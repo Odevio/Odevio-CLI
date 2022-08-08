@@ -1,0 +1,6 @@
+Sphinx==4.4.0
+sphinx-rtd-theme==1.0.0
+sphinx-click==3.1.0
+click==8.0.4
+rich==11.2.0
+requests==2.27.1

@@ -1,0 +1,98 @@
+======================
+Manage Users and Teams
+======================
+
+In Appollo CLI, you can **manage your teams** and the **users** that are a part of it.
+
+1. User account commands
+========================
+
+To create an account, use the ``appollo signup`` commmand.
+
+Complete your information with an email address, a username and password.
+
+.. image:: /img/appollo-signup.jpg
+  :alt: Appollo signup
+  :align: center
+
+|
+
+To access your account information, use the ``appollo profile`` command.
+
+.. image:: /img/appollo-profile.jpg
+  :alt: Appollo profile
+  :align: center
+
+|
+
+You can now also use the ``appollo signin`` and ``appollo signout`` command to log in and out of your account easily.
+
+2. Team commands
+================
+
+To manage your teams, simply use the ``appollo team`` command.
+
+.. image:: /img/appollo-team.jpg
+  :alt: Appollo team
+  :align: center
+
+|
+
+.. tip:: You can use the ``--help`` for each command to get information about the next available actions.
+
+If you use the ``appollo team ls`` command, the CLI will return a tree of the teams you belong to.
+
+.. image:: /img/appollo-team-ls.jpg
+  :alt: Appollo team ls
+  :align: center
+
+|
+
+You can also easily **create** or **delete** a team.
+
+With the ``appollo team mk --name TEXT`` command to create one.
+
+And ``appollo team rm --name TEXT --yes`` to delete one.
+
+.. image:: /img/appollo-team-mk.jpg
+  :alt: Appollo team mk
+  :align: center
+
+|
+
+3. Team users commands
+======================
+
+Using the ``appollo team member`` command will give you access to the commands to manage the users of your teams.
+
+You can **add** or **remove** a user from the teams if you are an admin.
+
+.. image:: /img/appollo-team-member.jpg
+  :alt: Appollo team member
+  :align: center
+
+|
+
+**To add**, enter the following command line :
+
+.. code-block::
+
+  appollo team member add KEY --username TEXT
+
+You can do the same to remove a user with ``rm``.
+
+.. image:: /img/appollo-team-add.jpg
+  :alt: Appollo team add member
+  :align: center
+
+|
+
+By validating your input, you will also get an overview of the team you just added or removed a member from.
+
+Do not forget to specify the team you want to add a member to with its key.
+
+.. image:: /img/appollo-team-member-add.jpg
+  :alt: Appollo team add member output
+  :align: center
+
+|

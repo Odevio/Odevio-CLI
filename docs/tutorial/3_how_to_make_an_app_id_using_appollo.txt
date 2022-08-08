@@ -1,0 +1,81 @@
+.. _previous_step:
+
+========================================
+3. How to create an App ID using Appollo
+========================================
+
+In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo app`` subcommands.
+
+#INSERT SCREENSHOT
+
+The first thing you should do, if you have not yet, is to **take notice of your account-key** by using the ``appollo apple ls`` command.
+
+The key is located in the first part of the table. It is the key that was created when you linked your Apple Developer Account to Appollo.
+
+#INSERT SCREENSHOT
+
+Make a new App ID
+-----------------
+
+You can **create a new one** using:
+
+.. code-block:: none
+
+  appollo app mk --name TEXT --bundle-id TEXT --account-key TEXT
+
+The **name** is simply the one you want to give to the identifier.
+
+The |bundle_id|, is a unique key for your app on the App Store (e.g.: com.company.appname)
+
+And finally, your **Appollo account-key**.
+
+Other subcommands
+-----------------
+
+Using the ``ls`` command line will return a list of all the App identifiers that are **currently linked** to your account.
+
+#INSERT SCREENSHOT
+
+If you wish to **remove an App ID**, you can use the ``rm --key TEXT`` command.
+
+.. note::
+  **The app ID is removed (unlinked) from Appollo but not from the App Store.**
+
+#INSERT SCREENSHOT
+
+For existing App IDs, the following command, allows you to link them to your Appollo account.
+
+.. code-block:: none
+
+  appollo app import --name TEXT --bundle-id TEXT --account-id TEXT
+
+#INSERT SCREENSHOT
+
+Furthermore, if you need to **link** or **unlink** an App to a **specific Appollo team**, you can use this command:
+
+.. code-block:: none
+
+  appollo app link --key TEXT --team-name TEXT
+
+#INSERT SCREENSHOT
+
+Linking an App with a team will **grant access** to all the team members.
+
+Extra resources
+---------------
+
+If you need to, you can access a list of your existing App IDs.
+
+For that, go over to your |apple_developer_account|, then to the **"Certificates, Identifiers & Profile"** menu.
+
+There, you will find the **"Identifiers menu"** that contains the list with the possibility to create new ones.
+
+#INSERT SCREENSHOT
+
+.. |bundle_id| raw:: html
+
+   <a href="https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids" target="_blank">bundle ID</a>
+
+.. |apple_developer_account| raw:: html
+
+  <a href="https://developer.apple.com/account" target="_blank">Apple Developer account</a>

@@ -1,0 +1,215 @@
+===========================================
+1. How to create an Apple Developer Account
+===========================================
+
+----------------------------------------------------
+A quick guide to enroll in Apple's Developer Program
+----------------------------------------------------
+
+The Apple Developer Program is a must have if you want to publish on the App Store.
+
+Follow this easy 5-steps guide to enroll! **No downloads required**.
+
+**Step 1: Creating your Apple ID**
+==================================
+
+The first thing you want to do is head over to |apple_developer| and click on the **"Account"** menu.
+
+.. image:: /img/apple-developer-home.jpg
+  :alt: Apple Developer Program Homepage
+  :align: center
+
+|
+
+If you already have an Apple ID you can sign in using it or create a new one by clicking **"Create yours now"**.
+
+.. image:: /img/apple-developer-account.jpg
+  :align: center
+  :alt: Create an Apple ID
+
+|
+
+When creating your Apple ID, you are also required to **turn on two-factor authentication**.
+
+**Step 2: Enrolling in the Apple Developer Program**
+====================================================
+
+Now that you are logged in, you can click on **"Join the Apple Developer Program"**.
+
+.. image:: /img/join-apple-dev-program.jpg
+  :alt: Join the program
+  :align: center
+
+|
+
+You will land on a page explaining what is the Apple Developer Program.
+
+To continue, click on the **"Enroll"** button at the top of the page.
+
+.. image:: /img/apple-dev-enroll.jpg
+  :alt: Enroll in the program
+  :align: center
+
+|
+
+Before you enroll, you are told what are the requirements to enroll as an individual or as a company. After acknowledging this page, you can click on **"Start Your Enrollment"**.
+
+.. image:: /img/apple-start-enroll.jpg
+  :alt: Start the enrollment
+  :align: center
+
+|
+
+You are then invited to download the new Apple Developer app from the store.
+
+You can just skip this part by clicking below on **"Continue enrollment on the web"**.
+
+.. image:: /img/apple-dev-app.jpg
+  :alt: Apple Developer app
+  :align: center
+
+|
+
+For the next step, you have to verify your personal contact information.
+
+**Make sure that everything is correct**.
+
+.. image:: /img/apple-confirm-info.jpg
+  :alt: Confirm your contact information
+  :align: center
+
+|
+
+**Select your entity type** (the one you wish to enroll as). Depending on the type you choose, you might need to give some additional information.
+
+.. image:: /img/apple-select-entity.jpg
+  :alt: Select your entity type
+  :align: center
+
+|
+
+.. figure:: /img/apple-cie-req.jpg
+  :figclass: align-center
+
+  *Company requirements*
+
+You can look up |check_duns| if your company/organization already has a Dun & Bradstreet (DUNS) number. Otherwise, you can request a number on |request_duns|.
+
+You will now be asked to review and accept the |apple_agreement|. **Check the box** to confirm you have read it and click on **"Continue"**.
+
+.. image:: /img/apple-agreement.jpg
+  :alt: Apple Developer Program license agreement
+  :align: center
+
+|
+
+**Step 3: Complete your purchase**
+==================================
+
+On this page, you can review what you are purchasing. **Apple Developer Program is not free.**
+
+It has a price of **99€** per year.
+
+You are also asked if you want your membership to be renewed automatically. If so, check the box.
+
+You can now press the **"Purchase"** button.
+
+.. image:: /img/apple-complete-purchase.jpg
+  :alt: Review purchase
+  :align: center
+
+|
+
+.. image:: /img/apple-renewal.jpg
+  :alt: Automate renewal
+  :align: center
+
+|
+
+You are then asked to reconnect with your Apple ID.
+
+**Step 4: Choosing your payment option**
+========================================
+
+On this page, fill in your billing information to finalize the purchase and **choose your payment options**.
+
+.. image:: /img/apple-pay-method.jpg
+  :alt: Payment options
+  :align: center
+
+|
+
+If you are buying as a company or an organization, **do not forget to indicate the VAT number**.
+
+
+.. image:: /img/apple-pay-vat.jpg
+  :alt: VAT number
+  :align: center
+
+|
+
+It is time to check your order.
+
+.. image:: /img/apple-check-order.jpg
+  :alt: Check your number
+  :align: center
+
+|
+
+Accept Apple's general conditions of sale and click on order.
+
+.. image:: /img/apple-t&c-check.jpg
+  :alt: Accept general conditions
+  :align: center
+
+|
+
+You will then go through a validation process depending on your bank.
+
+
+And you are done.
+
+.. image:: /img/apple-done.jpg
+  :alt: Done screen
+  :align: center
+
+|
+
+**Step 5: Access to the program**
+========================================
+
+You will then receive an email from Apple telling you that your order is being reviewed.
+
+Within 24 hours, you should receive another email welcoming you to the program along other useful links.
+
+.. image:: /img/apple-mail.jpg
+  :alt: Mail confirmation
+  :align: center
+
+|
+
+You are now an official member of the Apple Developer Program.
+
+Here is how the homepage looks like! Check out all the different resources!
+
+.. image:: /img/apple-homepage.jpg
+  :alt: Program homepage
+  :align: center
+
+|
+
+.. |apple_developer| raw:: html
+
+   <a href="https://developer.apple.com" target="_blank">https://developer.apple.com</a>
+
+.. |check_duns| raw:: html
+
+  <a href="https://developer.apple.com/enroll/duns-lookup/#!/search" target="_blank">this Apple page</a>
+
+.. |request_duns| raw:: html
+
+  <a href="https://fedgov.dnb.com/webform/index.jsp" target="_blank">Dun & Bradstreet's website</a>
+
+.. |apple_agreement| raw:: html
+
+  <a href="https://developer.apple.com/support/downloads/terms/apple-developer-program/Apple-Developer-Program-License-Agreement-20210607-English.pdf" target="_blank">Apple Developer Program license agreement</a>

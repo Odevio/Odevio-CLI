@@ -1,0 +1,230 @@
+=================================================================================
+2. How to configure App Store Connect for flutter app iOS deployment with Appollo
+=================================================================================
+
+#TO DO: Update images
+
+
+In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.
+
+Step 1: How to get an Apple API key
+===================================
+
+Go to |apple_developer| and click on the **"Account"** menu.
+
+Log into your Apple developer account if you need to.
+
+.. image:: /img/apple-developer-home.jpg
+  :alt: Apple Developer Program Homepage
+  :align: center
+
+|
+
+You can now see the overview of your account.
+
+Access **App Store Connect**.
+
+You can also directly go to |apple_overview|.
+
+.. image:: /img/apple-developer-overview.jpg
+  :alt: Apple Developer Account overview
+  :align: center
+
+|
+
+Once that you are on the App Store Connect homepage, you can head over to **"Users and Access"**.
+
+.. image:: /img/app-store-connect-home.jpg
+  :alt: App Store Connect home
+  :align: center
+
+|
+
+You will see a list of the users. Go to the **"Keys"** tab to see a list of your keys and their status
+
+To add a new key, press the **big "+" sign**.
+
+.. image:: /img/apple-add-key.jpg
+  :alt: Add API key
+  :align: center
+
+|
+
+To generate an API key, simply define its name, select the role of the user and click on generate.
+
+For more information about role permissions, check out Apple Developer Program's |official_doc|.
+
+**In this case, developer is a sufficient pick.**
+
+.. image:: /img/apple-generate-key.jpg
+  :alt: Generate API key
+  :align: center
+
+|
+
+Your API key has now been generated!
+
+You have the possibility to **copy¹** the key id and to **download the API key²**.
+
+.. danger:: **You can only download it ONCE. Make sure to save it in a safe place!**
+
+.. image:: /img/apple-download-key.jpg
+  :alt: Apple download API keys
+  :align: center
+
+|
+
+.. image:: /img/apple-api-key.jpg
+  :alt: Apple API keys
+  :align: center
+
+|
+
+**But wait, do not close that tab yet !**
+
+Step 2: Link the API key in Appollo
+===================================
+
+Now that you have successfully generated your API key, you can use it in Appollo CLI to link your accounts.
+
+
+To get Appollo running, use the following command: ``appollo``.
+
+You will get the subsequent result:
+
+.. image:: /img/appollo-launch.jpg
+  :alt: Appollo launch
+  :align: center
+
+|
+
+If you do not have an Appollo account yet, you have to create one first.
+
+To do so, simply enter ``appollo signup``.
+
+And follow the prompt instructions.
+
+#TO DO: Add image
+
+The starting command that will be of use for this tutorial is the ``apple`` one.
+
+Therefore, you can type in ``appollo apple`` to see what you can do next.
+
+.. image:: /img/appollo-ios.jpg
+  :alt: Appollo IOS
+  :align: center
+
+|
+
+At this stage, you have 8 possible subcommands which are, ``add``, ``detail``, ``edit``, ``link``, ``ls``, ``refresh-devices``, ``rm`` and ``unlink``.
+
+With these commands, you can manage the access between your Apple Developer account and Appollo.
+
+You can **add** and **remove** an access or you can **list** all existing access.
+
+You can also easily **get more information** about your Apple Developer account with the ``detail`` command and **link** or **unlink** an Appollo team with an Apple Developer account.
+
+In this case, you want to add an access. So, type in ``appollo apple add``.
+
+.. tip:: You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
+
+.. image:: /img/appollo-add.jpg
+  :alt: Appollo add Developer account
+  :align: center
+
+|
+
+If you use the ``add`` command, the CLI will ask you to complete the information step-by-step.
+
+.. image:: /img/appollo-add-name.jpg
+  :alt: Appollo add name
+  :align: center
+
+|
+
+You can also directly type in all the required information like this:
+
+.. code-block:: none
+
+  appollo apple add --apple-id TEXT --name TEXT --key-id TEXT --issuer-id TEXT --private-key FILE
+
+
+
+Step 3: Complete the required missing information and where to find it
+======================================================================
+
+Now that you know how to add an access between your Apple Developer account and Appollo, in this step, you will learn **where you can find the required information**.
+
+For the **Apple ID**, you can find it on your |apple_developer_membership|.
+
+Go to the **"Membership"** menu and there you will find it. It is actually your Apple **Team ID**.
+
+Just **copy & paste** it into the CLI and hit enter to continue.
+
+.. image:: /img/apple-team-id.jpg
+  :alt: Apple Team ID
+  :align: center
+
+|
+
+The next information you need is to give a **name** to your access.
+
+You can name it however you want.
+
+Next, is your **key ID**. The one you created earlier.
+
+Go back to your App Store Connect, in the Users and Access menu and in the keys tab.
+
+There will be your keys. You can easily **copy the key ID¹**.
+
+You can also copy the **Issuer ID²** right above because it will be the next line Appollo will ask you to complete.
+
+.. image:: /img/apple-id.jpg
+  :alt: Apple Key ID
+  :align: center
+
+|
+
+The **private key** is the last bit of information you need to complete. It is the **path** where you stored the file of the key you **downloaded³** earlier.
+
+The path should look like this, depending on where you saved the file.
+
+.. code-block:: python
+
+    /Users/USERNAME/Downloads/AuthKey_KeyID.p8
+
+You are told that your account was linked successfully with Appollo and you receive your **Appollo key**.
+
+It will be useful later.
+
+#INSERT SCREENSHOT .. image:: /img/appollo-link-success.jpg
+  :alt: Appollo link success
+  :align: center
+
+|
+
+If you type in ``appollo apple ls``, you should now see your access.
+
+.. image:: /img/appollo-ls.jpg
+  :alt: Appollo ls command
+  :align: center
+
+|
+
+And that is how you link your Apple Developer account with Appollo in just 3 easy steps!
+
+.. |apple_developer| raw:: html
+
+   <a href="https://developer.apple.com" target="_blank">https://developer.apple.com</a>
+
+.. |apple_overview| raw:: html
+
+   <a href="https://appstoreconnect.apple.com" target="_blank">https://appstoreconnect.apple.com</a>
+
+.. |official_doc| raw:: html
+
+   <a href="https://help.apple.com/app-store-connect/#/deve5f9a89d7" target="_blank">official documentation</a>
+
+.. |apple_developer_membership| raw:: html
+
+   <a href="https://developer.apple.com/account/#!/membership/ZQHY6MWMN2" target="_blank">Apple developper account</a>

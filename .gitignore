@@ -1,0 +1,19 @@
+.DS_Store
+*.pyc
+*~
+.idea/*
+.vscode
+dist
+/docs/_build/
+
+# Python files
+.venv/
+__pycache__/
+
+# Log files
+*.log
+
+# Example app
+flutter_app_ok/
+
+/tests/fixture.py

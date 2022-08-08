@@ -1,0 +1,62 @@
+===========================
+Configure Appollo for Apple
+===========================
+
+To properly use Appollo, you have to link your Apple Developer account to it.
+
+In this guide, you will learn how to quickly do it.
+
+**First**, you need to create an Apple API key on |app_store_connect|.
+
+Go over to the Users and Access menu and in the key tab, you will a **plus** sign to generate a key.
+
+.. image:: /img/apple-add-key.jpg
+  :alt: Add API key
+  :align: center
+
+|
+
+Once, you generated your key, you can **copy** it and **download** it.
+
+.. danger:: **You can only download it ONCE. Make sure to save it in a safe place!**
+
+**Second**, to add an Apple Developer account, use the command ``appollo apple add`` in your console.
+
+.. image:: /img/appollo-apple-add.jpg
+  :alt: Appollo Apple add output
+  :align: center
+
+|
+
+Your input should look like that:
+
+.. code-block:: none
+
+  appollo apple add --apple-id TEXT --name TEXT --key-id TEXT --issuer-id TEXT
+  --private-key TEXT
+
+You can easily find your **Apple ID** (Team ID) in the **membership** menu in the overview of your Apple developer account.
+
+For the **key-id** and **issuer-id**, they are located on the same page where you generated the key.
+
+Just copy them.
+
+.. image:: /img/apple-id.jpg
+  :alt: Apple Key ID
+  :align: center
+
+|
+
+By default, the private-key file you downloaded should be saved on your computer as such:
+
+.. code-block:: python
+
+  /Users/USERNAME/Downloads/AuthKey_KeyID.p8
+
+And that is how you can properly link you Appollo account with an Apple Developer account.
+
+
+
+.. |app_store_connect| raw:: html
+
+   <a href="https://appstoreconnect.apple.com" target="_blank">App Store connect</a>

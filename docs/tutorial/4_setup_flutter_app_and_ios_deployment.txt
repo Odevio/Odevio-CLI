@@ -1,0 +1,101 @@
+================================================================
+4. How to setup Xcode for a Flutter App with the help of Appollo
+================================================================
+
+In this tutorial, you will learn how to **configure Xcode** with the help of Appollo to **build your app**.
+
+**This can be achieved without a Mac**. Therefore, you can accomplish this part on  **Windows** or **Linux**.
+
+Requirements
+------------
+
+Before you try to build an App, you have to make sure that you have already **created at least one App ID**.
+
+You can use ``appollo app ls`` to retrieve a list of all your apps and see their **key**
+
+#INSERT SCREENSHOT
+
+See previous :ref:`step <previous_step>` of this tutorial if you have skipped it.
+
+Start the configuration build
+-----------------------------
+
+**Before starting the build**, make sure you are in the file of your Flutter app.
+
+When starting an Appollo build, with ``appollo build start``, you are asked to type in your **App key**
+
+and your **build type** among 6 different types.
+
+At this stage, since you want to be able to configure Xcode, you have to use the **configuration** type.
+
+Your build has now been registered and will be started as soons as possible !
+
+#INSERT SCREENSHOT
+
+You are being given a **key** which will be important for the rest of the configuration process.
+
+Now, if you type in ``appollo build detail`` with the build key, you will have a detailed view of the build's status.
+
+You can also easily access the logs of your build with the command ``appollo build logs KEY``
+
+.. note::
+
+  Most of the build commands require you to type in your **build key**
+
+Connect your configuration build
+--------------------------------
+
+Once your build is ready, you can use ``appollo build connect KEY``.
+
+This command will list you your connection settings and credentials.
+
+#INSERT SCREENSHOT
+
+Use Spice Remote viewer to configure Xcode
+------------------------------------------
+
+For this step, you need a remote desktop access application. In this tutorial, the one used is **Spice-Space's** OSX |spice_client|.
+
+Launch your software, indicate the **url** your were given and connect.
+
+#INSERT SCREENSHOT
+
+Second, simply type in the **connection_password** to authenticate.
+
+#INSERT SCREENSHOT
+
+Then, use the **user_password** you received to log in.
+
+And that is how you access the remote desktop.
+
+Configure Xcode on the VM
+-------------------------
+
+At this point, follow these **4-easy steps**:
+
+Your app is located in Documents/app.
+
+To configure it with Xcode,
+
+1. Open Xcode
+
+#INSERT SCREENSHOT
+
+2. Select Open an existing project
+
+#INSERT SCREENSHOT
+
+3. Select file Documents/app/ios/Runner.xcworkspace
+
+#INSERT SCREENSHOT
+
+4. Enjoy !
+
+* How to connect with remote desktop, ...
+* What should be setup usually on Xcode by Flutter developers to get their projects running
+* SEO : Add text with keywords "on Windows", "On Linux", "Without a Mac" in the top section of the page
+* SEO : ideally minimum 500 words on this page
+
+.. |spice_client| raw:: html
+
+   <a href="https://www.spice-space.org/osx-client.html" target="_blank">client</a>

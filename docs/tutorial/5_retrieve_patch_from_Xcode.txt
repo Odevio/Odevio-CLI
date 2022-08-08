@@ -1,0 +1,21 @@
+===========================================
+5. How to retrieve a patch of your settings
+===========================================
+
+Once you are satisfied with the configuration, you can retrieve a patch containing all the changes you made to Xcode.
+
+First, make sure your build is stopped.
+
+You can check the list of your ongoing builds with ``appollo build ls`` and the ``--all`` option to see all your other older builds.
+
+Stopping a build manually is possible by using the command ``appollo build stop KEY``.
+
+When your build is stopped, you can create the patch using ``appollo build patch``.
+
+By default, the file is called **appollo.patch** and is located in your app folder.
+
+.. tip::
+
+  Use ``--help`` to see the options of a command. For exemple, with ``appollo build patch`` you have options to name the file of your patch.
+
+To apply the changes, use the git command ``git am appollo.patch``.

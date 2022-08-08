@@ -1,0 +1,6 @@
+==============================================================================
+8. How to publish a Flutter iOS app without a Mac (or with one) - The easy way
+==============================================================================
+
+* SEO : Add text with keywords "on Windows", "On Linux", "Without a Mac" in the top section of the page
+* SEO : ideally minimum 500 words on this page

@@ -1,0 +1,74 @@
+=====================
+Appollo Documentation
+=====================
+---------------------------------------------------------------------------------------
+The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
+---------------------------------------------------------------------------------------
+
+Welcome to the documentation pages for Appollo.
+
+-----------------
+What is Appollo ?
+-----------------
+
+Appollo is an open-source tool to help developers setup and release their Flutter apps on iOS.
+
+Thanks for checking it out.
+
+.. figure:: img/appollo-demo.gif
+    :align: center
+    :alt: Appollo demo gif
+
+    **A tool for developers by developers**
+
+.. image:: https://img.shields.io/badge/version-1.0.0-blue
+    :alt: Version
+
+.. image:: https://img.shields.io/pypi/l/django
+    :alt: License
+
+.. image:: https://img.shields.io/librariesio/release/pypi/django
+    :target: https://pypi.org/project/Django/
+    :alt: Dependencies
+
+.. image:: https://img.shields.io/badge/downloads-500%2Fmonth-brightgreen
+    :target: https://pypi.org/project/Django/
+    :alt: Downloads
+
+.. image:: https://img.shields.io/uptimerobot/ratio/m790704444-ff292054ac36eaafed1ecaa4
+    :target: https://stats.uptimerobot.com/o9vx1IDpDX
+    :alt: UptimeRobot
+
+.. image:: https://www.codefactor.io/repository/github/maxcmoi89/test-repo/badge
+    :target: https://www.codefactor.io/repository/github/maxcmoi89/test-repo
+    :alt: CodeFactor
+
+.. image:: https://img.shields.io/discord/945256030869258280?logo=discord
+    :target: https://discord.gg/AzVwZ7yRFF
+    :alt: Discord
+
+-----------
+Get started
+-----------
+
+Here, you will find informations regarding Appollo and how to use it.
+
+If you are getting started this is how we recommend you use the docs :
+
+* First, we advise you to read our :ref:`Installation guide <installation>` for instructions on how to install Appollo.
+* Next, check how to setup your app with Appollo following our complete :ref:`Tutorial <tutorial>` and build your Flutter app to iOS.
+* If you want to know every option Appollo has to offer, check out our :ref:`Usage guide <usage_guide>` or :ref:`Reference Guide <reference_guide>`
+
+This documentation is constantly evolving and we appreciate every help we can get, so feel free to contribute.
+
+**You can learn more about how to contribute on the** :ref:`dedicated page <contribute>`.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   installation/index
+   usage/index
+   tutorial/index
+   reference_guide/index
+   contribute/index

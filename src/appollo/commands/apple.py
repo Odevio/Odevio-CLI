@@ -1,0 +1,324 @@
+import click
+
+
+@click.group("apple")
+def apple():
+    """ Subcommands to manage Apple specific settings for Appollo.
+
+    Access to an Apple developer account makes it possible for Appollo to retrieve and/or create all information
+    necessary to create a build of your application that you will be able to publish on the app store.
+
+    \f
+
+    A number of Apple specific objects is linked to each developer account and make it possible for Appollo to build
+    iOS apps :
+
+        - **Certificates** : The certificates resource represents the digital certificates you use to sign your iOS or Mac apps for development and distribution. *These are managed automatically by Appollo.*
+
+        - **Profiles** : A provisioning profile is a collection of digital entities that uniquely ties developers and devices to an authorized iPhone Development Team and enables a device to be used for testing. *These are managed automatically by Appollo.*
+
+        - **Identifiers** : Uniquely identifies your app throughout the Apple eco-system. *These are managed automatically by Appollo.*
+
+        - **Devices** : List of devices on which you want to be able to test your builds prior to release on the app store. At least one device should be added to the device list for Appollo to be able to build apps.
+
+    These can be added, modified or deleted through |https://developers.apple.com|.
+
+    \f
+
+    .. danger:: Deletion or modification of Certificates, Profiles or Identifiers managed by Appollo through |https://developers.apple.com| may break Appollo.
+
+    .. |https://developers.apple.com| raw:: html
+
+       <a href="https://developers.apple.com" target="_blank">https://developers.apple.com</a>
+
+    Usage :
+    """
+    pass
+
+
+@apple.command("detail")
+@click.argument('key', required=True)
+def developer_account_detail(key):
+    """ Gets detailed information about your Apple Developer Account with key \"KEY\" on Appollo.
+
+    Returned information :
+
+        - General information
+
+        - Devices
+
+        - Certificates
+
+        - Provisioning profiles
+
+    \f
+
+    .. note:: Appollo updates Apple Developer Account informations automatically when starting a build with Appollo.
+
+    Example output :
+
+    .. image:: /img/appollo-apple-detail.png
+        :alt: example output of the appollo team ls command
+        :align: center
+
+    Usage :
+
+    """
+    from rich.text import Text
+    from rich.panel import Panel
+    from rich.table import Table
+
+    from appollo import api
+    from appollo.settings import console
+
+    if key:
+        try:
+            dev_account = api.get(f"/developer-accounts/{key}/")
+        except api.NotFoundException:
+            console.print("There is no developer account with this key")
+            return
+        provisioning_profiles = api.get(f"/developer-accounts/{key}/provisioning-profiles/")
+
+        if dev_account:
+            console.print(Panel(Text.from_markup(
+                f"""
+                Appollo Key : [bold]{dev_account["key"]}[/bold]
+                Name : [bold]{dev_account["name"]}[/bold]
+                Apple ID : [bold]{dev_account["apple_id"]}[/bold]
+                Apple API Key ID : [bold]{dev_account["api_key_id"]}[/bold]
+                Admin : [bold]{dev_account["manager"]}[/bold]
+                """
+            ), title="Apple Developer Account"))
+
+        if len(dev_account['apple_account_devices']) > 0:
+            table_devices = Table(expand=True, title="Devices in your Apple Developer Account registered on Appollo.")
+            table_devices.add_column("Name")
+            table_devices.add_column("Identifier/Device UDID")
+            table_devices.add_column("Type")
+            for device in dev_account['apple_account_devices']:
+                table_devices.add_row(device['name'], device['device_udid'], device['device_class'])
+            console.print(table_devices)
+
+        if len(dev_account['apple_account_certificates']) > 0:
+            table_cert = Table(expand=True, title="Certificates in your Apple Developer Account registered on Appollo.")
+            table_cert.add_column("Name")
+            table_cert.add_column("Type")
+            table_cert.add_column("Expiration date")
+            for cert in dev_account['apple_account_certificates']:
+                table_cert.add_row(cert['apple_display_name'], cert['certificate_type'], cert['expiration_date'])
+            console.print(table_cert)
+
+        if len(provisioning_profiles) > 0:
+            table_pp = Table(expand=True, title="Provisioning profiles in your Apple Developer Account registered on "
+                                                "Appollo.")
+            table_pp.add_column("Name")
+            table_pp.add_column("Apple Name")
+            table_pp.add_column("Application")
+            table_pp.add_column("Expiration date")
+            for pp in provisioning_profiles:
+                table_pp.add_row(pp['name'], pp['apple_name'], pp['application'], pp['expiration_date'],)
+            console.print(table_pp)
+
+        console.print("Appollo updates these informations automatically when starting à build with Appollo")
+
+
+@apple.command("ls")
+def developer_account_ls():
+    """ Lists Apple Developer Accounts to which you have access.
+
+    \f
+
+    Example output :
+
+    .. image:: /img/appollo-apple-ls.png
+        :alt: example output of the appollo apple ls command
+        :align: center
+
+    Usage :
+
+    """
+    from rich.table import Table
+
+    from appollo import api
+    from appollo.settings import console
+
+    developer_accounts = api.get("/developer-accounts/")
+
+    if len(developer_accounts) > 0:
+        table = Table(title="Apple Developer Accounts you have access to")
+        table.add_column("KEY")
+        table.add_column("Name")
+        table.add_column("Admin")
+        table.add_column("Apple ID")
+        table.add_column("Apple API Key ID")
+        for da in developer_accounts:
+            table.add_row(da['key'], da['name'], da['manager'], da['apple_id'], da['api_key_id'])
+
+        console.print(table)
+
+        console.print("Check out [code]$ appollo apple --help[/code] to know what part of the Apple Developer Account "
+                      "is used by Appollo or check related documentation at "
+                      "[link]https://appollo.readthedocs.io/en/latest/reference_guide/index.html#appollo-apple[/link].")
+    else:
+        console.print('You do not have access to a developer account with Appollo.')
+
+
+@apple.command("add")
+@click.option("--apple-id", required=True, prompt=True, help="ID of your developer account on Apple")
+@click.option('--name', prompt=True, help="A user friendly name for Appollo")
+@click.option('--key-id', required=True, prompt=True, help="API key \"Key ID\" on App Store Connect")
+@click.option('--issuer-id', required=True, prompt=True, help="Issuer ID on App Store Connect")
+@click.option('--private-key', required=True, prompt=True,
+              type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+              help="Path to the private key downloaded from App Store Connect")
+def developer_account_add(apple_id, key_id, issuer_id, private_key, name=None):
+    """ Add access to an Apple developer account for Appollo.
+
+    \f
+    .. note:: Once the developer account has been created there is no way to retrieve the private key from Appollo.
+    .. note:: We have no way to verify your developer account's ID on Apple. In case of error, your builds will fail.
+    """
+    from appollo import api
+    from appollo.settings import console
+    import os.path
+
+    account = api.post(
+        "/developer-accounts/",
+        json_data={
+            "name": name,
+            "apple_id": apple_id,
+            "api_key_id": key_id,
+            "api_issuer_id": issuer_id
+        },
+        files={
+            "api_private_key": open(os.path.expanduser(private_key), "rb"),
+        }
+    )
+
+    if account:
+        console.print(f"Linked Appollo to the Apple developer account \"{account['name']}\" successfully. It has key {account['key']}")
+
+
+@apple.command("edit")
+@click.argument('key', required=True)
+@click.option("--apple-id", help="ID of your developer account on Apple")
+@click.option('--name', help="A user friendly name for Appollo")
+def developer_account_edit(key, apple_id=None, name=None):
+    """ Edit properties of a developer account linked to Appollo.
+
+    \f
+    .. note:: We have no way to verify your developer account's ID on Apple. In case of error, your builds will fail.
+    """
+    from appollo import api
+    from appollo.settings import console
+
+    account = api.put(
+        f"/developer-accounts/{key}/",
+        json_data={
+            "name": name,
+            "apple_id": apple_id,
+        },
+    )
+
+    if account:
+        console.print(f"Account {key} has been successfully modified.")
+
+
+@apple.command("rm")
+@click.argument('key', required=True)
+@click.confirmation_option(prompt="Everything related to this Developer Account will be deleted. Are you sure you want to do this ?")
+def developer_account_rm(key):
+    """
+    Removes access to Apple Developer account with key \"KEY\" for Appollo.
+
+    \f
+    ..note:: This will also remove every application, every build, every devices, every certificate, every profile and every objects related to that Apple Developer account.
+    """
+    from appollo import api
+    from appollo.settings import console
+
+    account = api.delete(f"/developer-accounts/{key}")
+    if account:
+        console.print(f"Removed Apple developer account with Appollo key \"{key}\" successfully.")
+
+
+@apple.command("link")
+@click.argument('key', required=True)
+@click.option('--team-key', prompt=True, help="Key of the team to link")
+def link(key, team_key):
+    """ Links the developer account with key \"KEY\" to an Appollo team.
+
+    \f
+
+    By default a newly added Apple Developer Account created on Appollo is only linked to the user having created it.
+    When using this command you can link the Apple Developer Account directly to one of your teams on Appollo
+    giving full access to your team members.
+
+    .. warning:: All users who are in a team linked to an Apple Developer Account have full control over it.
+
+    .. note:: Once the developer account has been created, there is no way to retrieve the private key from Appollo.
+              Making it impossible for team members to "steal" your Apple account.
+    """
+    from appollo import api
+    from appollo.settings import console
+
+    try:
+        teams = api.post(f"/developer-accounts/{key}/teams/{team_key}/")
+    except api.NotFoundException:
+        console.print("The provided account or team does not exist or you do not have access to it")
+
+    if teams:
+        console.print(f"Team \"{team_key}\" is now linked to "
+                      f"Apple Developer Account \"{key}\".")
+
+
+@apple.command("unlink")
+@click.argument('key', required=True)
+@click.option('--team-key', prompt=True, help="Key of the team to link")
+def unlink(key, team_key):
+    """ Unlinks the developer account with key \"KEY\" from an Appollo team.
+    """
+    from appollo import api
+    from appollo.settings import console
+
+    deleted = api.delete(f"/developer-accounts/{key}/teams/{team_key}/")
+    if deleted:
+        console.print(f"Team \"{team_key}\" is now unlinked from "
+                      f"Apple Developer Account \"{key}\".")
+
+
+@apple.command("refresh-devices")
+@click.argument('key', required=True)
+@click.option("--quiet", "-q", is_flag=True, help="Flag to know if the refreshed list of devices should be hidden or not")
+def refresh_devices(key, quiet):
+    """
+    Synchronizes the list of devices on Appollo with the Apple Developer account
+
+    \f
+    This command is used when you have just added or removed a new device from your Apple Developer account and you need it on Appollo.
+
+    .. note: By default, this process is done each time you launch a build except if you have already made this process in the last few hours.
+    """
+    from rich.table import Table
+
+    from appollo import api
+    from appollo.settings import console
+
+    try:
+        devices = api.get(f"/developer-accounts/{key}/refresh-devices/")
+    except api.NotFoundException:
+        console.print("There is no developer account with this key")
+        return
+    if devices:
+        console.print("Your device list has been updated.")
+
+        if not quiet:
+            table = Table()
+            table.add_column("Apple ID")
+            table.add_column("Class")
+            table.add_column("Name")
+
+            for device in devices:
+                table.add_row(device['apple_id'], device['device_class'], device['name'])
+
+            console.print(table)

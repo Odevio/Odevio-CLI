@@ -1,0 +1,53 @@
+.. _contribute:
+
+==========
+Contribute
+==========
+
+First off, thank you for considering contributing to Appollo.
+
+The main purpose of these guidelines is to establish a good communication channel between you and the developers behind the project.
+
+The goal is to keep Appollo evolving to make Flutter developer's lives easier.
+
+How can you make Appollo project evolve?
+========================================
+
+If you notice any bugs or issue, you can report it directly on |github_new_issue|.
+
+For improvements and feature request, you can notify them there too.
+
+We recommend that you wait for a confirmation of your bug or an approval of your feature request before you start coding your pull request. Pull requests linked to open issues are very much appreciated.
+
+We are also thrilled to receive a variety of other contributions, including:
+
+* Tutorials, blog posts or simply mentioning Appollo
+* Improving the documentation, submitting bug reports and feature reports or writing code
+* Any suggestion to enhance the experience and design such as spelling and/or grammar fixes
+
+**Appollo's GitHub issue tracker is only intended for bugs and improvement suggestions.**
+
+Get in touch!
+=============
+
+If you have a general question or require some functional support, you can post it on |stackoverflow|.
+
+Moreover, do not hesitate to ask about your issue on our community |Discord|.
+
+It will be a pleasure for us to help you!
+
+Thank you all very much!
+
+The Appollo team.
+
+.. |github_new_issue| raw:: html
+
+   <a href="https://github.com/Appollo-CLI/Appollo/issues" target="_blank">Github's issue tracker</a>
+
+.. |stackoverflow| raw:: html
+
+    <a href="https://stackoverflow.com/questions/tagged/appollo" target="_blank">Stackoverflow</a>
+
+.. |discord| raw:: html
+
+    <a href="https://discord.gg/AzVwZ7yRFF" target="_blank">Discord</a>
