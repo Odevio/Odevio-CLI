@@ -34,7 +34,7 @@ The easy way to setup, build & release flutter apps for iOS on Linux, Windows an
 Appollo is a tool to help developers setup and release their Flutter apps on iOS.
 Thanks for checking it out.
 
-.. figure:: https://github.com/Appollo-CLI/Appollo/blob/master/docs/img/appollo-demo.gif
+.. figure:: https://github.com/Appollo-CLI/Appollo/blob/master/docs/img/appollo--demo.gif
     :align: center
 
     **A tool for developers by developers**

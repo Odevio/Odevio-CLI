@@ -15,7 +15,7 @@ Appollo is an open-source tool to help developers setup and release their Flutte
 
 Thanks for checking it out.
 
-.. figure:: img/appollo-demo.gif
+.. figure:: img/appollo--demo.gif
     :align: center
     :alt: Appollo demo gif
 
