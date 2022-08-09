@@ -1,19 +1,21 @@
-.. image:: https://github.com/Appollo-CLI/Appollo/blob/master/docs/img/deuse_logo_400x400.png
-    :width: 200px
-    :align: center
+.. raw:: html
+
+    <img src="https://appollo.space/static/img/appollo--logo.svg" style="margin:auto; with:250px;"/>
 
 .. image:: https://img.shields.io/badge/version-0.1.0-blue
+    :target: https://github.com/Appollo-CLI/Appollo/
 
-.. image:: https://img.shields.io/pypi/l/django
+.. image:: https://img.shields.io/pypi/l/appollo
+    :target: https://github.com/Appollo-CLI/Appollo/blob/master/LICENSE
 
-.. image:: https://img.shields.io/librariesio/release/pypi/django
-    :target: https://pypi.org/project/Django/
+.. image:: https://img.shields.io/librariesio/release/pypi/appollo
+    :target: https://pypi.org/project/appollo/
 
-.. image:: https://img.shields.io/badge/downloads-500%2Fmonth-brightgreen
-    :target: https://pypi.org/project/Django/
+.. image:: https://img.shields.io/badge/downloads-100%2Fmonth-brightgreen
+    :target: https://pypi.org/project/appollo/
 
-.. image:: https://img.shields.io/uptimerobot/ratio/m790704444-ff292054ac36eaafed1ecaa4
-    :target: https://stats.uptimerobot.com/o9vx1IDpDX
+.. image:: https://img.shields.io/uptimerobot/ratio/m792431382-e51d8a06926b56c359afe3b7
+    :target: https://stats.uptimerobot.com/QqN9MFXvw3
     :alt: UptimeRobot
 
 .. image:: https://www.codefactor.io/repository/github/appollo-cli/appollo/badge
@@ -55,12 +57,12 @@ To start using Appollo simply run :code:`$ appollo` in your console.
 -------------
 Documentation
 -------------
-All documentation is in the :code:`docs` directory and online at https://readthedocs.org/.
+All documentation is in the :code:`docs` directory and online at https://appollo.readthedocs.io/.
 If you are getting started this is how we recommend you use the docs :
 
-* First read :code:`location of install` (link to doc) for instructions on installing Appollo.
-* Next, check how to setup your app with Appollo at :code:`location of doc` (link to doc) and build your Flutter app to iOS.
-* Finally, if you want to know every option Appollo has to offer check our usage guide (link) or reference guide (link)
+* First read our `installation instructions <https://appollo.readthedocs.io/en/master/installation/index.html>`_.
+* Next, check how to `setup your app with Appollo at and build your Flutter app to iOS <https://appollo.readthedocs.io/en/master/tutorial/index.html>`_ .
+* Finally, if you want to know every option Appollo has to offer check our `reference guide <https://appollo.readthedocs.io/en/master/reference_guide/index.html>`_
 
 -----
 About
@@ -101,4 +103,4 @@ We are also thrilled to receive a variety of other contributions including:
 * Spelling or grammar fixes.
 * Blogging, speaking about, or creating tutorials about Appollo.
 
-**Giving Appollo a Github star is much appreciated by the team ! Sharing our project with other Flutter developers is too :)**
+**Giving Appollo a Github star is much appreciated by our team ! Sharing our project with other Flutter developers is too :)**
