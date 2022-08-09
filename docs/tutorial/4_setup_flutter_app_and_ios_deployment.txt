@@ -63,6 +63,15 @@ This command will list you your connection settings and credentials.
 
 |
 
+.. tip:: If you try to connect a build that was not meant for remote desktop, no problem, Appollo will suggest
+         you to create one automatically.
+
+.. image:: /img/appollo-connect-other.jpg
+  :alt: Appollo build connect with other build
+  :align: center
+
+|
+
 Use Spice Remote viewer to configure Xcode
 ------------------------------------------
 

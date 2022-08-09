@@ -2,4 +2,56 @@
 7. How to debug and test your iOS app without a Mac (or with one) - The easy way
 ================================================================================
 
-Coming soon...
+Debugging and testing your iOS app is fairly easy with Appollo. **Even if you do not have a Mac**.
+
+For this tutorial, you will have to start a build with a **configuration build type**
+
+So, type in ``appollo build start KEY`` in your terminal and enter **configuration**.
+
+.. tip:: If you forgot the key of one of your apps, you can always use the command ``appollo app ls``.
+
+.. image:: /img/appollo-build-start.jpg
+  :alt: Appollo build start
+  :align: center
+
+|
+
+Let Appollo start the build, you can follow the progress with ``appollo build detail KEY``.
+
+.. image:: /img/appollo-build-detail.jpg
+  :alt: Appollo build detail output
+  :align: center
+
+|
+
+Now that your build started with success, you can connect to it with ``appollo build connect KEY``.
+
+.. image:: /img/appollo-build-connect.jpg
+  :alt: Appollo build connect
+  :align: center
+
+|
+
+Complete the given information within your remote desktop application to access the virtual machine.
+
+Once you are on the virtual desktop, you can launch the simulator.
+
+It might take some time to boot if it is the first time you are using it.
+
+.. image:: /img/appollo-simulator.jpg
+  :alt: Appollo simulator
+  :align: center
+
+|
+
+In parallel, you can also start an instance of the terminal on the virtual machine.
+
+Go into your app using ``cd Documents/app``. and use the ``flutter run`` command.
+
+Wait a few instants and that is how you can access your app on the remote desktop to debug and test it.
+
+.. image:: /img/appollo-flutter-run.jpg
+  :alt: Appollo flutter run
+  :align: center
+
+|
