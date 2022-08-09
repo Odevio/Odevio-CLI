@@ -2,4 +2,73 @@
 8. How to publish a Flutter iOS app without a Mac (or with one) - The easy way
 ==============================================================================
 
-Coming soon...
+**Congratulations, you are almost done !**
+
+For this last part of the tutorial, you will learn how to publish your Flutter iOS app on the app store.
+
+The first thing you will want to do is to create an iOS app on |app_store_connect|.
+
+.. image:: /img/apple-add-app.jpg
+  :alt: Apple add app
+  :align: center
+
+|
+
+You can give whatever name you would like.
+
+Select the **bundle ID** from the list of app ID you have already created.
+
+If you have no app ID, you can refer to the chapter 3 of this tutorial.
+
+Finally, for **SKU** you can choose anything you want as long as it is unique.
+
+You now have access to a dashboard for your app. If you scroll down, you will see the **Build** section.
+
+.. image:: /img/apple-build.jpg
+  :alt: Apple app build
+  :align: center
+
+|
+
+Now that this done, go over the Appollo CLI and use the command ``appollo build start KEY`` for your app.
+
+And this time, for the build type: **publication**
+
+Wait for Appollo to create and start the build.
+
+Then, wait for Apple to send you an email like this one:
+
+.. image:: /img/apple-mail-confirmation.jpg
+  :alt: Apple app build confirmation mail
+  :align: center
+
+|
+
+The build section should now look like this:
+
+.. image:: /img/apple-build-select.jpg
+  :alt: Apple build select button
+  :align: center
+
+|
+
+You can now select your build from the list.
+
+.. image:: /img/apple-build-list.jpg
+  :alt: Apple build list view
+  :align: center
+
+|
+
+Apple will ask you if your app responds to **encryption standards** and other standards **you have to comply to**.
+
+**You did it!** Your build has been **successfully publish** on the app store.
+
+.. warning:: **Do not forget to save your build! Scroll up to see the 'Save' button.**
+
+For your app to be published on the app store, you still have to **complete any missing information** and then
+you can submit it to Apple for review.
+
+.. |app_store_connect| raw:: html
+
+   <a href="https://appstoreconnect.apple.com/apps" target="_blank">app store connect</a>
