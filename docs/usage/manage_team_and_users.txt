@@ -89,10 +89,4 @@ You can do the same to remove a user with ``rm``.
 
 By validating your input, you will also get an overview of the team you just added or removed a member from.
 
-Do not forget to specify the team you want to add a member to with its key.
-
-.. image:: /img/appollo-team-member-add.jpg
-  :alt: Appollo team add member output
-  :align: center
-
-|
+.. tip:: Do not forget to specify the team you want to add a member to with its key.

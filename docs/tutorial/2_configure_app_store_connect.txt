@@ -2,9 +2,6 @@
 2. How to configure App Store Connect for flutter app iOS deployment with Appollo
 =================================================================================
 
-#TO DO: Update images
-
-
 In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.
 
 Step 1: How to get an Apple API key
@@ -92,8 +89,8 @@ To get Appollo running, use the following command: ``appollo``.
 
 You will get the subsequent result:
 
-.. image:: /img/appollo-launch.jpg
-  :alt: Appollo launch
+.. image:: /img/appollo-help.jpg
+  :alt: Appollo
   :align: center
 
 |
@@ -104,14 +101,18 @@ To do so, simply enter ``appollo signup``.
 
 And follow the prompt instructions.
 
-#TO DO: Add image
+.. image:: /img/appollo-signup.jpg
+  :alt: Appollo signup
+  :align: center
+
+|
 
 The starting command that will be of use for this tutorial is the ``apple`` one.
 
 Therefore, you can type in ``appollo apple`` to see what you can do next.
 
-.. image:: /img/appollo-ios.jpg
-  :alt: Appollo IOS
+.. image:: /img/appollo-apple.jpg
+  :alt: Appollo apple
   :align: center
 
 |
@@ -128,19 +129,13 @@ In this case, you want to add an access. So, type in ``appollo apple add``.
 
 .. tip:: You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
 
-.. image:: /img/appollo-add.jpg
+.. image:: /img/appollo-apple-add.jpg
   :alt: Appollo add Developer account
   :align: center
 
 |
 
 If you use the ``add`` command, the CLI will ask you to complete the information step-by-step.
-
-.. image:: /img/appollo-add-name.jpg
-  :alt: Appollo add name
-  :align: center
-
-|
 
 You can also directly type in all the required information like this:
 
@@ -197,16 +192,10 @@ You are told that your account was linked successfully with Appollo and you rece
 
 It will be useful later.
 
-#INSERT SCREENSHOT .. image:: /img/appollo-link-success.jpg
-  :alt: Appollo link success
-  :align: center
-
-|
-
 If you type in ``appollo apple ls``, you should now see your access.
 
-.. image:: /img/appollo-ls.jpg
-  :alt: Appollo ls command
+.. image:: /img/appollo-apple-ls.jpg
+  :alt: Appollo apple ls command
   :align: center
 
 |

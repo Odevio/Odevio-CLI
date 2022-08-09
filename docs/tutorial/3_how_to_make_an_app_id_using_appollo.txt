@@ -6,13 +6,21 @@
 
 In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo app`` subcommands.
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-app.jpg
+  :alt: Appollo app
+  :align: center
+
+|
 
 The first thing you should do, if you have not yet, is to **take notice of your account-key** by using the ``appollo apple ls`` command.
 
 The key is located in the first part of the table. It is the key that was created when you linked your Apple Developer Account to Appollo.
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-apple-ls.jpg
+  :alt: Appollo Apple ls
+  :align: center
+
+|
 
 Make a new App ID
 -----------------
@@ -29,35 +37,54 @@ The |bundle_id|, is a unique key for your app on the App Store (e.g.: com.compan
 
 And finally, your **Appollo account-key**.
 
+.. image:: /img/appollo-app-mk.jpg
+  :alt: Appollo app mk
+  :align: center
+
+|
+
 Other subcommands
 -----------------
 
 Using the ``ls`` command line will return a list of all the App identifiers that are **currently linked** to your account.
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-app-ls.jpg
+  :alt: Appollo app ls
+  :align: center
+
+|
 
 If you wish to **remove an App ID**, you can use the ``rm --key TEXT`` command.
 
 .. note::
   **The app ID is removed (unlinked) from Appollo but not from the App Store.**
 
-#INSERT SCREENSHOT
+
+  .. image:: /img/appollo-app-rm.jpg
+    :alt: Appollo app rm
+    :align: center
+
+  |
 
 For existing App IDs, the following command, allows you to link them to your Appollo account.
 
-.. code-block:: none
+  ``appollo app import --name TEXT --bundle-id TEXT --account-id TEXT``
 
-  appollo app import --name TEXT --bundle-id TEXT --account-id TEXT
+  .. image:: /img/appollo-app-import.jpg
+    :alt: Appollo app import
+    :align: center
 
-#INSERT SCREENSHOT
+  |
 
 Furthermore, if you need to **link** or **unlink** an App to a **specific Appollo team**, you can use this command:
 
-.. code-block:: none
+  ``appollo app link --key TEXT --team-name TEXT``
 
-  appollo app link --key TEXT --team-name TEXT
+  .. image:: /img/appollo-app-link.jpg
+    :alt: Appollo app link
+    :align: center
 
-#INSERT SCREENSHOT
+  |
 
 Linking an App with a team will **grant access** to all the team members.
 
@@ -70,7 +97,11 @@ For that, go over to your |apple_developer_account|, then to the **"Certificates
 
 There, you will find the **"Identifiers menu"** that contains the list with the possibility to create new ones.
 
-#INSERT SCREENSHOT
+.. image:: /img/apple-certificates.jpg
+  :alt: Apple certificates
+  :align: center
+
+|
 
 .. |bundle_id| raw:: html
 
