@@ -24,7 +24,8 @@ See previous :ref:`step <previous_step>` of this tutorial if you have skipped it
 Start the configuration build
 -----------------------------
 
-**Before starting the build**, make sure you are in the file of your Flutter app.
+**Before starting the build**, make sure you are in the root folder of your Flutter app. If you do not have a Flutter app for this
+tutorial get started on the `official flutter tutorial <https://docs.flutter.dev/get-started/test-drive#create-app>`_.
 
 When starting an Appollo build, with ``appollo build start``, you are asked to type in your **App key**
 

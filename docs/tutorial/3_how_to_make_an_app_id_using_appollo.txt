@@ -33,7 +33,7 @@ You can **create a new one** using:
 
 The **name** is simply the one you want to give to the identifier.
 
-The |bundle_id|, is a unique key for your app on the App Store (e.g.: com.company.appname)
+The |bundle_id|, is a unique key for your app on the App Store (the bundle id should look like this : com.company.appname)
 
 And finally, your **Appollo account-key**.
 
