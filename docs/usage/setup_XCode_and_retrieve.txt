@@ -32,4 +32,4 @@ Now that you are connected to Appollo Remote with your Windows or Linux computer
 
 Once that you are satisfied with the configuration of your build, you can use the following command: ``appollo build stop``.
 
-Now, you can **retrieve a patch** of your build with ``appollo build patch``.
+Now, you can **retrieve a patch** of your build with ``appollo build patch``

@@ -12,7 +12,19 @@ Stopping a build manually is possible by using the command ``appollo build stop 
 
 When your build is stopped, you can create the patch using ``appollo build patch``.
 
+.. image:: /img/appollo-build-patch.jpg
+  :alt: Appollo build patch
+  :align: center
+
+|
+
 By default, the file is called **appollo.patch** and is located in your app folder.
+
+.. image:: /img/appollo-patch.jpg
+  :alt: Appollo patch
+  :align: center
+
+|
 
 .. tip::
 

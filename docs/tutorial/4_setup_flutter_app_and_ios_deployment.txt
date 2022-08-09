@@ -13,7 +13,11 @@ Before you try to build an App, you have to make sure that you have already **cr
 
 You can use ``appollo app ls`` to retrieve a list of all your apps and see their **key**
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-app-ls.jpg
+  :alt: Appollo app ls
+  :align: center
+
+|
 
 See previous :ref:`step <previous_step>` of this tutorial if you have skipped it.
 
@@ -30,7 +34,11 @@ At this stage, since you want to be able to configure Xcode, you have to use the
 
 Your build has now been registered and will be started as soons as possible !
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-build-start.jpg
+  :alt: Appollo build start
+  :align: center
+
+|
 
 You are being given a **key** which will be important for the rest of the configuration process.
 
@@ -49,7 +57,11 @@ Once your build is ready, you can use ``appollo build connect KEY``.
 
 This command will list you your connection settings and credentials.
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-build-connect.jpg
+  :alt: Appollo build connect
+  :align: center
+
+|
 
 Use Spice Remote viewer to configure Xcode
 ------------------------------------------
@@ -58,11 +70,19 @@ For this step, you need a remote desktop access application. In this tutorial, t
 
 Launch your software, indicate the **url** your were given and connect.
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-remote-connect.jpg
+  :alt: Appollo remote connect
+  :align: center
+
+|
 
 Second, simply type in the **connection_password** to authenticate.
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-remote-pw.jpg
+  :alt: Appollo remote password
+  :align: center
+
+|
 
 Then, use the **user_password** you received to log in.
 
@@ -73,28 +93,33 @@ Configure Xcode on the VM
 
 At this point, follow these **4-easy steps**:
 
-Your app is located in Documents/app.
-
 To configure it with Xcode,
 
 1. Open Xcode
 
-#INSERT SCREENSHOT
-
 2. Select Open an existing project
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-xcode.jpg
+  :alt: Appollo remote xcode
+  :align: center
+
+|
 
 3. Select file Documents/app/ios/Runner.xcworkspace
 
-#INSERT SCREENSHOT
+.. image:: /img/appollo-xcode-file.jpg
+  :alt: Appollo remote xcode file
+  :align: center
+
+|
 
 4. Enjoy !
 
-* How to connect with remote desktop, ...
-* What should be setup usually on Xcode by Flutter developers to get their projects running
-* SEO : Add text with keywords "on Windows", "On Linux", "Without a Mac" in the top section of the page
-* SEO : ideally minimum 500 words on this page
+.. image:: /img/appollo-xcode-build.jpg
+  :alt: Appollo remote xcode build
+  :align: center
+
+|
 
 .. |spice_client| raw:: html
 

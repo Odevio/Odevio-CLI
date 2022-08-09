@@ -2,5 +2,4 @@
 7. How to debug and test your iOS app without a Mac (or with one) - The easy way
 ================================================================================
 
-* SEO : Add text with keywords "on Windows", "On Linux", "Without a Mac" in the top section of the page
-* SEO : ideally minimum 500 words on this page
+Coming soon...
