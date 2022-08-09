@@ -21,30 +21,29 @@ Thanks for checking it out.
 
     **A tool for developers by developers**
 
-.. image:: https://img.shields.io/badge/version-1.0.0-blue
-    :alt: Version
 
-.. image:: https://img.shields.io/pypi/l/django
-    :alt: License
+.. image:: https://img.shields.io/badge/version-0.1.0-blue
+    :target: https://github.com/Appollo-CLI/Appollo/
 
-.. image:: https://img.shields.io/librariesio/release/pypi/django
-    :target: https://pypi.org/project/Django/
-    :alt: Dependencies
+.. image:: https://img.shields.io/pypi/l/appollo
+    :target: https://github.com/Appollo-CLI/Appollo/blob/master/LICENSE
 
-.. image:: https://img.shields.io/badge/downloads-500%2Fmonth-brightgreen
-    :target: https://pypi.org/project/Django/
-    :alt: Downloads
+.. image:: https://img.shields.io/librariesio/release/pypi/appollo
+    :target: https://pypi.org/project/appollo/
 
-.. image:: https://img.shields.io/uptimerobot/ratio/m790704444-ff292054ac36eaafed1ecaa4
-    :target: https://stats.uptimerobot.com/o9vx1IDpDX
+.. image:: https://img.shields.io/badge/downloads-100%2Fmonth-brightgreen
+    :target: https://pypi.org/project/appollo/
+
+.. image:: https://img.shields.io/uptimerobot/ratio/m792431382-e51d8a06926b56c359afe3b7
+    :target: https://stats.uptimerobot.com/QqN9MFXvw3
     :alt: UptimeRobot
 
-.. image:: https://www.codefactor.io/repository/github/maxcmoi89/test-repo/badge
-    :target: https://www.codefactor.io/repository/github/maxcmoi89/test-repo
-    :alt: CodeFactor
+.. image:: https://www.codefactor.io/repository/github/appollo-cli/appollo/badge
+   :target: https://www.codefactor.io/repository/github/appollo-cli/appollo
+   :alt: CodeFactor
 
 .. image:: https://img.shields.io/discord/945256030869258280?logo=discord
-    :target: https://discord.gg/AzVwZ7yRFF
+    :target: https://discord.gg/6ZaaENZk
     :alt: Discord
 
 -----------

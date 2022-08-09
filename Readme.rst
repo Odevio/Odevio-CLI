@@ -1,6 +1,8 @@
 .. raw:: html
 
-    <img src="https://appollo.space/static/img/appollo--logo.svg" align="center" width="300px" />
+    <p align="center">
+        <img src="https://appollo.space/static/img/appollo--logo.svg" width="300px" />
+    </p>
 
 .. image:: https://img.shields.io/badge/version-0.1.0-blue
     :target: https://github.com/Appollo-CLI/Appollo/
