@@ -3,8 +3,10 @@
     :align: center
 
 .. image:: https://img.shields.io/badge/version-0.1.0-blue
+    :target: https://github.com/Appollo-CLI/Appollo/
 
 .. image:: https://img.shields.io/pypi/l/appollo
+    :target: https://github.com/Appollo-CLI/Appollo/blob/master/LICENSE
 
 .. image:: https://img.shields.io/librariesio/release/pypi/appollo
     :target: https://pypi.org/project/appollo/
