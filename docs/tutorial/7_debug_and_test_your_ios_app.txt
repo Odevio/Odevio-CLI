@@ -2,9 +2,9 @@
 7. How to debug and test your iOS app without a Mac (or with one) - The easy way
 ================================================================================
 
-Debugging and testing your iOS app is fairly easy with Appollo. Even if you do not have a Mac.
+Debugging and testing your iOS app is fairly easy with Appollo. **Even if you do not have a Mac**.
 
-Just like in the previous tutorial, the focus is going to be to start a build with a configuration type.
+For this tutorial, you will have to start a build with a **configuration build type**
 
 So, type in ``appollo build start KEY`` in your terminal and enter **configuration**.
 
