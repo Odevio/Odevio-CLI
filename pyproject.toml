@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://appollo.space"
+"Homepage" = "https://www.appollo.space"
 "Source" = "https://github.com/Appollo-CLI/Appollo"
 
 [project.scripts]
