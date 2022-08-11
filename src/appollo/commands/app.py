@@ -1,5 +1,7 @@
 import click
 
+from appollo.helpers import login_required_warning_decorator
+
 
 @click.group()
 def app():
@@ -7,6 +9,7 @@ def app():
 
 
 @app.command()
+@login_required_warning_decorator
 def ls():
     """ Lists the applications to which the logged in user has access.
 
@@ -47,16 +50,32 @@ def ls():
 
 
 @app.command()
+@login_required_warning_decorator
 @click.option('--name', prompt=True, help="Your application name")
 @click.option('--bundle-id', prompt=True, help="The bundle ID for your app on Apple (e.g.: com.company.appname)")
-@click.option('--account-key', prompt=True, help="Appollo key to the Apple Developer Account")
+@click.option('--account-key', prompt=False, help="Appollo key to the Apple Developer Account")
 def mk(name, bundle_id, account_key):
     """ Creates a new application.
 
     ..note: This will also create an application with this bundle ID on your Developer Account. This allows us to verify the validity of your bundle ID
      """
+    import textwrap
+
+    from rich.text import Text
+
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if account_key is None:
+        account_key = terminal_menu("/developer-accounts/", "Developer Account",
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            No developer accounts are linked to your profile. Check out [code]$ appollo apple add [/code] to link your developer account to Appollo.
+                                        """
+                                    )))
+        if account_key is None:
+            return
 
     application = api.post(
         "/applications/",
@@ -75,12 +94,20 @@ def mk(name, bundle_id, account_key):
 
 
 @app.command()
-@click.argument('key', required=True)
+@login_required_warning_decorator
+@click.argument('key', required=False)
 @click.option('--delete-on-apple', is_flag=True, help="Also delete the app on Apple")
 def rm(key, delete_on_apple):
     """ Deletes the application with key \"KEY\" from Appollo and on Apple if specified. """
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any apps.")
+        if key is None:
+            return
 
     url = f"/applications/{key}"
     if delete_on_apple:
@@ -92,7 +119,8 @@ def rm(key, delete_on_apple):
 
 
 @app.command("link")
-@click.argument('key', required=True)
+@login_required_warning_decorator
+@click.argument('key', required=False)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def link(key, team_key):
     """ Links an application to Appollo team with key \"KEY\".
@@ -102,6 +130,13 @@ def link(key, team_key):
     """
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any apps.")
+        if key is None:
+            return
 
     try:
         teams = api.post(f"/applications/{key}/teams/{team_key}/")
@@ -114,13 +149,21 @@ def link(key, team_key):
 
 
 @app.command("unlink")
-@click.argument('key', required=True)
+@login_required_warning_decorator
+@click.argument('key', required=False)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def unlink(key, team_key):
     """ Links or unlinks an application to Appollo team with key \"KEY\".
     """
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any apps.")
+        if key is None:
+            return
 
     deleted = api.delete(f"/applications/{key}/teams/{team_key}/")
 
@@ -129,13 +172,29 @@ def unlink(key, team_key):
 
 
 @app.command("import")
+@login_required_warning_decorator
 @click.option('--name', prompt=True, help="How you want to name your app in Appollo")
 @click.option('--bundle-id', prompt=True, help="The bundle ID for your app on Apple (e.g.: com.company.appname)")
-@click.option('--account-key', prompt=True, help="Appollo key to the Apple Developer Account")
+@click.option('--account-key', prompt=False, help="Appollo key to the Apple Developer Account")
 def import_app(name, bundle_id, account_key):
     """ Imports an application from Apple Developer to Appollo. """
+    import textwrap
+
+    from rich.text import Text
+
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if account_key is None:
+        account_key = terminal_menu("/developer-accounts/", "Developer Account",
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            No developer accounts are linked to your profile. Check out [code]$ appollo apple add [/code] to link your developer account to Appollo.
+                                        """
+                                    )))
+        if account_key is None:
+            return
 
     application = api.post(
         "/applications/",

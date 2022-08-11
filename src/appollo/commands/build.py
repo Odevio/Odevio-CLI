@@ -1,5 +1,7 @@
 import click
 
+from appollo.helpers import login_required_warning_decorator
+
 
 @click.group('build')
 def build():
@@ -21,6 +23,7 @@ def build():
 
 
 @build.command()
+@login_required_warning_decorator
 @click.option('-a', '--all', 'show_all', default=False, is_flag=True,
               help="shows your builds and the builds from your teams")
 def ls(show_all):
@@ -67,6 +70,7 @@ def ls(show_all):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 def rm(key):
     """ Delete build with key \"KEY\" and its corresponding Appollo-Remote.
@@ -85,6 +89,7 @@ def rm(key):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 def detail(key):
     """ Fetches detailed information of build with key \"KEY\".
@@ -148,6 +153,7 @@ def detail(key):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('directory', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
                 required=False)
 @click.option('--app-key', required=True, prompt=True, help="Key of the application to build")
@@ -227,6 +233,7 @@ def start(app_key, build_type, flutter, minimal_ios_version, app_version, build_
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 def ipa(key):
     """ Get the ipa file of build with key \"KEY\".
@@ -248,6 +255,7 @@ def ipa(key):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option(
     "-o", "--output", default="result.zip", help="Output filename (default: result.zip)",
@@ -271,6 +279,7 @@ def result(key, output="result.zip"):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option("-y", "--yes", is_flag=True, help="Automatically create an Appollo Remote if your build was not setup for remote desktop", )
 def connect(key, yes):
@@ -349,6 +358,7 @@ def connect(key, yes):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option(
     "-o", "--output", default="appollo.patch", help="Output filename (default: appollo.patch)",
@@ -380,6 +390,7 @@ def patch(key, output="result.zip"):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 def stop(key):
     """ Stops running build KEY """
@@ -396,6 +407,7 @@ def stop(key):
 
 
 @build.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 def logs(key):
     """
@@ -409,4 +421,4 @@ def logs(key):
     logs = api.get(f"/builds/{key}/logs/")
     console.print(logs)
 
-# TODO Commandes pour lister les versions Flutter disponibles
+# TODO Commands to list available flutter versions

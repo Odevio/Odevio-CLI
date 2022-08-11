@@ -254,7 +254,7 @@ def get_authorization_header(email=None, password=None):
             write_jwt_token(token)
     else:
         if email is None or password is None:
-            console.print("You are not connected yet. Please enter your credentials.")
+            console.print("If you already have an account, please enter your credentials and we will log you in :")
         if not email:
             email = Prompt.ask("E-mail")
         if not password:

@@ -5,7 +5,7 @@ import click
 from rich.console import Console
 
 APP_NAME = "Appollo"
-API_BASE_URL = "https://appollo.space"
+API_BASE_URL = "https://appollo.deuse.dev" #"https://appollo.space"
 
 
 console = Console()

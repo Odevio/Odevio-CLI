@@ -19,9 +19,9 @@ def appollo():
     """ Command line tool to build & release your flutter apps easily.
 
     \b
-    Github : |github|
-    Documentation : https://appollo.readthedocs.io/en/latest/
-    Download : |pypi|
+    Github : https://github.com/Appollo-CLI/Appollo
+    Documentation : https://appollo.readthedocs.io/en/master/
+    Download : https://pypi.org/project/appollo/
 
     \f
 
@@ -62,7 +62,6 @@ appollo.add_command(profile)
 appollo.add_command(team)
 appollo.add_command(app)
 appollo.add_command(apple)
-
 
 if __name__ == '__main__':
     appollo()

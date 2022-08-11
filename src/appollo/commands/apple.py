@@ -1,5 +1,7 @@
 import click
 
+from appollo.helpers import login_required_warning_decorator
+
 
 @click.group("apple")
 def apple():
@@ -37,6 +39,7 @@ def apple():
 
 
 @apple.command("detail")
+@login_required_warning_decorator
 @click.argument('key', required=True)
 def developer_account_detail(key):
     """ Gets detailed information about your Apple Developer Account with key \"KEY\" on Appollo.
@@ -123,6 +126,7 @@ def developer_account_detail(key):
 
 
 @apple.command("ls")
+@login_required_warning_decorator
 def developer_account_ls():
     """ Lists Apple Developer Accounts to which you have access.
 
@@ -164,6 +168,7 @@ def developer_account_ls():
 
 
 @apple.command("add")
+@login_required_warning_decorator
 @click.option("--apple-id", required=True, prompt=True, help="ID of your developer account on Apple")
 @click.option('--name', prompt=True, help="A user friendly name for Appollo")
 @click.option('--key-id', required=True, prompt=True, help="API key \"Key ID\" on App Store Connect")
@@ -200,6 +205,7 @@ def developer_account_add(apple_id, key_id, issuer_id, private_key, name=None):
 
 
 @apple.command("edit")
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option("--apple-id", help="ID of your developer account on Apple")
 @click.option('--name', help="A user friendly name for Appollo")
@@ -225,6 +231,7 @@ def developer_account_edit(key, apple_id=None, name=None):
 
 
 @apple.command("rm")
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.confirmation_option(prompt="Everything related to this Developer Account will be deleted. Are you sure you want to do this ?")
 def developer_account_rm(key):
@@ -243,6 +250,7 @@ def developer_account_rm(key):
 
 
 @apple.command("link")
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def link(key, team_key):
@@ -273,6 +281,7 @@ def link(key, team_key):
 
 
 @apple.command("unlink")
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def unlink(key, team_key):
@@ -288,6 +297,7 @@ def unlink(key, team_key):
 
 
 @apple.command("refresh-devices")
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.option("--quiet", "-q", is_flag=True, help="Flag to know if the refreshed list of devices should be hidden or not")
 def refresh_devices(key, quiet):

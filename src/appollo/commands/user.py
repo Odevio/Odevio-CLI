@@ -1,5 +1,7 @@
 import click
 
+from appollo.helpers import login_required_warning_decorator
+
 
 @click.command()
 @click.option('--email', prompt=True)
@@ -62,6 +64,7 @@ def signout():
 
 
 @click.command()
+@login_required_warning_decorator
 @click.option('--ini', is_flag=True, help="Highlight config.ini path")
 def profile(ini):
     """ Profile of the logged in user.

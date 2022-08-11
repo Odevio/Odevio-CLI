@@ -1,5 +1,7 @@
 import click
 
+from appollo.helpers import login_required_warning_decorator
+
 
 @click.group('team')
 def team():
@@ -23,6 +25,7 @@ def team():
 
 
 @team.command()
+@login_required_warning_decorator
 def ls():
     """ Lists the teams to which the logged in user has access.
 
@@ -76,6 +79,7 @@ def ls():
 
 
 @team.command()
+@login_required_warning_decorator
 @click.option('--name', prompt=True)
 def mk(name):
     """ Creates a team and sets the logged in user as team admin. """
@@ -91,6 +95,7 @@ def mk(name):
 
 
 @team.command()
+@login_required_warning_decorator
 @click.argument('key', required=True)
 @click.confirmation_option(prompt='Are you sure you want to delete the team ? \nThis action cannot be reverted.')
 def rm(key):
@@ -111,6 +116,7 @@ def member():
 
 
 @member.command('add')
+@login_required_warning_decorator
 @click.argument('key')
 @click.option('--username', prompt=True, help="username of the new team member")
 def add_member(key, username):
@@ -137,6 +143,7 @@ def add_member(key, username):
 
 
 @member.command('rm')
+@login_required_warning_decorator
 @click.argument('key')
 @click.option('--username', prompt=True, help="username of the team member to remove")
 def rm_member(key, username):
