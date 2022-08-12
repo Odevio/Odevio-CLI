@@ -8,8 +8,9 @@ from appollo.settings import console, get_jwt_token
 
 
 def zip_directory(directory_path):
-    """ Archives a directory in a zip file."""
-    shutil.make_archive(os.path.join(os.getcwd(), '.app'), "zip", directory_path)
+    """ Archives a directory in a zip file and returns his name."""
+    return shutil.make_archive(os.path.join(os.getcwd(), '.app'), "zip", directory_path)
+
 
 
 def print_validation_error(console, response_dict):

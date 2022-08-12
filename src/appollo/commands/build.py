@@ -154,16 +154,16 @@ def detail(key):
 
 @build.command()
 @login_required_warning_decorator
+@click.argument('app-key', required=False)
 @click.argument('directory', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
                 required=False)
-@click.option('--app-key', required=True, prompt=True, help="Key of the application to build")
 @click.option('--build-type', help="Build type", prompt=True,
               type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication"]))
 @click.option('--flutter', help="Flutter version for your build (example \"2.8.1\")",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
-def start(app_key, build_type, flutter, minimal_ios_version, app_version, build_number, directory=None):
+def start(build_type, flutter, minimal_ios_version, app_version, build_number, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided gets the current directory.
@@ -190,19 +190,41 @@ def start(app_key, build_type, flutter, minimal_ios_version, app_version, build_
     :code:`appollo build ls` or get detailed information by running :code:`appollo build detail <key>`
     """
     import os
+    import textwrap
+    from time import sleep
 
+    from rich.text import Text
     from rich.syntax import Syntax
+    from rich.spinner import Spinner
+    from rich.live import Live
+
     from appollo.settings import console
-    from appollo.helpers import zip_directory
+    from appollo.helpers import zip_directory, terminal_menu
     from appollo import api
 
     if directory is None:
         directory = os.getcwd()
 
-    print(f"Zipping {directory}")
-    zip_directory(directory)
+    if app_key is None:
+        app_key = terminal_menu("/applications/", "Application",
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have no applications in your account. Check out [code]$ appollo app mk [/code] to create an app.
+                                        """
+                                    )))
+        if app_key is None:
+            return
 
-    print(f"Uploading {directory}")
+    console.print(f"Zipping {directory}")
+    zip_file = zip_directory(directory)
+
+    file_size_mb = round(os.path.getsize(zip_file)/1000000, 2)
+
+    if file_size_mb > 1000:
+        console.print("File size exceeds 1GB, very large applications are not supported by Appollo.")
+        return
+
+    console.print(f"Uploading {directory} ({file_size_mb} MB)")
 
     build_instance = api.post(
         "/builds/",
@@ -228,8 +250,26 @@ def start(app_key, build_type, flutter, minimal_ios_version, app_version, build_
             code = Syntax(code=f"appollo build connect {build_instance['key']}", lexer="shell")
             console.print("To access your Appollo-Remote, you can use the following command when it has been started.")
             console.print(code)
+            console.print("Killing the commant will not stop the build.")
 
-    # TODO show realtime logs and build process.
+    # check build progress.
+    spinner = Spinner("dots", text="building...")
+    with Live(
+            spinner,
+            refresh_per_second=20,
+    ) as live:
+        while True:
+            sleep(10)
+            build_instance = api.get(f"/builds/{build_instance['key']}/")
+
+            # TODO change the backend to return status code and status description. Otherwise the condition do not work.
+            status = build_instance["status"]
+            if status in ["config", "succeeded"]:
+                console.print(Text.from_markup(f"Your build has succeeded"))
+                return
+            elif status in ["failed", "stopped",]:
+                console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
+                return
 
 
 @build.command()
@@ -280,7 +320,7 @@ def result(key, output="result.zip"):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.option("-y", "--yes", is_flag=True, help="Automatically create an Appollo Remote if your build was not setup for remote desktop", )
 def connect(key, yes):
     """ Get the connection information for an Appollo-Remote linked to build with key \"KEY\".
@@ -306,8 +346,18 @@ def connect(key, yes):
     from rich.syntax import Syntax
 
     from appollo.settings import console
-
+    from appollo.helpers import terminal_menu
     from appollo import api
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds",
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have no builds. Check out [code]$ appollo build start [/code] to start a build.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     build_instance = api.get(f"/builds/{key}/connect/")
 
