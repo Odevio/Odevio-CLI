@@ -46,7 +46,7 @@ It might take some time to boot if it is the first time you are using it.
 
 In parallel, you can also start an instance of the terminal on the virtual machine.
 
-Go into your app using ``cd Documents/app``. and use the ``flutter run`` command.
+Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
 
 Wait a few instants and that is how you can access your app on the remote desktop to debug and test it.
 
