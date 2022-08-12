@@ -33,6 +33,7 @@ The Appollo tool is composed of :
     :caption: Contents:
 
     manage_team_and_users
+    manage_your_app_ids_with_appollo
     configure_appollo
     connect_remote_desktop
     setup_Xcode_and_retrieve
