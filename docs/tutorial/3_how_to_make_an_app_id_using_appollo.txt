@@ -1,8 +1,17 @@
 .. _previous_step:
 
+.. _chapter_3:
+
 ========================================
 3. How to create an App ID using Appollo
 ========================================
+
+What is an App ID ?
+-------------------
+
+It is the combination of your **Team ID** and the **bundle ID**. The Team ID is the one you can find in your membership
+information and is supplied by Apple. The bundle ID is the one you define and is a **unique identifier**.
+It is a unique key for your app on the App Store (**the bundle id should look like this : com.company.appname**)
 
 In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo app`` subcommands.
 
@@ -33,7 +42,7 @@ You can **create a new one** using:
 
 The **name** is simply the one you want to give to the identifier.
 
-The |bundle_id|, is a unique key for your app on the App Store (the bundle id should look like this : com.company.appname)
+The bundle ID (e.g.: com.yourcompany.yourapp)
 
 And finally, your **Appollo account-key**.
 
@@ -43,55 +52,7 @@ And finally, your **Appollo account-key**.
 
 |
 
-Other subcommands
------------------
-
-Using the ``ls`` command line will return a list of all the App identifiers that are **currently linked** to your account.
-
-.. image:: /img/appollo-app-ls.jpg
-  :alt: Appollo app ls
-  :align: center
-
-|
-
-If you wish to **remove an App ID**, you can use the ``rm --key TEXT`` command.
-
-.. note::
-  **The app ID is removed (unlinked) from Appollo but not from the App Store.**
-
-
-  .. image:: /img/appollo-app-rm.jpg
-    :alt: Appollo app rm
-    :align: center
-
-  |
-
-For existing App IDs, the following command, allows you to link them to your Appollo account.
-
-  ``appollo app import --name TEXT --bundle-id TEXT --account-id TEXT``
-
-  .. image:: /img/appollo-app-import.jpg
-    :alt: Appollo app import
-    :align: center
-
-  |
-
-Furthermore, if you need to **link** or **unlink** an App to a **specific Appollo team**, you can use this command:
-
-  ``appollo app link --key TEXT --team-name TEXT``
-
-  .. image:: /img/appollo-app-link.jpg
-    :alt: Appollo app link
-    :align: center
-
-  |
-
-Linking an App with a team will **grant access** to all the team members.
-
-Extra resources
----------------
-
-If you need to, you can access a list of your existing App IDs.
+Now, you can access a list of your existing App IDs.
 
 For that, go over to your |apple_developer_account|, then to the **"Certificates, Identifiers & Profile"** menu.
 
@@ -102,10 +63,6 @@ There, you will find the **"Identifiers menu"** that contains the list with the 
   :align: center
 
 |
-
-.. |bundle_id| raw:: html
-
-   <a href="https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids" target="_blank">bundle ID</a>
 
 .. |apple_developer_account| raw:: html
 

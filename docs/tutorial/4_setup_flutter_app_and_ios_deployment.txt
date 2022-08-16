@@ -9,7 +9,11 @@ In this tutorial, you will learn how to **configure Xcode** with the help of App
 Requirements
 ------------
 
-Before you try to build an App, you have to make sure that you have already **created at least one App ID**.
+**Before starting the build**, make sure you are in the root folder of your Flutter app.
+
+**If** you do not have a Flutter app for this tutorial, get started on the |flutter_app|.
+
+You also have to make sure that you have already **created at least one App ID**.
 
 You can use ``appollo app ls`` to retrieve a list of all your apps and see their **key**
 
@@ -23,9 +27,6 @@ See previous :ref:`step <previous_step>` of this tutorial if you have skipped it
 
 Start the configuration build
 -----------------------------
-
-**Before starting the build**, make sure you are in the root folder of your Flutter app. If you do not have a Flutter app for this
-tutorial get started on the `official flutter tutorial <https://docs.flutter.dev/get-started/test-drive#create-app>`_.
 
 When starting an Appollo build, with ``appollo build start``, you are asked to type in your **App key**
 
@@ -76,7 +77,7 @@ This command will list you your connection settings and credentials.
 Use Spice Remote viewer to configure Xcode
 ------------------------------------------
 
-For this step, you need a remote desktop access application. In this tutorial, the one used is **Spice-Space's** OSX |spice_client|.
+For this step, you need a remote desktop access application. In this tutorial, the one used is **Spice-Space's** |spice_client|.
 
 Launch your software, indicate the **url** your were given and connect.
 
@@ -133,4 +134,8 @@ To configure it with Xcode,
 
 .. |spice_client| raw:: html
 
-   <a href="https://www.spice-space.org/osx-client.html" target="_blank">client</a>
+   <a href="https://www.spice-space.org/download.html" target="_blank">client</a>
+
+.. |flutter_app| raw:: html
+
+   <a href="https://docs.flutter.dev/get-started/test-drive?tab=vscode#create-app" target="_blank"> official Flutter tutorial</a>

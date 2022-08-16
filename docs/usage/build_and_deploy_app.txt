@@ -2,4 +2,27 @@
 Build and Release Flutter apps on iOS
 =====================================
 
-Coming soon...
+To build a Flutter app on iOS, you can use the ``appollo build start`` command.
+
+You can specify any build at this point except **configuration** so you can have an **IPA file**
+
+.. image:: /img/appollo-build-adhoc.jpg
+  :alt: Appollo build start build type ad-hoc
+  :align: center
+
+|
+
+Once the status of your build is **succeeded**, you can retrieve the **IPA file**.
+
+For that, use ``appollo build ipa``.
+
+.. image:: /img/appollo-build-ipa.jpg
+  :alt: Appollo build ipa
+  :align: center
+
+|
+
+Use an **ad-hoc** build type if you want to use your app on an registered device.
+
+.. warning:: For the device to be used, it must be registered **before** you make the build. Otherwise,
+             you will not be able to install the app.

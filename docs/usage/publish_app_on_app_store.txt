@@ -2,4 +2,22 @@
 Publish a flutter app on the App Store
 ======================================
 
-Coming soon...
+To publish an app, head over to |app_store_connect| and create a new iOS app.
+
+**Select the bundle ID of one of your App IDs**.
+
+.. image:: /img/apple-add-app.jpg
+  :alt: Apple add app
+  :align: center
+
+|
+
+Once this is done, in **Appollo**, you can create a **publication** build with ``appollo build start``.
+
+You will need to wait around **10 to 15 minutes** before Apple sends you an email confirming that your build has been processed.
+
+You can now add that build to your app.
+
+.. |app_store_connect| raw:: html
+
+   <a href="https://appstoreconnect.apple.com/apps" target="_blank">app store connect</a>

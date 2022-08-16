@@ -18,7 +18,7 @@ You can give whatever name you would like.
 
 Select the **bundle ID** from the list of app ID you have already created.
 
-If you have no app ID, you can refer to the chapter 3 of this tutorial.
+If you have no app ID, you can refer to the :ref:`chapter 3 <chapter_3>` of this tutorial.
 
 Finally, for **SKU** you can choose anything you want as long as it is unique.
 
