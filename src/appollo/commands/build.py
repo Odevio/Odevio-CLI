@@ -39,6 +39,8 @@ def ls(show_all):
     else:
         builds = api.get("/builds/")
 
+    console.print(builds)
+
     if builds:
         table = Table()
         table.add_column("KEY")
@@ -71,7 +73,7 @@ def ls(show_all):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 def rm(key):
     """ Delete build with key \"KEY\" and its corresponding Appollo-Remote.
 
@@ -79,8 +81,23 @@ def rm(key):
 
     .. note:: Appollo-Remotes are MacOS build machines on which the flutter build of your application is executed.
     """
+    import textwrap
+
+    from rich.text import Text
+
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     build_instance = api.delete(f"/builds/{key}/")
 
@@ -90,7 +107,7 @@ def rm(key):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 def detail(key):
     """ Fetches detailed information of build with key \"KEY\".
 
@@ -104,6 +121,17 @@ def detail(key):
 
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     build_instance = api.get(f"/builds/{key}/")
 
@@ -250,31 +278,39 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
             code = Syntax(code=f"appollo build connect {build_instance['key']}", lexer="shell")
             console.print("To access your Appollo-Remote, you can use the following command when it has been started.")
             console.print(code)
-            console.print("Killing the commant will not stop the build.")
+            console.print("Killing the command will not stop the build.")
 
     # check build progress.
     spinner = Spinner("dots", text="building...")
+    status = None
+    loop = True
     with Live(
             spinner,
             refresh_per_second=20,
     ) as live:
-        while True:
+        while loop:
+            # update status every 10 second.
             sleep(10)
             build_instance = api.get(f"/builds/{build_instance['key']}/")
 
-            # TODO change the backend to return status code and status description. Otherwise the condition do not work.
-            status = build_instance["status"]
-            if status in ["config", "succeeded"]:
-                console.print(Text.from_markup(f"Your build has succeeded"))
-                return
-            elif status in ["failed", "stopped",]:
-                console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
-                return
+            status = build_instance["status_code"]
+            if status in ["config", "succeeded", "failed", "stopped"]:
+                loop = False
+
+    if status in ["config", "succeeded"]:
+        console.print(Text.from_markup(f"Your build has succeeded"))
+        if status == "config":
+            console.print("You can access your Appollo-Remote by running the following command.")
+            console.print(code)
+        return
+    elif status in ["failed", "stopped"]:
+        console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
+        return
 
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 def ipa(key):
     """ Get the ipa file of build with key \"KEY\".
 
@@ -282,8 +318,23 @@ def ipa(key):
     This command is used when a build of type ad-hoc, ipa, validation or publication has succeeded.
     It returns an url to get the IPA, either to download it, or to install it if opened from an iOS device.
     """
+    import textwrap
+
+    from rich.text import Text
+
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     response = api.get(f"/builds/{key}/ipa/")
 
@@ -296,7 +347,7 @@ def ipa(key):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.option(
     "-o", "--output", default="result.zip", help="Output filename (default: result.zip)",
     type=click.Path(exists=False, resolve_path=True, file_okay=True, dir_okay=False))
@@ -306,8 +357,23 @@ def result(key, output="result.zip"):
     \b
     This command is used when a build is finished to retrieved its entire directory on the remote machine.
     """
+    import textwrap
+
+    from rich.text import Text
+
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     response = api.get(f"/builds/{key}/result/", json_decode=False)
 
@@ -350,10 +416,10 @@ def connect(key, yes):
     from appollo import api
 
     if key is None:
-        key = terminal_menu("/builds/", "Builds",
+        key = terminal_menu("/builds/", "Builds", name=build_name,
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
-                                            You have no builds. Check out [code]$ appollo build start [/code] to start a build.
+                                            You have not run any builds yet.
                                         """
                                     )))
         if key is None:
@@ -409,7 +475,7 @@ def connect(key, yes):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.option(
     "-o", "--output", default="appollo.patch", help="Output filename (default: appollo.patch)",
     type=click.Path(exists=False, resolve_path=True, file_okay=True, dir_okay=False))
@@ -421,10 +487,24 @@ def patch(key, output="result.zip"):
 
     .. note:: The patch was made on a blank Git repo.
     """
+    import textwrap
+
+    from rich.text import Text
     from rich.syntax import Syntax
 
     from appollo.settings import console
     from appollo import api
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", name=build_name, api_params={"all": 1},
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     response = api.get(f"/builds/{key}/patch/", json_decode=False)
 
@@ -441,13 +521,26 @@ def patch(key, output="result.zip"):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 def stop(key):
     """ Stops running build KEY """
+    import textwrap
+
     from rich.text import Text
 
     from appollo.settings import console
     from appollo import api
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", name=build_name, api_params={"all": 1},
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     build_instance = api.post(f"/builds/{key}/stop/")
     if build_instance:
@@ -458,17 +551,42 @@ def stop(key):
 
 @build.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 def logs(key):
     """
     Outputs the logs of build KEY
 
     .. note:: Logs are printed only when a command has finished its execution. In particular, Flutter logs are only printed when the flutter command execution has ended.
     """
+    import textwrap
+
+    from rich.text import Text
+
     from appollo.settings import console
     from appollo import api
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", name=build_name, api_params={"all": 1},
+                                    does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                        f"""
+                                            You have not run any builds yet.
+                                        """
+                                    )))
+        if key is None:
+            return
 
     logs = api.get(f"/builds/{key}/logs/")
     console.print(logs)
 
-# TODO Commands to list available flutter versions
+
+def build_name(build_instance):
+    """ Based on a build instance returns a user friendly name for the build. """
+    from datetime import datetime
+
+    start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z")
+    start_time_str = start_time.strftime('%Y-%m-%d %H:%M')
+    # TODO check if timezones are respected.
+    return f"{build_instance['application']} - {build_instance['name']} - {start_time_str}"
+
+
