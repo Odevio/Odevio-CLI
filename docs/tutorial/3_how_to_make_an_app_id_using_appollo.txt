@@ -6,27 +6,20 @@
 3. How to create an App ID using Appollo
 ========================================
 
-What is an App ID ?
--------------------
+What is an App ID (aka identifier) ?
+------------------------------------
 
 It is the combination of your **Team ID** and the **bundle ID**. The Team ID is the one you can find in your membership
-information and is supplied by Apple. The bundle ID is the one you define and is a **unique identifier**.
-It is a unique key for your app on the App Store (**the bundle id should look like this : com.company.appname**)
+information and is supplied by Apple. The bundle ID is the one you define and is a **unique identifier** for your app on
+the App Store. The App ID is required to publish an app on the App Store.
+
+.. note::
+    The bundle id should look like this : **com.company.appname**
 
 In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo app`` subcommands.
 
 .. image:: /img/appollo-app.jpg
   :alt: Appollo app
-  :align: center
-
-|
-
-The first thing you should do, if you have not yet, is to **take notice of your account-key** by using the ``appollo apple ls`` command.
-
-The key is located in the first part of the table. It is the key that was created when you linked your Apple Developer Account to Appollo.
-
-.. image:: /img/appollo-apple-ls.jpg
-  :alt: Appollo Apple ls
   :align: center
 
 |
@@ -38,25 +31,23 @@ You can **create a new one** using:
 
 .. code-block:: none
 
-  appollo app mk --name TEXT --bundle-id TEXT --account-key TEXT
+  appollo app mk --name APP_NAME --bundle-id COM.YOURCOMPANY.YOURAPP
 
-The **name** is simply the one you want to give to the identifier.
+The **name** is simply the one you want to give to the identifier. Choose your app name to make your life easier.
 
 The bundle ID (e.g.: com.yourcompany.yourapp)
 
-And finally, your **Appollo account-key**.
+If you have more than one developper account configured in Appollo you will be asked which one you want to use
+when running the command.
 
-.. image:: /img/appollo-app-mk.jpg
-  :alt: Appollo app mk
-  :align: center
-
-|
-
-Now, you can access a list of your existing App IDs.
+Let's check if your App ID was created properly on Apple Developer.
 
 For that, go over to your |apple_developer_account|, then to the **"Certificates, Identifiers & Profile"** menu.
 
 There, you will find the **"Identifiers menu"** that contains the list with the possibility to create new ones.
+
+..
+    TODO:change the image with one of the apple indentifiers.
 
 .. image:: /img/apple-certificates.jpg
   :alt: Apple certificates

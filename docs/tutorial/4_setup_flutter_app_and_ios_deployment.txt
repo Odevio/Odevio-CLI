@@ -1,6 +1,6 @@
-================================================================
-4. How to setup Xcode for a Flutter App with the help of Appollo
-================================================================
+=====================================================
+4. How to setup Xcode for a Flutter App without a MAC
+=====================================================
 
 In this tutorial, you will learn how to **configure Xcode** with the help of Appollo to **build your app**.
 
@@ -15,7 +15,7 @@ Requirements
 
 You also have to make sure that you have already **created at least one App ID**.
 
-You can use ``appollo app ls`` to retrieve a list of all your apps and see their **key**
+You can use ``appollo app ls`` to retrieve a list of all your App IDs.
 
 .. image:: /img/appollo-app-ls.jpg
   :alt: Appollo app ls
@@ -28,11 +28,13 @@ See previous :ref:`step <previous_step>` of this tutorial if you have skipped it
 Start the configuration build
 -----------------------------
 
-When starting an Appollo build, with ``appollo build start``, you are asked to type in your **App key**
+When starting an Appollo build, with ``appollo build start``, you are asked to select the **App ID** for which you want
+to make a build and also a **build type** among 6 different types.
 
-and your **build type** among 6 different types.
+At this stage, since you want to be able to configure Xcode, you have to use the **configuration** build type.
 
-At this stage, since you want to be able to configure Xcode, you have to use the **configuration** type.
+.. note::
+    if you only have a single **App ID** registered on Appollo, it is automatically selected when running ``appollo build start``.
 
 Your build has now been registered and will be started as soons as possible !
 
@@ -42,22 +44,18 @@ Your build has now been registered and will be started as soons as possible !
 
 |
 
-You are being given a **key** which will be important for the rest of the configuration process.
+Now, if you type in ``appollo build detail`` and select the last build, you will have a detailed view of the build's status.
 
-Now, if you type in ``appollo build detail`` with the build key, you will have a detailed view of the build's status.
+You can also easily access the logs of your build with the command ``appollo build logs`` and select the build for which
+you want to view the logs.
 
-You can also easily access the logs of your build with the command ``appollo build logs KEY``
+Connect to your configuration build
+-----------------------------------
 
-.. note::
+Once your build is ready, it takes a few minutes, you can use ``appollo build connect`` and select your last build in
+the list.
 
-  Most of the build commands require you to type in your **build key**
-
-Connect your configuration build
---------------------------------
-
-Once your build is ready, you can use ``appollo build connect KEY``.
-
-This command will list you your connection settings and credentials.
+This command will list your connection settings and credentials for a remote connection with Spice.
 
 .. image:: /img/appollo-build-connect.jpg
   :alt: Appollo build connect
@@ -79,7 +77,7 @@ Use Spice Remote viewer to configure Xcode
 
 For this step, you need a remote desktop access application. In this tutorial, the one used is **Spice-Space's** |spice_client|.
 
-Launch your software, indicate the **url** your were given and connect.
+Launch your software, it is named RemoteViewer on your computer, indicate the **url** your were given and connect.
 
 .. image:: /img/appollo-remote-connect.jpg
   :alt: Appollo remote connect
@@ -95,9 +93,7 @@ Second, simply type in the **connection_password** to authenticate.
 
 |
 
-Then, use the **user_password** you received to log in.
-
-And that is how you access the remote desktop.
+That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
 
 Configure Xcode on the VM
 -------------------------
@@ -129,6 +125,16 @@ To configure it with Xcode,
 .. image:: /img/appollo-xcode-build.jpg
   :alt: Appollo remote xcode build
   :align: center
+
+|
+
+We will configure the Bundle Identifier in XCode for our app to be the same to the one we created with Appollo. In the
+left menu of XCode select **Runner** and in the General tab under Identity update Bundle Identifier with the bundle ID
+generated beforehand.
+
+.. image:: /img/appollo-xcode-bundle-id.jpg
+   :alt: XCode bundle identifier
+   :align: center
 
 |
 
