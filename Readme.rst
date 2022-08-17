@@ -72,11 +72,6 @@ About
 **Our mission is to reduce the time it takes to setup, build and release Flutter
 apps on iOS to the bare minimum.**
 
-The Appollo initiative finds its source in the frustration many developers face
-to build and release Flutter mobile applications to iOS.
-A few of us got together to solve this issue once and for all and relieve
-future Flutter developers of this intense pain.
-
 The tool allows developers working alone or in teams and on
 multiple OS (Linux, Windows, MacOS) to build and publish their apps easily
 to the app store.
