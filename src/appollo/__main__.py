@@ -10,8 +10,8 @@ from appollo.commands.apple import apple
 
 
 @click.group()
-@click.version_option(version='1.0.0', message="""Appollo, %(version)s
-Copyright (C) 2022 Appollo
+@click.version_option(version='0.1.0', message="""Appollo, %(version)s
+Copyright (C) 2022 Appollo‡
 License : The MIT License
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""")
