@@ -39,8 +39,6 @@ def ls(show_all):
     else:
         builds = api.get("/builds/")
 
-    console.print(builds)
-
     if builds:
         table = Table()
         table.add_column("KEY")
