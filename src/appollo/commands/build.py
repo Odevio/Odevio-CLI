@@ -505,6 +505,7 @@ def patch(key, output="appollo.patch"):
         if key is None:
             return
 
+    console.print(f"Downloading patch file as {output}.")
     response = api.get(f"/builds/{key}/patch/", json_decode=False)
 
     if response:
