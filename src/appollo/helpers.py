@@ -59,8 +59,9 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
 
     Ideally this function should be integrated in a custom click.option and click.argument but it is not easy.
     """
-    from simple_term_menu import TerminalMenu
-
+    # from simple_term_menu import TerminalMenu
+    from pick import pick
+    
     from appollo import api
 
     if api_params:
@@ -74,9 +75,10 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
     elif len(terminal_ready_list) == 1:
         value = item_list[0][key_fieldname]
     else:
-        console.print("%s : " % prompt_text)
-        terminal_menu = TerminalMenu(terminal_ready_list)
-        menu_entry_index = terminal_menu.show()
+        # console.print("%s : " % prompt_text)
+        # terminal_menu = TerminalMenu(terminal_ready_list)
+        # menu_entry_index = terminal_menu.show()
+        option, menu_entry_index = pick(terminal_ready_list, prompt_text)
         value = item_list[menu_entry_index][key_fieldname]
 
     return value

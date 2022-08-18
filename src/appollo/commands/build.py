@@ -284,7 +284,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
     loop = True
     with Live(
             spinner,
-            refresh_per_second=20,
+            refresh_per_second=1,
     ) as live:
         while loop:
             # update status every 10 second.
