@@ -24,6 +24,8 @@ In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo ap
 
 |
 
+.. _create_app_id:
+
 Make a new App ID
 -----------------
 

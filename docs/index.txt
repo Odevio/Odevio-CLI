@@ -56,7 +56,7 @@ If you are getting started this is how we recommend you use the docs :
 
 * First, we advise you to read our :ref:`Installation guide <installation>` for instructions on how to install Appollo.
 * Next, check how to setup your app with Appollo following our complete :ref:`Tutorial <tutorial>` and build your Flutter app to iOS.
-* If you want to know every option Appollo has to offer, check out our :ref:`Usage guide <usage_guide>` or :ref:`Reference Guide <reference_guide>`
+* If you want to know every option Appollo has to offer, check out our :ref:`Reference Guide <reference_guide>`
 
 This documentation is constantly evolving and we appreciate every help we can get, so feel free to contribute.
 
@@ -67,7 +67,6 @@ This documentation is constantly evolving and we appreciate every help we can ge
    :caption: Contents:
 
    installation/index
-   usage/index
    tutorial/index
    reference_guide/index
    contribute/index

@@ -29,6 +29,6 @@ Let's get started.
    3_how_to_make_an_app_id_using_appollo
    4_setup_flutter_app_and_ios_deployment
    5_retrieve_patch_from_Xcode
-   6_build_flutter_ios_app_with_or_without_a_Mac
-   7_debug_and_test_your_ios_app
+   6_debug_and_test_your_ios_app_simulator
+   7_create_ipa_testing_purpose
    8_deploy_flutter_ios_app_on_app_store

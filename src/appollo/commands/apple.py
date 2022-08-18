@@ -19,9 +19,9 @@ def apple():
 
         - **Profiles** : A provisioning profile is a collection of digital entities that uniquely ties developers and devices to an authorized iPhone Development Team and enables a device to be used for testing. *These are managed automatically by Appollo.*
 
-        - **Identifiers** : Uniquely identifies your app throughout the Apple eco-system. *These are managed automatically by Appollo.*
+        - **Identifiers** : Uniquely identifies your app throughout the Apple eco-system. *These are imported or created in Appollo through command : $ appollo app*
 
-        - **Devices** : List of devices on which you want to be able to test your builds prior to release on the app store. At least one device should be added to the device list for Appollo to be able to build apps.
+        - **Devices** : List of devices on which you want to be able to test your builds prior to release on the App Store. At least one device should be added to the device list for Appollo to be able to build apps.
 
     These can be added, modified or deleted through |https://developers.apple.com|.
 
@@ -56,7 +56,7 @@ def developer_account_detail(key):
 
     \f
 
-    .. note:: Appollo updates Apple Developer Account informations automatically when starting a build with Appollo.
+    .. note:: Appollo updates Apple Developer Account information automatically when starting a build with Appollo.
 
     Example output :
 
@@ -162,7 +162,7 @@ def developer_account_ls():
 
         console.print("Check out [code]$ appollo apple --help[/code] to know what part of the Apple Developer Account "
                       "is used by Appollo or check related documentation at "
-                      "[link]https://appollo.readthedocs.io/en/latest/reference_guide/index.html#appollo-apple[/link].")
+                      "[link]https://appollo.readthedocs.io/en/master/reference_guide/index.html#appollo-apple[/link].")
     else:
         console.print('You do not have access to a developer account with Appollo.')
 
@@ -180,7 +180,7 @@ def developer_account_add(apple_id, key_id, issuer_id, private_key, name=None):
     """ Add access to an Apple developer account for Appollo.
 
     \f
-    .. note:: Once the developer account has been created there is no way to retrieve the private key from Appollo.
+    .. warning:: Once the developer account has been created there is no way to retrieve the private key from Appollo.
     .. note:: We have no way to verify your developer account's ID on Apple. In case of error, your builds will fail.
     """
     from appollo import api
@@ -235,11 +235,14 @@ def developer_account_edit(key, apple_id=None, name=None):
 @click.argument('key', required=True)
 @click.confirmation_option(prompt="Everything related to this Developer Account will be deleted. Are you sure you want to do this ?")
 def developer_account_rm(key):
-    """
-    Removes access to Apple Developer account with key \"KEY\" for Appollo.
+    """ Removes access to Apple Developer account with key \"KEY\" for Appollo.
+
+    This does not remove the Apple Developer account from Apple, it only removes the link between Appollo and Apple.
 
     \f
-    ..note:: This will also remove every application, every build, every devices, every certificate, every profile and every objects related to that Apple Developer account.
+    ..note::
+        This will also remove every application, every build, every devices, every certificate, every profile and every
+        objects related to that Apple Developer account on Appollo (it will not remove these from Apple).
     """
     from appollo import api
     from appollo.settings import console
@@ -265,7 +268,7 @@ def link(key, team_key):
     .. warning:: All users who are in a team linked to an Apple Developer Account have full control over it.
 
     .. note:: Once the developer account has been created, there is no way to retrieve the private key from Appollo.
-              Making it impossible for team members to "steal" your Apple account.
+              Making it impossible for team members to "steal" your Apple Developer account.
     """
     from appollo import api
     from appollo.settings import console

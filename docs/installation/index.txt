@@ -11,10 +11,19 @@ Appollo is a CLI utility developed in Python. It is easily installed with pip.
     pip install appollo
 
 
-Once installed we can easily run the CLI in the terminal :code:`$ appollo`
+Once installed we can easily run the CLI in the terminal :code:`$ appollo` and you should get the ``help`` output of the terminal.
+
+If it is your first time using Appollo, create an Appollo account by running :
+
+.. code-block::
+
+    appollo signup
 
 .. note::
 
-    PIP is the python package manager. If pip or python is not installed on your computer, check : https://packaging.python.org/en/latest/tutorials/installing-packages/.
+    PIP is the python package manager. PIP and python should be installed on your computer for Appollo to work.
+    `Install python <https://www.python.org/downloads/>`_.
 
-If it is your first time using Appollo, create an Appollo account by running :code:`$ appollo signup`.
+.. warning::
+
+    python 3.6 or higher is required for Appollo to work properly.

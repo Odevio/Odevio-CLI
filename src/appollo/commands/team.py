@@ -10,7 +10,7 @@ def team():
     A user can be part of multiple teams. Each team has only one admin. The admin can add or remove users based
     on their username.
 
-    The team system is used in case a user wants to share access to his Apple Developer Account, his apps or
+    The team system is used in case a user wants to share access to his Apple Developer Account, his app identifiers or
     his builds to other developers with whom he collaborates.
 
 
@@ -33,7 +33,7 @@ def ls():
 
         - General team information
         - List of team members
-        - List of applications in the team
+        - List of app identifiers in the team
         - List of Apple Developer accounts to which the team has access
 
     \f
@@ -148,8 +148,6 @@ def add_member(key, username):
 @click.option('--username', prompt=True, help="username of the team member to remove")
 def rm_member(key, username):
     """ Removes a user from a team."""
-    from rich.tree import Tree
-
     from appollo import api
     from appollo.settings import console
 

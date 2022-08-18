@@ -4,8 +4,8 @@
 
 Once you are satisfied with the configuration, you have two possibilities to retrieve the changes you made in Appollo locally.
 
-    1. **If you use Git** for your project the easiest is to use the ``appollo build patch`` which will generate a git patch file with your changes.
-    2. Otherwise, you can download all your project files locally with the command ``appollo build result``.
+    1. **If you use Git** for your project the easiest is to use the ``appollo build patch`` which will `Retrieve changes with a patch file`_.
+    2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the command ``appollo build download``.
 
 
 Retrieve changes with a patch file
@@ -35,12 +35,11 @@ By default, the file is called **appollo.patch** and is located in your app fold
 
 |
 
+To apply the changes, use the git command ``git am appollo.patch``.
+
 .. tip::
 
   Use ``--help`` to see the options of a command. For exemple, with ``appollo build patch`` you have options to name the file of your patch.
-
-To apply the changes, use the git command ``git am appollo.patch``.
-
 
 Retrieve changes by downloading the project files
 -------------------------------------------------
@@ -50,6 +49,6 @@ You can check the list of your ongoing builds with ``appollo build ls`` and the 
 
 Stopping a build manually is possible by using the command ``appollo build stop`` and selecting the build you want to stop.
 
-When your build is stopped, you can get your files as a zip file by using ``appollo build result``.
+When your build is stopped, you can get your files as a zip file by using ``appollo build download``.
 
-Unzip the files and you get the last version of your project as edited in XCode.
+Unzip the files and you get the last version of your source code as edited in XCode.

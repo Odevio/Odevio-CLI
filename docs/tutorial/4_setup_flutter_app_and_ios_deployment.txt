@@ -1,5 +1,5 @@
 =====================================================
-4. How to setup Xcode for a Flutter App without a MAC
+4. How to setup Xcode for a Flutter app without a MAC
 =====================================================
 
 In this tutorial, you will learn how to **configure Xcode** with the help of Appollo to **build your app**.
@@ -36,18 +36,16 @@ At this stage, since you want to be able to configure Xcode, you have to use the
 .. note::
     if you only have a single **App ID** registered on Appollo, it is automatically selected when running ``appollo build start``.
 
-Your build has now been registered and will be started as soons as possible !
+Your build has now been registered and is starting.
 
-.. image:: /img/appollo-build-start.jpg
-  :alt: Appollo build start
-  :align: center
+.. tip::
+    If the build fails you can easily access the logs of your build with the command ``appollo build logs`` and select
+    the build for which you want to view the logs.
 
-|
-
-Now, if you type in ``appollo build detail`` and select the last build, you will have a detailed view of the build's status.
-
-You can also easily access the logs of your build with the command ``appollo build logs`` and select the build for which
-you want to view the logs.
+.. tip::
+    If you closed your terminal while your app was building you can execute ``appollo build detail`` and select the last
+    build and you will have a detailed view of the build's status. Builds do not stop if the ``appollo build start``
+    command is killed.
 
 Connect to your configuration build
 -----------------------------------
@@ -63,12 +61,13 @@ This command will list your connection settings and credentials for a remote con
 
 |
 
-.. tip:: If you try to connect a build that was not meant for remote desktop, no problem, Appollo will suggest
-         you to create one automatically.
+.. tip::
+    If you try to connect a build that was not meant for remote desktop, no problem, Appollo will suggest
+    you to create one automatically.
 
-.. image:: /img/appollo-connect-other.jpg
-  :alt: Appollo build connect with other build
-  :align: center
+    .. image:: /img/appollo-connect-other.jpg
+      :alt: Appollo build connect with other build
+      :align: center
 
 |
 
@@ -95,8 +94,8 @@ Second, simply type in the **connection_password** to authenticate.
 
 That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
 
-Configure Xcode on the VM
--------------------------
+Configure Xcode on the Appollo-Remote
+-------------------------------------
 
 At this point, follow these **4-easy steps**:
 
@@ -128,9 +127,9 @@ To configure it with Xcode,
 
 |
 
-We will configure the Bundle Identifier in XCode for our app to be the same to the one we created with Appollo. In the
-left menu of XCode select **Runner** and in the General tab under Identity update Bundle Identifier with the bundle ID
-generated beforehand.
+We will configure the Bundle Identifier in XCode for our app to be the same to the one we created with Appollo otherwise
+Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
+General tab under Identity update Bundle Identifier with the bundle ID generated beforehand.
 
 .. image:: /img/appollo-xcode-bundle-id.jpg
    :alt: XCode bundle identifier

@@ -1,0 +1,108 @@
+==================================================================================
+7. How to create an IPA file without a Mac for testing purposes on an Apple Device
+==================================================================================
+
+In this section of the tutorial, you are going to learn how to effectively build your app to retrieve the **IPA** file
+for testing purposes on physical apple devices.
+
+.. tip:: An IPA file contains an iOS app. It is a file that can be installed on iOS devices and used as an application.
+         It is comparable to an Android APK.
+
+Adding your device to Apple Developer
+-------------------------------------
+IPA files can be used for testing purposes only if the physical devices on which you want to test them are added to the
+Apple Developer Devices.
+
+To register a new device, visit |apple_device| and add a new device.
+
+You will need the UDID of the apple device on which you want to install your app. You can get the UDID by browsing
+to `udid.tech <https://udid.tech/>`_ with your apple device. Or you can get your UDID
+`directly from itunes <https://whatsmyudid.com/>`_ when your device is plugged in.
+
+Once your device has been registered we can start building the IPA.
+
+Building the IPA
+----------------
+You can use the command ``appollo build start`` but this time the **build type** is going to be **ad-hoc**.
+
+.. image:: /img/appollo-build-adhoc.jpg
+  :alt: Appollo build start build type ad-hoc
+  :align: center
+
+|
+
+Your build is being created. Grab a coffee, it can take a few minutes.
+
+.. note:: The previously used build type ``configuration`` for the XCode configuration does not generate an IPA file.
+
+.. tip:: If you add ``--help`` you will see all the different options you have to configure your build. For example,
+         you can choose the build version.
+
+    .. image:: /img/appollo-build-help.jpg
+      :alt: Appollo build start --help
+      :align: center
+
+|
+
+.. tip::
+    If you closed your terminal while your app was building you can always check the status with ``appollo build detail``
+    and selecting your last build in the list.
+
+    Builds do not stop if the ``appollo build start`` command is killed.
+
+    .. image:: /img/appollo-build-detail.jpg
+      :alt: Appollo build detail output
+      :align: center
+
+    |
+
+    Your build can have different status, here they are in order:
+
+    1. Created: Your build was created but the remote instance has not started yet
+
+    2. In progress:
+
+      a. Starting instance: The Appollo-Remote instance is booting up
+
+      b. Preparing build: Loading the different certificates
+
+      c. Building: Your app is being created
+
+      d. Getting build result: The patch is created as well as the IPA file
+
+      e. Publishing: Sending app on the app store
+
+    3. Succeeded
+
+When your build has succeeded, you can use the command ``appollo build ipa``
+
+.. image:: /img/appollo-build-ipa.jpg
+  :alt: Appollo build ipa
+  :align: center
+
+|
+
+You will be given a URL. If you use it in a browser, it will download the file.
+
+You can also send the URL to a **registered device** of your Apple developer account to download the app, for example by e-mail.
+When clicking this link directly from your Apple device a prompt will be shown to install the application on your device.
+
+.. image:: /img/appollo-myapp.jpg
+  :alt: Myapp on iphone
+  :align: center
+
+|
+
+And that is how you can build your app for testing purposes on physical devices.
+
+.. tip:: To register a new device, visit |apple_device|.
+
+.. warning:: For the device to be used, it must be registered **before** you make the build. Otherwise,
+             you will not be able to install the app.
+
+|
+
+.. |apple_device| raw:: html
+
+   <a href="https://developer.apple.com/account/resources/devices/list" target="_blank">https://developer.apple.com/account/resources/devices/list</a>
+

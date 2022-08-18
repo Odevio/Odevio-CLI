@@ -11,7 +11,7 @@ def app():
 @app.command()
 @login_required_warning_decorator
 def ls():
-    """ Lists the applications to which the logged in user has access.
+    """ Lists the app identifiers to which the logged in user has access.
 
     \f
     Example output:
@@ -45,19 +45,19 @@ def ls():
         code = Syntax(
             code="$ appollo app mk --name NAME --bundle-id BUNDLE_ID --account-key APPLE_DEVELOPER_ACCOUNT_KEY",
             lexer="shell")
-        console.print(f"You did not register any apps. Create one with")
+        console.print(f"You did not register any app identifiers. Create one with")
         console.print(code)
 
 
 @app.command()
 @login_required_warning_decorator
-@click.option('--name', prompt=True, help="Your application name")
+@click.option('--name', prompt=True, help="Your app identifier name (e.g.: your app's name)")
 @click.option('--bundle-id', prompt=True, help="The bundle ID for your app on Apple (e.g.: com.company.appname)")
 @click.option('--account-key', prompt=False, help="Appollo key to the Apple Developer Account")
 def mk(name, bundle_id, account_key):
-    """ Creates a new application.
+    """ Creates a new app identifier.
 
-    ..note: This will also create an application with this bundle ID on your Developer Account. This allows us to verify the validity of your bundle ID
+    ..note: This will also create an app identifier with this bundle ID on your Developer Account. This allows us to verify the validity of your bundle ID
      """
     import textwrap
 
@@ -88,7 +88,7 @@ def mk(name, bundle_id, account_key):
     )
 
     if application:
-        console.print(f"Congratulations! Your application {application['apple_name']} has been created "
+        console.print(f"Congratulations! Your app identifier {application['apple_name']} has been created "
                       f"in Appollo as {application['name']} with key \"{application['key']}\" and on the "
                       f"App Store as ID \"{application['apple_id']}\"")
 
@@ -96,16 +96,16 @@ def mk(name, bundle_id, account_key):
 @app.command()
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.option('--delete-on-apple', is_flag=True, help="Also delete the app on Apple")
+@click.option('--delete-on-apple', is_flag=True, help="Also delete the app identifier on Apple")
 def rm(key, delete_on_apple):
-    """ Deletes the application with key \"KEY\" from Appollo and on Apple if specified. """
+    """ Deletes the app identifier with key \"KEY\" from Appollo and on Apple if specified. """
     from appollo import api
     from appollo.settings import console
     from appollo.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any apps.")
+                            does_not_exist_msg="You do not have any app identifiers.")
         if key is None:
             return
 
@@ -115,7 +115,7 @@ def rm(key, delete_on_apple):
     account = api.delete(url)
 
     if account:
-        console.print(f"Application with key \"{key}\" successfully removed.")
+        console.print(f"App identifier with key \"{key}\" successfully removed.")
 
 
 @app.command("link")
@@ -123,7 +123,7 @@ def rm(key, delete_on_apple):
 @click.argument('key', required=False)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def link(key, team_key):
-    """ Links an application to Appollo team with key \"KEY\".
+    """ Links an app identifier to Appollo team with key \"KEY\".
 
     \f
     .. warning:: All users who are in a team linked to an Apple Developer Account have full control over it.
@@ -134,18 +134,18 @@ def link(key, team_key):
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any apps.")
+                            does_not_exist_msg="You do not have any app identifier.")
         if key is None:
             return
 
     try:
         teams = api.post(f"/applications/{key}/teams/{team_key}/")
     except api.NotFoundException:
-        console.print("This application or team does not exist or you do not have access to it")
+        console.print("This app identifier or team does not exist or you do not have access to it")
         return
 
     if teams:
-        console.print(f"Team \"{team_key}\" is now linked to application \"{key}\".")
+        console.print(f"Team \"{team_key}\" is now linked to app identifier \"{key}\".")
 
 
 @app.command("unlink")
@@ -153,7 +153,7 @@ def link(key, team_key):
 @click.argument('key', required=False)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def unlink(key, team_key):
-    """ Links or unlinks an application to Appollo team with key \"KEY\".
+    """ Links or unlinks an app identifier to Appollo team with key \"KEY\".
     """
     from appollo import api
     from appollo.settings import console
@@ -161,23 +161,23 @@ def unlink(key, team_key):
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any apps.")
+                            does_not_exist_msg="You do not have any app identifier.")
         if key is None:
             return
 
     deleted = api.delete(f"/applications/{key}/teams/{team_key}/")
 
     if deleted:
-        console.print(f"Team \"{team_key}\" is now unlinked from application \"{key}\".")
+        console.print(f"Team \"{team_key}\" is now unlinked from app identifier \"{key}\".")
 
 
 @app.command("import")
 @login_required_warning_decorator
-@click.option('--name', prompt=True, help="How you want to name your app in Appollo")
+@click.option('--name', prompt=True, help="Your app identifier name (e.g.: your app's name)")
 @click.option('--bundle-id', prompt=True, help="The bundle ID for your app on Apple (e.g.: com.company.appname)")
 @click.option('--account-key', prompt=False, help="Appollo key to the Apple Developer Account")
 def import_app(name, bundle_id, account_key):
-    """ Imports an application from Apple Developer to Appollo. """
+    """ Imports an app identifier from Apple Developer to Appollo. """
     import textwrap
 
     from rich.text import Text
@@ -207,5 +207,5 @@ def import_app(name, bundle_id, account_key):
     )
 
     if application:
-        console.print(f"Congratulations! Your application {application['apple_name']} has been imported on Appollo "
+        console.print(f"Congratulations! Your app identifier {application['apple_name']} has been imported on Appollo "
                       f"as {application['name']}. It is registered with key \"{application['key']}\".")

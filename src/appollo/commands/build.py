@@ -10,10 +10,10 @@ def build():
     \f
     When starting a new project commands are mostly executed in this order :
 
-        1. :code:`appollo build start --build-type="configuration [DIRECTORY]"` to create an Appollo-Remote with the right environment for your application. This will return a key, you will use in the next commands.
-        2. :code:`appollo build connect <key>` to get your connection settings and access the Appolo Remote on which you can test and setup your application with XCode.
-        3. :code:`appollo build stop <key>` to stop your Appolo Remote when you're done editing your settings.
-        4. :code:`appollo build patch <key>` to retrieve the changes made on the Appollo-Remote.
+        1. :code:`appollo build start --build-type="configuration [DIRECTORY]"` to create an Appollo-Remote with the right environment for your application.
+        2. :code:`appollo build connect` to get your connection settings and access the Appolo Remote on which you can test and setup your application with XCode.
+        3. :code:`appollo build stop` to stop your Appolo Remote when you're done editing your settings.
+        4. :code:`appollo build patch` to retrieve the changes made on the Appollo-Remote.
         5. :code:`git am appollo.patch` to apply the changes locally.
         6. :code:`appollo build start [OPTIONS] [DIRECTORY]` to build your app with Flutter and generate an IPA or to publish your app on the App Store.
 
@@ -75,7 +75,7 @@ def ls(show_all):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def rm(key):
-    """ Delete build with key \"KEY\" and its corresponding Appollo-Remote.
+    """ Deletes a build and its corresponding Appollo-Remote.
 
     \f
 
@@ -109,7 +109,7 @@ def rm(key):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def detail(key):
-    """ Fetches detailed information of build with key \"KEY\".
+    """ Fetches detailed information of a build.
 
     Returns the location of the logs and application artifacts.
     """
@@ -214,8 +214,8 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
         * **Publication** : Build an .ipa file and publish it on the App Store. Once this build succeeds you have
           to go on the App Store to complete information and screenshots related to your new application version.
 
-    Build start in detached mode you can check the progress of all your Appollo-Remotes by running
-    :code:`appollo build ls` or get detailed information by running :code:`appollo build detail <key>`
+    Killing this command will not stop the build you can check the progress of all your Appollo-Remotes by running
+    :code:`appollo build ls` or get detailed information by running :code:`appollo build detail` and selecting your build.
     """
     import os
     import textwrap
@@ -237,7 +237,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
         app_key = terminal_menu("/applications/", "Application",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
-                                            You have no applications in your account. Check out [code]$ appollo app mk [/code] to create an app.
+                                            You have no app identifiers in your account. Check out [code]$ appollo app mk [/code] to create an app identifier.
                                         """
                                     )))
         if app_key is None:
@@ -312,7 +312,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def ipa(key):
-    """ Get the ipa file of build with key \"KEY\".
+    """ Get the ipa file of a build.
 
     \b
     This command is used when a build of type ad-hoc, ipa, validation or publication has succeeded.
@@ -349,13 +349,13 @@ def ipa(key):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.option(
-    "-o", "--output", default="result.zip", help="Output filename (default: result.zip)",
+    "-o", "--output", default="source.zip", help="Output filename (default: source.zip)",
     type=click.Path(exists=False, resolve_path=True, file_okay=True, dir_okay=False))
-def result(key, output="result.zip"):
-    """ Get the modified sources of build with key \"KEY\".
+def download(key, output="source.zip"):
+    """ Get the modified source code of a build.
 
     \b
-    This command is used when a build is finished to retrieved its entire directory on the remote machine.
+    This command is used when a build is finished or stopped to retrieve its entire directory on the remote machine.
     """
     import textwrap
 
@@ -381,7 +381,7 @@ def result(key, output="result.zip"):
         with open(output, "wb") as f:
             f.write(response)
     else:
-        console.print("This build does not have any result")
+        console.print("Could not download the source code. Are you sure the build is stopped ?")
 
 
 @build.command()
@@ -389,7 +389,7 @@ def result(key, output="result.zip"):
 @click.argument('key', required=False)
 @click.option("-y", "--yes", is_flag=True, help="Automatically create an Appollo Remote if your build was not setup for remote desktop", )
 def connect(key, yes):
-    """ Get the connection information for an Appollo-Remote linked to build with key \"KEY\".
+    """ Get the connection information for an Appollo-Remote linked to a build.
 
     \b
     This command is mainly used when it is needed to connect to the Appollo-Remote with a Remote Desktop client :
@@ -402,8 +402,9 @@ def connect(key, yes):
     This command will start an Appollo-Remote and return connection settings and credentials for you to connect with a
     remote desktop client to the Appollo-Remote.
 
+    .. note:: Appollo-Remotes are active for 30 minutes before being closed automatically.
     .. note:: Appollo-Remotes are MacOS build machines on which the flutter build of your application is executed.
-    .. note:: The connection uses spice protocol, your Remote DEsktop must support it to allow you to use an Appollo Remote
+    .. note:: The connection uses the spice protocol, your Remote Desktop client must support it to allow you to use an Appollo-Remote.
     """
     import textwrap
 
@@ -445,7 +446,7 @@ def connect(key, yes):
                     console.print(code)
 
         elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
-            console.print("Your VM is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
+            console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
         else:
             auth_info = Panel(Text.from_markup(
                 textwrap.dedent(
@@ -479,8 +480,8 @@ def connect(key, yes):
 @click.option(
     "-o", "--output", default="appollo.patch", help="Output filename (default: appollo.patch)",
     type=click.Path(exists=False, resolve_path=True, file_okay=True, dir_okay=False))
-def patch(key, output="result.zip"):
-    """ Retrieve a patch that gathers all changes made to the source code of build with key \"KEY\".
+def patch(key, output="appollo.patch"):
+    """ Retrieve a patch that gathers all changes made to the source code of a build.
 
     \b
     This command is used when a build is finished and succeeded or when you have stopped an Appollo Remote on which you configured an app with XCode.
@@ -523,7 +524,7 @@ def patch(key, output="result.zip"):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def stop(key):
-    """ Stops running build KEY """
+    """ Stops a running build"""
     import textwrap
 
     from rich.text import Text
@@ -553,9 +554,9 @@ def stop(key):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def logs(key):
-    """
-    Outputs the logs of build KEY
+    """ Outputs the logs of a build
 
+    \f
     .. note:: Logs are printed only when a command has finished its execution. In particular, Flutter logs are only printed when the flutter command execution has ended.
     """
     import textwrap
