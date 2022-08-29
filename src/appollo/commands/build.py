@@ -185,11 +185,12 @@ def detail(key):
                 required=False)
 @click.option('--build-type', help="Build type", prompt=True,
               type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication"]))
-@click.option('--flutter', help="Flutter version for your build (example \"2.8.1\")",)
+@click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use appollo build flutter-versions to see all available versions",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
-def start(build_type, flutter, minimal_ios_version, app_version, build_number, app_key=None, directory=None):
+@click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
+def start(build_type, flutter, minimal_ios_version, app_version, build_number, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided gets the current directory.
@@ -221,8 +222,6 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
 
     from rich.text import Text
     from rich.syntax import Syntax
-    from rich.spinner import Spinner
-    from rich.live import Live
 
     from appollo.settings import console
     from appollo.helpers import zip_directory, terminal_menu
@@ -278,32 +277,56 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, a
             console.print(code)
             console.print("Killing the command will not stop the build.")
 
-    # check build progress.
-    spinner = Spinner("dots", text="building...")
-    status = None
-    loop = True
-    with Live(
-            spinner,
-            refresh_per_second=20,
-    ) as live:
-        while loop:
-            # update status every 10 second.
-            sleep(10)
-            build_instance = api.get(f"/builds/{build_instance['key']}/")
+        if no_progress:
+            return
 
-            status = build_instance["status_code"]
-            if status in ["config", "succeeded", "failed", "stopped"]:
-                loop = False
+        # check build progress.
+        loop = True
+        with console.status("Preparing build...", spinner="line") as spinner:
+            while loop:
+                # update status every 10 second.
+                sleep(10)
+                build_instance = api.get(f"/builds/{build_instance['key']}/")
 
-    if status in ["config", "succeeded"]:
-        console.print(Text.from_markup(f"Your build has succeeded"))
-        if status == "config":
-            console.print("You can access your Appollo-Remote by running the following command.")
-            console.print(code)
-        return
-    elif status in ["failed", "stopped"]:
-        console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
-        return
+                status = build_instance["status_code"]
+                if status == "created":
+                    spinner.update("Preparing build...")
+                elif status == "waiting_instance":
+                    spinner.update("Waiting for available instance...")
+                elif status == "in_progress":
+                    substatus = build_instance["substatus_code"]
+                    if substatus == "starting_instance":
+                        spinner.update("Starting instance...")
+                    elif substatus == "preparing_build":
+                        spinner.update("Preparing build...")
+                    elif substatus == "getting_result":
+                        spinner.update("Getting result...")
+                    elif substatus == "publishing":
+                        spinner.update("Publishing...")
+                    else:
+                        spinner.update("Building...")
+                elif status == "config":
+                    spinner.update("Configured for remote access")
+                    loop = False
+                elif status == "succeeded":
+                    spinner.update("Success!")
+                    loop = False
+                elif status == "failed":
+                    spinner.update("Failed")
+                    loop = False
+                elif status == "stopped":
+                    spinner.update("Stopped")
+                    loop = False
+
+        if status in ["config", "succeeded"]:
+            console.print(Text.from_markup(f"Your build has succeeded"))
+            if status == "config":
+                console.print("You can access your Appollo-Remote by running the following command.")
+                console.print(code)
+            return
+        elif status in ["failed", "stopped"]:
+            console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
+            return
 
 
 @build.command()
@@ -589,3 +612,17 @@ def build_name(build_instance):
     return f"{build_instance['application']} - {build_instance['name']} - {start_time_str}"
 
 
+@build.command()
+@login_required_warning_decorator
+def flutter_versions():
+    """ Lists the Flutter versions available on Appollo. """
+    from rich.columns import Columns
+
+    from appollo import api
+    from appollo.settings import console
+
+    versions = api.get("/flutter-versions/")
+
+    if versions:
+        columns = Columns(versions, padding=(0, 3), equal=True, title="Flutter versions available")
+        console.print(columns)
