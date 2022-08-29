@@ -71,8 +71,8 @@ exclude_patterns = ["_build", "requirements.txt"]
 
 # ReadTheDocs Theme options
 html_theme_options = {
-    # 'analytics_id': 'G-XXXXXXXXXX',  #  Provided by Google in your dashboard
-    # 'analytics_anonymize_ip': False,
+    'analytics_id': 'G-8ZZP5DELJM',  #  Provided by Google in your dashboard
+    'analytics_anonymize_ip': False,
     # 'logo_only': False,
     # 'display_version': True,
     # 'prev_next_buttons_location': 'bottom',

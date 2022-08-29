@@ -59,7 +59,8 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
 
     Ideally this function should be integrated in a custom click.option and click.argument but it is not easy.
     """
-    from simple_term_menu import TerminalMenu
+    import questionary
+    from questionary import Choice
 
     from appollo import api
 
@@ -67,16 +68,21 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
         item_list = api.get(api_route, params=api_params)
     else:
         item_list = api.get(api_route)
-    terminal_ready_list = [f"{name(item)}" for item in item_list]
+    terminal_ready_list = [Choice(name(item), i) for i, item in enumerate(item_list)]
     if len(terminal_ready_list) == 0:
         console.print(does_not_exist_msg)
         return
     elif len(terminal_ready_list) == 1:
         value = item_list[0][key_fieldname]
     else:
-        console.print("%s : " % prompt_text)
-        terminal_menu = TerminalMenu(terminal_ready_list)
-        menu_entry_index = terminal_menu.show()
+        menu_entry_index = questionary.select(
+            prompt_text,
+            choices=terminal_ready_list,
+            qmark="",
+        ).ask()
+        if not menu_entry_index:  # When ctrl-C, exit
+            exit()
+
         value = item_list[menu_entry_index][key_fieldname]
 
     return value

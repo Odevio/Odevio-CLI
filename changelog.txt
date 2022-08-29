@@ -1,0 +1,9 @@
+v0.2.0
+    - CLI : Added choice picker for some options when no value was provided
+    - Documentation : Improved and finished a first version of the tutorial
+    - Documentation : Removed the Usage section
+    - CLI : While building added a "progress bar" to show the progress of the build in realtime
+    - CLI : Minor improvements and cleanup of the code
+    - CLI : Added a GIF showing a quick Appollo demo
+    - CLI : Added flutter version list
+    - CLI : Added more precise build progress status

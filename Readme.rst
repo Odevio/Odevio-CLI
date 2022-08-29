@@ -1,10 +1,11 @@
-.. raw:: html
+.. image:: https://appollo.space/static/img/appollo--logo.svg
+    :align: center
+    :height: 200px
+    :width: 100%
 
-    <p align="center">
-        <img src="https://appollo.space/static/img/appollo--logo.svg" width="300px" />
-    </p>
+|
 
-.. image:: https://img.shields.io/badge/version-0.1.0-blue
+.. image:: https://img.shields.io/badge/version-0.2.0-blue
     :target: https://github.com/Appollo-CLI/Appollo/
 
 .. image:: https://img.shields.io/pypi/l/appollo
@@ -34,7 +35,7 @@ The easy way to setup, build & release flutter apps for iOS on Linux, Windows an
 Appollo is a tool to help developers setup and release their Flutter apps on iOS.
 Thanks for checking it out.
 
-.. figure:: https://github.com/Appollo-CLI/Appollo/blob/master/docs/img/appollo--demo.gif
+.. figure:: https://raw.githubusercontent.com/Appollo-CLI/Appollo/master/docs/img/appollo--demo.gif
     :align: center
 
     **A tool for developers by developers**
@@ -54,7 +55,7 @@ Usage
 -----
 To start using Appollo simply run :code:`$ appollo` in your console.
 
-.. image:: https://github.com/Appollo-CLI/Appollo/blob/master/docs/img/appollo-help.png
+.. image:: https://raw.githubusercontent.com/Appollo-CLI/Appollo/master/docs/img/appollo-help.png
 
 -------------
 Documentation

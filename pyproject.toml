@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "appollo"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     {name="Appollo", email="hello@appollo.space"}
 ]
@@ -26,7 +26,7 @@ dependencies = [
     "rich==11.2.0",
     "requests==2.27.1",
     "pyjwt==2.4.0",
-    "simple-term-menu==1.5.0"
+    "questionary==1.10.0"
 ]
 
 [project.urls]
