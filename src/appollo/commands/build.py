@@ -275,23 +275,21 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
             code = Syntax(code=f"appollo build connect {build_instance['key']}", lexer="shell")
             console.print("To access your Appollo-Remote, you can use the following command when it has been started.")
             console.print(code)
-            console.print("Killing the command will not stop the build.")
+        console.print("Killing the command will not stop the build.")
 
         if no_progress:
             return
 
         # check build progress.
         loop = True
-        with console.status("Preparing build...", spinner="line") as spinner:
+        with console.status("Waiting for available instance...", spinner="line") as spinner:
             while loop:
                 # update status every 10 second.
                 sleep(10)
                 build_instance = api.get(f"/builds/{build_instance['key']}/")
 
                 status = build_instance["status_code"]
-                if status == "created":
-                    spinner.update("Preparing build...")
-                elif status == "waiting_instance":
+                if status == "created" or status == "waiting_instance":
                     spinner.update("Waiting for available instance...")
                 elif status == "in_progress":
                     substatus = build_instance["substatus_code"]
