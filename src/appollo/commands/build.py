@@ -230,6 +230,11 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
     if directory is None:
         directory = os.getcwd()
 
+    if not os.path.exists(os.path.join(directory, "lib")) or not os.path.exists(os.path.join(directory, "pubspec.yaml")):
+        res = console.input("This directory does not look like it contains a flutter project. Are you sure you want to upload it? (y/N) ")
+        if res not in ["y", "Y"]:
+            return
+
     if app_key is None:
         app_key = terminal_menu("/applications/", "Application",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(

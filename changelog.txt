@@ -1,5 +1,6 @@
 v0.2.1
     - CLI: Exclude unnecessary directories when sending code
+    - CLI: Check if the directory to upload is a flutter directory
     - CLI: Bug fixes
 v0.2.0
     - CLI: Added choice picker for some options when no value was provided
