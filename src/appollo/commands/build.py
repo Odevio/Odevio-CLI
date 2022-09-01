@@ -476,7 +476,7 @@ def connect(key, yes):
             auth_info = Panel(Text.from_markup(
                 textwrap.dedent(
                     f"""
-                        url: [bold]spice://appollo.deuse.dev:{build_instance["remote_desktop_port"]}[/bold]
+                        url: [bold]spice://appollo.space:{build_instance["remote_desktop_port"]}[/bold]
                         connection_password: [bold]{build_instance["remote_desktop_password"]}[/bold]
                         user: [bold]appollo[/bold]
                         user_password: [bold]{build_instance["vm_password"]}[/bold]

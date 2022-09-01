@@ -1,3 +1,5 @@
+v0.2.2
+    - CLI: Fixed remote desktop url
 v0.2.1
     - CLI: Exclude unnecessary directories when sending code
     - CLI: Check if the directory to upload is a flutter directory
