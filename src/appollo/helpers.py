@@ -10,7 +10,7 @@ def zip_directory(directory_path):
     """ Archives a directory in a zip file and returns his name."""
     if os.path.exists(os.path.join(os.getcwd(), '.app.zip')):
         os.remove(os.path.join(os.getcwd(), '.app.zip'))
-    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, ["build", ".dart_tool", ".pub-cache", ".pub", ".git"])
+    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, ["build", ".dart_tool", ".pub-cache", ".pub", ".git"], ["source.zip"])
 
 
 
@@ -81,7 +81,6 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
             choices=terminal_ready_list,
             qmark="",
         ).ask()
-        print("menu_entry_index: "+str(menu_entry_index))
         if menu_entry_index is None:  # When ctrl-C, exit
             exit()
 
@@ -91,7 +90,7 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
 
 
 ### Copied from shutil to add directory exlusion
-def _make_zipfile(base_name, base_dir, exclude_dir=None, verbose=0, dry_run=0, logger=None):
+def _make_zipfile(base_name, base_dir, exclude_dir=None, exclude_files=None, verbose=0, dry_run=0, logger=None):
     """Create a zip file from all the files under 'base_dir'.
 
     The output zip file will be named 'base_name' + ".zip".  Returns the
@@ -129,6 +128,8 @@ def _make_zipfile(base_name, base_dir, exclude_dir=None, verbose=0, dry_run=0, l
                     if logger is not None:
                         logger.info("adding '%s'", path)
                 for name in filenames:
+                    if exclude_files is not None and name in exclude_files:
+                        continue
                     path = os.path.normpath(os.path.join(dirpath, name))
                     if os.path.isfile(path):
                         zf.write(path, path)
@@ -138,7 +139,7 @@ def _make_zipfile(base_name, base_dir, exclude_dir=None, verbose=0, dry_run=0, l
     return zip_filename
 
 
-def make_zip(base_name, root_dir=None, exclude_dir=None, base_dir=None, verbose=0,
+def make_zip(base_name, root_dir=None, exclude_dir=None, exclude_files=None, base_dir=None, verbose=0,
                  dry_run=0, logger=None):
     """Create a zip archive file
 
@@ -166,7 +167,7 @@ def make_zip(base_name, root_dir=None, exclude_dir=None, base_dir=None, verbose=
     kwargs = {'dry_run': dry_run, 'logger': logger}
 
     try:
-        filename = _make_zipfile(base_name, base_dir, exclude_dir, **kwargs)
+        filename = _make_zipfile(base_name, base_dir, exclude_dir, exclude_files, **kwargs)
     finally:
         if root_dir is not None:
             if logger is not None:

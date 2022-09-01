@@ -319,8 +319,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
         if status in ["config", "succeeded"]:
             console.print(Text.from_markup(f"Your build has succeeded"))
             if status == "config":
-                console.print("You can access your Appollo-Remote by running the following command.")
-                console.print(code)
+                connect({build_instance['key']})
             return
         elif status in ["failed", "stopped"]:
             console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
@@ -394,7 +393,9 @@ def download(key, output="source.zip"):
         if key is None:
             return
 
+    console.print("Downloading modified sources...")
     response = api.get(f"/builds/{key}/result/", json_decode=False)
+    console.print("The modified sources have been downloaded and are in source.zip")
 
     if response:
         with open(output, "wb") as f:
@@ -478,7 +479,7 @@ def connect(key, yes):
                 )
             ), title="Connexion settings and credentials", expand=False)
             console.print(auth_info)
-            console.print("Most Remote Desktop applications link the Mac Command key to Windows key on your keyboard.")
+            console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
             open_info = Text.from_markup(
                 textwrap.dedent(
                     """
@@ -554,10 +555,10 @@ def stop(key):
     from appollo.helpers import terminal_menu
 
     if key is None:
-        key = terminal_menu("/builds/", "Builds", name=build_name, api_params={"all": 1},
+        key = terminal_menu("/builds/", "Builds", name=build_name,
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
-                                            You have not run any builds yet.
+                                            You do not have any running builds.
                                         """
                                     )))
         if key is None:
@@ -605,6 +606,7 @@ def build_name(build_instance):
     """ Based on a build instance returns a user friendly name for the build. """
     from datetime import datetime
 
+    build_instance['start_time'] = build_instance['start_time'][:-3]+build_instance['start_time'][-2:]  # Remove timezone ':' otherwise it can't parse
     start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z")
     start_time_str = start_time.strftime('%Y-%m-%d %H:%M')
     # TODO check if timezones are respected.
