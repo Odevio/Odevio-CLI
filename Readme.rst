@@ -5,10 +5,10 @@
 
 |
 
-.. image:: https://img.shields.io/badge/version-0.2.0-blue
+.. image:: https://img.shields.io/badge/version-0.2.1-blue
     :target: https://github.com/Appollo-CLI/Appollo/
 
-.. image:: https://img.shields.io/pypi/l/appollo
+.. image:: https://img.shields.io/github/license/appollo-cli/appollo
     :target: https://github.com/Appollo-CLI/Appollo/blob/master/LICENSE
 
 .. image:: https://img.shields.io/librariesio/release/pypi/appollo

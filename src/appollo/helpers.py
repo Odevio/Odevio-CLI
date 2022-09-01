@@ -1,5 +1,4 @@
 import os
-import shutil
 from functools import update_wrapper
 
 import click
@@ -9,7 +8,9 @@ from appollo.settings import console, get_jwt_token
 
 def zip_directory(directory_path):
     """ Archives a directory in a zip file and returns his name."""
-    return shutil.make_archive(os.path.join(os.getcwd(), '.app'), "zip", directory_path)
+    if os.path.exists(os.path.join(os.getcwd(), '.app.zip')):
+        os.remove(os.path.join(os.getcwd(), '.app.zip'))
+    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, ["build", ".dart_tool", ".pub-cache", ".pub", ".git"])
 
 
 
@@ -80,9 +81,96 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
             choices=terminal_ready_list,
             qmark="",
         ).ask()
-        if not menu_entry_index:  # When ctrl-C, exit
+        print("menu_entry_index: "+str(menu_entry_index))
+        if menu_entry_index is None:  # When ctrl-C, exit
             exit()
 
         value = item_list[menu_entry_index][key_fieldname]
 
     return value
+
+
+### Copied from shutil to add directory exlusion
+def _make_zipfile(base_name, base_dir, exclude_dir=None, verbose=0, dry_run=0, logger=None):
+    """Create a zip file from all the files under 'base_dir'.
+
+    The output zip file will be named 'base_name' + ".zip".  Returns the
+    name of the output zip file.
+    """
+    import zipfile  # late import for breaking circular dependency
+
+    zip_filename = base_name + ".zip"
+    archive_dir = os.path.dirname(base_name)
+
+    if archive_dir and not os.path.exists(archive_dir):
+        if logger is not None:
+            logger.info("creating %s", archive_dir)
+        if not dry_run:
+            os.makedirs(archive_dir)
+
+    if logger is not None:
+        logger.info("creating '%s' and adding '%s' to it",
+                    zip_filename, base_dir)
+
+    if not dry_run:
+        with zipfile.ZipFile(zip_filename, "w",
+                             compression=zipfile.ZIP_DEFLATED) as zf:
+            path = os.path.normpath(base_dir)
+            if path != os.curdir:
+                zf.write(path, path)
+                if logger is not None:
+                    logger.info("adding '%s'", path)
+            for dirpath, dirnames, filenames in os.walk(base_dir, topdown=True):
+                if exclude_dir is not None:
+                    dirnames[:] = [d for d in dirnames if d not in exclude_dir]
+                for name in sorted(dirnames):
+                    path = os.path.normpath(os.path.join(dirpath, name))
+                    zf.write(path, path)
+                    if logger is not None:
+                        logger.info("adding '%s'", path)
+                for name in filenames:
+                    path = os.path.normpath(os.path.join(dirpath, name))
+                    if os.path.isfile(path):
+                        zf.write(path, path)
+                        if logger is not None:
+                            logger.info("adding '%s'", path)
+
+    return zip_filename
+
+
+def make_zip(base_name, root_dir=None, exclude_dir=None, base_dir=None, verbose=0,
+                 dry_run=0, logger=None):
+    """Create a zip archive file
+
+    'base_name' is the name of the file to create, minus any format-specific
+    extension.
+
+    'root_dir' is a directory that will be the root directory of the
+    archive; ie. we typically chdir into 'root_dir' before creating the
+    archive.  'base_dir' is the directory where we start archiving from;
+    ie. 'base_dir' will be the common prefix of all files and
+    directories in the archive.  'root_dir' and 'base_dir' both default
+    to the current directory.  Returns the name of the archive file.
+    """
+    save_cwd = os.getcwd()
+    if root_dir is not None:
+        if logger is not None:
+            logger.debug("changing into '%s'", root_dir)
+        base_name = os.path.abspath(base_name)
+        if not dry_run:
+            os.chdir(root_dir)
+
+    if base_dir is None:
+        base_dir = os.curdir
+
+    kwargs = {'dry_run': dry_run, 'logger': logger}
+
+    try:
+        filename = _make_zipfile(base_name, base_dir, exclude_dir, **kwargs)
+    finally:
+        if root_dir is not None:
+            if logger is not None:
+                logger.debug("changing back to '%s'", save_cwd)
+            os.chdir(save_cwd)
+
+    return filename

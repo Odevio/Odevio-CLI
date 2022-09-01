@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "appollo"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
     {name="Appollo", email="hello@appollo.space"}
 ]
@@ -16,7 +16,7 @@ keywords = ["Flutter", "iOS"]
 classifiers  = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Operating System :: OS Independent",
     "Environment :: Console",
     "Natural Language :: English",
