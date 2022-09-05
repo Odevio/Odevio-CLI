@@ -38,9 +38,9 @@ Your build is being created. Grab a coffee, it can take a few minutes.
 .. tip:: If you add ``--help`` you will see all the different options you have to configure your build. For example,
          you can choose the build version.
 
-    .. image:: /img/appollo-build-help.jpg
-      :alt: Appollo build start --help
-      :align: center
+.. image:: /img/appollo-build-help.jpg
+  :alt: Appollo build start --help
+  :align: center
 
 |
 
@@ -48,31 +48,31 @@ Your build is being created. Grab a coffee, it can take a few minutes.
     If you closed your terminal while your app was building you can always check the status with ``appollo build detail``
     and selecting your last build in the list.
 
-    Builds do not stop if the ``appollo build start`` command is killed.
+Builds do not stop if the ``appollo build start`` command is killed.
 
-    .. image:: /img/appollo-build-detail.jpg
-      :alt: Appollo build detail output
-      :align: center
+.. image:: /img/appollo-build-detail.jpg
+  :alt: Appollo build detail output
+  :align: center
 
-    |
+|
 
-    Your build can have different status, here they are in order:
+Your build can have different status, here they are in order:
 
-    1. Created: Your build was created but the remote instance has not started yet
+1. Created: Your build was created but the remote instance has not started yet
 
-    2. In progress:
+2. In progress:
 
-      a. Starting instance: The Appollo-Remote instance is booting up
+  a. Starting instance: The Appollo-Remote instance is booting up
 
-      b. Preparing build: Loading the different certificates
+  b. Preparing build: Loading the different certificates
 
-      c. Building: Your app is being created
+  c. Building: Your app is being created
 
-      d. Getting build result: The patch is created as well as the IPA file
+  d. Getting build result: The patch is created as well as the IPA file
 
-      e. Publishing: Sending app on the app store
+  e. Publishing: Sending app on the app store
 
-    3. Succeeded
+3. Succeeded
 
 When your build has succeeded, you can use the command ``appollo build ipa``
 
@@ -105,4 +105,3 @@ And that is how you can build your app for testing purposes on physical devices.
 .. |apple_device| raw:: html
 
    <a href="https://developer.apple.com/account/resources/devices/list" target="_blank">https://developer.apple.com/account/resources/devices/list</a>
-
