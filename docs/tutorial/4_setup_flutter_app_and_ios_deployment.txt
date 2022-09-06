@@ -33,8 +33,14 @@ to make a build and also a **build type** among 6 different types.
 
 At this stage, since you want to be able to configure Xcode, you have to use the **configuration** build type.
 
+.. image:: /img/appollo-build-start.jpg
+  :alt: Appollo build start
+  :align: center
+
+|
+
 .. note::
-    if you only have a single **App ID** registered on Appollo, it is automatically selected when running ``appollo build start``.
+    If you only have a single **App ID** registered on Appollo, it is automatically selected when running ``appollo build start``.
 
 Your build has now been registered and is starting.
 
