@@ -22,10 +22,10 @@ Thanks for checking it out.
     **A tool for developers by developers**
 
 
-.. image:: https://img.shields.io/badge/version-0.1.0-blue
+.. image:: https://img.shields.io/badge/version-0.2.2-blue
     :target: https://github.com/Appollo-CLI/Appollo/
 
-.. image:: https://img.shields.io/pypi/l/appollo
+.. image:: https://img.shields.io/github/license/appollo-cli/appollo
     :target: https://github.com/Appollo-CLI/Appollo/blob/master/LICENSE
 
 .. image:: https://img.shields.io/librariesio/release/pypi/appollo
@@ -43,7 +43,7 @@ Thanks for checking it out.
    :alt: CodeFactor
 
 .. image:: https://img.shields.io/discord/945256030869258280?logo=discord
-    :target: https://discord.gg/6ZaaENZk
+    :target: https://discord.gg/sCVTTsXbvE
     :alt: Discord
 
 -----------
