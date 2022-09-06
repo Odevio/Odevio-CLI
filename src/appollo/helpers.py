@@ -7,10 +7,8 @@ from appollo.settings import console, get_jwt_token
 
 
 def zip_directory(directory_path):
-    """ Archives a directory in a zip file and returns his name."""
-    if os.path.exists(os.path.join(os.getcwd(), '.app.zip')):
-        os.remove(os.path.join(os.getcwd(), '.app.zip'))
-    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, ["build", ".dart_tool", ".pub-cache", ".pub", ".git"], ["source.zip"])
+    """ Archives a directory in a zip file and returns its name."""
+    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, ["build", ".dart_tool", ".pub-cache", ".pub", ".git"], ["source.zip", ".app.zip", "appollo.patch"])
 
 
 

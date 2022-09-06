@@ -540,6 +540,7 @@ def patch(key, output="appollo.patch"):
             f.write(response)
     else:
         console.print("This build does not have any patch")
+        return
 
     code = Syntax("git am appollo.patch", lexer="shell")
     console.print("To apply a patch, run")
