@@ -25,7 +25,7 @@
    :alt: CodeFactor
 
 .. image:: https://img.shields.io/discord/945256030869258280?logo=discord
-    :target: https://discord.gg/6ZaaENZk
+    :target: https://discord.gg/sCVTTsXbvE
     :alt: Discord
 
 =======================================================================================
@@ -52,9 +52,44 @@ pip.
 -----
 Usage
 -----
-To start using Appollo simply run :code:`$ appollo` in your console.
+To start using Appollo simply run :code:`appollo` in your console.
 
-.. image:: https://github.com/Appollo-CLI/Appollo/blob/master/docs/img/appollo-help.png
+Start by creating an account
+
+.. code-block::
+
+    appollo signup
+
+Then linking your Apple Developer Account to Appollo
+
+.. code-block::
+
+    appollo apple add --apple-id APPLE_TEAM_ID --name TEXT --key-id APPLE_KEY_ID --issuer-id APPLE_ISSUER_ID --private-key LOCATION_APPLE_PRIVATE_KEY
+
+Once this is done you can either start a build machine in configuration mode : to configure XCode or test your app in the iOS simulator.
+
+.. code-block::
+
+    appollo build start --build-type configuration
+
+Or create an IPA to install on a physical device for testing purposes
+
+.. code-block::
+
+    appollo build start --build-type ad-hoc
+    appollo build ipa
+
+Or even publish directly to the App Store
+
+.. code-block::
+
+    appollo build start --build-type publication
+
+Your build failed ? No worries, you can check the logs with
+
+.. code-block::
+
+    appollo build logs
 
 -------------
 Documentation
