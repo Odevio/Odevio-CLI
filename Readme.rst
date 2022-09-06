@@ -128,7 +128,7 @@ Please report improvements, bugs and issues to Github's issue tracker.
 Pull requests linked to open issues are even more appreciated.
 
 Appollo's GitHub issue tracker is not intended to provide help or support.
-For that check out our `discord <https://discord.gg/6ZaaENZk>`_.
+For that check out our `discord <https://discord.gg/sCVTTsXbvE>`_.
 
 We are also thrilled to receive a variety of other contributions including:
 
