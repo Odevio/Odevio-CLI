@@ -612,9 +612,13 @@ def build_name(build_instance):
     """ Based on a build instance returns a user friendly name for the build. """
     from datetime import datetime
 
-    build_instance['start_time'] = build_instance['start_time'][:-3]+build_instance['start_time'][-2:]  # Remove timezone ':' otherwise it can't parse
-    start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z")
-    start_time_str = start_time.strftime('%Y-%m-%d %H:%M')
+    if "start_time" in build_instance:
+        build_instance['start_time'] = build_instance['start_time'][:-3]+build_instance['start_time'][-2:]  # Remove timezone ':' otherwise it can't parse
+        start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z")
+        start_time_str = start_time.strftime('%Y-%m-%d %H:%M')
+    else:
+        start_time_str = "Not started"
+
     # TODO check if timezones are respected.
     return f"{build_instance['application']} - {build_instance['name']} - {start_time_str}"
 
