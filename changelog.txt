@@ -1,3 +1,7 @@
+improv_191022_error_logs:
+    19/10/22:
+        - Addition of the help url after a build error
+
 v0.2.3
 	- CLI: Fixed build display when no start time
 v0.2.2

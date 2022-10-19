@@ -173,3 +173,12 @@ def make_zip(base_name, root_dir=None, exclude_dir=None, exclude_files=None, bas
             os.chdir(save_cwd)
 
     return filename
+
+def handle_error(key):
+    from rich.text import Text
+
+    from appollo import api
+    response = api.get(f"/builds/{key}/help/")
+    if response:
+        console.print(Text.from_markup("Appollo identified an error. You can ask for help regarding this issue here:"))
+        console.print(f"[link]{response['url']}[/link]")

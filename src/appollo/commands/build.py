@@ -328,6 +328,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
             return
         elif status in ["failed", "stopped"]:
             console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
+            handle_error(build_instance['key'])
             return
 
 
