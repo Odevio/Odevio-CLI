@@ -1,5 +1,4 @@
 import click
-
 from appollo.helpers import login_required_warning_decorator
 
 
@@ -28,11 +27,10 @@ def build():
               help="shows your builds and the builds from your teams")
 def ls(show_all):
     """ Lists builds on Appollo. """
-    from rich.table import Table
-    from rich.syntax import Syntax
-
     from appollo import api
     from appollo.settings import console
+    from rich.syntax import Syntax
+    from rich.table import Table
 
     if show_all:
         builds = api.get("/builds/", params={"all": 1})
@@ -81,11 +79,10 @@ def rm(key):
     """
     import textwrap
 
-    from rich.text import Text
-
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
@@ -113,13 +110,12 @@ def detail(key):
     """
     import textwrap
 
-    from rich.text import Text
+    from appollo import api
+    from appollo.helpers import terminal_menu
+    from appollo.settings import console
     from rich.panel import Panel
     from rich.syntax import Syntax
-
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
@@ -220,12 +216,11 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
     import textwrap
     from time import sleep
 
-    from rich.text import Text
-    from rich.syntax import Syntax
-
-    from appollo.settings import console
-    from appollo.helpers import zip_directory, terminal_menu
     from appollo import api
+    from appollo.helpers import handle_error, terminal_menu, zip_directory
+    from appollo.settings import console
+    from rich.syntax import Syntax
+    from rich.text import Text
 
     if directory is None:
         directory = os.getcwd()
@@ -322,7 +317,9 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
                     loop = False
 
         if status in ["config", "succeeded"]:
-            console.print(Text.from_markup(f"Your build has succeeded"))
+            console.print(Text.from_markup("Your build has succeeded"))
+            console.print(Text.from_markup("Congrats ! Leave us a star on GitHub if you enjoy Appollo:"))
+            console.print(f"[link]https://github.com/Appollo-CLI/Appollo[/link]")
             if status == "config":
                 connect({build_instance['key']})
             return
@@ -344,11 +341,10 @@ def ipa(key):
     """
     import textwrap
 
-    from rich.text import Text
-
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
@@ -383,11 +379,10 @@ def download(key, output="source.zip"):
     """
     import textwrap
 
-    from rich.text import Text
-
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
@@ -434,13 +429,12 @@ def connect(key, yes):
     """
     import textwrap
 
-    from rich.panel import Panel
-    from rich.text import Text
-    from rich.syntax import Syntax
-
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
     from appollo import api
+    from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.panel import Panel
+    from rich.syntax import Syntax
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", name=build_name,
@@ -516,12 +510,11 @@ def patch(key, output="appollo.patch"):
     """
     import textwrap
 
-    from rich.text import Text
-    from rich.syntax import Syntax
-
-    from appollo.settings import console
     from appollo import api
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.syntax import Syntax
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", name=build_name, api_params={"all": 1},
@@ -555,11 +548,10 @@ def stop(key):
     """ Stops a running build"""
     import textwrap
 
-    from rich.text import Text
-
-    from appollo.settings import console
     from appollo import api
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", name=build_name,
@@ -589,11 +581,10 @@ def logs(key):
     """
     import textwrap
 
-    from rich.text import Text
-
-    from appollo.settings import console
     from appollo import api
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
+    from rich.text import Text
 
     if key is None:
         key = terminal_menu("/builds/", "Builds", name=build_name, api_params={"all": 1},
@@ -628,10 +619,9 @@ def build_name(build_instance):
 @login_required_warning_decorator
 def flutter_versions():
     """ Lists the Flutter versions available on Appollo. """
-    from rich.columns import Columns
-
     from appollo import api
     from appollo.settings import console
+    from rich.columns import Columns
 
     versions = api.get("/flutter-versions/")
 
