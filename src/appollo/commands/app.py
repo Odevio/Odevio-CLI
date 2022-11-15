@@ -22,8 +22,8 @@ def ls():
 
     Usage:
     """
-    from rich.table import Table
     from rich.syntax import Syntax
+    from rich.table import Table
 
     from appollo import api
     from appollo.settings import console
@@ -64,8 +64,8 @@ def mk(name, bundle_id, account_key):
     from rich.text import Text
 
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
 
     if account_key is None:
         account_key = terminal_menu("/developer-accounts/", "Developer Account",
@@ -100,8 +100,8 @@ def mk(name, bundle_id, account_key):
 def rm(key, delete_on_apple):
     """ Deletes the app identifier with key \"KEY\" from Appollo and on Apple if specified. """
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
@@ -129,8 +129,8 @@ def link(key, team_key):
     .. warning:: All users who are in a team linked to an Apple Developer Account have full control over it.
     """
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
@@ -156,8 +156,8 @@ def unlink(key, team_key):
     """ Links or unlinks an app identifier to Appollo team with key \"KEY\".
     """
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
@@ -183,8 +183,8 @@ def import_app(name, bundle_id, account_key):
     from rich.text import Text
 
     from appollo import api
-    from appollo.settings import console
     from appollo.helpers import terminal_menu
+    from appollo.settings import console
 
     if account_key is None:
         account_key = terminal_menu("/developer-accounts/", "Developer Account",
@@ -209,3 +209,25 @@ def import_app(name, bundle_id, account_key):
     if application:
         console.print(f"Congratulations! Your app identifier {application['apple_name']} has been imported on Appollo "
                       f"as {application['name']}. It is registered with key \"{application['key']}\".")
+
+@app.command("screenshots")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+def screenshots(key):
+    """ Returns a link to the screenshot editor for the app with key \"KEY\". """
+    from appollo import api
+    from appollo.helpers import terminal_menu
+    from appollo.settings import console
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return
+
+    screenshot_link = api.get(f"/applications/{key}/screens/")
+
+    if screenshot_link:
+        console.print("Here's the link to the screenshot editor:")
+        console.print(f"[link]{screenshot_link['url']}[/link]")
+        

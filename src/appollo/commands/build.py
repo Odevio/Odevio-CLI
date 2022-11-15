@@ -318,7 +318,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
 
         if status in ["config", "succeeded"]:
             console.print(Text.from_markup("Your build has succeeded"))
-            console.print(Text.from_markup("Congrats ! Leave us a star on GitHub if you enjoy Appollo:"))
+            console.print(Text.from_markup("Congrats ! Leave us a star on GitHub, we'd greatly appreciate it:"))
             console.print(f"[link]https://github.com/Appollo-CLI/Appollo[/link]")
             if status == "config":
                 connect({build_instance['key']})

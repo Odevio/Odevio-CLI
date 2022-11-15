@@ -1,4 +1,6 @@
 improv_191022_error_logs:
+    15/11/22:
+        - Addition of the url to the screenshot editor
     19/10/22:
         - Addition of the help url after a build error
 
