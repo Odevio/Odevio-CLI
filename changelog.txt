@@ -1,3 +1,6 @@
+v0.2.4
+    - CLI: Fixed token refresh when it is too old
+    - CLI: Fixed error in build selection menu when a build has no time
 v0.2.3
 	- CLI: Fixed build display when no start time
 v0.2.2
