@@ -323,6 +323,8 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
 
         if status in ["config", "succeeded"]:
             console.print(Text.from_markup(f"Your build has succeeded"))
+            if build_type == "publication":
+                console.print("It will appear on your appstoreconnect account shortly")
             if status == "config":
                 connect({build_instance['key']})
             return

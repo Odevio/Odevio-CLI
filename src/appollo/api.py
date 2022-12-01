@@ -251,20 +251,23 @@ def get_authorization_header(email=None, password=None):
         decoded = jwt.decode(token, options={"verify_signature": False})
         if decoded['exp'] <= datetime.datetime.utcnow().timestamp():
             token = _refresh_token(token)
-            write_jwt_token(token)
-    else:
-        if email is None or password is None:
-            console.print("If you already have an account, please enter your credentials and we will log you in :")
-        if not email:
-            email = Prompt.ask("E-mail")
-        if not password:
-            password = Prompt.ask("Password", password=True)
-        token = _generate_new_token(email, password)
-        # if the API call for a JWT token failed return False.
-        if not token:
-            return False
+            if token:
+                write_jwt_token(token)
+                return f"JWT {token}"
+        else:
+            return f"JWT {token}"
+    if email is None or password is None:
+        console.print("If you already have an account, please enter your credentials and we will log you in :")
+    if not email:
+        email = Prompt.ask("E-mail")
+    if not password:
+        password = Prompt.ask("Password", password=True)
+    token = _generate_new_token(email, password)
+    # if the API call for a JWT token failed return False.
+    if not token:
+        return False
 
-        write_jwt_token(token)
+    write_jwt_token(token)
     return f"JWT {token}"
 
 
