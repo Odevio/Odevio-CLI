@@ -224,9 +224,11 @@ def screenshots(key):
                             does_not_exist_msg="You do not have any app identifiers.")
         if key is None:
             return
-
-    screenshot_link = api.get(f"/applications/{key}/screens/")
-
+    try:
+        screenshot_link = api.get(f"/applications/{key}/screens/")
+    except api.NotFoundException:
+        console.print("This key is invalid or you do not have access to it.")
+        return
     if screenshot_link:
         console.print("Here's the link to the screenshot editor:")
         console.print(f"[link]{screenshot_link['url']}[/link]")

@@ -178,7 +178,11 @@ def handle_error(key):
     from rich.text import Text
 
     from appollo import api
-    response = api.get(f"/builds/{key}/help/")
+    try:
+        response = api.get(f"/builds/{key}/help/")
+    except api.NotFoundException:
+        console.print("Build couldn't be found.")
+        return
     if response:
         console.print(Text.from_markup("Appollo identified an error. You can ask for help regarding this issue here:"))
         console.print(f"[link]{response['url']}[/link]")
