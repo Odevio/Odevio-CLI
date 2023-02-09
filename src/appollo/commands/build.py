@@ -326,7 +326,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
             if build_type == "publication":
                 console.print("It will appear on your appstoreconnect account shortly")
 
-            if build_type == "publication":
+            if build_type == "ad-hoc":
                 ipa({build_instance['key']})
 
             if status == "config":

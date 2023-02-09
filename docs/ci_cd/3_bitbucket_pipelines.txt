@@ -1,0 +1,135 @@
+Bitbucket Pipelines
+===================
+
+The objective of this tutorial is show how to use Bitbucket Pipelines with `Appollo <https://github.com/Appollo-CLI/Appollo>`_ for releasing iOS apps with a CI solution.  
+
+.. image:: /img/ci_cd_bitbucket_workflow.jpg
+    :align: center
+    :width: 50%
+    :alt: 'worflow with all step active'
+
+-------------
+Prerequisites
+-------------
+
+To Follow this tutorial you will need :
+
+* An appollo account linked to your Apple Developer Account. `Learn how to setup Appollo <https://appollo.readthedocs.io/en/master/tutorial/2_configure_app_store_connect.html>`_.
+* A `Flutter <https://docs.flutter.dev/get-started/install>`_ project located at the root of your git repository.
+
+-------------
+Configuration
+-------------
+
+To use Bitbucket Pipelines there are 2 possibilities, use the Bitbucket's runner (paid solution) or use the self-hosted runners (free solution).
+In this tutorial we will use the sel-hosted runner.
+If you want use the free solution, you can add a self-hosted runner to your repository by going to repository's settings  **>** Pipelines **>**  Runners  **>** Add runner button and follow the tutorial for your os. 
+
+.. note::
+    When using a Bitbucket runner or self-hosted runner, The only difference is the way to call the runner.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Creation of workflow file
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To work properly you need to create bitbucket-pipelines.yml at the root of project and insert your workflows.
+
+Exemple of workflow with Appollo
+
+.. code-block::
+
+    pipelines:
+        default:
+            - stage:
+                name: Test
+                steps:
+                - step:
+                    runs-on:
+                        - 'self.hosted'
+                        - 'macos'
+                        - '<personal.runner.label>'
+                    name: Run unite test
+                    script:
+                        - flutter test
+            
+            
+            - stage:
+                name: Build ipa
+                steps:
+                - step:
+                    runs-on:
+                        - 'self.hosted'
+                        - 'macos'
+                        - '<personal.runner.label>'
+                    name: Build IPA file
+                    script:
+                        - yes | pip3 install Appollo
+                        - appollo signin --email <email> --password <password>
+                        - appollo build start --build-type=ad-hoc <application_key>
+                        - appollo signout     
+
+        branches:
+        production:
+        - stage:
+            name: Test
+            steps:
+                - step:
+                    runs-on:
+                    - 'self.hosted'
+                    - 'macos'
+                    - '<personal.runner.label>'
+                    name: Run unite test
+                    script:
+                    - flutter test  
+
+        - stage:
+            name: "Publication app"
+            deployment: staging
+            steps: 
+                - step:
+                    runs-on:
+                    - 'self.hosted'
+                    - 'macos'
+                    - '<personal.runner.label>'
+                    name: "Publication"
+                    script:
+                    - yes | pip3 install Appollo
+                    - appollo signin --email <email> --password <password>
+                    - appollo build start --build-type=publication <application_key>
+                    - appollo signout     
+
+
+
+In this exemple we have 4 parametres:
+
+* <*personal.runner.label*> is the self-hosted runner label defined when it was created
+* <*email*> is the email to connect to your account on appollo
+* <*password*> is the password to connect to your account on appollo
+* <*application_key*> is the key off your application.
+
+.. note::
+    If you forgot the application's Appollo key you can use this following command :  `appollo app ls`
+
+-----
+Usage
+-----
+
+Now that all is configured you doens't need to do anything else. The previously made worflow is call on each push, when the push action is on *production* branche the second section is cald otherwise is the default section.
+
+^^^^^^^^^^^^^^^^
+View the actions
+^^^^^^^^^^^^^^^^
+
+When you push your code on Bitbucket you can show the workflow executed or in execution in the section ``Pipelines`` of the repository
+
+If the unit tests have been successfully passed and the build ipa successed you get back the url to the IPA, either to download it, or to install it if opened (in safari) from an iOS device.
+
+Finally if the push was on ``production`` branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
+
+And that's it with this tutorial you  have learned how to use Appollo with Bitbucket Pipelines.
+
+---------------
+Project exemple
+---------------
+
+You can find a project exemple using `Bitbucket Pipelines <https://bitbucket.org/appollo-ci-cd/flutter_appollo_ci>`_

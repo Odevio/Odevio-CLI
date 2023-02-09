@@ -6,6 +6,7 @@ from rich.console import Console
 
 APP_NAME = "Appollo"
 API_BASE_URL = "https://appollo.space"
+# API_BASE_URL = "http://localhost:8000"
 
 
 console = Console()

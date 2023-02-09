@@ -1,0 +1,112 @@
+GitLab CI
+=========
+The objective of this tutorial is show how to use the GitLab CI with `Appollo <https://github.com/Appollo-CLI/Appollo>`_ for releasing iOS apps with a CI solution.  
+
+.. image:: /img/ci_cd_gitlab_workflow.jpg
+    :align: center
+    :width: 100%
+    :alt: 'worflow with all step active'
+
+|
+
+-------------
+Prerequisites
+-------------
+To Follow this tutorial you will need : 
+
+* An appollo account linked to your Apple Developer Account. `Learn how to setup Appollo <https://appollo.readthedocs.io/en/master/tutorial/2_configure_app_store_connect.html>`_.
+* A `Flutter <https://docs.flutter.dev/get-started/install>`_ project located at the root of your git repository.
+
+-------------
+Configuration
+-------------
+To use GitLab CI there are 2 possibilities, use the GitLab's runner (paid solution) or use the self-hosted runners (free solution).
+If you want use the free solution, you can add a self-hosted runner to your repository by going to repository's settings **>** CI/CD **>**  Runners **>** Show runner installation instructions button and follow the tutorial for your os. 
+
+When your runner is configured  don't forget to disable shared runners for the project. This setting is in Runners section too, under Shared runners.
+
+.. note::
+    When using a GitLab runner or self-hosted runner, The only difference is the way to call the runner if you use self-hosted runner you can remove tags section.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Creation of workflows file
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To work properly you need to create .gitlab-ci.yml at the root of project. This is where we will add the jobs.
+
+Here is an example :
+
+.. code-block::
+  
+    stages:          # List of stages for jobs, and their order of execution
+      - test
+      - build
+      - deploy
+
+    unit-test:
+      stage: test
+      script:
+        - echo 'test flutter'
+        - flutter test
+      tags:
+          - <personnal_runner_tag>
+
+
+    build-ipa:  
+      stage: build
+      script:
+        - echo 'build ipa'
+        - yes | pip3 install -y Appollo
+        - appollo signin --email <email> --password <password>
+        - appollo build start --build-type=ad-hoc <application_key>
+        - appollo signout
+      except:
+        - production
+      tags:
+          - <personnal_runner_tag>
+
+    deploy-prod:
+      stage: deploy
+      script:
+        - echo 'publication'
+        - yes | pip3 install -y Appollo
+        - appollo signin --email <email> --password <password>
+        - appollo build start --build-type=publication <application_key>
+        - appollo signout
+      only:
+        - production
+      tags:
+          - <personnal_runner_tag>
+
+In this exemple we have 4 parametres:
+
+* <*personnal_runner_tag*> is the self-hosted runner tag defined when it was created
+* <*email*> is the email to connect to your account on appollo
+* <*password*> is the password to connect to your account on appollo
+* <*application_key*> is the key off your application.
+
+.. note:: 
+    If you forgot the application's Appollo key you can use this following command :  ``appollo app ls``
+
+-----
+Usage
+-----
+
+Now that all is configured you don't need to do anything else. The previously made worflow is called on each push no matter the branch
+However the last jobs are only called if there was a push on the ``production`` branch and the second job isn't called in this case.
+
+^^^^^^^^^^^^^^^^
+View the actions
+^^^^^^^^^^^^^^^^
+
+When you push your code on GitLab you can show the workflow executed or in execution in the section ``CI/CD`` of the repository.
+
+If the unit tests have been successfully passed and the build ipa succeeded you get back the url to the IPA, either to download it, or to install it if opened (in safari) from an iOS device.
+
+Finally if the push was on the ``production`` branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
+
+^^^^^^^^^^^^^^^
+Project exemple
+^^^^^^^^^^^^^^^
+
+You can find a project exemple using `GitLab Ci <https://gitlab.com/NathanSepul/flutter_ci_appollo>`_
