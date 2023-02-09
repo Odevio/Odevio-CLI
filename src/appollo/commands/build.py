@@ -325,13 +325,16 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
             console.print(Text.from_markup(f"Your build has succeeded"))
             if build_type == "publication":
                 console.print("It will appear on your appstoreconnect account shortly")
+
+            if build_type == "publication":
+                ipa({build_instance['key']})
+
             if status == "config":
                 connect({build_instance['key']})
             return
         elif status in ["failed", "stopped"]:
             console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
-            return
-
+            exit(1)
 
 @build.command()
 @login_required_warning_decorator
