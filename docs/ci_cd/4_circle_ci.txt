@@ -36,11 +36,11 @@ To work properly you need to create this folder at the root of your project
 Inside .circleci you will create a config.yml file. This is where we will add the actions.
 Here is an example :
 
-.. code-block::
+.. code-block:: yaml
 
     version: 2.1
     workflows:
-    testing:
+      testing:
         jobs:
         - test
         - build-ipa:
@@ -59,32 +59,32 @@ Here is an example :
                 only: production
         
     jobs:
-    test:
-        machine: true
-        resource_class: <namespace/resource_class_label>
+      test:
+        docker:
+          - image: cimg/base:stable
         steps:
-        - checkout
-        - run: flutter test
+          - checkout
+          - run: flutter test
 
-    build-ipa:
-        machine: true
-        resource_class: <namespace/resource_class_label>
+      build-ipa:
+        docker:
+          - image: cimg/base:stable
         steps:
-        - checkout
-        - run: yes | pip3 install Appollo
-        - run: appollo signin --email <email> --password <password>
-        - run: appollo build start --build-type=ad-hoc 882
-        - run: appollo signout
+          - checkout
+          - run: pip3 install  --no-input appollo
+          - run: appollo signin --email <email> --password <password>
+          - run: appollo build start --build-type=ad-hoc 882
+          - run: appollo signout
 
-    deploy:
-        machine: true
-        resource_class: <namespace/resource_class_label>
+      deploy:
+        docker:
+          - image: cimg/base:stable
         steps:
-        - checkout
-        - run: yes | pip3 install Appollo
-        - run: appollo signin --email <email> --password <password>
-        - run: appollo build start --build-type=publication <application_key>
-        - run: appollo signout
+          - checkout
+          - run: pip3 install --no-input appollo 
+          - run: appollo signin --email <email> --password <password>
+          - run: appollo build start --build-type=publication <application_key>
+          - run: appollo signout
 
 
 
@@ -95,7 +95,7 @@ In this exemple we have 4 parametres:
 * <*password*> is the password to connect to your account on appollo
 * <*application_key*> is the key off your application. 
 
-.. note:: If you forgot the application's Appollo key you can use this following command :  `appollo app ls`
+.. note:: If you forgot the application's Appollo key you can use this following command :  ``appollo app ls``
 
 
 -------------------------
@@ -131,7 +131,7 @@ Self-hosted runner
 To use CircleCI there are 2 possibilities, use the  CircleCI's runner (paid solution) or use the self-hosted runners (free solution).
 In this tutorial we will use the sel-hosted runner.
 
-The first step is agree the `CircleCI Runner Terms <https://circleci.com/legal/runner-terms>`_ in organization settings **>** Self-Hosted Runners.
+The first step is agree the `CircleCI Runner Terms <https://circleci.com/legal/runner-terms>`_ in *organization settings* **>** *Self-Hosted Runners*.
 When you add agree the usage terms you can access to *Self-Hosted Runners* on the left and create ressource class by following the tutorial 
 
 .. image:: /img/ci_cd_circle_ci_create_ressource_class.jpg
@@ -158,7 +158,7 @@ When you push your code you can show the workflow executed or in execution in th
 
 If the unit tests have been successfully passed and the build ipa succeeded you get back the url to the IPA, either to download it, or to install it if opened (in safari) from an iOS device.
 
-Finally if the push was on the ``production`` branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
+Finally if the push was on the production branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
 
 And that's it with this tutorial you had learn how to use Appollo with Circle .
 

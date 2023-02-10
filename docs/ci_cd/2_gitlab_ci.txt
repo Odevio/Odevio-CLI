@@ -21,12 +21,17 @@ To Follow this tutorial you will need :
 Configuration
 -------------
 To use GitLab CI there are 2 possibilities, use the GitLab's runner (paid solution) or use the self-hosted runners (free solution).
-If you want use the free solution, you can add a self-hosted runner to your repository by going to repository's settings **>** CI/CD **>**  Runners **>** Show runner installation instructions button and follow the tutorial for your os. 
+If you want use the free solution, you can add a self-hosted runner to your repository by going to *repository's settings* **>** *CI/CD* **>** *Runners* **>** *Show runner installation instructions* button and follow the tutorial for your os. 
 
 When your runner is configured  don't forget to disable shared runners for the project. This setting is in Runners section too, under Shared runners.
 
 .. note::
-    When using a GitLab runner or self-hosted runner, The only difference is the way to call the runner if you use self-hosted runner you can remove tags section.
+    When using a GitLab runner or self-hosted runner, the only difference is the way to call the runner if you use self-hosted runner you should add the following code under each script.
+
+.. code-block:: yaml
+    
+    tags:
+      - personnal_runner_tag
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 Creation of workflows file
@@ -36,7 +41,7 @@ To work properly you need to create .gitlab-ci.yml at the root of project. This 
 
 Here is an example :
 
-.. code-block::
+.. code-block:: yaml
   
     stages:          # List of stages for jobs, and their order of execution
       - test
@@ -48,39 +53,31 @@ Here is an example :
       script:
         - echo 'test flutter'
         - flutter test
-      tags:
-          - <personnal_runner_tag>
-
 
     build-ipa:  
       stage: build
       script:
         - echo 'build ipa'
-        - yes | pip3 install -y Appollo
+        - pip3 install --no-input appollo 
         - appollo signin --email <email> --password <password>
         - appollo build start --build-type=ad-hoc <application_key>
         - appollo signout
       except:
         - production
-      tags:
-          - <personnal_runner_tag>
 
     deploy-prod:
       stage: deploy
       script:
         - echo 'publication'
-        - yes | pip3 install -y Appollo
+        - pip3 install --no-input appollo 
         - appollo signin --email <email> --password <password>
         - appollo build start --build-type=publication <application_key>
         - appollo signout
       only:
         - production
-      tags:
-          - <personnal_runner_tag>
 
 In this exemple we have 4 parametres:
 
-* <*personnal_runner_tag*> is the self-hosted runner tag defined when it was created
 * <*email*> is the email to connect to your account on appollo
 * <*password*> is the password to connect to your account on appollo
 * <*application_key*> is the key off your application.
@@ -103,7 +100,7 @@ When you push your code on GitLab you can show the workflow executed or in execu
 
 If the unit tests have been successfully passed and the build ipa succeeded you get back the url to the IPA, either to download it, or to install it if opened (in safari) from an iOS device.
 
-Finally if the push was on the ``production`` branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
+Finally if the push was on the production branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
 
 ^^^^^^^^^^^^^^^
 Project exemple

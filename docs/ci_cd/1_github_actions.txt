@@ -23,10 +23,10 @@ Configuration
 -------------
 
 To use Github Actions there are 2 possibilities, use the GitHub's runner (paid solution) or use the self-hosted runners (free solution).
-If you want use the free solution, you can add a self-hosted runner to your repository by going to repository's settings  **>** Actions **>**  Runners  **>** New self-hosted runner button and follow the tutorial for your os. 
+If you want use the free solution, you can add a self-hosted runner to your repository by going to *repository's settings*  **>** *Actions* **>**  *Runners*  **>** *New self-hosted runner* button and follow the tutorial for your os. 
 
 .. note:: 
-    When using a GitHub runner or self-hosted runner, The only difference is the way to call the runner.
+    When using a GitHub runner or self-hosted runner, the only difference is the way to call the runner. You should replace ``ubuntu-latest`` by ``[personal_runner_label]``
 
 ^^^^^^^^^^^^^^^^^^^^^^^^
 Creation of actions file
@@ -41,7 +41,7 @@ To work properly you need to create this folder at the root of your project
 Inside workflows you will create a github_actions.yml file. This is where we will add the actions.
 Here is an example :
 
-.. code-block::
+.. code-block:: yaml
 
     name : appollo ci
 
@@ -49,7 +49,7 @@ Here is an example :
 
     jobs:
       check_validity_flutter:
-        runs-on: [<personal_runner_label>]
+        runs-on: ubuntu-latest
         name: "Run tests" 
         steps:
           # extract repo
@@ -62,12 +62,12 @@ Here is an example :
 
       build_ipa:
         needs: check_validity_flutter
-        runs-on: [<personal_runner_label>]
+        runs-on: ubuntu-latest
         name: "Build IPA file"
         if: github.ref != 'refs/heads/production'
         steps:
           - name: Install Appollo
-            run: pip3 install -y Appollo
+            run: pip3 install --no-input appollo 
 
           - name: Connection
             run : appollo signin --email <email> --password <password>
@@ -81,14 +81,14 @@ Here is an example :
 
       deploy:
         needs: build_ipa
-        runs-on: [<personal_runner_label>]
+        runs-on: ubuntu-latest
         name: "Publication app" 
         
         # only do this if we pushed on 'production' branch
         if: github.ref == 'refs/heads/production'
         steps:
           - name: Install Appollo
-            run: pip3 install -y Appollo
+            run: pip3 install --no-input appollo 
             
           - name: Connection
             run : appollo signin --email <email> --password <password>
@@ -101,7 +101,6 @@ Here is an example :
 
 In this exemple we have 4 parameters:
 
-* <*personal_runner_label*> is the self-hosted runner label defined when it was created
 * <*email*> is the email to connect to your account on appollo
 * <*password*> is the password to connect to your account on appollo
 * <*application_key*> is the key off your application. 
@@ -113,7 +112,7 @@ In this exemple we have 4 parameters:
 Usage
 -----
 
-Now that all is configured you don't need to do anything else. The previously made worflow is called on each push no matter the branch because we specified ``on: ['push']`` in our configuration file.  
+Now that all is configured you don't need to do anything else. The previously made worflow is called on each push no matter the branch because we specified *on: ['push']* in our configuration file.  
 However the last jobs are only called if there was a push on the ``production`` branch and the second job isn't called in this case.
 
 ^^^^^^^^^^^^^^^^
@@ -130,7 +129,7 @@ When you push your code on Github you can show the workflow executed or in execu
 
 If the unit tests have been successfully passed and the build ipa succeeded you get back the url to the IPA, either to download it, or to install it if opened (in safari) from an iOS device.
 
-Finally if the push was on the ``production`` branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
+Finally if the push was on the production branch the workflow will publish your app on the App Store directly. You can then either test your application through testflight or submit the latest version to Apple.
 
 And that's it with this tutorial you have learned how to use Appollo with Github Actions.
 

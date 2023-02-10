@@ -8,6 +8,8 @@ The objective of this tutorial is show how to use Bitbucket Pipelines with `Appo
     :width: 50%
     :alt: 'worflow with all step active'
 
+|
+
 -------------
 Prerequisites
 -------------
@@ -23,10 +25,20 @@ Configuration
 
 To use Bitbucket Pipelines there are 2 possibilities, use the Bitbucket's runner (paid solution) or use the self-hosted runners (free solution).
 In this tutorial we will use the sel-hosted runner.
-If you want use the free solution, you can add a self-hosted runner to your repository by going to repository's settings  **>** Pipelines **>**  Runners  **>** Add runner button and follow the tutorial for your os. 
+If you want use the free solution, you can add a self-hosted runner to your repository by going to *repository's settings*  **>** *Pipelines* **>** *Runners*  **>** *Add runner* button and follow the tutorial for your os. 
 
 .. note::
-    When using a Bitbucket runner or self-hosted runner, The only difference is the way to call the runner.
+    When using a Bitbucket runner or self-hosted runner, The only difference is the way to call the runner. If you use self-hosted runner you should remove the image line and add then runner information as the following code under in step.
+
+.. code-block:: yaml
+
+     - step:
+         runs-on:
+          - 'self.hosted'
+          - 'personal.runner.label'
+         name: Run unite test
+         script:
+          - flutter test
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Creation of workflow file
@@ -36,73 +48,57 @@ To work properly you need to create bitbucket-pipelines.yml at the root of proje
 
 Exemple of workflow with Appollo
 
-.. code-block::
+.. code-block:: yaml
+
+    image: atlassian/default-image:3
 
     pipelines:
         default:
+          - stage:
+              name: Test
+              steps:
+                - step:
+                    name: Run unite test
+                    script:
+                      - flutter test
+            
+          - stage:
+              name: Build ipa
+              steps:
+                - step:
+                    name: Build IPA file
+                    script:
+                      - pip3 install --no-input appollo 
+                      - appollo signin --email <email> --password <password>
+                      - appollo build start --build-type=ad-hoc <application_key>
+                      - appollo signout     
+
+        branches:
+          production:
             - stage:
                 name: Test
                 steps:
-                - step:
-                    runs-on:
-                        - 'self.hosted'
-                        - 'macos'
-                        - '<personal.runner.label>'
-                    name: Run unite test
-                    script:
-                        - flutter test
-            
-            
+                  - step:
+                      name: Run unite test
+                      script:
+                        - flutter test  
+
             - stage:
-                name: Build ipa
-                steps:
-                - step:
-                    runs-on:
-                        - 'self.hosted'
-                        - 'macos'
-                        - '<personal.runner.label>'
-                    name: Build IPA file
-                    script:
-                        - yes | pip3 install Appollo
+                name: "Publication app"
+                deployment: staging
+                steps: 
+                  - step:
+                      name: "Publication"
+                      script:
+                        - pip3 install --no-input appollo 
                         - appollo signin --email <email> --password <password>
-                        - appollo build start --build-type=ad-hoc <application_key>
+                        - appollo build start --build-type=publication <application_key>
                         - appollo signout     
-
-        branches:
-        production:
-        - stage:
-            name: Test
-            steps:
-                - step:
-                    runs-on:
-                    - 'self.hosted'
-                    - 'macos'
-                    - '<personal.runner.label>'
-                    name: Run unite test
-                    script:
-                    - flutter test  
-
-        - stage:
-            name: "Publication app"
-            deployment: staging
-            steps: 
-                - step:
-                    runs-on:
-                    - 'self.hosted'
-                    - 'macos'
-                    - '<personal.runner.label>'
-                    name: "Publication"
-                    script:
-                    - yes | pip3 install Appollo
-                    - appollo signin --email <email> --password <password>
-                    - appollo build start --build-type=publication <application_key>
-                    - appollo signout     
 
 
 
 In this exemple we have 4 parametres:
 
-* <*personal.runner.label*> is the self-hosted runner label defined when it was created
 * <*email*> is the email to connect to your account on appollo
 * <*password*> is the password to connect to your account on appollo
 * <*application_key*> is the key off your application.

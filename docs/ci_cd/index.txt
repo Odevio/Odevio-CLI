@@ -1,7 +1,7 @@
 .. _ci_cd:
 
-CI/CD tools
-===========
+CI/CD integration
+=================
 
 This section is aimed towards beginning developers and new Appollo users whose want set up a continuous integration and continuous delivery system
 
