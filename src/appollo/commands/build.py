@@ -190,6 +190,7 @@ def detail(key):
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
+@click.option('--test', is_flag=True, default=False, help="Launch the test before", )
 def start(build_type, flutter, minimal_ios_version, app_version, build_number, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 

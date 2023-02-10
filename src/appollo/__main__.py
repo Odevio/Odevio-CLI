@@ -7,6 +7,7 @@ from appollo.commands.user import signup, signin, signout, profile
 from appollo.commands.team import team
 from appollo.commands.app import app
 from appollo.commands.apple import apple
+from appollo.commands.test import test
 
 
 @click.group()
@@ -62,6 +63,7 @@ appollo.add_command(profile)
 appollo.add_command(team)
 appollo.add_command(app)
 appollo.add_command(apple)
+appollo.add_command(test)
 
 if __name__ == '__main__':
     appollo()
