@@ -162,8 +162,8 @@ Finally if the push was on the ``production`` branch the workflow will publish y
 
 And that's it with this tutorial you had learn how to use Appollo with Circle .
 
----------------
+^^^^^^^^^^^^^^^
 Project exemple
----------------
+^^^^^^^^^^^^^^^
 
-You can find a project exemple using `Circle Ci <https://github.com/NathanSepul/flutter_appollo_circle_ci>`_
+You can find a project exemple on `Circle <https://github.com/NathanSepul/flutter_appollo_circle_ci>`_

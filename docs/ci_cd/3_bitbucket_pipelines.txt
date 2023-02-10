@@ -128,8 +128,8 @@ Finally if the push was on ``production`` branch the workflow will publish your 
 
 And that's it with this tutorial you  have learned how to use Appollo with Bitbucket Pipelines.
 
----------------
+^^^^^^^^^^^^^^^
 Project exemple
----------------
+^^^^^^^^^^^^^^^
 
-You can find a project exemple using `Bitbucket Pipelines <https://bitbucket.org/appollo-ci-cd/flutter_appollo_ci>`_
+You can find a project exemple on `Bitbucket <https://bitbucket.org/appollo-ci-cd/flutter_appollo_ci>`_

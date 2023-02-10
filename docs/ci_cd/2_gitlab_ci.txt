@@ -109,4 +109,4 @@ Finally if the push was on the ``production`` branch the workflow will publish y
 Project exemple
 ^^^^^^^^^^^^^^^
 
-You can find a project exemple using `GitLab Ci <https://gitlab.com/NathanSepul/flutter_ci_appollo>`_
+You can find a project exemple on `GitLab <https://gitlab.com/NathanSepul/flutter_ci_appollo>`_

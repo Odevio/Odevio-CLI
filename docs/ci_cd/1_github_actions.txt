@@ -138,4 +138,4 @@ And that's it with this tutorial you have learned how to use Appollo with Github
 Project exemple
 ^^^^^^^^^^^^^^^
 
-You can find a project exemple using `GitHub Actions <https://github.com/NathanSepul/flutter_ci_appollo>`_
+You can find a project exemple on `GitHub <https://github.com/NathanSepul/flutter_ci_appollo>`_

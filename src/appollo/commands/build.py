@@ -15,8 +15,8 @@ def build():
         3. :code:`appollo build stop` to stop your Appolo Remote when you're done editing your settings.
         4. :code:`appollo build patch` to retrieve the changes made on the Appollo-Remote.
         5. :code:`git am appollo.patch` to apply the changes locally.
-        6. :code:`appollo build start [OPTIONS] [DIRECTORY]` to build your app with Flutter and generate an IPA or to publish your app on the App Store.
-
+        6. :code:`appollo build start [OPTIONS]`
+        
     Usage:
     """
     pass
@@ -184,13 +184,17 @@ def detail(key):
 @click.argument('directory', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
                 required=False)
 @click.option('--build-type', help="Build type", prompt=True,
-              type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication"]))
+              type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication", "test"]))
 @click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use appollo build flutter-versions to see all available versions",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
-def start(build_type, flutter, minimal_ios_version, app_version, build_number, no_progress, app_key=None, directory=None):
+@click.option('--path-test', help="The path to tests")
+@click.option('-t', '--tags', help="Run only tests associated with the specified tags.")
+@click.option('-x','--exclude-tags', help="Run only tests that do not have the specified tags.")
+@click.option('--update-goldens', is_flag=True, help="Update of reference images for your golden tests",  default=False )
+def start(build_type, flutter, minimal_ios_version, app_version, build_number, no_progress, path_test,tags,exclude_tags, update_goldens, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided gets the current directory.
@@ -265,6 +269,9 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
             "flutter_version": flutter,
             "app_version": app_version,
             "build_number": build_number,
+            "path_test" : path_test,
+            "tags" : tags,
+            "exclude_tags" : exclude_tags
         },
         files={
             "source": ("source.zip", open(".app.zip", "rb"), "application/zip")
@@ -328,6 +335,9 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
 
             if build_type == "ad-hoc":
                 ipa({build_instance['key']})
+            
+            if build_type == "test":
+                console.print("do the test")
 
             if status == "config":
                 connect({build_instance['key']})
