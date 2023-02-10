@@ -37,8 +37,7 @@ When your runner is configured  don't forget to disable shared runners for the p
 Creation of workflows file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To work properly you need to create .gitlab-ci.yml at the root of project. This is where we will add the jobs.
-
+To work properly you need to create ``.gitlab-ci.yml`` at the root of project. This is where we will add the jobs.
 Here is an example :
 
 .. code-block:: yaml
@@ -51,13 +50,12 @@ Here is an example :
     unit-test:
       stage: test
       script:
-        - echo 'test flutter'
+        - sudo snap install flutter --classic
         - flutter test
 
     build-ipa:  
       stage: build
       script:
-        - echo 'build ipa'
         - pip3 install --no-input appollo 
         - appollo signin --email <email> --password <password>
         - appollo build start --build-type=ad-hoc <application_key>
@@ -68,7 +66,6 @@ Here is an example :
     deploy-prod:
       stage: deploy
       script:
-        - echo 'publication'
         - pip3 install --no-input appollo 
         - appollo signin --email <email> --password <password>
         - appollo build start --build-type=publication <application_key>
@@ -76,7 +73,7 @@ Here is an example :
       only:
         - production
 
-In this exemple we have 4 parametres:
+In this exemple we have 3 parametres:
 
 * <*email*> is the email to connect to your account on appollo
 * <*password*> is the password to connect to your account on appollo

@@ -36,9 +36,9 @@ To work properly you need to create this folder at the root of your project
 
 .. code-block::
 
-    mkdir -p .github/worklows/
+    mkdir -p .github/workflows/
 
-Inside workflows you will create a github_actions.yml file. This is where we will add the actions.
+Inside workflows you will create a ``github_actions.yml`` file. This is where we will add the actions.
 Here is an example :
 
 .. code-block:: yaml
@@ -55,6 +55,9 @@ Here is an example :
           # extract repo
           - name: Checkout
             uses: actions/checkout@v3
+
+          - name: Install flutter
+            run: sudo snap install flutter --classic
 
           - name: Run unit test
             run: flutter test
@@ -99,7 +102,7 @@ Here is an example :
           - name: Disconnection
             run : appollo signout
 
-In this exemple we have 4 parameters:
+In this exemple we have 3 parameters:
 
 * <*email*> is the email to connect to your account on appollo
 * <*password*> is the password to connect to your account on appollo

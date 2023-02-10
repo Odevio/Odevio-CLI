@@ -18,6 +18,7 @@ To Follow this tutorial you will need :
 
 * An appollo account linked to your Apple Developer Account. `Learn how to setup Appollo <https://appollo.readthedocs.io/en/master/tutorial/2_configure_app_store_connect.html>`_.
 * A `Flutter <https://docs.flutter.dev/get-started/install>`_ project located at the root of your git repository.
+* Enable pipelines in Repository setting **>** Pipelines **>** Settings
 
 -------------
 Configuration
@@ -28,7 +29,7 @@ In this tutorial we will use the sel-hosted runner.
 If you want use the free solution, you can add a self-hosted runner to your repository by going to *repository's settings*  **>** *Pipelines* **>** *Runners*  **>** *Add runner* button and follow the tutorial for your os. 
 
 .. note::
-    When using a Bitbucket runner or self-hosted runner, The only difference is the way to call the runner. If you use self-hosted runner you should remove the image line and add then runner information as the following code under in step.
+    When using a Bitbucket runner or self-hosted runner, The only difference is the way to call the runner. If you use self-hosted runner you should remove the image line and add the runner information as the following code.
 
 .. code-block:: yaml
 
@@ -44,13 +45,10 @@ If you want use the free solution, you can add a self-hosted runner to your repo
 Creation of workflow file
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To work properly you need to create bitbucket-pipelines.yml at the root of project and insert your workflows.
-
-Exemple of workflow with Appollo
+To work properly you need to create ``bitbucket-pipelines.yml`` at the root of project and insert your workflows.
+Here is an example :
 
 .. code-block:: yaml
-
-    image: atlassian/default-image:3
 
     pipelines:
         default:
@@ -58,6 +56,7 @@ Exemple of workflow with Appollo
               name: Test
               steps:
                 - step:
+                    image: cirrusci/flutter:latest
                     name: Run unite test
                     script:
                       - flutter test
@@ -66,6 +65,7 @@ Exemple of workflow with Appollo
               name: Build ipa
               steps:
                 - step:
+                    image: python:3.11
                     name: Build IPA file
                     script:
                       - pip3 install --no-input appollo 
@@ -79,6 +79,7 @@ Exemple of workflow with Appollo
                 name: Test
                 steps:
                   - step:
+                      image: cirrusci/flutter:latest
                       name: Run unite test
                       script:
                         - flutter test  
@@ -88,6 +89,7 @@ Exemple of workflow with Appollo
                 deployment: staging
                 steps: 
                   - step:
+                      image: python:3.11
                       name: "Publication"
                       script:
                         - pip3 install --no-input appollo 
@@ -97,7 +99,7 @@ Exemple of workflow with Appollo
 
 
 
-In this exemple we have 4 parametres:
+In this exemple we have 3 parametres:
 
 * <*email*> is the email to connect to your account on appollo
 * <*password*> is the password to connect to your account on appollo
