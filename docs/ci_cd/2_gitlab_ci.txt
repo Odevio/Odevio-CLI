@@ -26,7 +26,7 @@ If you want use the free solution, you can add a self-hosted runner to your repo
 When your runner is configured  don't forget to disable shared runners for the project. This setting is in Runners section too, under Shared runners.
 
 .. note::
-    When using a GitLab runner or self-hosted runner, the only difference is the way to call the runner if you use self-hosted runner you should add the following code under each script.
+    When using a GitLab runner or self-hosted runner, the only difference is the way to call the runner if you use self-hosted runner you should add the following in each stage.
 
 .. code-block:: yaml
     
