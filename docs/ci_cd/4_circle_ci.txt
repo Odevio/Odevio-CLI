@@ -42,21 +42,21 @@ Here is an example :
     workflows:
       testing:
         jobs:
-        - test
-        - build-ipa:
-            requires:
+          - test
+          - build-ipa:
+              requires:
                 - test
-            filters:
+              filters:
                 branches:
-                ignore: 
+                  ignore: 
                     - production
 
-        - deploy:
-            requires:
+          - deploy:
+              requires:
                 - test
-            filters:
+              filters:
                 branches:
-                only: production
+                  only: production
         
     jobs:
       test:
