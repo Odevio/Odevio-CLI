@@ -26,7 +26,7 @@ If you want use the free solution, you can add a self-hosted runner to your repo
 When your runner is configured  don't forget to disable shared runners for the project. This setting is in Runners section too, under Shared runners.
 
 .. note::
-    When using a GitLab runner or self-hosted runner, the only difference is the way to call the runner if you use self-hosted runner you should add the following in each stage.
+    When using a GitLab runner or self-hosted runner, the only difference is the way to call the runner if you use self-hosted runner you should replace image tags by the following code.
 
 .. code-block:: yaml
     
@@ -49,12 +49,13 @@ Here is an example :
 
     unit-test:
       stage: test
+      image: cirrusci/flutter
       script:
-        - sudo snap install flutter --classic
         - flutter test
 
     build-ipa:  
       stage: build
+      image: python:3.11
       script:
         - pip3 install --no-input appollo 
         - appollo signin --email <email> --password <password>
@@ -65,6 +66,7 @@ Here is an example :
 
     deploy-prod:
       stage: deploy
+      image: python:3.11
       script:
         - pip3 install --no-input appollo 
         - appollo signin --email <email> --password <password>
