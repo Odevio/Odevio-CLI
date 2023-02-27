@@ -69,8 +69,8 @@ Here is an example :
                     name: Build IPA file
                     script:
                       - pip3 install --no-input appollo 
-                      - appollo signin --email <email> --password <password>
-                      - appollo build start --build-type=ad-hoc <application_key>
+                      - appollo signin --email $EMAIL_APPOLLO --password $PASSWORD_APPOLLO
+                      - appollo build start --build-type=ad-hoc $APPLICATION_KEY
                       - appollo signout     
 
         branches:
@@ -93,17 +93,21 @@ Here is an example :
                       name: "Publication"
                       script:
                         - pip3 install --no-input appollo 
-                        - appollo signin --email <email> --password <password>
-                        - appollo build start --build-type=publication <application_key>
+                        - appollo signin --email $EMAIL_APPOLLO --password $PASSWORD_APPOLLO
+                        - appollo build start --build-type=publication $APPLICATION_KEY
                         - appollo signout     
 
 
 
-In this exemple we have 3 parametres:
+In this exemple we have 3 variables:
 
-* <*email*> is the email to connect to your account on appollo
-* <*password*> is the password to connect to your account on appollo
-* <*application_key*> is the key off your application.
+* *EMAIL_APPOLLO* is the email to connect to your account on appollo
+* *PASSWORD_APPOLLO* is the password to connect to your account on appollo
+* *APPLICATION_KEY* is the key off your application.
+
+Here is the `documentation <https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/>`_ for variables on Bibucket
+
+|
 
 .. note::
     If you forgot the application's Appollo key you can use this following command :  `appollo app ls`
