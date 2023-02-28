@@ -178,6 +178,79 @@ def detail(key):
         console.print("This build was not found or you cannot access it.")
 
 
+def _show_build_progress(build_instance, no_progress=False):
+    from time import sleep
+    from rich.syntax import Syntax
+    from rich.text import Text
+    from appollo.settings import console
+    from appollo import api
+
+    build_type = build_instance['build_type']
+
+    console.print(f"{build_instance['name']} has been registered. It has key \"{build_instance['key']}\" "
+                  f"and will be started as soon as possible.")
+    if build_type == "configuration":
+        code = Syntax(code=f"appollo build connect {build_instance['key']}", lexer="shell")
+        console.print("To access your Appollo-Remote, you can use the following command when it has been started.")
+        console.print(code)
+    console.print("Killing the command will not stop the build.")
+
+    if no_progress:
+        return
+
+    # check build progress.
+    loop = True
+    with console.status("Waiting for available instance...", spinner="line") as spinner:
+        while loop:
+            # update status every 5 seconds.
+            sleep(5)
+            build_instance = api.get(f"/builds/{build_instance['key']}/")
+
+            status = build_instance["status_code"]
+            if status == "created" or status == "waiting_instance":
+                spinner.update("Waiting for available instance...")
+            elif status == "in_progress":
+                substatus = build_instance["substatus_code"]
+                if substatus == "starting_instance":
+                    spinner.update("Starting instance...")
+                elif substatus == "preparing_build":
+                    spinner.update("Preparing build...")
+                elif substatus == "getting_result":
+                    spinner.update("Getting result...")
+                elif substatus == "publishing":
+                    spinner.update("Publishing...")
+                else:
+                    spinner.update("Building...")
+            elif status == "config":
+                spinner.update("Configured for remote access")
+                loop = False
+            elif status == "succeeded":
+                spinner.update("Success!")
+                loop = False
+            elif status == "failed":
+                spinner.update("Failed")
+                loop = False
+            elif status == "stopped":
+                spinner.update("Stopped")
+                loop = False
+
+    if status in ["config", "succeeded"]:
+        console.print(Text.from_markup(f"Your build has succeeded"))
+        if build_type == "publication":
+            console.print("It will appear on your appstoreconnect account shortly")
+        if build_type == "ad-hoc":
+            ipa({build_instance['key']})
+        if status == "config":
+            connect({build_instance['key']})
+        return
+    elif status in ["failed", "stopped"]:
+        if "error_message" in build_instance:
+            console.print(Text.from_markup(f"[red]Error: {build_instance['error_message']}[/red]"))
+        console.print(Text.from_markup(
+            f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
+        return
+
+
 @build.command()
 @login_required_warning_decorator
 @click.argument('app-key', required=False)
@@ -218,10 +291,8 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
     """
     import os
     import textwrap
-    from time import sleep
 
     from rich.text import Text
-    from rich.syntax import Syntax
 
     from appollo.settings import console
     from appollo.helpers import zip_directory, terminal_menu
@@ -274,63 +345,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
     os.remove(".app.zip")
 
     if build_instance:
-        console.print(f"{build_instance['name']} has been registered. It has key \"{build_instance['key']}\" "
-                      f"and will be started as soon as possible.")
-        if build_type == "configuration":
-            code = Syntax(code=f"appollo build connect {build_instance['key']}", lexer="shell")
-            console.print("To access your Appollo-Remote, you can use the following command when it has been started.")
-            console.print(code)
-        console.print("Killing the command will not stop the build.")
-
-        if no_progress:
-            return
-
-        # check build progress.
-        loop = True
-        with console.status("Waiting for available instance...", spinner="line") as spinner:
-            while loop:
-                # update status every 10 second.
-                sleep(10)
-                build_instance = api.get(f"/builds/{build_instance['key']}/")
-
-                status = build_instance["status_code"]
-                if status == "created" or status == "waiting_instance":
-                    spinner.update("Waiting for available instance...")
-                elif status == "in_progress":
-                    substatus = build_instance["substatus_code"]
-                    if substatus == "starting_instance":
-                        spinner.update("Starting instance...")
-                    elif substatus == "preparing_build":
-                        spinner.update("Preparing build...")
-                    elif substatus == "getting_result":
-                        spinner.update("Getting result...")
-                    elif substatus == "publishing":
-                        spinner.update("Publishing...")
-                    else:
-                        spinner.update("Building...")
-                elif status == "config":
-                    spinner.update("Configured for remote access")
-                    loop = False
-                elif status == "succeeded":
-                    spinner.update("Success!")
-                    loop = False
-                elif status == "failed":
-                    spinner.update("Failed")
-                    loop = False
-                elif status == "stopped":
-                    spinner.update("Stopped")
-                    loop = False
-
-        if status in ["config", "succeeded"]:
-            console.print(Text.from_markup(f"Your build has succeeded"))
-            if build_type == "publication":
-                console.print("It will appear on your appstoreconnect account shortly")
-            if status == "config":
-                connect({build_instance['key']})
-            return
-        elif status in ["failed", "stopped"]:
-            console.print(Text.from_markup(f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
-            return
+        _show_build_progress(build_instance, no_progress)
 
 
 @build.command()
@@ -431,13 +446,12 @@ def connect(key, yes):
 
     .. note:: Appollo-Remotes are active for 30 minutes before being closed automatically.
     .. note:: Appollo-Remotes are MacOS build machines on which the flutter build of your application is executed.
-    .. note:: The connection uses the spice protocol, your Remote Desktop client must support it to allow you to use an Appollo-Remote.
+    .. note:: The connection uses the VNC protocol, your Remote Desktop client must support it to allow you to use an Appollo-Remote.
     """
     import textwrap
 
     from rich.panel import Panel
     from rich.text import Text
-    from rich.syntax import Syntax
 
     from appollo.settings import console
     from appollo.helpers import terminal_menu
@@ -458,7 +472,7 @@ def connect(key, yes):
     if build_instance:
         if build_instance["remote_desktop_status"] == "no_remote_desktop":
             console.print("This build was not setup for remote desktop.")
-            if yes or click.confirm("Do you want to create a copy of this build setup for Remote Desktop access ?", default=False):
+            if yes or click.confirm("Do you want to create a new build with the same parameters setup for Remote Desktop access ?", default=False):
                 rebuild_instance = api.post(
                     f"/builds/{key}/rebuild/",
                     json_data={
@@ -466,22 +480,25 @@ def connect(key, yes):
                     })
 
                 if rebuild_instance:
-                    console.print(f"{rebuild_instance['name']} has been registered. It has key \"{rebuild_instance['key']}\" "
-                                  f"and will be started as soon as possible. When it is ready, you will be able to access it "
-                                  "with the following command")
-                    code = Syntax(code=f"appollo build connect {rebuild_instance['key']}", lexer="shell")
-                    console.print(code)
+                    _show_build_progress(rebuild_instance)
 
         elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
             console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
         else:
+            rustdesk_id = build_instance["rustdesk_id"]
+            if len(rustdesk_id) == 9:
+                rustdesk_id = rustdesk_id[0:3]+" "+rustdesk_id[3:6]+" "+rustdesk_id[6:9]
             auth_info = Panel(Text.from_markup(
                 textwrap.dedent(
                     f"""
-                        url: [bold]spice://appollo.space:{build_instance["remote_desktop_port"]}[/bold]
-                        connection_password: [bold]{build_instance["remote_desktop_password"]}[/bold]
+                        RustDesk relay server: appollo.space
+                        RustDesk ID: [bold]{rustdesk_id}[/bold]
+                        RustDesk password: [bold]{build_instance["rustdesk_password"]}[/bold]
+                        
+                        VNC: [bold]vnc://{build_instance["host_ip"]}:{build_instance["remote_desktop_port"]}[/bold]
+                        
                         user: [bold]appollo[/bold]
-                        user_password: [bold]{build_instance["vm_password"]}[/bold]
+                        password: [bold]{build_instance["password"]}[/bold]
                     """
                 )
             ), title="Connexion settings and credentials", expand=False)
@@ -544,7 +561,7 @@ def patch(key, output="appollo.patch"):
         console.print("This build does not have any patch")
         return
 
-    code = Syntax("git am appollo.patch", lexer="shell")
+    code = Syntax("git apply appollo.patch", lexer="shell")
     console.print("To apply a patch, run")
     console.print(code)
 
