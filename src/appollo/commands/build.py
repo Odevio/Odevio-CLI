@@ -1,7 +1,7 @@
 import click
 
 from appollo.helpers import login_required_warning_decorator
-
+import datetime
 
 @click.group('build')
 def build():
@@ -184,13 +184,12 @@ def detail(key):
 @click.argument('directory', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
                 required=False)
 @click.option('--build-type', help="Build type", prompt=True,
-              type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication", "test"]))
+              type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication"]))
 @click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use appollo build flutter-versions to see all available versions",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
-@click.option('--test', is_flag=True, default=False, help="Launch the test before", )
 def start(build_type, flutter, minimal_ios_version, app_version, build_number, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 
