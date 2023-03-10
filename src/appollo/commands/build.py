@@ -256,7 +256,7 @@ def _show_build_progress(build_instance, no_progress=False):
 @click.argument('app-key', required=False)
 @click.argument('directory', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
                 required=False)
-@click.option('--build-type', help="Build type", prompt=True,
+@click.option('--build-type', help="Build type",
               type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication"]))
 @click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use appollo build flutter-versions to see all available versions",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
@@ -291,6 +291,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
     """
     import os
     import textwrap
+    import questionary
 
     from rich.text import Text
 
@@ -306,15 +307,29 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
         if res not in ["y", "Y"]:
             return
 
+    if build_type is None:
+        build_type = questionary.select(
+            "Build type",
+            choices=["configuration", "development", "ad-hoc", "distribution", "validation", "publication"],
+            qmark="",
+        ).ask()
+        if build_type is None:  # When ctrl-C, exit
+            exit()
+
     if app_key is None:
+        extra_options = []
+        if build_type == "configuration":
+            extra_options = [{'key': "", 'name': "No application (xcode will not be configured)"}]
         app_key = terminal_menu("/applications/", "Application",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
                                             You have no app identifiers in your account. Check out [code]$ appollo app mk [/code] to create an app identifier.
                                         """
-                                    )))
+                                    )), name=lambda a: a['name']+(f" ({a['key']})" if a['key'] != "" else ""), extra_options=extra_options)
         if app_key is None:
             return
+        if app_key == "":
+            app_key = None
 
     console.print(f"Zipping {directory}")
     zip_file = zip_directory(directory)
@@ -564,6 +579,9 @@ def patch(key, output="appollo.patch"):
     code = Syntax("git apply appollo.patch", lexer="shell")
     console.print("To apply a patch, run")
     console.print(code)
+    console.print("If the directory you are in is not the top-level git directory (the one where .git is located) you need to add --directory=<this_directory> to the command")
+    console.print("For example if this directory is named flutter_app and is contained in the top-level git directory you need to run")
+    console.print(Syntax("git apply --directory=flutter_app appollo.patch", lexer="shell"))
 
 
 @build.command()
@@ -654,5 +672,7 @@ def flutter_versions():
     versions = api.get("/flutter-versions/")
 
     if versions:
-        columns = Columns(versions, padding=(0, 3), equal=True, title="Flutter versions available")
+        columns = Columns(versions["stable"], padding=(0, 3), equal=True, title="Stable channel")
+        console.print(columns)
+        columns = Columns(versions["beta"], padding=(0, 3), equal=True, title="Beta channel")
         console.print(columns)

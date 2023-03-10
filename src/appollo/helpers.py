@@ -53,7 +53,7 @@ def login_required_warning_decorator(f):
     return update_wrapper(run, f)
 
 
-def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", name=lambda a: f"{a['name']} ({a['key']})", does_not_exist_msg="No item to select."):
+def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", name=lambda a: f"{a['name']} ({a['key']})", does_not_exist_msg="No item to select.", extra_options=[]):
     """ A simple helper function to have a select terminal menu.
 
     Ideally this function should be integrated in a custom click.option and click.argument but it is not easy.
@@ -67,6 +67,7 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
         item_list = api.get(api_route, params=api_params)
     else:
         item_list = api.get(api_route)
+    item_list.extend(extra_options)
     terminal_ready_list = [Choice(name(item), i) for i, item in enumerate(item_list)]
     if len(terminal_ready_list) == 0:
         console.print(does_not_exist_msg)
