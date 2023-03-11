@@ -2,9 +2,11 @@
 *.pyc
 *~
 .idea/*
+.env/*
 .vscode
 dist
 /docs/_build/
+/docs/.env/*
 
 # Python files
 .venv/

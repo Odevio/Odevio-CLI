@@ -14,7 +14,7 @@ def build():
         2. :code:`appollo build connect` to get your connection settings and access the Appolo Remote on which you can test and setup your application with XCode.
         3. :code:`appollo build stop` to stop your Appolo Remote when you're done editing your settings.
         4. :code:`appollo build patch` to retrieve the changes made on the Appollo-Remote.
-        5. :code:`git am appollo.patch` to apply the changes locally.
+        5. :code:`git apply appollo.patch` to apply the changes locally.
         6. :code:`appollo build start [OPTIONS] [DIRECTORY]` to build your app with Flutter and generate an IPA or to publish your app on the App Store.
 
     Usage:
