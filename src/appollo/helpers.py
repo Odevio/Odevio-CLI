@@ -2,6 +2,9 @@ import os
 from functools import update_wrapper
 
 import click
+import paramiko
+import sys
+import threading
 
 from appollo.settings import console, get_jwt_token
 
@@ -174,3 +177,51 @@ def make_zip(base_name, root_dir=None, exclude_dir=None, exclude_files=None, bas
             os.chdir(save_cwd)
 
     return filename
+
+
+def tunnel_handler(chan, host, port):
+    import socket
+    import select
+    sock = socket.socket()
+    try:
+        sock.connect((host, port))
+    except Exception as e:
+        return
+    while True:
+        r, w, x = select.select([sock, chan], [], [])
+        if sock in r:
+            data = sock.recv(1024)
+            if len(data) == 0:
+                break
+            chan.send(data)
+        if chan in r:
+            data = chan.recv(1024)
+            if len(data) == 0:
+                break
+            sock.send(data)
+    chan.close()
+    sock.close()
+
+
+def ssh_tunnel(host, port, username, password, remote_port, forward_host, forward_port):
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        client.connect(host, port, username, password)
+    except Exception as e:
+        print("Failed to connect to remote host: " + str(e))
+        sys.exit(1)
+    print("Forwarding remote port " + str(remote_port) + " to port " + str(
+        forward_port) + " on " + forward_host + ". Press ctrl+C to close the tunnel.")
+    try:
+        transport = client.get_transport()
+        transport.request_port_forward("", remote_port)
+        while True:
+            chan = transport.accept(1000)
+            if chan is None:
+                continue
+            thr = threading.Thread(target=tunnel_handler, args=(chan, forward_host, forward_port))
+            thr.setDaemon(True)
+            thr.start()
+    except KeyboardInterrupt:
+        print("\nTunnel closed")

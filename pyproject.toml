@@ -11,7 +11,7 @@ authors = [
 description = "CLI to interact with Appollo, the easy way to setup, build & deploy flutter apps for iOS on Linux, Windows and MacOS"
 readme = "Readme.rst"
 license = {file="LICENSE"}
-requires-python = ">=3.6.2"
+requires-python = ">=3.7.0"
 keywords = ["Flutter", "iOS"]
 classifiers  = [
     "Programming Language :: Python :: 3",
@@ -26,7 +26,8 @@ dependencies = [
     "rich==11.2.0",
     "requests==2.27.1",
     "pyjwt==2.4.0",
-    "questionary==1.10.0"
+    "questionary==1.10.0",
+    "paramiko==3.0.0"
 ]
 
 [project.urls]

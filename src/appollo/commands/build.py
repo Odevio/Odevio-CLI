@@ -1,6 +1,6 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator
+from appollo.helpers import login_required_warning_decorator, ssh_tunnel
 
 
 @click.group('build')
@@ -676,3 +676,56 @@ def flutter_versions():
         console.print(columns)
         columns = Columns(versions["beta"], padding=(0, 3), equal=True, title="Beta channel")
         console.print(columns)
+
+
+@build.command()
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.option('--port', required=True, prompt=True, type=int, help="Port to forward to")
+@click.option('--remote-port', required=False, type=int, help="Port on the VM (defaults to the same port, except for 22 and 5900)")
+@click.option('--host', required=False, help="Host to forward to (defaults to localhost)")
+def tunnel(key, port, remote_port, host):
+    """ Create a reverse ssh tunnel between this computer and the VM
+
+    This allows you to access a port of this computer or any host accessible frow this computer, from the VM.
+
+    For example if you have a web server running on port 8000, type the command
+
+    appollo build tunnel --port 8000
+
+    and your web server will be accessible on the VM at localhost:8000, which will enable you to run your app in the simulator while connecting to your local web server.
+    """
+    import textwrap
+    import random
+
+    from rich.text import Text
+
+    from appollo.settings import console
+    from appollo.helpers import terminal_menu
+    from appollo import api
+
+    if remote_port is None:
+        if remote_port not in [22, 5900]:
+            remote_port = port
+        else:
+            remote_port = random.Random().randrange(10000, 65000)
+    if host is None:
+        host = "localhost"
+    if key is None:
+        key = terminal_menu("/builds/", "Builds", name=build_name,
+                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                f"""
+                                    You have not run any builds yet.
+                                """
+                            )))
+        if key is None:
+            return
+
+    build_instance = api.get(f"/builds/{key}/connect/")
+    if build_instance:
+        if build_instance["remote_desktop_status"] == "no_remote_desktop":
+            console.print("This build was not setup for remote desktop.")
+        elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
+            console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
+        else:
+            ssh_tunnel(build_instance['host_ip'], build_instance['ssh_port'], "appollo", build_instance['password'], remote_port, host, port)
