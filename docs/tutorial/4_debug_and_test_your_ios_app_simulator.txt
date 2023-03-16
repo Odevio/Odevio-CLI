@@ -1,19 +1,21 @@
-============================================================================
-4. How to debug and test your Flutter app in the iOS simulator without a Mac
-============================================================================
+==============================================================
+4. How to debug and test your Flutter app in the iOS simulator
+==============================================================
 
-Debugging and testing your iOS app is fairly easy with Appollo. **Even if you do not have a Mac**.
+Debugging and testing your iOS app is fairly easy with Appollo.
 
-For this tutorial, you will have to start a build with a **configuration build type**. Why use a configuration build type ?
-This is because this build type allows you to connect to the Appollo-Remote with the Spice protocol used previously in
+For this tutorial, you will have to start a build with a **configuration build type**. 
+
+Why use a configuration build type ?
+This is because this build type allows you to connect to the Appollo-Remote with the RustDesk protocol used previously in
 the tutorial.
 
 So, type in ``appollo build start`` in your terminal and enter **configuration**.
 
-Let Appollo start the build, and wait a few minutes for the build to end. Once finished you can connect to the Appollo-Remote
-with ``appollo build connect``.
+Let Appollo start the build, and wait a few minutes for the build to end. Once finished you can **connect to the Appollo-Remote
+with your credentials** or with ``appollo build connect``.
 
-.. image:: /img/appollo-build-connect.jpg
+.. image:: /img/appollo-build-start-4.jpg
   :alt: Appollo build connect
   :align: center
 
@@ -22,21 +24,13 @@ with ``appollo build connect``.
 Complete the given information within your remote desktop application to access the Appollo-Remote.
 
 .. note::
-    For this step, you need a remote desktop access application. In this tutorial, the one used is **Spice-Space's** |spice_client|.
+    For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
 
-    Launch your software, it is named RemoteViewer on your computer, indicate the **url** your were given and connect.
+    Launch your software, indicate the **RustDesk ID** your were given and connect.
 
-Once you are on the Appollo-Remote, you can launch the simulator.
+Once you are on the Appollo-Remote, an instance of the Simulator is ready for you.
 
-It might take some time to boot if it is the first time you are using it.
-
-.. image:: /img/appollo-simulator.jpg
-  :alt: Appollo simulator
-  :align: center
-
-|
-
-In parallel, you can also start an instance of the terminal on the Appollo-Remote.
+You can open the terminal on the Appollo-Remote.
 
 Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
 
@@ -48,6 +42,6 @@ Wait a few instants and the app should start on the simulator, you can now debug
 
 |
 
-.. |spice_client| raw:: html
+.. |rustdesk_client| raw:: html
 
-   <a href="https://www.spice-space.org/download.html" target="_blank">client</a>
+   <a href="https://rustdesk.com/" target="_blank">client</a>

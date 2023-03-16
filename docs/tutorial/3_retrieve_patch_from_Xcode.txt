@@ -11,7 +11,7 @@ Once you are satisfied with the configuration, you have two possibilities to ret
 Retrieve changes with a patch file
 ----------------------------------
 
-you are using git and decided to retrieve a git patch containing all the changes you made to Xcode.
+If you are using git and decided to retrieve a git patch containing all the changes you made to Xcode.
 
 First, make sure your build is stopped.
 
@@ -52,3 +52,9 @@ Stopping a build manually is possible by using the command ``appollo build stop`
 When your build is stopped, you can get your files as a zip file by using ``appollo build download``.
 
 Unzip the files and you get the last version of your source code as edited in XCode.
+
+.. image:: /img/appollo-build-download.jpg
+  :alt: Appollo build download
+  :align: center
+
+|
