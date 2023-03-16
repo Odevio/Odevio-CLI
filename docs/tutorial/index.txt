@@ -24,11 +24,12 @@ Let's get started.
    :maxdepth: 2
    :caption: Contents:
 
-   1_create_apple_developer_account
-   2_configure_app_store_connect
-   3_how_to_make_an_app_id_using_appollo
-   4_setup_flutter_app_and_ios_deployment
-   5_retrieve_patch_from_Xcode
-   6_debug_and_test_your_ios_app_simulator
-   7_create_ipa_testing_purpose
-   8_deploy_flutter_ios_app_on_app_store
+   1_create_your_first_build
+   2_setup_flutter_app_and_ios_deployment
+   3_retrieve_patch_from_Xcode
+   4_debug_and_test_your_ios_app_simulator
+   5_create_apple_developer_account
+   6_configure_app_store_connect
+   7_how_to_make_an_app_id_using_appollo
+   8_create_ipa_testing_purpose
+   9_deploy_flutter_ios_app_on_app_store

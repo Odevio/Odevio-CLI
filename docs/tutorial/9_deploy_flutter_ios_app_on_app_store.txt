@@ -1,5 +1,5 @@
 ==============================================================
-8. How to publish a Flutter app on the App Store without a Mac
+9. How to publish a Flutter app on the App Store without a Mac
 ==============================================================
 
 **Congratulations, you are almost done !**

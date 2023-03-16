@@ -1,5 +1,5 @@
 ===========================================
-1. How to create an Apple Developer Account
+5. How to create an Apple Developer Account
 ===========================================
 
 ----------------------------------------------------

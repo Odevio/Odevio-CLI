@@ -1,9 +1,9 @@
 .. _previous_step:
 
-.. _chapter_3:
+.. _chapter_7:
 
 ========================================
-3. How to create an App ID using Appollo
+7. How to create an App ID using Appollo
 ========================================
 
 What is an App ID (aka identifier) ?

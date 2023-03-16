@@ -1,5 +1,5 @@
 ============================================================================
-6. How to debug and test your Flutter app in the iOS simulator without a Mac
+4. How to debug and test your Flutter app in the iOS simulator without a Mac
 ============================================================================
 
 Debugging and testing your iOS app is fairly easy with Appollo. **Even if you do not have a Mac**.

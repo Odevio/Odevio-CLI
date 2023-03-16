@@ -1,0 +1,121 @@
+=================================================================
+2. How to connect to your build and setup Xcode for a Flutter app
+=================================================================
+
+In this chapter, you will learn how to **connect to your configuration build** and **configure Xcode** 
+
+with the help of Appollo to **build your app**.
+
+Connect to your configuration build
+-----------------------------------
+
+Once your build is ready, it takes a few minutes, you can use ``appollo build connect``.
+
+This command will list your connection settings and credentials for a remote connection with RustDesk.
+
+
+.. note::
+  It is not mandatory as ``appollo build start`` already gives you your credentials.
+
+.. image:: /img/appollo-build-connect.jpg
+  :alt: Appollo build connect
+  :align: center
+
+|
+
+.. tip::
+    If you try to connect a build that was not meant for remote desktop or that was stopped, no problem, 
+    Appollo will suggest you to create one automatically.
+
+    .. image:: /img/appollo-connect-other.jpg
+      :alt: Appollo build connect with other build
+      :align: center
+
+|
+
+Use RustDesk to configure Xcode
+-------------------------------
+
+For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk** |rustdesk_client|.
+
+Launch RustDesk, it should look like the following screenshot.
+
+**The first step is to click on the three little dots and select 'ID/Relay Server'.**
+
+.. image:: /img/rustdesk-home.jpg
+  :alt: Appollo RustDesk connect
+  :align: center
+
+|
+
+This step is to make sure you are connected to Appollo's relay server.
+
+.. image:: /img/rustdesk-relay-server.jpg
+  :alt: Appollo RustDesk relay server
+  :align: center
+
+|
+
+Secondly, simply type in the **RustDesk ID** you were given to authenticate.
+
+.. image:: /img/rustdesk-connect.jpg
+  :alt: Appollo RustDesk connect
+  :align: center
+
+|
+
+Finally, RustDesk will ask you to enter the **RustDesk password** you received.
+
+.. image:: /img/rustdesk-password.jpg
+  :alt: Appollo RustDesk password
+  :align: center
+
+|
+
+That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
+
+.. image:: /img/rustdesk-desktop.jpg
+  :alt: Appollo RustDesk desktop
+  :align: center
+
+|
+
+.. tip::
+    If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
+      
+      .. image:: /img/rustdesk-shrink.jpg
+        :alt: Appollo RustDesk shrink
+        :align: center
+
+|
+
+Configure Xcode on the Appollo-Remote
+-------------------------------------
+
+Your project is already opened in Xcode.
+
+Remember your virtual machine will be up for an hour so make sure you finish everything you need in that time.
+
+.. image:: /img/rustdesk-xcode.jpg
+  :alt: Appollo remote xcode
+  :align: center
+
+|
+
+We will configure the Bundle Identifier in XCode for our app to be the same to the one we created with Appollo otherwise
+Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
+Signing & Capacities tab under Bundle Identifier you can find the field to change it.
+
+.. image:: /img/rustdesk-bundle.jpg
+   :alt: XCode bundle identifier
+   :align: center
+
+|
+
+.. |rustdesk_client| raw:: html
+
+   <a href="https://rustdesk.com/" target="_blank">client</a>
+
+.. |flutter_app| raw:: html
+
+   <a href="https://docs.flutter.dev/get-started/test-drive?tab=vscode#create-app" target="_blank"> official Flutter tutorial</a>
