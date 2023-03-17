@@ -97,10 +97,13 @@ def rm(key):
         if key is None:
             return
 
-    build_instance = api.delete(f"/builds/{key}/")
+    try:
+        build_instance = api.delete(f"/builds/{key}/")
 
-    if build_instance:
-        console.print(f"Build with KEY {key} has been deleted")
+        if build_instance:
+            console.print(f"Build with KEY {key} has been deleted")
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -131,51 +134,54 @@ def detail(key):
         if key is None:
             return
 
-    build_instance = api.get(f"/builds/{key}/")
+    try:
+        build_instance = api.get(f"/builds/{key}/")
 
-    if build_instance:
-        console.print(Panel(Text.from_markup(
-            textwrap.dedent(
-                f"""
-                Appollo Key : [bold]{build_instance["key"]}[/bold]
-                Name : [bold]{build_instance["name"]}[/bold]
-                Application : [bold]{build_instance["application"]}[/bold]
-                Status : [bold]{build_instance["status"] + (" - " + build_instance["substatus"] if build_instance["substatus"] else "")}[/bold]
-                Remote Desktop status : [bold]{build_instance["remote_desktop_status"]}[/bold]
-                Creator : [bold]{build_instance["creator"]}[/bold]
-                """
-            )
-        ), title="General information"))
-
-        console.print(Panel(Text.from_markup(
-            textwrap.dedent(
-                f"""
-                Flutter version: [bold]{build_instance["flutter_version"]}[/bold]
-                Build type : [bold]{build_instance["build_type"]}[/bold]
-                Provisioning profile : [bold]{build_instance["profile"]}[/bold]
-                Certificate : [bold]{build_instance["certificate"]}[/bold]
-                Minimum iOS SDK : [bold]{build_instance["min_sdk"]}[/bold]
-                App version: [bold]{build_instance["app_version"] or "-"}[/bold]
-                Build number: [bold]{build_instance["build_number"] or "-"}[/bold]
-                """
-            )
-        ), title="Build config"))
-
-        if build_instance.get("error_message"):
+        if build_instance:
             console.print(Panel(Text.from_markup(
                 textwrap.dedent(
                     f"""
-                    Error message: [bold]{build_instance['error_message']}[/bold]
+                    Appollo Key : [bold]{build_instance["key"]}[/bold]
+                    Name : [bold]{build_instance["name"]}[/bold]
+                    Application : [bold]{build_instance["application"]}[/bold]
+                    Status : [bold]{build_instance["status"] + (" - " + build_instance["substatus"] if build_instance["substatus"] else "")}[/bold]
+                    Remote Desktop status : [bold]{build_instance["remote_desktop_status"]}[/bold]
+                    Creator : [bold]{build_instance["creator"]}[/bold]
                     """
                 )
-            ), title="Error details"))
-            # TODO Add errors codes in doc
+            ), title="General information"))
 
-        code = Syntax(f"appollo build logs {key}", lexer="shell")
-        console.print("To see logs of this build, run")
-        console.print(code)
-    else:
-        console.print("This build was not found or you cannot access it.")
+            console.print(Panel(Text.from_markup(
+                textwrap.dedent(
+                    f"""
+                    Flutter version: [bold]{build_instance["flutter_version"]}[/bold]
+                    Build type : [bold]{build_instance["build_type"]}[/bold]
+                    Provisioning profile : [bold]{build_instance["profile"]}[/bold]
+                    Certificate : [bold]{build_instance["certificate"]}[/bold]
+                    Minimum iOS SDK : [bold]{build_instance["min_sdk"]}[/bold]
+                    App version: [bold]{build_instance["app_version"] or "-"}[/bold]
+                    Build number: [bold]{build_instance["build_number"] or "-"}[/bold]
+                    """
+                )
+            ), title="Build config"))
+
+            if build_instance.get("error_message"):
+                console.print(Panel(Text.from_markup(
+                    textwrap.dedent(
+                        f"""
+                        Error message: [bold]{build_instance['error_message']}[/bold]
+                        """
+                    )
+                ), title="Error details"))
+                # TODO Add errors codes in doc
+
+            code = Syntax(f"appollo build logs {key}", lexer="shell")
+            console.print("To see logs of this build, run")
+            console.print(code)
+        else:
+            console.print("This build was not found or you cannot access it.")
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 def _show_build_progress(build_instance, no_progress=False):
@@ -200,15 +206,17 @@ def _show_build_progress(build_instance, no_progress=False):
 
     # check build progress.
     loop = True
-    with console.status("Waiting for available instance...", spinner="line") as spinner:
+    with console.status("Looking for available instance...", spinner="line") as spinner:
         while loop:
             # update status every 5 seconds.
             sleep(5)
             build_instance = api.get(f"/builds/{build_instance['key']}/")
 
             status = build_instance["status_code"]
-            if status == "created" or status == "waiting_instance":
-                spinner.update("Waiting for available instance...")
+            if status == "created":
+                spinner.update("Looking for available instance...")
+            elif status == "waiting_instance":
+                spinner.update("No instance available at the moment. Waiting for one to be free...")
             elif status == "in_progress":
                 substatus = build_instance["substatus_code"]
                 if substatus == "starting_instance":
@@ -391,13 +399,14 @@ def ipa(key):
         if key is None:
             return
 
-    response = api.get(f"/builds/{key}/ipa/")
+    try:
+        response = api.get(f"/builds/{key}/ipa/")
 
-    if response:
-        console.print(f"[link={response['url']}]{response['url']}[/link]")
-        console.print("Open this url to download the IPA, or with an iOS device to install it.")
-    else:
-        console.print("This build does not have any IPA")
+        if response:
+            console.print(f"[link={response['url']}]{response['url']}[/link]")
+            console.print("Open this url to download the IPA, or with an iOS device to install it.")
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -430,15 +439,16 @@ def download(key, output="source.zip"):
         if key is None:
             return
 
-    console.print("Downloading modified sources...")
-    response = api.get(f"/builds/{key}/result/", json_decode=False)
-    console.print("The modified sources have been downloaded and are in source.zip")
+    try:
+        console.print("Downloading modified sources...")
+        response = api.get(f"/builds/{key}/result/", json_decode=False)
+        console.print("The modified sources have been downloaded and are in source.zip")
 
-    if response:
-        with open(output, "wb") as f:
-            f.write(response)
-    else:
-        console.print("Could not download the source code. Are you sure the build is stopped ?")
+        if response:
+            with open(output, "wb") as f:
+                f.write(response)
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -482,55 +492,58 @@ def connect(key, yes):
         if key is None:
             return
 
-    build_instance = api.get(f"/builds/{key}/connect/")
+    try:
+        build_instance = api.get(f"/builds/{key}/connect/")
 
-    if build_instance:
-        if build_instance["remote_desktop_status"] == "no_remote_desktop":
-            console.print("This build was not setup for remote desktop.")
-            if yes or click.confirm("Do you want to create a new build with the same parameters setup for Remote Desktop access ?", default=False):
-                rebuild_instance = api.post(
-                    f"/builds/{key}/rebuild/",
-                    json_data={
-                        "remote_desktop_enabled": True,
-                    })
+        if build_instance:
+            if build_instance["remote_desktop_status"] == "no_remote_desktop":
+                console.print("This build is either stopped or was not setup for remote desktop.")
+                if yes or click.confirm("Do you want to create a new build with the same parameters setup for Remote Desktop access ?", default=False):
+                    rebuild_instance = api.post(
+                        f"/builds/{key}/rebuild/",
+                        json_data={
+                            "remote_desktop_enabled": True,
+                        })
 
-                if rebuild_instance:
-                    _show_build_progress(rebuild_instance)
+                    if rebuild_instance:
+                        _show_build_progress(rebuild_instance)
 
-        elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
-            console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
-        else:
-            rustdesk_id = build_instance["rustdesk_id"]
-            if len(rustdesk_id) == 9:
-                rustdesk_id = rustdesk_id[0:3]+" "+rustdesk_id[3:6]+" "+rustdesk_id[6:9]
-            auth_info = Panel(Text.from_markup(
-                textwrap.dedent(
-                    f"""
-                        RustDesk relay server: appollo.space
-                        RustDesk ID: [bold]{rustdesk_id}[/bold]
-                        RustDesk password: [bold]{build_instance["rustdesk_password"]}[/bold]
-                        
-                        VNC: [bold]vnc://{build_instance["host_ip"]}:{build_instance["remote_desktop_port"]}[/bold]
-                        
-                        user: [bold]appollo[/bold]
-                        password: [bold]{build_instance["password"]}[/bold]
-                    """
-                )
-            ), title="Connexion settings and credentials", expand=False)
-            console.print(auth_info)
-            console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
-            open_info = Text.from_markup(
-                textwrap.dedent(
-                    """
-                        Your app is located in [bold]Documents/app[/bold].
-                        To configure it with XCode,
-                        1. Open [bold]XCode[/bold]
-                        2. Select [bold]Open an existing project[/bold]
-                        3. Select file [bold]Documents/app/ios/Runner.xcworkspace[/bold]
-                        4. Enjoy !
-                    """
-                ))
-            console.print(open_info)
+            elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
+                console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
+            else:
+                rustdesk_id = build_instance["rustdesk_id"]
+                if len(rustdesk_id) == 9:
+                    rustdesk_id = rustdesk_id[0:3]+" "+rustdesk_id[3:6]+" "+rustdesk_id[6:9]
+                auth_info = Panel(Text.from_markup(
+                    textwrap.dedent(
+                        f"""
+                            RustDesk relay server: appollo.space
+                            RustDesk ID: [bold]{rustdesk_id}[/bold]
+                            RustDesk password: [bold]{build_instance["rustdesk_password"]}[/bold]
+                            
+                            VNC: [bold]vnc://{build_instance["host_ip"]}:{build_instance["remote_desktop_port"]}[/bold]
+                            
+                            user: [bold]appollo[/bold]
+                            password: [bold]{build_instance["password"]}[/bold]
+                        """
+                    )
+                ), title="Connection settings and credentials", expand=False)
+                console.print(auth_info)
+                console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
+                open_info = Text.from_markup(
+                    textwrap.dedent(
+                        """
+                            Your app is located in [bold]Documents/app[/bold].
+                            To configure it with XCode,
+                            1. Open [bold]XCode[/bold]
+                            2. Select [bold]Open an existing project[/bold]
+                            3. Select file [bold]Documents/app/ios/Runner.xcworkspace[/bold]
+                            4. Enjoy !
+                        """
+                    ))
+                console.print(open_info)
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -567,21 +580,23 @@ def patch(key, output="appollo.patch"):
             return
 
     console.print(f"Downloading patch file as {output}.")
-    response = api.get(f"/builds/{key}/patch/", json_decode=False)
+    try:
+        response = api.get(f"/builds/{key}/patch/", json_decode=False)
 
-    if response:
-        with open(output, "wb") as f:
-            f.write(response)
-    else:
-        console.print("This build does not have any patch")
-        return
+        if response:
+            with open(output, "wb") as f:
+                f.write(response)
+        else:
+            return
 
-    code = Syntax("git apply appollo.patch", lexer="shell")
-    console.print("To apply a patch, run")
-    console.print(code)
-    console.print("If the directory you are in is not the top-level git directory (the one where .git is located) you need to add --directory=<this_directory> to the command")
-    console.print("For example if this directory is named flutter_app and is contained in the top-level git directory you need to run")
-    console.print(Syntax("git apply --directory=flutter_app appollo.patch", lexer="shell"))
+        code = Syntax("git apply appollo.patch", lexer="shell")
+        console.print("To apply a patch, run")
+        console.print(code)
+        console.print("If the directory you are in is not the top-level git directory (the one where .git is located) you need to add --directory=<this_directory> to the command")
+        console.print("For example if this directory is named flutter_app and is contained in the top-level git directory you need to run")
+        console.print(Syntax("git apply --directory=flutter_app appollo.patch", lexer="shell"))
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -607,11 +622,14 @@ def stop(key):
         if key is None:
             return
 
-    build_instance = api.post(f"/builds/{key}/stop/")
-    if build_instance:
-        console.print(Text.from_markup(f"[bold]{build_instance['name']}[/bold] has been stopped."))
-    else:
-        console.print(f"Build with KEY \"{key}\" was not found.")
+    try:
+        build_instance = api.post(f"/builds/{key}/stop/")
+        if build_instance:
+            console.print(Text.from_markup(f"[bold]{build_instance['name']}[/bold] has been stopped."))
+        else:
+            console.print(f"Build with KEY \"{key}\" was not found.")
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -641,8 +659,11 @@ def logs(key):
         if key is None:
             return
 
-    logs = api.get(f"/builds/{key}/logs/")
-    console.print(logs)
+    try:
+        logs = api.get(f"/builds/{key}/logs/")
+        console.print(logs)
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
 
 
 def build_name(build_instance):
@@ -721,11 +742,14 @@ def tunnel(key, port, remote_port, host):
         if key is None:
             return
 
-    build_instance = api.get(f"/builds/{key}/connect/")
-    if build_instance:
-        if build_instance["remote_desktop_status"] == "no_remote_desktop":
-            console.print("This build was not setup for remote desktop.")
-        elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
-            console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
-        else:
-            ssh_tunnel(build_instance['host_ip'], build_instance['ssh_port'], "appollo", build_instance['password'], remote_port, host, port)
+    try:
+        build_instance = api.get(f"/builds/{key}/connect/")
+        if build_instance:
+            if build_instance["remote_desktop_status"] == "no_remote_desktop":
+                console.print("This build was not setup for remote desktop.")
+            elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
+                console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
+            else:
+                ssh_tunnel(build_instance['host_ip'], build_instance['ssh_port'], "appollo", build_instance['password'], remote_port, host, port)
+    except api.NotFoundException:
+        console.print("This build does not exist or you cannot access it.")
