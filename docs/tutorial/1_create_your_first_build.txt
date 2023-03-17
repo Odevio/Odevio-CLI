@@ -1,10 +1,10 @@
-==================================
-1. Create your first Appollo build
-==================================
+================================================
+1. Create your first Appollo configuration build
+================================================
 
 If you are here, it means that you managed to install Appollo and have created your account.
 
-You are almost there, this is the first and last step of this tutorial to create your first build.
+You are almost there, this is the first and last step of this tutorial to create your first configuration build.
 
 It is really easy, you just need to **use this one command**:
 
@@ -23,7 +23,8 @@ It is really easy, you just need to **use this one command**:
 
 Now, select the **No application (Xcode will not be configured) option.**
 
-You will also see a list of your existing apps if this is the case.
+.. note::
+    If you have linked your Appollo account with your Apple Developer Account, you will be able to see a list of the Apps you added.
 
 .. image:: /img/appollo-build-start-2.jpg
   :alt: Appollo build start select option

@@ -3,22 +3,15 @@
 =================================================================
 
 In this chapter, you will learn how to **connect to your configuration build** and **configure Xcode** 
-
 with the help of Appollo to **build your app**.
 
-Connect to your configuration build
------------------------------------
+Use RustDesk to connect to your configuration build
+---------------------------------------------------
 
-Once your build is ready, it takes a few minutes, you can use ``appollo build connect``.
+Now that your configuration build is ready and that you received your credentials, you can connect to your Mac virtual machine.
 
-This command will list your connection settings and credentials for a remote connection with RustDesk.
-
-
-.. note::
-  It is not mandatory as ``appollo build start`` already gives you your credentials.
-
-.. image:: /img/appollo-build-connect.jpg
-  :alt: Appollo build connect
+.. image:: /img/appollo-build-start-4.jpg
+  :alt: Appollo build start
   :align: center
 
 |
@@ -33,10 +26,7 @@ This command will list your connection settings and credentials for a remote con
 
 |
 
-Use RustDesk to configure Xcode
--------------------------------
-
-For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk** |rustdesk_client|.
+For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
 
 Launch RustDesk, it should look like the following screenshot.
 
@@ -74,6 +64,16 @@ Finally, RustDesk will ask you to enter the **RustDesk password** you received.
 
 That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
 
+**You can now freely configure Xcode!**
+
+.. tip::
+  You have access to everything you need, the simulator, the terminal... It is also possible to directly modify your code with Android Studio or Visual Studio Code!
+    .. image:: /img/rustdesk-tools.jpg
+      :alt: Appollo RustDesk tools
+      :align: center
+
+|
+
 .. image:: /img/rustdesk-desktop.jpg
   :alt: Appollo RustDesk desktop
   :align: center
@@ -86,29 +86,6 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
       .. image:: /img/rustdesk-shrink.jpg
         :alt: Appollo RustDesk shrink
         :align: center
-
-|
-
-Configure Xcode on the Appollo-Remote
--------------------------------------
-
-Your project is already opened in Xcode.
-
-Remember your virtual machine will be up for an hour so make sure you finish everything you need in that time.
-
-.. image:: /img/rustdesk-xcode.jpg
-  :alt: Appollo remote xcode
-  :align: center
-
-|
-
-We will configure the Bundle Identifier in XCode for our app to be the same to the one we created with Appollo otherwise
-Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
-Signing & Capacities tab under Bundle Identifier you can find the field to change it.
-
-.. image:: /img/rustdesk-bundle.jpg
-   :alt: XCode bundle identifier
-   :align: center
 
 |
 

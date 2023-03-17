@@ -63,6 +63,30 @@ There, you will find the **"Identifiers menu"** that contains the list with the 
 
 |
 
+Modify your Bundle ID on the Appollo-Remote
+-------------------------------------------
+
+Your project is already opened in Xcode.
+
+.. note::
+  Remember that your virtual machine will be up for an hour, so make sure you finish everything you need in that time.
+
+.. image:: /img/rustdesk-xcode.jpg
+  :alt: Appollo remote xcode
+  :align: center
+
+|
+
+We will configure the Bundle Identifier in XCode for our app to be the same as the one we created with Appollo otherwise
+Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
+Signing & Capacities tab under Bundle Identifier you can find the field to change it.
+
+.. image:: /img/rustdesk-bundle.jpg
+   :alt: XCode bundle identifier
+   :align: center
+
+|
+
 .. |apple_developer_account| raw:: html
 
   <a href="https://developer.apple.com/account" target="_blank">Apple Developer account</a>
