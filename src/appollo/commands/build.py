@@ -184,7 +184,7 @@ def detail(key):
         console.print("This build does not exist or you cannot access it.")
 
 
-def _show_build_progress(build_instance, no_progress=False):
+def _show_build_progress(build_instance, no_progress=False, tunnel_port=None, tunnel_host=None, tunnel_remote_port=None):
     from time import sleep
     from rich.syntax import Syntax
     from rich.text import Text
@@ -202,7 +202,7 @@ def _show_build_progress(build_instance, no_progress=False):
     console.print("Killing the command will not stop the build.")
 
     if no_progress:
-        return
+        return False
 
     # check build progress.
     loop = True
@@ -249,14 +249,14 @@ def _show_build_progress(build_instance, no_progress=False):
         if build_type == "ad-hoc":
             ipa({build_instance['key']})
         if status == "config":
-            connect({build_instance['key']})
-        return
+            connect({build_instance['key'], tunnel_port, tunnel_host, tunnel_remote_port})
+        return True
     elif status in ["failed", "stopped"]:
         if "error_message" in build_instance:
             console.print(Text.from_markup(f"[red]Error: {build_instance['error_message']}[/red]"))
         console.print(Text.from_markup(
             f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
-        return
+        return False
 
 
 @build.command()
@@ -270,8 +270,11 @@ def _show_build_progress(build_instance, no_progress=False):
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
+@click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel when the build is started, forwarding to this port. Note: this only applies to configuration builds")
+@click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
+@click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
-def start(build_type, flutter, minimal_ios_version, app_version, build_number, no_progress, app_key=None, directory=None):
+def start(build_type, flutter, minimal_ios_version, app_version, build_number, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided gets the current directory.
@@ -314,6 +317,38 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
         res = console.input("This directory does not look like it contains a flutter project. Are you sure you want to upload it? (y/N) ")
         if res not in ["y", "Y"]:
             return
+
+    if os.path.isfile(".appollo"):
+        with open(".appollo") as config:
+            for i, line in enumerate(config.readlines()):
+                split = line.split("=")
+                if len(split) != 2:
+                    print("Error in .appollo file line "+str(i+1)+": should be KEY=VALUE")
+                    continue
+                key = split[0].strip()
+                value = split[1].strip()
+                if key == "app-key":
+                    app_key = value
+                elif key == "build-type":
+                    build_type = value
+                elif key == "flutter":
+                    flutter = value
+                elif key == "minimal-ios-version":
+                    minimal_ios_version = value
+                elif key == "app-version":
+                    app_version = value
+                elif key == "build-number":
+                    build_number = value
+                elif key == "tunnel-port":
+                    tunnel_port = int(value)
+                elif key == "tunnel-host":
+                    tunnel_host = value
+                elif key == "tunnel-remote-port":
+                    tunnel_remote_port = int(value)
+                elif key == "no-progress":
+                    no_progress = value in ["1", "true", "True"]
+                else:
+                    console.print(f"Warning: unknown option '{key}' in .appollo")
 
     if build_type is None:
         build_type = questionary.select(
@@ -368,7 +403,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, n
     os.remove(".app.zip")
 
     if build_instance:
-        _show_build_progress(build_instance, no_progress)
+        _show_build_progress(build_instance, no_progress, tunnel_port, tunnel_host, tunnel_remote_port)
 
 
 @build.command()
@@ -454,8 +489,11 @@ def download(key, output="source.zip"):
 @build.command()
 @login_required_warning_decorator
 @click.argument('key', required=False)
+@click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel, forwarding to this port. Note: this only applies to configuration builds")
+@click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
+@click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option("-y", "--yes", is_flag=True, help="Automatically create an Appollo Remote if your build was not setup for remote desktop", )
-def connect(key, yes):
+def connect(key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
     """ Get the connection information for an Appollo-Remote linked to a build.
 
     \b
@@ -537,6 +575,8 @@ def connect(key, yes):
                 console.print(Syntax(code="appollo build stop "+key, lexer="shell"))
                 console.print("")
                 console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
+                if tunnel_port:
+                    tunnel(build_instance['key'], tunnel_port, tunnel_remote_port, tunnel_host)
     except api.NotFoundException:
         console.print("This build does not exist or you cannot access it.")
 
@@ -692,6 +732,8 @@ def flutter_versions():
         console.print(columns)
         columns = Columns(versions["beta"], padding=(0, 3), equal=True, title="Beta channel")
         console.print(columns)
+        console.print("")
+        console.print("Note: the builds run on M1 or M2 macs so only versions starting at flutter 3 are available")
 
 
 @build.command()
