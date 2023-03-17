@@ -42,29 +42,23 @@ And this time, for the build type: **publication**
 
 Wait for Appollo to create and start the build.
 
-Then, wait for Apple to send you an email like this one:
-
-.. image:: /img/apple-mail-confirmation.jpg
-  :alt: Apple app build confirmation mail
+.. image:: /img/appollo-build-publication.jpg
+  :alt: Appollo build start publication
   :align: center
 
 |
+
+.. tip::
+  Do not forget to adjust your app version or build number to avoid duplicate errors
+
 
 Publish your app on the App Store
 ---------------------------------
 
-The build section should now look like this:
+The **build section** should now look like this and you can **select your newest build**.
 
 .. image:: /img/apple-build-select.jpg
   :alt: Apple build select button
-  :align: center
-
-|
-
-You can now select your build from the list.
-
-.. image:: /img/apple-build-list.jpg
-  :alt: Apple build list view
   :align: center
 
 |
@@ -73,7 +67,7 @@ Apple will ask you if your app responds to **encryption standards** and other st
 
 **You did it!** Your build has been **successfully publish** on the app store.
 
-.. warning:: **Do not forget to save your build! Scroll up to see the 'Save' button.**
+.. warning:: **Do not forget to save your build!**
 
 For your app to be published on the app store, you still have to **complete any missing information** and then
 you can submit it to Apple for review.

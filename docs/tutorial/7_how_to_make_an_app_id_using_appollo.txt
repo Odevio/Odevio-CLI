@@ -10,7 +10,9 @@ What is an App ID (aka identifier) ?
 ------------------------------------
 
 It is the combination of your **Team ID** and the **bundle ID**. The Team ID is the one you can find in your membership
-information and is supplied by Apple. The bundle ID is the one you define and is a **unique identifier** for your app on
+information and is supplied by Apple. 
+
+The bundle ID is the one you define and is a **unique identifier** for your app on
 the App Store. The App ID is required to publish an app on the App Store.
 
 .. note::
@@ -35,9 +37,9 @@ You can **create a new one** using:
 
   appollo app mk --name APP_NAME --bundle-id COM.YOURCOMPANY.YOURAPP
 
-The **name** is simply the one you want to give to the identifier. Choose your app name to make your life easier.
+The **name** is simply the one you want to give to the identifier. Choose an app name to make your life easier.
 
-The bundle ID (e.g.: com.yourcompany.yourapp)
+The **bundle ID** (e.g.: com.yourcompany.yourapp)
 
 .. image:: /img/appollo-app-mk.jpg
   :alt: Appollo app mk
@@ -45,8 +47,9 @@ The bundle ID (e.g.: com.yourcompany.yourapp)
 
 |
 
-If you have more than one developper account configured in Appollo you will be asked which one you want to use
-when running the command.
+.. note::
+  If you have more than one developper account configured in Appollo you will be asked which one you want to use
+  when running the command.
 
 Let's check if your App ID was created properly on Apple Developer.
 
@@ -66,7 +69,7 @@ There, you will find the **"Identifiers menu"** that contains the list with the 
 Modify your Bundle ID on the Appollo-Remote
 -------------------------------------------
 
-Your project is already opened in Xcode.
+Once you started and connected your configuration build, your project is already opened in Xcode.
 
 .. note::
   Remember that your virtual machine will be up for an hour, so make sure you finish everything you need in that time.
@@ -77,9 +80,9 @@ Your project is already opened in Xcode.
 
 |
 
-We will configure the Bundle Identifier in XCode for our app to be the same as the one we created with Appollo otherwise
+We will **configure the Bundle Identifier in XCode for our app** to be the same as the one we created with Appollo otherwise
 Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
-Signing & Capacities tab under Bundle Identifier you can find the field to change it.
+**Signing & Capacities** tab under Bundle Identifier you can find the field to change it.
 
 .. image:: /img/rustdesk-bundle.jpg
    :alt: XCode bundle identifier

@@ -8,7 +8,7 @@ This is a complete guide to Appollo.
 
 This tutorial is aimed towards beginning developers and new Appollo users.
 
-In this in-depth tutorial, you'll learn everything from the creation of your |Apple_enroll| to releasing your app on the |App_store|.
+In this in-depth tutorial, you'll learn everything from the creation of your first configuration build, the creation of your |Apple_enroll| to releasing your app on the |App_store|.
 
 Let's get started.
 

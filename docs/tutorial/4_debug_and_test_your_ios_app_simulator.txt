@@ -12,8 +12,7 @@ the tutorial.
 
 So, type in ``appollo build start`` in your terminal and enter **configuration**.
 
-Let Appollo start the build, and wait a few minutes for the build to end. Once finished you can **connect to the Appollo-Remote
-with your credentials** or with ``appollo build connect``.
+Let Appollo start the build, once ready, you can **connect to the Appollo-Remote with your credentials**
 
 .. image:: /img/appollo-build-start-4.jpg
   :alt: Appollo build connect
@@ -21,12 +20,10 @@ with your credentials** or with ``appollo build connect``.
 
 |
 
-Complete the given information within your remote desktop application to access the Appollo-Remote.
-
 .. note::
     For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
 
-    Launch your software, indicate the **RustDesk ID** your were given and connect.
+    Launch your software, indicate the **RustDesk ID** you were given and connect.
 
 Once you are on the Appollo-Remote, an instance of the Simulator is ready for you.
 

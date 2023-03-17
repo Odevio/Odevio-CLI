@@ -38,6 +38,8 @@ Launch RustDesk, it should look like the following screenshot.
 
 |
 
+Type in Appollo's relay server: **appollo.space**
+
 This step is to make sure you are connected to Appollo's relay server.
 
 .. image:: /img/rustdesk-relay-server.jpg
@@ -46,7 +48,7 @@ This step is to make sure you are connected to Appollo's relay server.
 
 |
 
-Secondly, simply type in the **RustDesk ID** you were given to authenticate.
+Secondly, simply enter the **RustDesk ID** you were given to authenticate.
 
 .. image:: /img/rustdesk-connect.jpg
   :alt: Appollo RustDesk connect
@@ -71,8 +73,6 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
     .. image:: /img/rustdesk-tools.jpg
       :alt: Appollo RustDesk tools
       :align: center
-
-|
 
 .. image:: /img/rustdesk-desktop.jpg
   :alt: Appollo RustDesk desktop

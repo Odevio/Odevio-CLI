@@ -4,16 +4,21 @@
 
 If you are here, it means that you managed to install Appollo and have created your account.
 
-You are almost there, this is the first and last step of this tutorial to create your first configuration build.
+You are almost there, this is the only step you need to do to create your first configuration build.
 
 It is really easy, you just need to **use this one command**:
 
-``appollo build start``
+.. code-block::
+
+  appollo build start
 
 .. note::
     Make sure you are in the root folder of your app!
 
-**Choose the configuration type:**
+.. tip:: 
+  You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
+
+**Select the configuration type**
 
 .. image:: /img/appollo-build-start-1.jpg
   :alt: Appollo build start select type
@@ -40,7 +45,7 @@ Appollo will prepare your build in a few moments!
 
 |
 
-Once it is done, you will receive all the informations of your Mac virtual machine.
+Once it is done, you will receive all the credentials of your Mac virtual machine.
 
 .. image:: /img/appollo-build-start-4.jpg
   :alt: Appollo build start ready

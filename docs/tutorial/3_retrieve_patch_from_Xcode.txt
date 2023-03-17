@@ -4,14 +4,14 @@
 
 Once you are satisfied with the configuration, you have two possibilities to retrieve the changes you made in Appollo locally.
 
-    1. **If you use Git** for your project the easiest is to use the ``appollo build patch`` which will `Retrieve changes with a patch file`_.
+    1. **If you use Git** for your project the easiest is to use ``appollo build patch`` which will `Retrieve changes with a patch file`_.
     2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the command ``appollo build download``.
 
 
 Retrieve changes with a patch file
 ----------------------------------
 
-If you are using git and decided to retrieve a git patch containing all the changes you made to Xcode.
+**If you are using git** and decided to retrieve a git patch containing all the changes you made to Xcode.
 
 First, make sure your build is stopped.
 

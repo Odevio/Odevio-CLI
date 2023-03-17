@@ -107,9 +107,9 @@ And follow the prompt instructions.
 
 |
 
-The starting command that will be of use for this tutorial is the ``apple`` one.
+The starting command that will be of use for this tutorial is ``appollo apple``.
 
-Therefore, you can type in ``appollo apple`` to see what you can do next.
+Therefore, you can type it in to see what you can do next.
 
 .. image:: /img/appollo-apple.jpg
   :alt: Appollo apple
@@ -127,7 +127,8 @@ You can also easily **get more information** about your Apple Developer account 
 
 In this case, you want to add an access. So, type in ``appollo apple add``.
 
-.. tip:: You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
+.. tip:: 
+  You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
 
 .. image:: /img/appollo-apple-add.jpg
   :alt: Appollo add Developer account
