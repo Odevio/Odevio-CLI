@@ -474,9 +474,11 @@ def connect(key, yes):
     .. note:: The connection uses the VNC protocol, your Remote Desktop client must support it to allow you to use an Appollo-Remote.
     """
     import textwrap
+    from datetime import datetime
 
     from rich.panel import Panel
     from rich.text import Text
+    from rich.syntax import Syntax
 
     from appollo.settings import console
     from appollo.helpers import terminal_menu
@@ -529,19 +531,12 @@ def connect(key, yes):
                     )
                 ), title="Connection settings and credentials", expand=False)
                 console.print(auth_info)
+                build_instance['stop_time'] = build_instance['stop_time'][:-3] + build_instance['stop_time'][-2:]  # Remove timezone ':' otherwise it can't parse
+                stop_time = datetime.strptime(build_instance["stop_time"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+                console.print("Your machine will automatically stop at "+stop_time.strftime("%H:%M")+", but remember to stop it as soon as you are finished to free up resources by typing")
+                console.print(Syntax(code="appollo build stop "+key, lexer="shell"))
+                console.print("")
                 console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
-                open_info = Text.from_markup(
-                    textwrap.dedent(
-                        """
-                            Your app is located in [bold]Documents/app[/bold].
-                            To configure it with XCode,
-                            1. Open [bold]XCode[/bold]
-                            2. Select [bold]Open an existing project[/bold]
-                            3. Select file [bold]Documents/app/ios/Runner.xcworkspace[/bold]
-                            4. Enjoy !
-                        """
-                    ))
-                console.print(open_info)
     except api.NotFoundException:
         console.print("This build does not exist or you cannot access it.")
 
@@ -672,7 +667,7 @@ def build_name(build_instance):
 
     if "start_time" in build_instance and build_instance["start_time"]:
         build_instance['start_time'] = build_instance['start_time'][:-3]+build_instance['start_time'][-2:]  # Remove timezone ':' otherwise it can't parse
-        start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z")
+        start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
         start_time_str = start_time.strftime('%Y-%m-%d %H:%M')
     else:
         start_time_str = "Not started"
