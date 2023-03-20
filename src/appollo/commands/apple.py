@@ -87,7 +87,7 @@ def developer_account_detail(key):
                 f"""
                 Appollo Key : [bold]{dev_account["key"]}[/bold]
                 Name : [bold]{dev_account["name"]}[/bold]
-                Apple ID : [bold]{dev_account["apple_id"]}[/bold]
+                Team ID : [bold]{dev_account["apple_id"]}[/bold]
                 Apple API Key ID : [bold]{dev_account["api_key_id"]}[/bold]
                 Admin : [bold]{dev_account["manager"]}[/bold]
                 """
@@ -153,7 +153,7 @@ def developer_account_ls():
         table.add_column("KEY")
         table.add_column("Name")
         table.add_column("Admin")
-        table.add_column("Apple ID")
+        table.add_column("Team ID")
         table.add_column("Apple API Key ID")
         for da in developer_accounts:
             table.add_row(da['key'], da['name'], da['manager'], da['apple_id'], da['api_key_id'])

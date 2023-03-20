@@ -1,3 +1,4 @@
+import io
 import os
 from functools import update_wrapper
 
@@ -5,6 +6,7 @@ import click
 import paramiko
 import sys
 import threading
+import qrcode
 
 from appollo.settings import console, get_jwt_token
 
@@ -225,3 +227,12 @@ def ssh_tunnel(host, port, username, password, remote_port, forward_host, forwar
             thr.start()
     except KeyboardInterrupt:
         print("\nTunnel closed")
+
+
+def print_qrcode(url):
+    qr = qrcode.QRCode()
+    qr.add_data(url)
+    f = io.StringIO()
+    qr.print_ascii(f)
+    f.seek(0)
+    print(f.read())

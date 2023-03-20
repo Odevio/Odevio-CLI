@@ -1,6 +1,6 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator, ssh_tunnel
+from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode
 
 
 @click.group('build')
@@ -440,9 +440,10 @@ def ipa(key):
 
         if response:
             console.print(f"[link={response['url']}]{response['url']}[/link]")
-            console.print("Open this url to download the IPA, or with an iOS device to install it.")
+            console.print("Open this url to download the IPA, or use an iOS device to open the url or scan this QR code to install it.")
+            print_qrcode(response['url'])
     except api.NotFoundException:
-        console.print("This build does not exist or you cannot access it.")
+            console.print("This build does not exist or you cannot access it.")
 
 
 @build.command()
@@ -478,9 +479,9 @@ def download(key, output="source.zip"):
     try:
         console.print("Downloading modified sources...")
         response = api.get(f"/builds/{key}/result/", json_decode=False)
-        console.print("The modified sources have been downloaded and are in source.zip")
 
         if response:
+            console.print("The modified sources have been downloaded and are in source.zip")
             with open(output, "wb") as f:
                 f.write(response)
     except api.NotFoundException:
@@ -714,8 +715,7 @@ def build_name(build_instance):
     else:
         start_time_str = "Not started"
 
-    # TODO check if timezones are respected.
-    return f"{build_instance['application']} - {build_instance['name']} - {start_time_str}"
+    return f"{build_instance['application'] if build_instance['application'] else 'No application'} - {build_instance['name']} - {build_instance['build_type']} - {start_time_str} ({build_instance['key']}) - {build_instance['status']}"
 
 
 @build.command()

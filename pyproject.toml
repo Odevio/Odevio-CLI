@@ -27,7 +27,8 @@ dependencies = [
     "requests==2.27.1",
     "pyjwt==2.4.0",
     "questionary==1.10.0",
-    "paramiko==3.0.0"
+    "paramiko==3.0.0",
+    "qrcode==7.4.2"
 ]
 
 [project.urls]
