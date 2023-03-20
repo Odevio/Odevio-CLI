@@ -1,6 +1,16 @@
+DEV:
+    - Improved the performance of the build machines
+    - Changed the connection to the build machines from Spice to RustDesk
+    - Made it possible to make a configuration build without an Apple Developer account. An Apple Developer account is
+      still necessary for the creation of the IPA or for publication
+    - Added a possibility to easily copy errors from Appollo to StackOverflow
+    - Updated the documentation with the new Appollo features
+    - First version of the screenshot editor : to user run `appollo app screenshots`
+
 v0.2.4
     - CLI: Fixed token refresh when it is too old
     - CLI: Fixed error in build selection menu when a build has no time
+
 v0.2.3
 	- CLI: Fixed build display when no start time
 v0.2.2
