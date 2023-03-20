@@ -1,6 +1,6 @@
-============================================================
-3. How to retrieve your settings from Appollo-Remote locally
-============================================================
+===========================================================
+3. How to retrieve your updates from Appollo-Remote locally
+===========================================================
 
 Once you are satisfied with the configuration, you have two possibilities to retrieve the changes you made in Appollo locally.
 
