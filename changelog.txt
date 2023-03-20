@@ -1,5 +1,7 @@
 DEV:
     - Improved the performance of the build machines
+    - Builds of type configuration have now a duration of 1 hour instead of 30 min. When arriving at 5 minutes of the end 
+      a prompt tells the user that the Appollo Remote will be closed
     - Changed the connection to the build machines from Spice to RustDesk
     - Made it possible to make a configuration build without an Apple Developer account. An Apple Developer account is
       still necessary for the creation of the IPA or for publication
