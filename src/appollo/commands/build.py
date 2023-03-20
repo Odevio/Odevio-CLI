@@ -14,7 +14,7 @@ def build():
         2. :code:`appollo build connect` to get your connection settings and access the Appolo Remote on which you can test and setup your application with XCode.
         3. :code:`appollo build stop` to stop your Appolo Remote when you're done editing your settings.
         4. :code:`appollo build patch` to retrieve the changes made on the Appollo-Remote.
-        5. :code:`git am appollo.patch` to apply the changes locally.
+        5. :code:`git apply appollo.patch` to apply the changes locally.
         6. :code:`appollo build start [OPTIONS] [DIRECTORY]` to build your app with Flutter and generate an IPA or to publish your app on the App Store.
 
     Usage:
@@ -184,7 +184,7 @@ def detail(key):
         console.print("This build does not exist or you cannot access it.")
 
 
-def _show_build_progress(build_instance, no_progress=False, tunnel_port=None, tunnel_host=None, tunnel_remote_port=None):
+def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None, tunnel_remote_port=None, no_progress=False):
     from time import sleep
     from rich.syntax import Syntax
     from rich.text import Text
@@ -249,7 +249,7 @@ def _show_build_progress(build_instance, no_progress=False, tunnel_port=None, tu
         if build_type == "ad-hoc":
             ipa({build_instance['key']})
         if status == "config":
-            connect({build_instance['key'], tunnel_port, tunnel_host, tunnel_remote_port})
+            ctx.invoke(connect, key=build_instance['key'], tunnel_port=tunnel_port, tunnel_host=tunnel_host, tunnel_remote_port=tunnel_remote_port)
         return True
     elif status in ["failed", "stopped"]:
         if "error_message" in build_instance:
@@ -274,7 +274,8 @@ def _show_build_progress(build_instance, no_progress=False, tunnel_port=None, tu
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
-def start(build_type, flutter, minimal_ios_version, app_version, build_number, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
+@click.pass_context
+def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided gets the current directory.
@@ -403,7 +404,7 @@ def start(build_type, flutter, minimal_ios_version, app_version, build_number, t
     os.remove(".app.zip")
 
     if build_instance:
-        _show_build_progress(build_instance, no_progress, tunnel_port, tunnel_host, tunnel_remote_port)
+        _show_build_progress(ctx, build_instance, tunnel_port, tunnel_host, tunnel_remote_port, no_progress)
 
 
 @build.command()
@@ -493,7 +494,8 @@ def download(key, output="source.zip"):
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option("-y", "--yes", is_flag=True, help="Automatically create an Appollo Remote if your build was not setup for remote desktop", )
-def connect(key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
+@click.pass_context
+def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
     """ Get the connection information for an Appollo-Remote linked to a build.
 
     \b
@@ -546,7 +548,7 @@ def connect(key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
                         })
 
                     if rebuild_instance:
-                        _show_build_progress(rebuild_instance)
+                        _show_build_progress(ctx, rebuild_instance, tunnel_port, tunnel_host, tunnel_remote_port)
 
             elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
                 console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
@@ -576,7 +578,7 @@ def connect(key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
                 console.print("")
                 console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
                 if tunnel_port:
-                    tunnel(build_instance['key'], tunnel_port, tunnel_remote_port, tunnel_host)
+                    ctx.invoke(tunnel, key=build_instance['key'], port=tunnel_port, remote_port=tunnel_remote_port, host=tunnel_host)
     except api.NotFoundException:
         console.print("This build does not exist or you cannot access it.")
 
