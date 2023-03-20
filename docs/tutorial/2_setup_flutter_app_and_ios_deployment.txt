@@ -24,8 +24,6 @@ Now that your configuration build is ready and that you received your credential
       :alt: Appollo build connect with other build
       :align: center
 
-|
-
 For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
 
 Launch RustDesk, it should look like the following screenshot.
@@ -68,12 +66,6 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
 
 **You can now freely configure Xcode!**
 
-.. tip::
-  You have access to everything you need, the simulator, the terminal... It is also possible to directly modify your code with Android Studio or Visual Studio Code!
-    .. image:: /img/rustdesk-tools.jpg
-      :alt: Appollo RustDesk tools
-      :align: center
-
 .. image:: /img/rustdesk-desktop.jpg
   :alt: Appollo RustDesk desktop
   :align: center
@@ -87,7 +79,31 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
         :alt: Appollo RustDesk shrink
         :align: center
 
+Debug and test your Flutter app in the iOS simulator
+----------------------------------------------------
+
+Debugging and testing your iOS app is fairly easy with Appollo.
+
+**Once you are on the Appollo-Remote**, an instance of the Simulator is ready for you.
+
+You can **open the terminal** on the Appollo-Remote.
+
+Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
+
+Wait a few instants and the app should start on the simulator, you can now debug and test it.
+
+.. image:: /img/appollo-flutter-run.jpg
+  :alt: Appollo flutter run
+  :align: center
+
 |
+
+.. tip::
+  You have access to everything you need!
+    .. image:: /img/rustdesk-tools.jpg
+      :alt: Appollo RustDesk tools
+      :align: center
+
 
 .. |rustdesk_client| raw:: html
 
