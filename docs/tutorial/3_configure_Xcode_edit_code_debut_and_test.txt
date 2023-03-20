@@ -11,15 +11,6 @@ Now that you are connected, **you can freely configure Xcode!**
   :alt: Appollo RustDesk desktop
   :align: center
 
-|
-
-.. tip::
-    If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
-      
-      .. image:: /img/rustdesk-shrink.jpg
-        :alt: Appollo RustDesk shrink
-        :align: center
-
 
 Edit your code directly on the virtual machine
 ----------------------------------------------

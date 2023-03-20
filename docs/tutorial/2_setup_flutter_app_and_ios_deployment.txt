@@ -69,6 +69,14 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
 
 |
 
+.. tip::
+    If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
+
+      .. image:: /img/rustdesk-shrink.jpg
+        :alt: Appollo RustDesk shrink
+        :align: center
+
+
 .. |rustdesk_client| raw:: html
 
    <a href="https://rustdesk.com/" target="_blank">client</a>
@@ -76,3 +84,4 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
 .. |flutter_app| raw:: html
 
    <a href="https://docs.flutter.dev/get-started/test-drive?tab=vscode#create-app" target="_blank"> official Flutter tutorial</a>
+
