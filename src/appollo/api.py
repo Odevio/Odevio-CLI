@@ -3,6 +3,7 @@
 #                                   #
 import datetime
 import json
+import time
 
 import jwt
 from click import ClickException
@@ -14,7 +15,7 @@ from appollo.helpers import print_validation_error
 from appollo.settings import API_BASE_URL, console, get_jwt_token, write_jwt_token, delete_jwt_token
 
 
-def get(route, params=None, authorization=True, auth_data=None, json_decode=True):
+def get(route, params=None, authorization=True, auth_data=None, json_decode=True, tries=5):
     """ GET method wrapper for Appollo API.
 
     :return dict of the JSON returned by the API or False if an error occurred
@@ -39,6 +40,9 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
             params=params,
         )
     except requests.exceptions.ConnectionError:
+        if tries > 0:
+            time.sleep(2)
+            return get(route, params, authorization, auth_data, json_decode, tries - 1)
         raise ClickException("Server not available")
 
     if response.ok:
@@ -53,12 +57,15 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
             return False
         elif response.status_code == 404:
             raise NotFoundException()
+        elif response.status_code == 302 and tries > 0: # Happens for a few seconds when server is updating
+            time.sleep(2)
+            return get(route, params, authorization, auth_data, json_decode, tries-1)
         else:
             error = response.reason
             raise ClickException(f"GET {route} failed: {error}")
 
 
-def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None):
+def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None, tries=5):
     """ POST method wrapper for Appollo API.
 
     :return dict of the JSON returned by the API or False if an error occurred
@@ -85,6 +92,9 @@ def post(route, authorization=True, json_data=None, params=None, files=None, aut
             files=files,
         )
     except requests.exceptions.ConnectionError:
+        if tries > 0:
+            time.sleep(2)
+            return post(route, authorization, json_data, params, files, auth_data, tries - 1)
         raise ClickException("Server not available")
 
     if response.ok:
@@ -95,11 +105,14 @@ def post(route, authorization=True, json_data=None, params=None, files=None, aut
             print_validation_error(console, error)
         elif response.status_code == 404:
             raise NotFoundException()
+        elif response.status_code == 302 and tries > 0:  # Happens for a few seconds when server is updating
+            time.sleep(2)
+            return post(route, authorization, json_data, params, files, auth_data, tries-1)
         else:
             error = response.reason
             raise ClickException(f"POST {route} failed: {error}")
 
-def put(route, authorization=True, json_data=None, params=None, files=None):
+def put(route, authorization=True, json_data=None, params=None, files=None, tries=5):
     """ PUT method wrapper for Appollo API
 
     :return dict of the JSON returned by the API or False if an error occurred
@@ -129,6 +142,9 @@ def put(route, authorization=True, json_data=None, params=None, files=None):
             files=files,
         )
     except requests.exceptions.ConnectionError:
+        if tries > 0:
+            time.sleep(2)
+            return put(route, authorization, json_data, params, files, tries - 1)
         raise ClickException("Server not available")
 
     if response.ok:
@@ -139,12 +155,15 @@ def put(route, authorization=True, json_data=None, params=None, files=None):
             print_validation_error(console, error)
         elif response.status_code == 404:
             raise NotFoundException()
+        elif response.status_code == 302 and tries > 0:  # Happens for a few seconds when server is updating
+            time.sleep(2)
+            return put(route, authorization, json_data, params, files, tries-1)
         else:
             error = response.reason
             raise ClickException(f"PUT {route} failed: {error}")
 
 
-def delete(route, authorization=True, params=None, auth_data=None):
+def delete(route, authorization=True, params=None, auth_data=None, tries=5):
     """ DELETE method wrapper for Appollo API.
 
     :return True if the deletion was successful or False if an error occurred
@@ -169,6 +188,9 @@ def delete(route, authorization=True, params=None, auth_data=None):
             params=params,
         )
     except requests.exceptions.ConnectionError:
+        if tries > 0:
+            time.sleep(2)
+            return delete(route, authorization, params, auth_data, tries - 1)
         raise ClickException("Server not available")
 
     if response.ok:
@@ -179,6 +201,9 @@ def delete(route, authorization=True, params=None, auth_data=None):
             print_validation_error(console, error)
         elif response.status_code in [404]:
             console.print("Cannot delete something that does not exist.")
+        elif response.status_code == 302 and tries > 0:  # Happens for a few seconds when server is updating
+            time.sleep(2)
+            return delete(route, authorization, params, auth_data, tries-1)
         else:
             error = response.reason
             raise ClickException(f"DELETE {route} failed: {error}")
