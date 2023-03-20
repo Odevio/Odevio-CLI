@@ -1,5 +1,6 @@
 import click
 
+from appollo import settings
 from appollo.helpers import login_required_warning_decorator
 
 
@@ -231,5 +232,5 @@ def screenshots(key):
         return
     if screenshot_link:
         console.print("Here's the link to the screenshot editor:")
-        console.print(f"[link]{screenshot_link['url']}[/link]")
+        console.print(f"[link]{settings.API_BASE_URL}{screenshot_link['url']}[/link]")
         
