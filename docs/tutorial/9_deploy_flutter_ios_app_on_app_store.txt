@@ -1,5 +1,5 @@
 ==============================================================
-8. How to publish a Flutter app on the App Store without a Mac
+9. How to publish a Flutter app on the App Store without a Mac
 ==============================================================
 
 **Congratulations, you are almost done !**
@@ -21,7 +21,7 @@ You can give whatever name you would like.
 
 Select the **bundle ID** from the list of App ID you have created earlier in the tutorial.
 
-If you have no app ID, you can refer to the :ref:`chapter 6 <create_app_id>` of this tutorial.
+If you have no app ID, you can refer to the :ref:`chapter 7 <create_app_id>` of this tutorial.
 
 Finally, for **SKU** you can choose anything you want as long as it is unique.
 

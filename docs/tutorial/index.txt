@@ -26,9 +26,10 @@ Let's get started.
 
    1_create_your_first_build
    2_setup_flutter_app_and_ios_deployment
-   3_retrieve_patch_from_Xcode
-   4_create_apple_developer_account
-   5_configure_app_store_connect
-   6_how_to_make_an_app_id_using_appollo
-   7_create_ipa_testing_purpose
-   8_deploy_flutter_ios_app_on_app_store
+   3_configure_Xcode_edit_code_debut_and_test
+   4_retrieve_patch_from_Xcode
+   5_create_apple_developer_account
+   6_configure_app_store_connect
+   7_how_to_make_an_app_id_using_appollo
+   8_create_ipa_testing_purpose
+   9_deploy_flutter_ios_app_on_app_store

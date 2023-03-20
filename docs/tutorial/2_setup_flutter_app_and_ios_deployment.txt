@@ -1,9 +1,8 @@
-=================================================================
-2. How to connect to your build and setup Xcode for a Flutter app
-=================================================================
+=============================================
+2. How to connect to your configuration build
+=============================================
 
-In this chapter, you will learn how to **connect to your configuration build** and **configure Xcode** 
-with the help of Appollo to **build your app**.
+In this chapter, you will learn how to **connect to your configuration build**
 
 Use RustDesk to connect to your configuration build
 ---------------------------------------------------
@@ -64,46 +63,11 @@ Finally, RustDesk will ask you to enter the **RustDesk password** you received.
 
 That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
 
-**You can now freely configure Xcode!**
-
 .. image:: /img/rustdesk-desktop.jpg
   :alt: Appollo RustDesk desktop
   :align: center
 
 |
-
-.. tip::
-    If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
-      
-      .. image:: /img/rustdesk-shrink.jpg
-        :alt: Appollo RustDesk shrink
-        :align: center
-
-Debug and test your Flutter app in the iOS simulator
-----------------------------------------------------
-
-Debugging and testing your iOS app is fairly easy with Appollo.
-
-**Once you are on the Appollo-Remote**, an instance of the Simulator is ready for you.
-
-You can **open the terminal** on the Appollo-Remote.
-
-Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
-
-Wait a few instants and the app should start on the simulator, you can now debug and test it.
-
-.. image:: /img/appollo-flutter-run.jpg
-  :alt: Appollo flutter run
-  :align: center
-
-|
-
-.. tip::
-  You have access to everything you need!
-    .. image:: /img/rustdesk-tools.jpg
-      :alt: Appollo RustDesk tools
-      :align: center
-
 
 .. |rustdesk_client| raw:: html
 

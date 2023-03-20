@@ -1,5 +1,5 @@
 =================================================================================
-5. How to configure App Store Connect for flutter app iOS deployment with Appollo
+6. How to configure App Store Connect for Flutter app iOS deployment with Appollo
 =================================================================================
 
 In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.

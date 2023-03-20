@@ -1,5 +1,5 @@
 ====================================================================
-7. How to create an IPA file for testing purposes on an Apple Device
+8. How to create an IPA file for testing purposes on an Apple Device
 ====================================================================
 
 In this section of the tutorial, you are going to learn how to effectively build your app to retrieve the **IPA** file

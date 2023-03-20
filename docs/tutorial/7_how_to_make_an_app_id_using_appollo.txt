@@ -1,9 +1,9 @@
 .. _previous_step:
 
-.. _chapter_6:
+.. _chapter_7:
 
 ========================================
-6. How to create an App ID using Appollo
+7. How to create an App ID using Appollo
 ========================================
 
 What is an App ID (aka identifier) ?
@@ -69,7 +69,14 @@ There, you will find the **"Identifiers menu"** that contains the list with the 
 Modify your Bundle ID on the Appollo-Remote
 -------------------------------------------
 
-Once you started and connected your configuration build, your project is already opened in Xcode.
+To modify your Bundle ID on Appollo remote, **you have to connect to a configuration build** just like we did in the :ref:`step 1 <start_configuration_build>` of our tutorial 
+but with your freshly new create App ID.
+
+So, use the ``appollo build start`` command.
+
+Select the configuration type.
+
+**But this time, select your App ID in the list of your app**. Do not select the 'No application (Xcode will not be configured) option'.
 
 .. note::
   Remember that your virtual machine will be up for an hour, so make sure you finish everything you need in that time.
