@@ -22,7 +22,7 @@ Thanks for checking it out.
     **A tool for developers by developers**
 
 
-.. image:: https://img.shields.io/badge/version-0.2.4-blue
+.. image:: https://img.shields.io/badge/version-1.0.0-blue
     :target: https://github.com/Appollo-CLI/Appollo/
 
 .. image:: https://img.shields.io/github/license/appollo-cli/appollo

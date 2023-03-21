@@ -5,7 +5,7 @@
 
 |
 
-.. image:: https://img.shields.io/badge/version-0.2.4-blue
+.. image:: https://img.shields.io/badge/version-1.0.0-blue
     :target: https://github.com/Appollo-CLI/Appollo/
 
 .. image:: https://img.shields.io/github/license/appollo-cli/appollo
@@ -14,7 +14,7 @@
 .. image:: https://img.shields.io/librariesio/release/pypi/appollo
     :target: https://pypi.org/project/appollo/
 
-.. image:: https://img.shields.io/badge/downloads-100%2Fmonth-brightgreen
+.. image:: https://img.shields.io/pypi/dm/appollo
     :target: https://pypi.org/project/appollo/
 
 .. image:: https://img.shields.io/uptimerobot/ratio/m792431382-e51d8a06926b56c359afe3b7
@@ -61,26 +61,28 @@ Start by creating an account
 
     appollo signup
 
-Then linking your Apple Developer Account to Appollo
-
-.. code-block::
-
-    appollo apple add --apple-id APPLE_TEAM_ID --name TEXT --key-id APPLE_KEY_ID --issuer-id APPLE_ISSUER_ID --private-key LOCATION_APPLE_PRIVATE_KEY
-
-Once this is done you can either start a build machine in configuration mode : to configure XCode or test your app in the iOS simulator.
+Your Appollo account is now created and you can either start a build machine in configuration mode : to configure XCode or test your app in the iOS simulator.
 
 .. code-block::
 
     appollo build start --build-type configuration
 
-Or create an IPA to install on a physical device for testing purposes
+
+Or you can build an IPA or release your app by linking your Apple Developer Account to Appollo and creating an app identifier
+
+.. code-block::
+
+    appollo apple add --apple-id APPLE_TEAM_ID --name TEXT --key-id APPLE_KEY_ID --issuer-id APPLE_ISSUER_ID --private-key LOCATION_APPLE_PRIVATE_KEY
+    appollo app mk --name MY_APP_NAME --bundle-id COM.COMPANY.APP_NAME 
+
+To create the IPA to install on a physical device for testing purposes
 
 .. code-block::
 
     appollo build start --build-type ad-hoc
     appollo build ipa
 
-Or even publish directly to the App Store
+To publish directly to the App Store
 
 .. code-block::
 

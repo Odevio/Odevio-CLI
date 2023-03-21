@@ -251,3 +251,17 @@ def get_version_and_build(pubspec_file):
                     raise Exception("The build number (after '+' in the version line in pubspec.yaml) has to be a number")
                 return version, int(build)
         raise Exception("No line starting with 'version: ' found in pubspec.yaml")
+
+
+def handle_error(key):
+    from rich.text import Text
+
+    from appollo import api
+    try:
+        response = api.get(f"/builds/{key}/help/")
+    except api.NotFoundException:
+        console.print("Build couldn't be found.")
+        return
+    if response:
+        console.print(Text.from_markup("Appollo identified an error. You can ask for help regarding this issue here:"))
+        console.print(f"[link]{response['url']}[/link]")

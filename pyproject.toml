@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "appollo"
-version = "0.2.4"
+version = "1.0.0"
 authors = [
     {name="Appollo", email="hello@appollo.space"}
 ]
