@@ -57,10 +57,12 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
             return False
         elif response.status_code == 404:
             raise NotFoundException()
-        elif response.status_code == 302 and tries > 0: # Happens for a few seconds when server is updating
+        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
             time.sleep(2)
             return get(route, params, authorization, auth_data, json_decode, tries-1)
         else:
+            if response.status_code == 503:
+                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
             error = response.reason
             raise ClickException(f"GET {route} failed: {error}")
 
@@ -105,10 +107,12 @@ def post(route, authorization=True, json_data=None, params=None, files=None, aut
             print_validation_error(console, error)
         elif response.status_code == 404:
             raise NotFoundException()
-        elif response.status_code == 302 and tries > 0:  # Happens for a few seconds when server is updating
+        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
             time.sleep(2)
             return post(route, authorization, json_data, params, files, auth_data, tries-1)
         else:
+            if response.status_code == 503:
+                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
             error = response.reason
             raise ClickException(f"POST {route} failed: {error}")
 
@@ -155,10 +159,12 @@ def put(route, authorization=True, json_data=None, params=None, files=None, trie
             print_validation_error(console, error)
         elif response.status_code == 404:
             raise NotFoundException()
-        elif response.status_code == 302 and tries > 0:  # Happens for a few seconds when server is updating
+        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
             time.sleep(2)
             return put(route, authorization, json_data, params, files, tries-1)
         else:
+            if response.status_code == 503:
+                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
             error = response.reason
             raise ClickException(f"PUT {route} failed: {error}")
 
@@ -201,10 +207,12 @@ def delete(route, authorization=True, params=None, auth_data=None, tries=5):
             print_validation_error(console, error)
         elif response.status_code in [404]:
             console.print("Cannot delete something that does not exist.")
-        elif response.status_code == 302 and tries > 0:  # Happens for a few seconds when server is updating
+        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
             time.sleep(2)
             return delete(route, authorization, params, auth_data, tries-1)
         else:
+            if response.status_code == 503:
+                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
             error = response.reason
             raise ClickException(f"DELETE {route} failed: {error}")
 
