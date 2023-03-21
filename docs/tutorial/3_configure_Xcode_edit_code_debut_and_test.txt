@@ -1,0 +1,45 @@
+===============================================================================
+3. Configure Xcode, edit your code, debug and test your app with Appollo Remote
+===============================================================================
+
+Configure Xcode
+---------------
+
+Now that you are connected, **you can freely configure Xcode!**
+
+.. image:: /img/rustdesk-desktop.jpg
+  :alt: Appollo RustDesk desktop
+  :align: center
+
+
+Edit your code directly on the virtual machine
+----------------------------------------------
+
+Appollo remote also gives you the possibility to direclty **edit your code** with **Android Studio**.
+
+.. image:: /img/rustdesk-android-studio.jpg
+  :alt: Appollo RustDesk Android studio
+  :align: center
+
+|
+
+Debug and test your Flutter app with the iOS simulator
+------------------------------------------------------
+
+Debugging and testing your iOS app is fairly easy with Appollo.
+
+**Once you are on the Appollo-Remote**, an instance of the Simulator is ready for you.
+
+You can **open the terminal** on the Appollo-Remote.
+
+Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
+
+Wait a few instants and the app should start on the simulator, you can now debug and test it.
+
+.. image:: /img/appollo-flutter-run.jpg
+  :alt: Appollo flutter run
+  :align: center
+
+|
+
+With all these tools in your hands, we believe you will be able to do everything you need for your app!

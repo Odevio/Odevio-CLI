@@ -1,6 +1,11 @@
 ===========================================
-1. How to create an Apple Developer Account
+5. How to create an Apple Developer Account
 ===========================================
+
+.. warning::
+  Now that you have configured your app perfectly and tested it, you will probably want to **retrieve an IPA file** of your app to **test it on an Apple device** or **publish it on the App store**.
+  
+  For that, you will **need an Apple Developer Account** and this why we invite you to follow this tutorial on how to create one.
 
 ----------------------------------------------------
 A quick guide to enroll in Apple's Developer Program

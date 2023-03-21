@@ -1,0 +1,71 @@
+.. _start_configuration_build:
+
+================================================
+1. Create your first Appollo configuration build
+================================================
+
+If you are here, it means that you managed to install Appollo and have created your account.
+
+You are almost there, this is the only step you need to do to create your first configuration build.
+
+It is really easy, you just need to **use this one command**:
+
+.. code-block::
+
+  appollo build start
+
+.. note::
+    Make sure you are in the root folder of your app!
+
+.. tip:: 
+  You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
+
+**Select the configuration type**
+
+.. image:: /img/appollo-build-start-1.jpg
+  :alt: Appollo build start select type
+  :align: center
+
+|
+
+Now, select the **No application (Xcode will not be configured) option.**
+
+.. note::
+    If you have linked your Appollo account with your Apple Developer Account, you will be able to see a list of the Apps you added.
+
+.. image:: /img/appollo-build-start-2.jpg
+  :alt: Appollo build start select option
+  :align: center
+
+|
+
+Appollo will prepare your build in a few moments!
+
+.. image:: /img/appollo-build-start-3.jpg
+  :alt: Appollo build start prepare
+  :align: center
+
+|
+
+Once it is done, you will receive all the credentials of your Mac virtual machine.
+
+.. image:: /img/appollo-build-start-4.jpg
+  :alt: Appollo build start ready
+  :align: center
+
+|
+
+Let's hop on to the next chapter of our tutorial to learn how to connect and setup Xcode for your build.
+
+.. note::
+    If you have an Apple developer account and App ID(s), check out our tutorial on  :doc:`how to link your account <6_configure_app_store_connect>` and 
+    :doc:`how to create an app ID <7_how_to_make_an_app_id_using_appollo>` using Appollo.
+
+.. tip::
+    If the build fails you can easily access the logs of your build with the command ``appollo build logs`` and select
+    the build for which you want to view the logs.
+
+.. tip::
+    If you closed your terminal while your app was building you can execute ``appollo build detail`` and select the last
+    build and you will have a detailed view of the build's status. Builds do not stop if the ``appollo build start``
+    command is killed.

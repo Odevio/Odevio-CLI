@@ -1,5 +1,5 @@
 ==============================================================
-8. How to publish a Flutter app on the App Store without a Mac
+9. How to publish a Flutter app on the App Store without a Mac
 ==============================================================
 
 **Congratulations, you are almost done !**
@@ -21,7 +21,7 @@ You can give whatever name you would like.
 
 Select the **bundle ID** from the list of App ID you have created earlier in the tutorial.
 
-If you have no app ID, you can refer to the :ref:`chapter 3 <create_app_id>` of this tutorial.
+If you have no app ID, you can refer to the :ref:`chapter 7 <create_app_id>` of this tutorial.
 
 Finally, for **SKU** you can choose anything you want as long as it is unique.
 
@@ -42,29 +42,23 @@ And this time, for the build type: **publication**
 
 Wait for Appollo to create and start the build.
 
-Then, wait for Apple to send you an email like this one:
-
-.. image:: /img/apple-mail-confirmation.jpg
-  :alt: Apple app build confirmation mail
+.. image:: /img/appollo-build-publication.jpg
+  :alt: Appollo build start publication
   :align: center
 
 |
+
+.. tip::
+  Do not forget to adjust your app version or build number to avoid duplicate errors
+
 
 Publish your app on the App Store
 ---------------------------------
 
-The build section should now look like this:
+The **build section** should now look like this and you can **select your newest build**.
 
 .. image:: /img/apple-build-select.jpg
   :alt: Apple build select button
-  :align: center
-
-|
-
-You can now select your build from the list.
-
-.. image:: /img/apple-build-list.jpg
-  :alt: Apple build list view
   :align: center
 
 |
@@ -73,7 +67,7 @@ Apple will ask you if your app responds to **encryption standards** and other st
 
 **You did it!** Your build has been **successfully publish** on the app store.
 
-.. warning:: **Do not forget to save your build! Scroll up to see the 'Save' button.**
+.. warning:: **Do not forget to save your build!**
 
 For your app to be published on the app store, you still have to **complete any missing information** and then
 you can submit it to Apple for review.

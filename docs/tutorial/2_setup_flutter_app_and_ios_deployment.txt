@@ -1,0 +1,87 @@
+=============================================
+2. How to connect to your configuration build
+=============================================
+
+In this chapter, you will learn how to **connect to your configuration build**
+
+Use RustDesk to connect to your configuration build
+---------------------------------------------------
+
+Now that your configuration build is ready and that you received your credentials, you can connect to your Mac virtual machine.
+
+.. image:: /img/appollo-build-start-4.jpg
+  :alt: Appollo build start
+  :align: center
+
+|
+
+.. tip::
+    If you try to connect a build that was not meant for remote desktop or that was stopped, no problem, 
+    Appollo will suggest you to create one automatically.
+
+    .. image:: /img/appollo-connect-other.jpg
+      :alt: Appollo build connect with other build
+      :align: center
+
+For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
+
+Launch RustDesk, it should look like the following screenshot.
+
+**The first step is to click on the three little dots and select 'ID/Relay Server'.**
+
+.. image:: /img/rustdesk-home.jpg
+  :alt: Appollo RustDesk connect
+  :align: center
+
+|
+
+Type in Appollo's relay server: **appollo.space**
+
+This step is to make sure you are connected to Appollo's relay server.
+
+.. image:: /img/rustdesk-relay-server.jpg
+  :alt: Appollo RustDesk relay server
+  :align: center
+
+|
+
+Secondly, simply enter the **RustDesk ID** you were given to authenticate.
+
+.. image:: /img/rustdesk-connect.jpg
+  :alt: Appollo RustDesk connect
+  :align: center
+
+|
+
+Finally, RustDesk will ask you to enter the **RustDesk password** you received.
+
+.. image:: /img/rustdesk-password.jpg
+  :alt: Appollo RustDesk password
+  :align: center
+
+|
+
+That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
+
+.. image:: /img/rustdesk-desktop.jpg
+  :alt: Appollo RustDesk desktop
+  :align: center
+
+|
+
+.. tip::
+    If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
+
+      .. image:: /img/rustdesk-shrink.jpg
+        :alt: Appollo RustDesk shrink
+        :align: center
+
+
+.. |rustdesk_client| raw:: html
+
+   <a href="https://rustdesk.com/" target="_blank">client</a>
+
+.. |flutter_app| raw:: html
+
+   <a href="https://docs.flutter.dev/get-started/test-drive?tab=vscode#create-app" target="_blank"> official Flutter tutorial</a>
+
