@@ -1,6 +1,6 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode
+from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode, get_version_and_build
 
 
 @click.group('build')
@@ -269,7 +269,7 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 @click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use appollo build flutter-versions to see all available versions",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
-@click.option('--build-number', help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
+@click.option('--build-number', type=int, help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
 @click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel when the build is started, forwarding to this port. Note: this only applies to configuration builds")
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
@@ -329,25 +329,35 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 key = split[0].strip()
                 value = split[1].strip()
                 if key == "app-key":
-                    app_key = value
+                    if not app_key:
+                        app_key = value
                 elif key == "build-type":
-                    build_type = value
+                    if not build_type:
+                        build_type = value
                 elif key == "flutter":
-                    flutter = value
+                    if not flutter:
+                        flutter = value
                 elif key == "minimal-ios-version":
-                    minimal_ios_version = value
+                    if not minimal_ios_version:
+                        minimal_ios_version = value
                 elif key == "app-version":
-                    app_version = value
+                    if not app_version:
+                        app_version = value
                 elif key == "build-number":
-                    build_number = value
+                    if not build_number:
+                        build_number = int(value)
                 elif key == "tunnel-port":
-                    tunnel_port = int(value)
+                    if not tunnel_port:
+                        tunnel_port = int(value)
                 elif key == "tunnel-host":
-                    tunnel_host = value
+                    if not tunnel_host:
+                        tunnel_host = value
                 elif key == "tunnel-remote-port":
-                    tunnel_remote_port = int(value)
+                    if not tunnel_remote_port:
+                        tunnel_remote_port = int(value)
                 elif key == "no-progress":
-                    no_progress = value in ["1", "true", "True"]
+                    if no_progress is None:
+                        no_progress = value in ["1", "true", "True"]
                 else:
                     console.print(f"Warning: unknown option '{key}' in .appollo")
 
@@ -374,6 +384,23 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             return
         if app_key == "":
             app_key = None
+
+    if build_type != "configuration" and (not app_version or not build_number) and os.path.exists(os.path.join(directory, "pubspec.yaml")):
+        try:
+            version, build_num = get_version_and_build(os.path.join(directory, "pubspec.yaml"))
+            if not app_version:
+                app_version = version
+            if not build_number:
+                build_number = build_num
+        except Exception as e:
+            console.stderr("Error getting version and build number from pubspec.yaml: "+str(e))
+
+    if build_type == "publication":
+        max_build_number = api.get(f"/applications/{app_key}/buildnumber")
+        if max_build_number and build_number <= max_build_number:
+            res = console.input(f"You have specified {build_number} as build number but you have already made a publication build with number {max_build_number}. To change it, either supply the --build-number parameter or modify it in pubspec.yaml. Do you want to continue anyway? (y/N) ")
+            if res not in ["y", "Y"]:
+                return
 
     console.print(f"Zipping {directory}")
     zip_file = zip_directory(directory)

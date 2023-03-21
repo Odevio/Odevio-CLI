@@ -236,3 +236,18 @@ def print_qrcode(url):
     qr.print_ascii(f)
     f.seek(0)
     print(f.read())
+
+
+def get_version_and_build(pubspec_file):
+    with open(pubspec_file) as f:
+        for line in f.readlines():
+            if line.startswith("version: "):
+                split = line.strip()[9:].split('+')
+                if len(split) != 2:
+                    raise Exception("The version line in pubspec.yaml should be formatted as version: <version>+<build>")
+                version = split[0]
+                build = split[1]
+                if not build.isdigit():
+                    raise Exception("The build number (after '+' in the version line in pubspec.yaml) has to be a number")
+                return version, int(build)
+        raise Exception("No line starting with 'version: ' found in pubspec.yaml")
