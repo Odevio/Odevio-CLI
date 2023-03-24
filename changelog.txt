@@ -1,3 +1,6 @@
+v1.0.1:
+    - Added missing requirements in the docs folder otherwise the reference guide does not get generated
+
 v1.0.0:
     - Added reverse SSH tunnel
     - Added QR code for IPA download
