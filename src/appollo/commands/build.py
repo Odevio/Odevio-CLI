@@ -298,8 +298,18 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         * **Publication** : Build an .ipa file and publish it on the App Store. Once this build succeeds you have
           to go on the App Store to complete information and screenshots related to your new application version.
 
-    Killing this command will not stop the build you can check the progress of all your Appollo-Remotes by running
+    Killing this command will not stop the build. You can check the progress of all your Appollo-Remotes by running
     :code:`appollo build ls` or get detailed information by running :code:`appollo build detail` and selecting your build.
+
+    To avoid having to specify all the parameters each time, you can create a .appollo file in the directory where the
+    command is run. Each parameter is specified on a line in the form PARAM=VALUE. For example:
+
+    .. code-block::
+
+       app-key=123
+       flutter=3.0.0
+       minimal-ios-version=11.0
+
     """
     import os
     import textwrap
@@ -325,6 +335,8 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                     print("Error in .appollo file line "+str(i+1)+": should be KEY=VALUE")
                     continue
                 key = split[0].strip()
+                if key[0] == "#":  # Ignore commented lines
+                    continue
                 value = split[1].strip()
                 if key == "app-key":
                     if not app_key:

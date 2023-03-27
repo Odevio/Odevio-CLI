@@ -1,6 +1,6 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator
+from appollo.helpers import login_required_warning_decorator, terminal_menu
 
 
 @click.group("apple")
@@ -40,7 +40,7 @@ def apple():
 
 @apple.command("detail")
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 def developer_account_detail(key):
     """ Gets detailed information about your Apple Developer Account with key \"KEY\" on Appollo.
 
@@ -70,9 +70,20 @@ def developer_account_detail(key):
     from rich.text import Text
     from rich.panel import Panel
     from rich.table import Table
+    import textwrap
 
     from appollo import api
     from appollo.settings import console
+
+    if key is None:
+        key = terminal_menu("/developer-accounts/", "Developer account",
+                                does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                    f"""
+                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                        """
+                                )))
+        if key is None:
+            return
 
     if key:
         try:
@@ -206,7 +217,7 @@ def developer_account_add(apple_id, key_id, issuer_id, private_key, name=None):
 
 @apple.command("edit")
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.option("--apple-id", help="ID of your developer account on Apple")
 @click.option('--name', help="A user friendly name for Appollo")
 def developer_account_edit(key, apple_id=None, name=None):
@@ -217,6 +228,18 @@ def developer_account_edit(key, apple_id=None, name=None):
     """
     from appollo import api
     from appollo.settings import console
+    from rich.text import Text
+    import textwrap
+
+    if key is None:
+        key = terminal_menu("/developer-accounts/", "Developer account",
+                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                f"""
+                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                        """
+                            )))
+        if key is None:
+            return
 
     account = api.put(
         f"/developer-accounts/{key}/",
@@ -232,7 +255,7 @@ def developer_account_edit(key, apple_id=None, name=None):
 
 @apple.command("rm")
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.confirmation_option(prompt="Everything related to this Developer Account will be deleted. Are you sure you want to do this ?")
 def developer_account_rm(key):
     """ Removes access to Apple Developer account with key \"KEY\" for Appollo.
@@ -246,6 +269,18 @@ def developer_account_rm(key):
     """
     from appollo import api
     from appollo.settings import console
+    from rich.text import Text
+    import textwrap
+
+    if key is None:
+        key = terminal_menu("/developer-accounts/", "Developer account",
+                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                f"""
+                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                        """
+                            )))
+        if key is None:
+            return
 
     account = api.delete(f"/developer-accounts/{key}")
     if account:
@@ -254,7 +289,7 @@ def developer_account_rm(key):
 
 @apple.command("link")
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.option('--team-key', prompt=True, help="Key of the team to link")
 def link(key, team_key):
     """ Links the developer account with key \"KEY\" to an Appollo team.
@@ -272,6 +307,18 @@ def link(key, team_key):
     """
     from appollo import api
     from appollo.settings import console
+    from rich.text import Text
+    import textwrap
+
+    if key is None:
+        key = terminal_menu("/developer-accounts/", "Developer account",
+                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                f"""
+                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                        """
+                            )))
+        if key is None:
+            return
 
     try:
         teams = api.post(f"/developer-accounts/{key}/teams/{team_key}/")
@@ -285,13 +332,35 @@ def link(key, team_key):
 
 @apple.command("unlink")
 @login_required_warning_decorator
-@click.argument('key', required=True)
-@click.option('--team-key', prompt=True, help="Key of the team to link")
+@click.argument('key', required=False)
+@click.option('--team-key', help="Key of the team to unlink")
 def unlink(key, team_key):
     """ Unlinks the developer account with key \"KEY\" from an Appollo team.
     """
     from appollo import api
     from appollo.settings import console
+    from rich.text import Text
+    import textwrap
+
+    if key is None:
+        key = terminal_menu("/developer-accounts/", "Developer account",
+                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                f"""
+                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                        """
+                            )))
+        if key is None:
+            return
+
+    if team_key is None:
+        team_key = terminal_menu(f"/developer-accounts/{key}/teams", "Team",
+                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
+                                f"""
+                                            There are no teams linked to this Apple account.
+                                        """
+                            )))
+        if team_key is None:
+            return
 
     deleted = api.delete(f"/developer-accounts/{key}/teams/{team_key}/")
     if deleted:
