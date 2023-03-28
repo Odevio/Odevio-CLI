@@ -1,3 +1,9 @@
+v1.0.2:
+    - Added .appolloignore support to specify files and directories to ignore when sending files to build
+    - Added support for mode, target and flavor options during flutter build
+    - Default deployment target is set to 11 if none is provided during build and it's set to 9 in xcode configuration
+    - Fixes
+
 v1.0.1:
     - Added missing requirements in the docs folder otherwise the reference guide does not get generated
 

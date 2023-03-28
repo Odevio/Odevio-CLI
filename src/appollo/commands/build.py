@@ -157,6 +157,9 @@ def detail(key):
                     Minimum iOS SDK : [bold]{build_instance["min_sdk"]}[/bold]
                     App version: [bold]{build_instance["app_version"] or "-"}[/bold]
                     Build number: [bold]{build_instance["build_number"] or "-"}[/bold]
+                    Mode: [bold]{build_instance["mode"]}[/bold]
+                    Target: [bold]{build_instance["target"] or "-"}[/bold]
+                    Flavor: [bold]{build_instance["flavor"] or "-"}[/bold]
                     """
                 )
             ), title="Build config"))
@@ -270,12 +273,15 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', type=int, help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
+@click.option('--mode', type=click.Choice(["release", "profile", "debug"]), help="Mode to build the app in. Defaults to release")
+@click.option('--target', help="The main entry-point file of the application. Defaults to lib/main.dart")
+@click.option('--flavor', help="Custom app flavor")
 @click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel when the build is started, forwarding to this port. Note: this only applies to configuration builds")
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
 @click.pass_context
-def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
+def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided, gets the current directory.
@@ -373,6 +379,15 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 elif key == "build-number":
                     if not build_number:
                         build_number = int(value)
+                elif key == "mode":
+                    if not mode:
+                        mode = value
+                elif key == "target":
+                    if not target:
+                        target = target
+                elif key == "flavor":
+                    if not flavor:
+                        flavor = flavor
                 elif key == "tunnel-port":
                     if not tunnel_port:
                         tunnel_port = int(value)
@@ -463,6 +478,9 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             "flutter_version": flutter,
             "app_version": app_version,
             "build_number": build_number,
+            "mode": mode,
+            "target": target,
+            "flavor": flavor,
         },
         files={
             "source": ("source.zip", open(".app.zip", "rb"), "application/zip")
