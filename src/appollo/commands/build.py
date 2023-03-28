@@ -1,3 +1,6 @@
+import re
+import subprocess
+
 import click
 from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode, get_version_and_build
 
@@ -280,8 +283,9 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
+@click.option('--no-flutter-warning', is_flag=True, help="Do not display a warning if no flutter version is specified and the local flutter version does not match the build version.")
 @click.pass_context
-def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
+def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, no_flutter_warning, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided, gets the current directory.
@@ -400,6 +404,9 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 elif key == "no-progress":
                     if no_progress is None:
                         no_progress = value in ["1", "true", "True"]
+                elif key == "no-flutter-warning":
+                    if no_flutter_warning is None:
+                        no_flutter_warning = value in ["1", "true", "True"]
                 else:
                     console.print(f"Warning: unknown option '{key}' in .appollo")
 
@@ -443,6 +450,21 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             res = console.input(f"You have specified {build_number} as build number but you have already made a publication build with number {max_build_number}. To change it, either supply the --build-number parameter or modify it in pubspec.yaml. Do you want to continue anyway? (y/N) ")
             if res not in ["y", "Y"]:
                 return
+
+    # If no flutter version is explicitly specified, check that the local version matches the one of the build so the user doesn't get unexpected errors
+    if not no_flutter_warning and not flutter:
+        flutter_version_output = subprocess.run(["flutter", "--version"], stdout=subprocess.PIPE, text=True)
+        if flutter_version_output.returncode == 0:
+            match = re.match(r"Flutter ([^\s]+) ", flutter_version_output.stdout)
+            if match:
+                local_version = match.group(1)
+                build_version = api.get("/flutter-versions/latest")['version']
+                if local_version.split("-")[0].split(".")[:2] != build_version.split("-")[0].split(".")[:2]:  # Only check major and minor
+                    res = console.input(f"Warning: your local flutter version is {local_version} but the build will be run with the latest flutter version ({build_version}). This could lead to unexpected errors if you have not tested your code with version {build_version}. To avoid this, specify the flutter version you want to use with the --flutter parameter or in a .appollo file.\nWhat do you want to do? (Y/m/c):\nContinue anyway (Y)\nSet the build version to {local_version} (m)\nCancel and specify the version yourself (c)\n")
+                    if res in ["c", "C"]:
+                        return
+                    if res in ["m", "M"]:
+                        flutter = local_version
 
     console.print(f"Zipping {directory}")
     excluded_dirs = []
