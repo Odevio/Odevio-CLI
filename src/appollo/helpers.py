@@ -11,9 +11,9 @@ import qrcode
 from appollo.settings import console, get_jwt_token
 
 
-def zip_directory(directory_path):
+def zip_directory(directory_path, excluded_dirs, excluded_files):
     """ Archives a directory in a zip file and returns its name."""
-    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, ["build", ".dart_tool", ".pub-cache", ".pub", ".git", ".gradle"], ["source.zip", ".app.zip", "appollo.patch"])
+    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, excluded_dirs+["build", "windows", "linux", ".dart_tool", ".pub-cache", ".pub", ".git", ".gradle"], excluded_files+["source.zip", ".app.zip", "appollo.patch"])
 
 
 

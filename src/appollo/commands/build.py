@@ -278,10 +278,10 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, app_key=None, directory=None):
     """ Start a new build from scratch
 
-    DIRECTORY : Home directory of the flutter project. If not provided gets the current directory.
+    DIRECTORY : Home directory of the flutter project. If not provided, gets the current directory.
 
     \f
-    The Appollo tool is composed of :
+    The Appollo tool is composed of:
 
         - *Appollo-Remote* : The pre-configured build machines which handle the setup, build and release of your app
         - *Appollo-cli* : The CLI command line that works as an interface to start Appollo-Remote build machines
@@ -309,6 +309,23 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
        app-key=123
        flutter=3.0.0
        minimal-ios-version=11.0
+
+    All files and directories in the provided directory will be uploaded, except:
+
+        * build/
+        * windows/
+        * linux/
+        * .dart_tool/
+        * .pub-cache/
+        * .pub/
+        * .git/
+        * .gradle/
+        * source.zip
+        * .app.zip
+        * appollo.patch
+
+    You can also specify additional files and directories in a .appolloignore file, with each files and directories
+    you want to ignore on separate lines, with directories ending with '/'
 
     """
     import os
@@ -413,12 +430,26 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 return
 
     console.print(f"Zipping {directory}")
-    zip_file = zip_directory(directory)
+    excluded_dirs = []
+    excluded_files = []
+    if os.path.isfile(".appolloignore"):
+        with open(".appolloignore") as ignore:
+            for line in ignore.readlines():
+                line = line.strip()
+                if line == "":
+                    continue
+                if line[-1] == "/":
+                    excluded_dirs.append(line[:-1])
+                else:
+                    excluded_files.append(line)
+
+    zip_file = zip_directory(directory, excluded_dirs, excluded_files)
 
     file_size_mb = round(os.path.getsize(zip_file)/1000000, 2)
 
-    if file_size_mb > 1000:
-        console.print("File size exceeds 1GB, very large applications are not supported by Appollo.")
+    if file_size_mb > 500:
+        console.print("Zipped directory size exceeds 500MB, very large applications are not supported by Appollo. Make sure that all files and directories not needed to build are listed in .appolloignore")
+        os.remove(".app.zip")
         return
 
     console.print(f"Uploading {directory} ({file_size_mb} MB)")
