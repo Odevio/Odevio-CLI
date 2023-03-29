@@ -452,19 +452,22 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 return
 
     # If no flutter version is explicitly specified, check that the local version matches the one of the build so the user doesn't get unexpected errors
-    if not no_flutter_warning and not flutter:
-        flutter_version_output = subprocess.run(["flutter", "--version"], stdout=subprocess.PIPE, text=True)
-        if flutter_version_output.returncode == 0:
-            match = re.match(r"Flutter ([^\s]+) ", flutter_version_output.stdout)
-            if match:
-                local_version = match.group(1)
-                build_version = api.get("/flutter-versions/latest")['version']
-                if local_version.split("-")[0].split(".")[:2] != build_version.split("-")[0].split(".")[:2]:  # Only check major and minor
-                    res = console.input(f"Warning: your local flutter version is {local_version} but the build will be run with the latest flutter version ({build_version}). This could lead to unexpected errors if you have not tested your code with version {build_version}. To avoid this, specify the flutter version you want to use with the --flutter parameter or in a .appollo file.\nWhat do you want to do? (Y/m/c):\nContinue anyway (Y)\nSet the build version to {local_version} (m)\nCancel and specify the version yourself (c)\n")
-                    if res in ["c", "C"]:
-                        return
-                    if res in ["m", "M"]:
-                        flutter = local_version
+    try:
+        if not no_flutter_warning and not flutter:
+            flutter_version_output = subprocess.run(["flutter", "--version"], stdout=subprocess.PIPE, text=True)
+            if flutter_version_output.returncode == 0:
+                match = re.match(r"Flutter ([^\s]+) ", flutter_version_output.stdout)
+                if match:
+                    local_version = match.group(1)
+                    build_version = api.get("/flutter-versions/latest")['version']
+                    if local_version.split("-")[0].split(".")[:2] != build_version.split("-")[0].split(".")[:2]:  # Only check major and minor
+                        res = console.input(f"Warning: your local flutter version is {local_version} but the build will be run with the latest flutter version ({build_version}). This could lead to unexpected errors if you have not tested your code with version {build_version}. To avoid this, specify the flutter version you want to use with the --flutter parameter or in a .appollo file.\nWhat do you want to do? (Y/m/c):\nContinue anyway (Y)\nSet the build version to {local_version} (m)\nCancel and specify the version yourself (c)\n")
+                        if res in ["c", "C"]:
+                            return
+                        if res in ["m", "M"]:
+                            flutter = local_version
+    except Exception:  # If flutter is not installed or the command fails, ignore it
+        pass
 
     console.print(f"Zipping {directory}")
     excluded_dirs = []

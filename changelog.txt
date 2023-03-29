@@ -1,3 +1,6 @@
+v1.0.4:
+    - Ignore local flutter version check when it fails
+
 v1.0.2:
     - Added .appolloignore support to specify files and directories to ignore when sending files to build
     - Added support for mode, target and flavor options during flutter build
