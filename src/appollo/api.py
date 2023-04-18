@@ -15,8 +15,8 @@ from appollo.helpers import print_validation_error
 from appollo.settings import API_BASE_URL, console, get_jwt_token, write_jwt_token, delete_jwt_token
 
 
-def get(route, params=None, authorization=True, auth_data=None, json_decode=True, tries=5):
-    """ GET method wrapper for Appollo API.
+def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5):
+    """ General request wrapper for Appollo API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
@@ -34,15 +34,18 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
         headers["Authorization"] = auth_headers
 
     try:
-        response = requests.get(
+        response = requests.request(
+            method,
             f"{API_BASE_URL}/api/v1{route}",
             headers=headers,
             params=params,
+            data=data,
+            files=files,
         )
     except requests.exceptions.ConnectionError:
         if tries > 0:
             time.sleep(2)
-            return get(route, params, authorization, auth_data, json_decode, tries - 1)
+            return _request(method, route, params, data, files, authorization, auth_data, json_decode, tries-1)
         raise ClickException("Server not available")
 
     if response.ok:
@@ -51,170 +54,63 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
         else:
             return response.content
     else:
-        if response.status_code in [400, 401, 403]:
+        if response.status_code in [400, 401]:
             error = response.json()
             print_validation_error(console, error)
+            return False
+        elif response.status_code == 402:
+            console.print(f"Error: {response.json()['detail']}")
+            console.print("To upgrade your account, please go to https://appollo.space/plans")
+            return False
+        elif response.status_code == 403:
+            console.print(f"Permission error: {response.json()['detail']}")
             return False
         elif response.status_code == 404:
             raise NotFoundException()
         elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
             time.sleep(2)
-            return get(route, params, authorization, auth_data, json_decode, tries-1)
+            return _request(method, route, params, data, files, authorization, auth_data, json_decode, tries-1)
         else:
             if response.status_code == 503:
                 raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
             error = response.reason
-            raise ClickException(f"GET {route} failed: {error}")
+            raise ClickException(f"{method.upper()} {route} failed: {error}")
 
 
-def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None, tries=5):
+def get(route, params=None, authorization=True, auth_data=None, json_decode=True):
+    """ GET method wrapper for Appollo API.
+
+    :return dict of the JSON returned by the API or False if an error occurred
+    """
+    return _request("get", route, params=params, authorization=authorization, auth_data=auth_data, json_decode=json_decode)
+
+
+def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None):
     """ POST method wrapper for Appollo API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-    headers = dict()
-    headers["Accept"] = "application/json"
-    if authorization:
-        if auth_data is None:
-            auth_data = dict()
+    return _request("post", route, params=params, data=json_data, files=files, authorization=authorization, auth_data=auth_data)
 
-        auth_headers = get_authorization_header(**auth_data)
 
-        if not auth_headers:
-            return False
-
-        headers["Authorization"] = auth_headers
-
-    try:
-        response = requests.post(
-            f"{API_BASE_URL}/api/v1{route}",
-            headers=headers,
-            params=params,
-            data=json_data,
-            files=files,
-        )
-    except requests.exceptions.ConnectionError:
-        if tries > 0:
-            time.sleep(2)
-            return post(route, authorization, json_data, params, files, auth_data, tries - 1)
-        raise ClickException("Server not available")
-
-    if response.ok:
-        return response.json()
-    else:
-        if response.status_code in [400, 401, 403]:
-            error = response.json()
-            print_validation_error(console, error)
-        elif response.status_code == 404:
-            raise NotFoundException()
-        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
-            time.sleep(2)
-            return post(route, authorization, json_data, params, files, auth_data, tries-1)
-        else:
-            if response.status_code == 503:
-                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
-            error = response.reason
-            raise ClickException(f"POST {route} failed: {error}")
-
-def put(route, authorization=True, json_data=None, params=None, files=None, tries=5):
+def put(route, authorization=True, json_data=None, params=None, files=None):
     """ PUT method wrapper for Appollo API
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-
-    headers = {}
-
-    if authorization:
-        auth_headers = get_authorization_header()
-
-        if not auth_headers:
-            return False
-
-        headers["Authorization"] = auth_headers
-
     if json_data:
         json_data = {key: value for key, value in json_data.items() if value is not None}
     if files:
         files = {key: value for key, value in files.items() if value is not None}
-
-    try:
-        response = requests.put(
-            f"{API_BASE_URL}/api/v1{route}",
-            headers=headers,
-            params=params,
-            data=json_data,
-            files=files,
-        )
-    except requests.exceptions.ConnectionError:
-        if tries > 0:
-            time.sleep(2)
-            return put(route, authorization, json_data, params, files, tries - 1)
-        raise ClickException("Server not available")
-
-    if response.ok:
-        return response.json()
-    else:
-        if response.status_code in [400, 401, 403]:
-            error = response.json()
-            print_validation_error(console, error)
-        elif response.status_code == 404:
-            raise NotFoundException()
-        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
-            time.sleep(2)
-            return put(route, authorization, json_data, params, files, tries-1)
-        else:
-            if response.status_code == 503:
-                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
-            error = response.reason
-            raise ClickException(f"PUT {route} failed: {error}")
+    return _request("put", route, params=params, data=json_data, files=files, authorization=authorization)
 
 
-def delete(route, authorization=True, params=None, auth_data=None, tries=5):
+def delete(route, authorization=True, params=None, auth_data=None):
     """ DELETE method wrapper for Appollo API.
 
     :return True if the deletion was successful or False if an error occurred
     """
-    headers = dict()
-    headers["Accept"] = "application/json"
-    if authorization:
-        if auth_data is None:
-            auth_data = dict()
-
-        auth_headers = get_authorization_header(**auth_data)
-
-        if not auth_headers:
-            return False
-
-        headers["Authorization"] = auth_headers
-
-    try:
-        response = requests.delete(
-            f"{API_BASE_URL}/api/v1{route}",
-            headers=headers,
-            params=params,
-        )
-    except requests.exceptions.ConnectionError:
-        if tries > 0:
-            time.sleep(2)
-            return delete(route, authorization, params, auth_data, tries - 1)
-        raise ClickException("Server not available")
-
-    if response.ok:
-        return True
-    else:
-        if response.status_code in [400, 401, 403]:
-            error = response.json()
-            print_validation_error(console, error)
-        elif response.status_code in [404]:
-            console.print("Cannot delete something that does not exist.")
-        elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
-            time.sleep(2)
-            return delete(route, authorization, params, auth_data, tries-1)
-        else:
-            if response.status_code == 503:
-                raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
-            error = response.reason
-            raise ClickException(f"DELETE {route} failed: {error}")
+    return _request("delete", route, params=params, authorization=authorization, auth_data=auth_data)
 
 
 #                                   #
