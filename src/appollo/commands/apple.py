@@ -297,8 +297,8 @@ def link(key, team_key):
     from appollo.helpers import terminal_menu
 
     if key is None:
-        key = terminal_menu("/developer-accounts/", "Apple account",
-                            does_not_exist_msg="You do not have any apple developer accounts")
+        key = terminal_menu("/developer-accounts/?manager=me", "Apple account",
+                            does_not_exist_msg="You are not the manager of any apple developer accounts")
         if key is None:
             return
 
@@ -327,8 +327,8 @@ def unlink(key, team_key):
     from appollo.helpers import terminal_menu
 
     if key is None:
-        key = terminal_menu("/developer-accounts/", "Apple account",
-                            does_not_exist_msg="You do not have any apple developer accounts")
+        key = terminal_menu("/developer-accounts/?manager=me&hasteams=1", "Apple account",
+                            does_not_exist_msg="You do not have any apple developer accounts in a team")
         if key is None:
             return
 

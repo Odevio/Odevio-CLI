@@ -134,7 +134,7 @@ def link(key, team_key):
     from appollo.settings import console
 
     if key is None:
-        key = terminal_menu("/applications/", "Application", does_not_exist_msg="You do not have any app identifier.")
+        key = terminal_menu("/applications/?manager=me", "Application", does_not_exist_msg="You do not have any app identifier.")
         if key is None:
             return
 
@@ -165,7 +165,7 @@ def unlink(key, team_key):
     from appollo.settings import console
 
     if key is None:
-        key = terminal_menu("/applications/", "Application", does_not_exist_msg="You do not have any app identifier.")
+        key = terminal_menu("/applications/?manager=me&hasteams=1", "Application", does_not_exist_msg="You do not have any app identifiers in a team.")
         if key is None:
             return
 
