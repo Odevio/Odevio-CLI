@@ -390,7 +390,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             app_key = None
 
     if build_type in ["validation", "publication"]:
-        permission = api.get("/builds/publication-permission")
+        permission = api.get(f"/builds/publication-permission/{app_key}")
         if permission["free"]:
             if permission.get("next_build_date"):
                 permission['next_build_date'] = permission['next_build_date'][:-3] + permission['next_build_date'][-2:]  # Remove timezone ':' otherwise it can't parse

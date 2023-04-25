@@ -122,7 +122,7 @@ def rm(key, delete_on_apple):
 @app.command("link")
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.option('--team-key', prompt=True, help="Key of the team to link")
+@click.option('--team-key', prompt=False, help="Key of the team to link")
 def link(key, team_key):
     """ Links an app identifier to Appollo team with key \"KEY\".
 
@@ -134,9 +134,13 @@ def link(key, team_key):
     from appollo.settings import console
 
     if key is None:
-        key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any app identifier.")
+        key = terminal_menu("/applications/", "Application", does_not_exist_msg="You do not have any app identifier.")
         if key is None:
+            return
+
+    if team_key is None:
+        team_key = terminal_menu("/teams/", "Team", does_not_exist_msg="You are not part of any team.")
+        if team_key is None:
             return
 
     try:
@@ -152,7 +156,7 @@ def link(key, team_key):
 @app.command("unlink")
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.option('--team-key', prompt=True, help="Key of the team to link")
+@click.option('--team-key', prompt=False, help="Key of the team to link")
 def unlink(key, team_key):
     """ Links or unlinks an app identifier to Appollo team with key \"KEY\".
     """
@@ -161,9 +165,13 @@ def unlink(key, team_key):
     from appollo.settings import console
 
     if key is None:
-        key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any app identifier.")
+        key = terminal_menu("/applications/", "Application", does_not_exist_msg="You do not have any app identifier.")
         if key is None:
+            return
+
+    if team_key is None:
+        team_key = terminal_menu(f"/applications/{key}/teams/", "Team", does_not_exist_msg="This app is not part of any team")
+        if team_key is None:
             return
 
     deleted = api.delete(f"/applications/{key}/teams/{team_key}/")
