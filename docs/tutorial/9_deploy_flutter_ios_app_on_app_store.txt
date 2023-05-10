@@ -6,6 +6,9 @@
 
 For this last part of the tutorial, you will learn how to publish your Flutter iOS app on the App Store.
 
+.. note:: 
+  If you are using the free version of Appollo, you have access to **one** successful publication build every 90 days to release your app on the App Store.
+
 Create your app in the App Store
 --------------------------------
 

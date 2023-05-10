@@ -4,6 +4,9 @@
 
 In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.
 
+.. note::
+  If you are using the free version of Appollo, you can have **one** Apple developer account linked to your user account
+
 Step 1: How to get an Apple API key
 ===================================
 

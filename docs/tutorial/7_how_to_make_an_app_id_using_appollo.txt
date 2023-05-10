@@ -26,6 +26,9 @@ In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo ap
 
 |
 
+.. note::
+  If you are using the free version or the hobbyist plan, you can link **one** application to your user account
+
 .. _create_app_id:
 
 Make a new App ID
