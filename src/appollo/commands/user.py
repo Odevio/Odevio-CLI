@@ -101,8 +101,9 @@ def profile(ini):
         config_path = f"<[bold purple]{get_config_path()}[/bold purple]>" if ini else f"<{get_config_path()}>"
         console.print(Panel(Text.from_markup(
             f"""
-            Username : [bold]{user["username"]}[/bold]
-            E-mail : [bold]{user["email"]}[/bold]
+            Username: [bold]{user["username"]}[/bold]
+            E-mail: [bold]{user["email"]}[/bold]
+            Account type: [bold]{user["type"]}[/bold]
             """
         ), title="User", subtitle=config_path))
 
