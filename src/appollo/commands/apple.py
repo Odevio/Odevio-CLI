@@ -269,9 +269,8 @@ def developer_account_rm(key):
         if key is None:
             return
 
-    account = api.delete(f"/developer-accounts/{key}")
-    if account:
-        console.print(f"Removed Apple developer account with Appollo key \"{key}\" successfully.")
+    api.delete(f"/developer-accounts/{key}", json_decode=False)
+    console.print(f"Removed Apple developer account with Appollo key \"{key}\" successfully.")
 
 
 @apple.command("link")

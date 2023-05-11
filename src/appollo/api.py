@@ -105,12 +105,12 @@ def put(route, authorization=True, json_data=None, params=None, files=None):
     return _request("put", route, params=params, data=json_data, files=files, authorization=authorization)
 
 
-def delete(route, authorization=True, params=None, auth_data=None):
+def delete(route, authorization=True, params=None, auth_data=None, json_decode=True):
     """ DELETE method wrapper for Appollo API.
 
     :return True if the deletion was successful or False if an error occurred
     """
-    return _request("delete", route, params=params, authorization=authorization, auth_data=auth_data)
+    return _request("delete", route, params=params, authorization=authorization, auth_data=auth_data, json_decode=json_decode)
 
 
 #                                   #
