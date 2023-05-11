@@ -5,7 +5,9 @@
 In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.
 
 .. note::
-  If you are using the free version of Appollo, you can have **one** Apple developer account linked to your user account
+  If you are using the free version of Appollo, you can only have **one** Apple developer account linked to your user account. 
+  
+  To **link multiple accounts**, you have to **subscribe to a paid subscription**, you can discover our available plans |appollo_sub|.
 
 Step 1: How to get an Apple API key
 ===================================
@@ -221,3 +223,7 @@ And that is how you link your Apple Developer account with Appollo in just 3 eas
 .. |apple_developer_membership| raw:: html
 
    <a href="https://developer.apple.com/account/#!/membership/ZQHY6MWMN2" target="_blank">Apple developper account</a>
+
+.. |appollo_sub| raw:: html
+
+   <a href="https://appollo.space/plans/" target="_blank">here</a>
