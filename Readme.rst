@@ -5,7 +5,7 @@
 
 |
 
-.. image:: https://img.shields.io/badge/version-1.0.4-blue
+.. image:: https://img.shields.io/badge/version-1.1.0-blue
     :target: https://github.com/Appollo-CLI/Appollo/
 
 .. image:: https://img.shields.io/github/license/appollo-cli/appollo

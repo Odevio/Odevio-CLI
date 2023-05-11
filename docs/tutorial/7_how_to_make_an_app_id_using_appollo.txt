@@ -26,6 +26,11 @@ In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo ap
 
 |
 
+.. note::
+  If you are using the free version or the hobbyist plan, you can only link **one** application to your user account.
+
+  To **link multiple applications** to your user account, you have to **subscribe to Appollo**, check out our available plans |appollo_sub|.
+
 .. _create_app_id:
 
 Make a new App ID
@@ -97,3 +102,7 @@ Apple will not accept our submission later on in the tutorial. In the left menu 
 .. |apple_developer_account| raw:: html
 
   <a href="https://developer.apple.com/account" target="_blank">Apple Developer account</a>
+
+.. |appollo_sub| raw:: html
+
+   <a href="https://appollo.space/plans/" target="_blank">here</a>

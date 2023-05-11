@@ -1,5 +1,6 @@
 import re
 import subprocess
+from datetime import datetime
 
 import click
 from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode, get_version_and_build
@@ -350,11 +351,13 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     if directory is None:
         directory = os.getcwd()
 
+    # Check that the command was run for a flutter directory
     if not os.path.exists(os.path.join(directory, "lib")) or not os.path.exists(os.path.join(directory, "pubspec.yaml")):
         res = console.input("This directory does not look like it contains a flutter project. Are you sure you want to upload it? (y/N) ")
         if res not in ["y", "Y"]:
             return
 
+    # Get options from .appollo file
     if os.path.isfile(".appollo"):
         with open(".appollo") as config:
             for i, line in enumerate(config.readlines()):
@@ -411,6 +414,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 else:
                     console.print(f"Warning: unknown option '{key}' in .appollo")
 
+    # Select build type if it was not specified
     if build_type is None:
         build_type = questionary.select(
             "Build type",
@@ -420,6 +424,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         if build_type is None:  # When ctrl-C, exit
             exit()
 
+    # Select app if it was not specified
     if app_key is None:
         extra_options = []
         if build_type == "configuration":
@@ -435,6 +440,23 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         if app_key == "":
             app_key = None
 
+    if build_type in ["validation", "publication"]:
+        permission = api.get(f"/builds/publication-permission/{app_key}")
+        if permission["free"]:
+            if permission.get("next_build_date"):
+                permission['next_build_date'] = permission['next_build_date'][:-3] + permission['next_build_date'][-2:]  # Remove timezone ':' otherwise it can't parse
+                next_build_date = datetime.strptime(permission["next_build_date"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+                console.print(f"Error: as a free Appollo user, you can only make one publication every {permission['days_delay']} days. You will be able to make a new build on {next_build_date.strftime('%Y-%m-%d at %H:%M')}")
+                console.print("To upgrade your account and make as many publication as you want, please go to https://appollo.space/plans")
+                return
+            else:
+                console.print(f"Warning: as a free Appollo user, you can only make one publication every {permission['days_delay']} days. If this build succeeds, you won't be able to make another publication for {permission['days_delay']} days unless you upgrade.")
+                console.print("To upgrade your account and make as many publication as you want, please go to https://appollo.space/plans")
+                res = console.input("Do you confirm you want to proceed with the build? (Y/n) ")
+                if res not in ["", "y", "Y"]:
+                    return
+
+    # Get app version and build number
     if build_type != "configuration" and (not app_version or not build_number) and os.path.exists(os.path.join(directory, "pubspec.yaml")):
         try:
             version, build_num = get_version_and_build(os.path.join(directory, "pubspec.yaml"))
@@ -445,6 +467,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         except Exception as e:
             console.stderr("Error getting version and build number from pubspec.yaml: "+str(e))
 
+    # Show warning if the build number has already been used
     if build_type == "publication":
         max_build_number = api.get(f"/applications/{app_key}/buildnumber")
         if max_build_number and build_number <= max_build_number:
@@ -504,8 +527,8 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         os.remove(".app.zip")
         return
 
+    # Start build
     console.print(f"Uploading {directory} ({file_size_mb} MB)")
-
     build_instance = api.post(
         "/builds/",
         json_data={

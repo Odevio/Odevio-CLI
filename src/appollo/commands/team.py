@@ -96,12 +96,19 @@ def mk(name):
 
 @team.command()
 @login_required_warning_decorator
-@click.argument('key', required=True)
-@click.confirmation_option(prompt='Are you sure you want to delete the team ? \nThis action cannot be reverted.')
+@click.argument('key', required=False)
+@click.confirmation_option(prompt='Are you sure you want to delete a team ?\nThis will remove access to all Apple developer accounts and applications shared to the team to all members of the team\nThis action cannot be reverted.')
 def rm(key):
     """ Deletes a team. """
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/teams/?me=1", "Team",
+                            does_not_exist_msg="You are not the manager of any team.")
+        if key is None:
+            return
 
     team_instance = api.delete(f"/teams/{key}/")
 
@@ -117,7 +124,7 @@ def member():
 
 @member.command('add')
 @login_required_warning_decorator
-@click.argument('key')
+@click.argument('key', required=False)
 @click.option('--username', prompt=True, help="username of the new team member")
 def add_member(key, username):
     """ Adds a user to a team. """
@@ -125,6 +132,13 @@ def add_member(key, username):
 
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/teams/", "Team",
+                            does_not_exist_msg="You are not part of any team.")
+        if key is None:
+            return
 
     try:
         team_instance = api.post(f"/teams/{key}/members/{username}/")
@@ -144,12 +158,20 @@ def add_member(key, username):
 
 @member.command('rm')
 @login_required_warning_decorator
-@click.argument('key')
+@click.argument('key', required=False)
 @click.option('--username', prompt=True, help="username of the team member to remove")
+@click.confirmation_option(prompt="Warning: removing this user from a team will make them lose access to all of its applications and developer account,\nand will make the team lose access to any Apple account and application shared by this user to the team. Are you sure you want to continue?")
 def rm_member(key, username):
     """ Removes a user from a team."""
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/teams/", "Team",
+                            does_not_exist_msg="You are not part of any team.")
+        if key is None:
+            return
 
     deleted = api.delete(f"/teams/{key}/members/{username}/")
 

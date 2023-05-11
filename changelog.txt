@@ -1,3 +1,9 @@
+v1.1.0:
+    - Replaced flutter version warning with interactive menu
+    - Added restrictions based on subscription plan
+    - Added terminal menus for all commands
+    - Documentation update
+
 v1.0.4:
     - Ignore local flutter version check when it fails
 

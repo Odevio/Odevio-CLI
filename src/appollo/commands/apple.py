@@ -74,6 +74,7 @@ def developer_account_detail(key):
 
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/developer-accounts/", "Developer account",
@@ -85,55 +86,54 @@ def developer_account_detail(key):
         if key is None:
             return
 
-    if key:
-        try:
-            dev_account = api.get(f"/developer-accounts/{key}/")
-        except api.NotFoundException:
-            console.print("There is no developer account with this key")
-            return
-        provisioning_profiles = api.get(f"/developer-accounts/{key}/provisioning-profiles/")
+    try:
+        dev_account = api.get(f"/developer-accounts/{key}/")
+    except api.NotFoundException:
+        console.print("There is no developer account with this key")
+        return
+    provisioning_profiles = api.get(f"/developer-accounts/{key}/provisioning-profiles/")
 
-        if dev_account:
-            console.print(Panel(Text.from_markup(
-                f"""
-                Appollo Key : [bold]{dev_account["key"]}[/bold]
-                Name : [bold]{dev_account["name"]}[/bold]
-                Team ID : [bold]{dev_account["apple_id"]}[/bold]
-                Apple API Key ID : [bold]{dev_account["api_key_id"]}[/bold]
-                Admin : [bold]{dev_account["manager"]}[/bold]
-                """
-            ), title="Apple Developer Account"))
+    if dev_account:
+        console.print(Panel(Text.from_markup(
+            f"""
+            Appollo Key : [bold]{dev_account["key"]}[/bold]
+            Name : [bold]{dev_account["name"]}[/bold]
+            Team ID : [bold]{dev_account["apple_id"]}[/bold]
+            Apple API Key ID : [bold]{dev_account["api_key_id"]}[/bold]
+            Admin : [bold]{dev_account["manager"]}[/bold]
+            """
+        ), title="Apple Developer Account"))
 
-        if len(dev_account['apple_account_devices']) > 0:
-            table_devices = Table(expand=True, title="Devices in your Apple Developer Account registered on Appollo.")
-            table_devices.add_column("Name")
-            table_devices.add_column("Identifier/Device UDID")
-            table_devices.add_column("Type")
-            for device in dev_account['apple_account_devices']:
-                table_devices.add_row(device['name'], device['device_udid'], device['device_class'])
-            console.print(table_devices)
+    if len(dev_account['apple_account_devices']) > 0:
+        table_devices = Table(expand=True, title="Devices in your Apple Developer Account registered on Appollo.")
+        table_devices.add_column("Name")
+        table_devices.add_column("Identifier/Device UDID")
+        table_devices.add_column("Type")
+        for device in dev_account['apple_account_devices']:
+            table_devices.add_row(device['name'], device['device_udid'], device['device_class'])
+        console.print(table_devices)
 
-        if len(dev_account['apple_account_certificates']) > 0:
-            table_cert = Table(expand=True, title="Certificates in your Apple Developer Account registered on Appollo.")
-            table_cert.add_column("Name")
-            table_cert.add_column("Type")
-            table_cert.add_column("Expiration date")
-            for cert in dev_account['apple_account_certificates']:
-                table_cert.add_row(cert['apple_display_name'], cert['certificate_type'], cert['expiration_date'])
-            console.print(table_cert)
+    if len(dev_account['apple_account_certificates']) > 0:
+        table_cert = Table(expand=True, title="Certificates in your Apple Developer Account registered on Appollo.")
+        table_cert.add_column("Name")
+        table_cert.add_column("Type")
+        table_cert.add_column("Expiration date")
+        for cert in dev_account['apple_account_certificates']:
+            table_cert.add_row(cert['apple_display_name'], cert['certificate_type'], cert['expiration_date'])
+        console.print(table_cert)
 
-        if len(provisioning_profiles) > 0:
-            table_pp = Table(expand=True, title="Provisioning profiles in your Apple Developer Account registered on "
-                                                "Appollo.")
-            table_pp.add_column("Name")
-            table_pp.add_column("Apple Name")
-            table_pp.add_column("Application")
-            table_pp.add_column("Expiration date")
-            for pp in provisioning_profiles:
-                table_pp.add_row(pp['name'], pp['apple_name'], pp['application'], pp['expiration_date'],)
-            console.print(table_pp)
+    if len(provisioning_profiles) > 0:
+        table_pp = Table(expand=True, title="Provisioning profiles in your Apple Developer Account registered on "
+                                            "Appollo.")
+        table_pp.add_column("Name")
+        table_pp.add_column("Apple Name")
+        table_pp.add_column("Application")
+        table_pp.add_column("Expiration date")
+        for pp in provisioning_profiles:
+            table_pp.add_row(pp['name'], pp['apple_name'], pp['application'], pp['expiration_date'],)
+        console.print(table_pp)
 
-        console.print("Appollo updates these informations automatically when starting à build with Appollo")
+    console.print("Appollo updates these informations automatically when starting à build with Appollo")
 
 
 @apple.command("ls")
@@ -187,7 +187,8 @@ def developer_account_ls():
 @click.option('--private-key', required=True, prompt=True,
               type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
               help="Path to the private key downloaded from App Store Connect")
-def developer_account_add(apple_id, key_id, issuer_id, private_key, name=None):
+@click.option('--team', multiple=True, help="Key of the team to add the account to. Can be specified multiple times")
+def developer_account_add(apple_id, key_id, issuer_id, private_key, team, name=None):
     """ Add access to an Apple developer account for Appollo.
 
     \f
@@ -204,7 +205,8 @@ def developer_account_add(apple_id, key_id, issuer_id, private_key, name=None):
             "name": name,
             "apple_id": apple_id,
             "api_key_id": key_id,
-            "api_issuer_id": issuer_id
+            "api_issuer_id": issuer_id,
+            "teams": team,
         },
         files={
             "api_private_key": open(os.path.expanduser(private_key), "rb"),
@@ -273,7 +275,7 @@ def developer_account_rm(key):
     import textwrap
 
     if key is None:
-        key = terminal_menu("/developer-accounts/", "Developer account",
+        key = terminal_menu("/developer-accounts/?manager=me", "Developer account",
                             does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                 f"""
                                             You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
@@ -282,15 +284,14 @@ def developer_account_rm(key):
         if key is None:
             return
 
-    account = api.delete(f"/developer-accounts/{key}")
-    if account:
-        console.print(f"Removed Apple developer account with Appollo key \"{key}\" successfully.")
+    api.delete(f"/developer-accounts/{key}", json_decode=False)
+    console.print(f"Removed Apple developer account with Appollo key \"{key}\" successfully.")
 
 
 @apple.command("link")
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.option('--team-key', prompt=True, help="Key of the team to link")
+@click.option('--team-key', help="Key of the team to link")
 def link(key, team_key):
     """ Links the developer account with key \"KEY\" to an Appollo team.
 
@@ -307,27 +308,25 @@ def link(key, team_key):
     """
     from appollo import api
     from appollo.settings import console
-    from rich.text import Text
-    import textwrap
+    from appollo.helpers import terminal_menu
 
     if key is None:
-        key = terminal_menu("/developer-accounts/", "Developer account",
-                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
-                                f"""
-                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
-                                        """
-                            )))
+        key = terminal_menu("/developer-accounts/?manager=me", "Developer account",
+                            does_not_exist_msg="You are not the manager of any apple developer accounts")
         if key is None:
             return
 
-    try:
-        teams = api.post(f"/developer-accounts/{key}/teams/{team_key}/")
-    except api.NotFoundException:
-        console.print("The provided account or team does not exist or you do not have access to it")
+    if team_key is None:
+        team_key = terminal_menu("/teams/", "Team", does_not_exist_msg="You are not part of any teams")
+        if team_key is None:
+            return
 
-    if teams:
+    try:
+        api.post(f"/developer-accounts/{key}/teams/{team_key}/")
         console.print(f"Team \"{team_key}\" is now linked to "
                       f"Apple Developer Account \"{key}\".")
+    except api.NotFoundException:
+        console.print("The provided account or team does not exist or you do not have access to it")
 
 
 @apple.command("unlink")
@@ -339,26 +338,16 @@ def unlink(key, team_key):
     """
     from appollo import api
     from appollo.settings import console
-    from rich.text import Text
-    import textwrap
+    from appollo.helpers import terminal_menu
 
     if key is None:
-        key = terminal_menu("/developer-accounts/", "Developer account",
-                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
-                                f"""
-                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
-                                        """
-                            )))
+        key = terminal_menu("/developer-accounts/?manager=me&hasteams=1", "Apple account",
+                            does_not_exist_msg="You do not have any apple developer accounts in a team")
         if key is None:
             return
 
     if team_key is None:
-        team_key = terminal_menu(f"/developer-accounts/{key}/teams", "Team",
-                            does_not_exist_msg=Text.from_markup(textwrap.dedent(
-                                f"""
-                                            There are no teams linked to this Apple account.
-                                        """
-                            )))
+        team_key = terminal_menu(f"/developer-accounts/{key}/teams/", "Team", does_not_exist_msg="This developer account isn't shared with any team")
         if team_key is None:
             return
 
@@ -370,7 +359,7 @@ def unlink(key, team_key):
 
 @apple.command("refresh-devices")
 @login_required_warning_decorator
-@click.argument('key', required=True)
+@click.argument('key', required=False)
 @click.option("--quiet", "-q", is_flag=True, help="Flag to know if the refreshed list of devices should be hidden or not")
 def refresh_devices(key, quiet):
     """
@@ -385,6 +374,13 @@ def refresh_devices(key, quiet):
 
     from appollo import api
     from appollo.settings import console
+    from appollo.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/developer-accounts/", "Apple account",
+                            does_not_exist_msg="You do not have any apple developer accounts")
+        if key is None:
+            return
 
     try:
         devices = api.get(f"/developer-accounts/{key}/refresh-devices/")
