@@ -7,6 +7,7 @@ from appollo.commands.user import signup, signin, signout, profile
 from appollo.commands.team import team
 from appollo.commands.app import app
 from appollo.commands.apple import apple
+from appollo.helpers import check_new_version
 
 
 @click.group()
@@ -50,7 +51,7 @@ def appollo():
 
     Usage:
     """
-    pass
+    check_new_version()
 
 
 # register the subgroups to the main CLI commands

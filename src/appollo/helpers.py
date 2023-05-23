@@ -1,5 +1,7 @@
 import io
 import os
+import time
+from configparser import ConfigParser
 from functools import update_wrapper
 
 import click
@@ -7,8 +9,9 @@ import paramiko
 import sys
 import threading
 import qrcode
+import requests
 
-from appollo.settings import console, get_jwt_token
+from appollo.settings import console, get_jwt_token, get_config_path
 
 
 def zip_directory(directory_path, excluded_dirs, excluded_files):
@@ -265,3 +268,38 @@ def handle_error(key):
     if response:
         console.print(Text.from_markup("Appollo identified an error. You can ask for help regarding this issue here:"))
         console.print(f"[link]{response['url']}[/link]")
+
+
+def check_new_version():
+    config_file = get_config_path()
+    parser = ConfigParser()
+    parser.read(config_file)
+    try:
+        if parser.has_section("update") and parser.getfloat("update", "last_update_check", fallback=0) > (time.time()-3600):
+            return
+        response = requests.get("https://pypi.org/pypi/appollo/json")
+        if response.status_code != 200:
+            return
+        latest_version = response.json()["info"]["version"]
+        try:
+            from importlib import metadata
+        except ImportError:
+            # Python < 3.8
+            import importlib_metadata as metadata
+        current_version = metadata.version("appollo")
+        if current_version and current_version != latest_version:
+            import subprocess
+            console.print("A new version of Appollo is available! Updating to make sure you've got the latest features...")
+            try:
+                subprocess.run("pip install -U appollo", stdout=subprocess.PIPE, text=True, shell=True)
+            except Exception:
+                console.print("Could not update appollo using pip install -U appollo. Please update it yourself so you can have all the latest features and fixes.")
+    except Exception:
+        # Ignore, no need to crash if we can't check for new updates
+        pass
+    finally:
+        if not parser.has_section("update"):
+            parser.add_section("update")
+        parser.set("update", "last_update_check", str(time.time()))
+        with open(get_config_path(), "w") as fp:
+            parser.write(fp)
