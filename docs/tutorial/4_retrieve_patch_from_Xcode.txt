@@ -35,7 +35,7 @@ By default, the file is called **appollo.patch** and is located in your app fold
 
 |
 
-To apply the changes, use the git command ``git am appollo.patch``.
+To apply the changes, use the git command ``git apply appollo.patch``.
 
 .. tip::
 
