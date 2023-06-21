@@ -21,7 +21,7 @@ def print_validation_error(console, response_dict):
     """ Pretty print helper for validation errors in the console"""
     error = response_dict.pop('non_field_errors', None)
     if error is not None:
-        console.print(f"Error: {error}")
+        console.print(f"Error: {error}", markup=False)
     for field, errors in response_dict.items():
         if errors is str:
             console.print(f"Error: for {field} - {list(errors)}")
