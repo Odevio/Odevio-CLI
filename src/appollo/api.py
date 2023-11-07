@@ -15,13 +15,14 @@ from appollo.helpers import print_validation_error
 from appollo.settings import API_BASE_URL, console, get_jwt_token, write_jwt_token, delete_jwt_token
 
 
-def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5):
+def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5, sse=False):
     """ General request wrapper for Appollo API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
     headers = dict()
-    headers["Accept"] = "application/json"
+    if not sse:
+        headers["Accept"] = "application/json"
     if authorization:
         if auth_data is None:
             auth_data = dict()
@@ -36,11 +37,12 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
     try:
         response = requests.request(
             method,
-            f"{API_BASE_URL}/api/v1{route}",
+            f"{API_BASE_URL}{'/events' if sse else '/api/v1'}{route}",
             headers=headers,
             params=params,
             data=data,
             files=files,
+            stream=sse
         )
     except requests.exceptions.ConnectionError:
         if tries > 0:
@@ -49,6 +51,8 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
         raise ClickException("Server not available")
 
     if response.ok:
+        if sse:
+            return response
         if json_decode:
             return response.json()
         else:
@@ -77,12 +81,12 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
             raise ClickException(f"{method.upper()} {route} failed: {error}")
 
 
-def get(route, params=None, authorization=True, auth_data=None, json_decode=True):
+def get(route, params=None, authorization=True, auth_data=None, json_decode=True, sse=False):
     """ GET method wrapper for Appollo API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-    return _request("get", route, params=params, authorization=authorization, auth_data=auth_data, json_decode=json_decode)
+    return _request("get", route, params=params, authorization=authorization, auth_data=auth_data, json_decode=json_decode, sse=sse)
 
 
 def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None):

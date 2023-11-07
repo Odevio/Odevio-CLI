@@ -1,8 +1,11 @@
+import json
 import re
 import subprocess
 from datetime import datetime
 
 import click
+import sseclient
+
 from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode, get_version_and_build
 
 
@@ -188,7 +191,6 @@ def detail(key):
 
 
 def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None, tunnel_remote_port=None, no_progress=False):
-    from time import sleep
     from rich.syntax import Syntax
     from rich.text import Text
     from appollo.settings import console
@@ -209,42 +211,70 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
         return False
 
     # check build progress.
-    loop = True
-    with console.status("Looking for available instance...", spinner="line") as spinner:
-        while loop:
-            # update status every 5 seconds.
-            sleep(5)
-            build_instance = api.get(f"/builds/{build_instance['key']}/")
-
-            status = build_instance["status_code"]
-            if status == "created":
-                spinner.update("Looking for available instance...")
-            elif status == "waiting_instance":
-                spinner.update("No instance available at the moment. Waiting for one to be free...")
-            elif status == "in_progress":
-                substatus = build_instance["substatus_code"]
+    build_instance = api.get(f"/builds/{build_instance['key']}/")
+    status = build_instance["status_code"]
+    if status == "created":
+        spinner_text = "Looking for available instance..."
+    elif status == "waiting_instance":
+        spinner_text = "No instance available at the moment. Waiting for one to be free..."
+    elif status == "in_progress":
+        substatus = build_instance["substatus_code"]
+        if substatus == "starting_instance":
+            spinner_text = "Starting instance..."
+        elif substatus == "preparing_build":
+            spinner_text = "Preparing build..."
+        elif substatus == "building":
+            spinner_text = "Building..."
+        elif substatus == "getting_result":
+            spinner_text = "Getting result..."
+        elif substatus == "publishing":
+            spinner_text = "Publishing..."
+        else:
+            spinner_text = "Building..."
+    else:
+        return
+    with console.status(spinner_text, spinner="line") as spinner:
+        res = api.get(f"/builds/{build_instance['key']}/logs", sse=True)
+        client = sseclient.SSEClient(res)
+        for event in client.events():
+            if event.event == "status":
+                status = json.loads(event.data)
+                if status == "created":
+                    spinner.update("Looking for available instance...")
+                elif status == "waiting_instance":
+                    spinner.update("No instance available at the moment. Waiting for one to be free...")
+                elif status == "in_progress":
+                    spinner.update("Building...")
+                elif status == "config":
+                    spinner.update("Configured for remote access")
+                    res.close()
+                    break
+                elif status == "succeeded":
+                    spinner.update("Success!")
+                    res.close()
+                    break
+                elif status == "failed":
+                    spinner.update("Failed")
+                    res.close()
+                    break
+                elif status == "stopped":
+                    spinner.update("Stopped")
+                    res.close()
+                    break
+            elif event.event == "substatus":
+                substatus = json.loads(event.data)
                 if substatus == "starting_instance":
                     spinner.update("Starting instance...")
                 elif substatus == "preparing_build":
                     spinner.update("Preparing build...")
+                elif substatus == "building":
+                    spinner.update("Building...")
                 elif substatus == "getting_result":
                     spinner.update("Getting result...")
                 elif substatus == "publishing":
                     spinner.update("Publishing...")
-                else:
-                    spinner.update("Building...")
-            elif status == "config":
-                spinner.update("Configured for remote access")
-                loop = False
-            elif status == "succeeded":
-                spinner.update("Success!")
-                loop = False
-            elif status == "failed":
-                spinner.update("Failed")
-                loop = False
-            elif status == "stopped":
-                spinner.update("Stopped")
-                loop = False
+            elif event.event == "log":
+                print(json.loads(event.data), end="", flush=True)
 
     if status in ["config", "succeeded"]:
         console.print(Text.from_markup(f"\n\nYour build has succeeded, congrats ! Leave us a star on GitHub, we'd greatly appreciate it:"))
