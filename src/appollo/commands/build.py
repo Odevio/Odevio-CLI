@@ -280,13 +280,14 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 @click.option('--mode', type=click.Choice(["release", "profile", "debug"]), help="Mode to build the app in. Defaults to release")
 @click.option('--target', help="The main entry-point file of the application. Defaults to lib/main.dart")
 @click.option('--flavor', help="Custom app flavor")
+@click.option('--post-build-command', multiple=True, help="Command to run after the build has finished. Can be specified multiple times.")
 @click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel when the build is started, forwarding to this port. Note: this only applies to configuration builds")
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
 @click.option('--no-flutter-warning', is_flag=True, help="Do not display a warning if no flutter version is specified and the local flutter version does not match the build version.")
 @click.pass_context
-def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, no_flutter_warning, app_key=None, directory=None):
+def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, post_build_command, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, no_flutter_warning, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided, gets the current directory.
@@ -357,6 +358,10 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         if res not in ["y", "Y"]:
             return
 
+    post_build_commands = []
+    if post_build_command:
+        post_build_commands = list(post_build_command)
+
     # Get options from .appollo file
     if os.path.isfile(".appollo"):
         with open(".appollo") as config:
@@ -392,10 +397,13 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                         mode = value
                 elif key == "target":
                     if not target:
-                        target = target
+                        target = value
                 elif key == "flavor":
                     if not flavor:
-                        flavor = flavor
+                        flavor = value
+                elif key == "post-build-command":
+                    if not post_build_command:
+                        post_build_commands.append(value)
                 elif key == "tunnel-port":
                     if not tunnel_port:
                         tunnel_port = int(value)
@@ -445,7 +453,10 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         if permission["free"]:
             if permission.get("next_build_date"):
                 permission['next_build_date'] = permission['next_build_date'][:-3] + permission['next_build_date'][-2:]  # Remove timezone ':' otherwise it can't parse
-                next_build_date = datetime.strptime(permission["next_build_date"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+                try:
+                    next_build_date = datetime.strptime(permission["next_build_date"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+                except ValueError:
+                    next_build_date = datetime.strptime(permission["next_build_date"], "%Y-%m-%dT%H:%M:%S%z").astimezone()
                 console.print(f"Error: as a free Appollo user, you can only make one publication every {permission['days_delay']} days. You will be able to make a new build on {next_build_date.strftime('%Y-%m-%d at %H:%M')}")
                 console.print("To upgrade your account and make as many publication as you want, please go to https://appollo.space/plans")
                 return
@@ -541,6 +552,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             "mode": mode,
             "target": target,
             "flavor": flavor,
+            "post_build_commands": post_build_commands,
         },
         files={
             "source": ("source.zip", open(".app.zip", "rb"), "application/zip")
@@ -571,7 +583,7 @@ def ipa(key):
     from rich.text import Text
 
     if key is None:
-        key = terminal_menu("/builds/", "Builds", api_params={"all": 1}, name=build_name,
+        key = terminal_menu("/builds/", "Builds", api_params={"all": 1, "type": "ad-hoc", "status": "succeeded"}, name=build_name,
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
                                             You have not run any builds yet.
@@ -716,7 +728,10 @@ def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
                 ), title="Connection settings and credentials", expand=False)
                 console.print(auth_info)
                 build_instance['stop_time'] = build_instance['stop_time'][:-3] + build_instance['stop_time'][-2:]  # Remove timezone ':' otherwise it can't parse
-                stop_time = datetime.strptime(build_instance["stop_time"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+                try:
+                    stop_time = datetime.strptime(build_instance["stop_time"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+                except ValueError:
+                    stop_time = datetime.strptime(build_instance["stop_time"], "%Y-%m-%dT%H:%M:%S%z").astimezone()
                 console.print("Your machine will automatically stop at "+stop_time.strftime("%H:%M")+", but remember to stop it as soon as you are finished to free up resources by typing")
                 console.print(Syntax(code="appollo build stop "+key, lexer="shell"))
                 console.print("")
@@ -805,6 +820,8 @@ def stop(key):
         build_instance = api.post(f"/builds/{key}/stop/")
         if build_instance:
             console.print(Text.from_markup(f"[bold]{build_instance['name']}[/bold] has been stopped."))
+            if build_instance['build_type'] == "Configuration":
+                console.print(Text.from_markup(f"Do not forget to run [code]appollo build patch {key}[/code] or [code]appollo build download {key}[/code] to get your changes from the build machine!"))
         else:
             console.print(f"Build with KEY \"{key}\" was not found.")
     except api.NotFoundException:
@@ -850,7 +867,10 @@ def build_name(build_instance):
 
     if "start_time" in build_instance and build_instance["start_time"]:
         build_instance['start_time'] = build_instance['start_time'][:-3]+build_instance['start_time'][-2:]  # Remove timezone ':' otherwise it can't parse
-        start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+        try:
+            start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
+        except ValueError:
+            start_time = datetime.strptime(build_instance['start_time'], "%Y-%m-%dT%H:%M:%S%z").astimezone()
         start_time_str = start_time.strftime('%Y-%m-%d %H:%M')
     else:
         start_time_str = "Not started"
