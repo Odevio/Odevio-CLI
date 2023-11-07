@@ -274,7 +274,7 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
                 elif substatus == "publishing":
                     spinner.update("Publishing...")
             elif event.event == "log":
-                print(json.loads(event.data), end="", flush=True)
+                print(json.loads(event.data), end="")
 
     if status in ["config", "succeeded"]:
         console.print(Text.from_markup(f"\n\nYour build has succeeded, congrats ! Leave us a star on GitHub, we'd greatly appreciate it:"))
@@ -288,10 +288,9 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
             ctx.invoke(connect, key=build_instance['key'], tunnel_port=tunnel_port, tunnel_host=tunnel_host, tunnel_remote_port=tunnel_remote_port)
         return True
     elif status in ["failed", "stopped"]:
+        build_instance = api.get(f"/builds/{build_instance['key']}/")
         if "error_message" in build_instance:
             console.print(Text.from_markup(f"[red]Error: {build_instance['error_message']}[/red]"))
-        console.print(Text.from_markup(
-            f"Your build has failed, to access logs run : [code]appollo build logs {build_instance['key']}[/code]"))
         handle_error(build_instance['key'])
         return False
 
