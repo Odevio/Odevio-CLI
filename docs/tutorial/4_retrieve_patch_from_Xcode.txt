@@ -2,27 +2,23 @@
 4. How to retrieve your updates from Appollo-Remote locally
 ===========================================================
 
-Once you are satisfied with the configuration, you have two possibilities to retrieve the changes you made in Appollo locally.
+For this next part, make sure your configuration build is stopped by pressing the **Stop build** button.
 
-    1. **If you use Git** for your project the easiest is to use ``appollo build patch`` which will `Retrieve changes with a patch file`_.
-    2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the command ``appollo build download``.
+You will have two possibilities to retrieve the changes you made in Appollo Remote locally.
+
+$$Might change!!
+
+    1. **If you use Git** for your project the easiest is to use the $$Add button name button which will `Retrieve changes with a patch file`_.
+    2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the $$Add button name button.
 
 
 Retrieve changes with a patch file
 ----------------------------------
 
-**If you are using git** and decided to retrieve a git patch containing all the changes you made to Xcode.
+When your build is stopped, you can create the patch using the **Download Patch (1)** button.
 
-First, make sure your build is stopped.
-
-You can check the list of your ongoing builds with ``appollo build ls`` and the ``--all`` option to see all your other older builds.
-
-Stopping a build manually is possible by using the command ``appollo build stop`` and selecting the build you want to stop.
-
-When your build is stopped, you can create the patch using ``appollo build patch``.
-
-.. image:: /img/appollo-build-patch.jpg
-  :alt: Appollo build patch
+.. image:: /img/desktop-patch.jpg
+  :alt: Desktop patch
   :align: center
 
 |
@@ -35,21 +31,12 @@ By default, the file is called **appollo.patch** and is located in your app fold
 
 |
 
-To apply the changes, use the git command ``git apply appollo.patch``.
-
-.. tip::
-
-  Use ``--help`` to see the options of a command. For exemple, with ``appollo build patch`` you have options to name the file of your patch.
+To apply the changes, use the **Apply Patch (2)** button.
 
 Retrieve changes by downloading the project files
 -------------------------------------------------
-First, make sure your build is stopped.
 
-You can check the list of your ongoing builds with ``appollo build ls`` and the ``--all`` option to see all your other older builds.
-
-Stopping a build manually is possible by using the command ``appollo build stop`` and selecting the build you want to stop.
-
-When your build is stopped, you can get your files as a zip file by using ``appollo build download``.
+When your build is stopped, you can get your files as a zip file by using the $$Button name.
 
 Unzip the files and you get the last version of your source code as edited in XCode.
 

@@ -9,11 +9,19 @@ Use RustDesk to connect to your configuration build
 
 Now that your configuration build is ready and that you received your credentials, you can connect to your Mac virtual machine.
 
-.. image:: /img/desktop-connect.jpg
-  :alt: Desktop connect
+.. image:: /img/appollo-build-start-4.jpg
+  :alt: Appollo build start
   :align: center
 
 |
+
+.. tip::
+    If you try to connect a build that was not meant for remote desktop or that was stopped, no problem, 
+    Appollo will suggest you to create one automatically.
+
+    .. image:: /img/appollo-connect-other.jpg
+      :alt: Appollo build connect with other build
+      :align: center
 
 For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
 

@@ -1,0 +1,13 @@
+.. _reference_guide:
+
+===================
+CLI Reference Guide
+===================
+
+After you mastered the basic concepts, you can come back to this page to learn what commands Appollo offers.
+You can learn more about individual Appollo commands with :code:`appollo COMMAND --help`.
+
+.. click:: appollo.__main__:appollo
+    :prog: appollo
+    :nested: full
+    :naming: full

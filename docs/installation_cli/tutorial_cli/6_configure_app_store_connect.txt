@@ -24,17 +24,19 @@ Log into your Apple developer account if you need to.
 
 You can now see the overview of your account.
 
-Access **Users and Access**.
+Access **App Store Connect**.
 
-.. image:: /img/app-store-connect-home.jpg
-  :alt: App Store Connect home
+You can also directly go to |apple_overview|.
+
+.. image:: /img/apple-developer-overview.jpg
+  :alt: Apple Developer Account overview
   :align: center
 
 |
 
-Or via |apple_overview| and click on the **Users and Access** button.
+Once that you are on the App Store Connect homepage, you can head over to **"Users and Access"**.
 
-.. image:: /img/app-store-connect-users.jpg
+.. image:: /img/app-store-connect-home.jpg
   :alt: App Store Connect home
   :align: center
 

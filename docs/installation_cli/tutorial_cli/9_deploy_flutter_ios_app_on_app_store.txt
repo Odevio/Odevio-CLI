@@ -1,0 +1,92 @@
+==============================================================
+9. How to publish a Flutter app on the App Store without a Mac
+==============================================================
+
+**Congratulations, you are almost done !**
+
+For this last part of the tutorial, you will learn how to publish your Flutter iOS app on the App Store.
+
+.. note:: 
+  If you are using the free version of Appollo, you have access to **one** successful publication build **every 90 days** to release your app on the App Store.
+
+  To **enjoy unlimited publication builds**, you must **upgrade to a paid subscription**. You can discover our paid plans |appollo_sub|.
+
+Create your app in the App Store
+--------------------------------
+
+The first thing you will want to do is to create an iOS app on |app_store_connect|.
+
+.. image:: /img/apple-add-app.jpg
+  :alt: Apple add app
+  :align: center
+
+|
+
+You can give whatever name you would like.
+
+Select the **bundle ID** from the list of App ID you have created earlier in the tutorial.
+
+If you have no app ID, you can refer to the :ref:`chapter 7 <create_app_id>` of this tutorial.
+
+Finally, for **SKU** you can choose anything you want as long as it is unique.
+
+You now have access to a dashboard for your app. If you scroll down, you will see the **Build** section.
+
+.. image:: /img/apple-build.jpg
+  :alt: Apple app build
+  :align: center
+
+|
+
+Build your app
+--------------
+
+Now that this done, go over the Appollo CLI and use the command ``appollo build start`` for your app.
+
+And this time, for the build type: **publication**
+
+Wait for Appollo to create and start the build.
+
+.. image:: /img/appollo-build-publication.jpg
+  :alt: Appollo build start publication
+  :align: center
+
+|
+
+.. tip::
+  Do not forget to adjust your app version or build number to avoid duplicate errors
+
+
+Publish your app on the App Store
+---------------------------------
+
+The **build section** should now look like this and you can **select your newest build**.
+
+.. image:: /img/apple-build-select.jpg
+  :alt: Apple build select button
+  :align: center
+
+|
+
+Apple will ask you if your app responds to **encryption standards** and other standards **you have to comply to**.
+
+**You did it!** Your build has been **successfully publish** on the app store.
+
+.. warning:: **Do not forget to save your build!**
+
+For your app to be published on the app store, you still have to **complete any missing information** and then
+you can submit it to Apple for review.
+
+.. tip:: This type of build can also be published on TestFlight for more testing.
+
+Usually it takes Apple a few days to test your application and approve it or decline it. In case it is declined you will
+get an e-mail from Apple telling you why it is not approved (reasons are not always very specific). You can then fix
+the issues and publish it again.
+
+.. |app_store_connect| raw:: html
+
+   <a href="https://appstoreconnect.apple.com/apps" target="_blank">app store connect</a>
+
+.. |appollo_sub| raw:: html
+
+   <a href="https://appollo.space/plans/" target="_blank">here</a>

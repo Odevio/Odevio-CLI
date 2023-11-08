@@ -1,0 +1,62 @@
+====================================================================
+8. How to create an IPA file for testing purposes on an Apple Device
+====================================================================
+
+In this section of the tutorial, you are going to learn how to effectively build your app to retrieve the **IPA** file
+for testing purposes on physical Apple devices.
+
+.. tip:: An IPA file contains an iOS app. It is a file that can be installed on iOS devices and used as an application.
+         It is comparable to an Android APK.
+
+Adding your device to Apple Developer
+-------------------------------------
+IPA files can be used for testing purposes only if the physical devices on which you want to test them are added to the
+Apple Developer Devices.
+
+To register a new device, visit |apple_device| and add a new device.
+
+You will need the UDID of the apple device on which you want to install your app. You can get the UDID by browsing
+to `udid.tech <https://udid.tech/>`_ with your apple device. Or you can get your UDID
+`directly from itunes <https://whatsmyudid.com/>`_ when your device is plugged in.
+
+Once your device has been registered we can start building the IPA.
+
+Building the IPA
+----------------
+You can use the command ``appollo build start`` but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
+
+.. image:: /img/appollo-build-adhoc.jpg
+  :alt: Appollo build start build type ad-hoc
+  :align: center
+
+|
+
+You will be given a URL. If you use it in a browser, it will download the file.
+
+Or just scan the QR code with an iPhone.
+
+You can also send the URL to a **registered device** of your Apple developer account to download the app, for example by e-mail.
+When clicking this link directly from your Apple device a prompt will be shown to install the application on your device.
+
+.. image:: /img/appollo-myapp.jpg
+  :alt: Myapp on iphone
+  :align: center
+
+|
+
+And that is how you can build your app for testing purposes on physical devices.
+
+.. note:: 
+  The previously used build type ``configuration`` for the Xcode configuration does not generate an IPA file.
+
+.. tip:: 
+  To register a new device, visit |apple_device|.
+
+.. warning:: For the device to be used, it must be registered **before** you make the build. Otherwise,
+             you will not be able to install the app.
+
+|
+
+.. |apple_device| raw:: html
+
+   <a href="https://developer.apple.com/account/resources/devices/list" target="_blank">https://developer.apple.com/account/resources/devices/list</a>

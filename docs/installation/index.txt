@@ -4,26 +4,28 @@
 Installation
 ============
 
-Appollo is a CLI utility developed in Python. It is easily installed with pip.
+Appollo is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Appollo's $$Add link with anchor client.
 
-.. code-block::
+$$Add client download screenshot
 
-    pip install appollo
+.. image:: 
+  :alt: Appollo download
+  :align: center
 
+Once installed, you can easily run the client from your desktop.
 
-Once installed we can easily run the CLI in the terminal :code:`$ appollo` and you should get the ``help`` output of the terminal.
+If it is your first time using Appollo, you are required to create an account. 
 
-If it is your first time using Appollo, create an Appollo account by running :
+.. image:: /img/desktop-signup.jpg
+  :alt: Appollo sign up
+  :align: center
 
-.. code-block::
+|
 
-    appollo signup
+Otherwise, you can log in using your existing credentials.
 
-.. note::
+.. image:: /img/desktop-login.jpg
+  :alt: Appollo login
+  :align: center
 
-    PIP is the python package manager. PIP and python should be installed on your computer for Appollo to work.
-    `Install python <https://www.python.org/downloads/>`_.
-
-.. warning::
-
-    python 3.6 or higher is required for Appollo to work properly.
+|
