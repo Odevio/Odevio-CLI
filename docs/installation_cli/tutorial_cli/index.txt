@@ -1,4 +1,3 @@
-.. _tutorial:
 
 ============
 CLI Tutorial

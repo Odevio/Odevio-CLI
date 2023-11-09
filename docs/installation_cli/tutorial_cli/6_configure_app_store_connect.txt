@@ -28,12 +28,6 @@ Access **App Store Connect**.
 
 You can also directly go to |apple_overview|.
 
-.. image:: /img/apple-developer-overview.jpg
-  :alt: Apple Developer Account overview
-  :align: center
-
-|
-
 Once that you are on the App Store Connect homepage, you can head over to **"Users and Access"**.
 
 .. image:: /img/app-store-connect-home.jpg

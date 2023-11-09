@@ -1,4 +1,3 @@
-.. _reference_guide:
 
 ===================
 CLI Reference Guide

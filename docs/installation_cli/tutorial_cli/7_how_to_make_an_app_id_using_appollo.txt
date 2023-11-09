@@ -65,8 +65,8 @@ There, you will find the **"Identifiers menu"** that contains the list with the 
 ..
     TODO:change the image with one of the apple indentifiers.
 
-.. image:: /img/apple-certificates.jpg
-  :alt: Apple certificates
+.. image:: /img/apple-identifiers.jpg
+  :alt: Apple Identifiers
   :align: center
 
 |
