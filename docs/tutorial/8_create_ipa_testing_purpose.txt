@@ -23,7 +23,9 @@ Once your device has been registered we can start building the IPA.
 
 Building the IPA
 ----------------
-You can use the command ``appollo build start`` but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
+You can use the **Builds** tab but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
+
+$$Add desktop IPA Screenshot
 
 .. image:: /img/appollo-build-adhoc.jpg
   :alt: Appollo build start build type ad-hoc
@@ -47,7 +49,7 @@ When clicking this link directly from your Apple device a prompt will be shown t
 And that is how you can build your app for testing purposes on physical devices.
 
 .. note:: 
-  The previously used build type ``configuration`` for the Xcode configuration does not generate an IPA file.
+  The previously used build type **configuration** for the Xcode configuration does not generate an IPA file.
 
 .. tip:: 
   To register a new device, visit |apple_device|.

@@ -1,8 +1,8 @@
 .. _installation:
 
-==========
-Legacy CLI
-==========
+===
+CLI
+===
 
 Appollo is a CLI utility developed in Python. It is easily installed with pip.
 
