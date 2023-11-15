@@ -1,13 +1,13 @@
 =================================================================================
-6. How to configure App Store Connect for Flutter app iOS deployment with Appollo
+6. How to configure App Store Connect for Flutter app iOS deployment with Odevio
 =================================================================================
 
-In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.
+In this tutorial, you will learn how to **link your Apple Developer account with Odevio**.
 
 .. note::
-  If you are using the free version of Appollo, you can only have **one** Apple developer account linked to your user account. 
+  If you are using the free version of Odevio, you can only have **one** Apple developer account linked to your user account. 
   
-  To **link multiple accounts**, you have to **subscribe to a paid subscription**, you can discover our available plans |appollo_sub|.
+  To **link multiple accounts**, you have to **subscribe to a paid subscription**, you can discover our available plans |odevio_sub|.
 
 Step 1: How to get an Apple API key
 ===================================
@@ -82,12 +82,15 @@ You have the possibility to **copy¹** the key id and to **download the API key�
 
 **But wait, do not close that tab yet !**
 
-Step 2: Link the API key in Appollo
+Step 2: Link the API key in Odevio
 ===================================
 
 Now that you have successfully generated your API key, you can use it in the desktop client to link your accounts.
 
 Go into the **Apple** section.
+
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/desktop-apple.jpg
   :alt: Desktop apple
@@ -102,7 +105,7 @@ Once you are done, you can press the **Add** button.
 Step 3: Complete the required missing information and where to find it
 ======================================================================
 
-Now that you know how to add an access between your Apple Developer account and Appollo, in this step, you will learn **where you can find the required information**.
+Now that you know how to add an access between your Apple Developer account and Odevio, in this step, you will learn **where you can find the required information**.
 
 For the **Apple ID**, you can find it on your |apple_developer_membership|.
 
@@ -132,7 +135,7 @@ Go back to your App Store Connect, in the Users and Access menu and in the keys 
 
 There will be your keys. You can easily **copy the key ID¹**.
 
-You can also copy the **Issuer ID²** right above because it will be the next line Appollo will ask you to complete.
+You can also copy the **Issuer ID²** right above because it will be the next line Odevio will ask you to complete.
 
 .. image:: /img/apple-id.jpg
   :alt: Apple Key ID
@@ -150,6 +153,9 @@ The **private key** is the last bit of information you need to complete. It is t
 
 Now that your Apple Developer account was linked successfully you should see it appear in the **Apple** section like this:
 
+..
+  $$Update screenshot Appollo
+
 .. image:: /img/desktop-apple-ls.jpg
   :alt: Desktop Apple ls
   :align: center
@@ -159,12 +165,12 @@ Now that your Apple Developer account was linked successfully you should see it 
 .. note::
     You can only link one Apple Developer acccount at a time with the trial version or the hobbyist plant.
 
-    To **link multiple Apple Developer Account** to your user account, you have to **subscribe to Appollo**, check out our available plans |appollo_sub|.
+    To **link multiple Apple Developer Account** to your user account, you have to **subscribe to Odevio**, check out our available plans |odevio_sub|.
 
 .. _create_app_id:
 
 
-And that is how you link your Apple Developer account with Appollo in just 3 easy steps!
+And that is how you link your Apple Developer account with Odevio in just 3 easy steps!
 
 .. |apple_developer| raw:: html
 
@@ -182,6 +188,6 @@ And that is how you link your Apple Developer account with Appollo in just 3 eas
 
    <a href="https://developer.apple.com/account/#!/membership/ZQHY6MWMN2" target="_blank">Apple developper account</a>
 
-.. |appollo_sub| raw:: html
+.. |odevio_sub| raw:: html
 
    <a href="https://appollo.space/plans/" target="_blank">here</a>

@@ -1,10 +1,10 @@
 ===========================================================
-4. How to retrieve your updates from Appollo-Remote locally
+4. How to retrieve your updates from Odevio-Remote locally
 ===========================================================
 
 For this next part, make sure your configuration build is stopped by pressing the **Stop build** button.
 
-You will have two possibilities to retrieve the changes you made in Appollo Remote locally.
+You will have two possibilities to retrieve the changes you made in Odevio Remote locally.
 
 $$Might change!!
 
@@ -23,10 +23,10 @@ When your build is stopped, you can create the patch using the **Download Patch 
 
 |
 
-By default, the file is called **appollo.patch** and is located in your app folder.
+By default, the file is called **odevio.patch** and is located in your app folder.
 
-.. image:: /img/appollo-patch.jpg
-  :alt: Appollo patch
+.. image:: /img/odevio-patch.jpg
+  :alt: Odevio patch
   :align: center
 
 |
@@ -36,12 +36,12 @@ To apply the changes, use the **Apply Patch (2)** button.
 Retrieve changes by downloading the project files
 -------------------------------------------------
 
-When your build is stopped, you can get your files as a zip file by using the $$Button name.
+When your build is stopped, you can get your files as a zip file by using the **Stop Build** button.
 
 Unzip the files and you get the last version of your source code as edited in XCode.
 
-.. image:: /img/appollo-build-download.jpg
-  :alt: Appollo build download
+.. image:: /img/odevio-build-download.jpg
+  :alt: Odevio build download
   :align: center
 
 |

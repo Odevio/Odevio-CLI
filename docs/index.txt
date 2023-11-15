@@ -1,17 +1,17 @@
 =====================
-Appollo Documentation
+Odevio Documentation
 =====================
 ---------------------------------------------------------------------------------------
 The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
 ---------------------------------------------------------------------------------------
 
-Welcome to the documentation pages for Appollo.
+Welcome to the documentation pages for Odevio.
 
 -----------------
-What is Appollo ?
+What is Odevio ?
 -----------------
 
-Appollo is an open-source tool to help developers setup and release their Flutter apps on iOS.
+Odevio is an open-source tool to help developers setup and release their Flutter apps on iOS.
 
 Thanks for checking it out.
 
@@ -52,13 +52,13 @@ $$Change GIF
 Get started
 -----------
 
-Here, you will find informations regarding Appollo and how to use it.
+Here, you will find informations regarding Odevio and how to use it.
 
 If you are getting started this is how we recommend you use the docs :
 
-* First, we advise you to read our :ref:`Installation guide <installation>` for instructions on how to install Appollo.
-* Next, check how to setup your app with Appollo following our complete :ref:`Tutorial <tutorial>` and build your Flutter app to iOS.
-* If you want to know every option Appollo has to offer, check out our :ref:`Reference Guide <reference_guide>`
+* First, we advise you to read our :ref:`Installation guide <installation>` for instructions on how to install Odevio.
+* Next, check how to setup your app with Odevio following our complete :ref:`Tutorial <tutorial>` and build your Flutter app to iOS.
+* If you want to know every option Odevio has to offer, check out our :ref:`Reference Guide <reference_guide>`
 
 This documentation is constantly evolving and we appreciate every help we can get, so feel free to contribute.
 

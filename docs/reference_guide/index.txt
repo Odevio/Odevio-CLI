@@ -4,7 +4,7 @@
 Reference Guide
 ===============
 
-This guide references all the Appollo fields with their description and how they should be used.
+This guide references all the Odevio fields with their description and how they should be used.
 
 Builds
 ------
@@ -18,7 +18,7 @@ Settings
 
 **Build type:** Select the type of build you wish to launch for your application.
 
-    * **Configuration:** launch an Appollo-Remote to allow you to configure your project on XCode
+    * **Configuration:** launch an Odevio-Remote to allow you to configure your project on XCode
 
     * **Development:** builds the app for testing on an iOS simulator.
 

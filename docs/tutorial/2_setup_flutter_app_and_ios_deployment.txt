@@ -15,32 +15,41 @@ Now that your configuration build is ready and that you received your credential
 
 |
 
-For this step, you need a remote desktop access application. For Appollo, the one used is **RustDesk's** |rustdesk_client|.
+For this step, you need a remote desktop access application. For Odevio, the one used is **RustDesk's** |rustdesk_client|.
 
 Launch RustDesk, it should look like the following screenshot.
 
 **The first step is to click on the three little dots and select 'ID/Relay Server'.**
 
+..
+  $$Update screenshot Appollo
+  
 .. image:: /img/rustdesk-home.jpg
-  :alt: Appollo RustDesk connect
+  :alt: Odevio RustDesk connect
   :align: center
 
 |
 
-Type in Appollo's relay server: **appollo.space**
+Type in Odevio's relay server: **odevio.space**
 
-This step is to make sure you are connected to Appollo's relay server.
+This step is to make sure you are connected to Odevio's relay server.
+
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/rustdesk-relay-server.jpg
-  :alt: Appollo RustDesk relay server
+  :alt: Odevio RustDesk relay server
   :align: center
 
 |
 
 Secondly, simply enter the **RustDesk ID** you were given to authenticate.
 
+..
+  $$Update screenshot Appollo
+
 .. image:: /img/rustdesk-connect.jpg
-  :alt: Appollo RustDesk connect
+  :alt: Odevio RustDesk connect
   :align: center
 
 |
@@ -48,15 +57,18 @@ Secondly, simply enter the **RustDesk ID** you were given to authenticate.
 Finally, RustDesk will ask you to enter the **RustDesk password** you received.
 
 .. image:: /img/rustdesk-password.jpg
-  :alt: Appollo RustDesk password
+  :alt: Odevio RustDesk password
   :align: center
 
 |
 
-That's it ! You are now connected to an Appollo-Remote build machine in remote desktop.
+That's it ! You are now connected to an Odevio-Remote build machine in remote desktop.
+
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/rustdesk-desktop.jpg
-  :alt: Appollo RustDesk desktop
+  :alt: Odevio RustDesk desktop
   :align: center
 
 |
@@ -65,7 +77,7 @@ That's it ! You are now connected to an Appollo-Remote build machine in remote d
     If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
 
       .. image:: /img/rustdesk-shrink.jpg
-        :alt: Appollo RustDesk shrink
+        :alt: Odevio RustDesk shrink
         :align: center
 
 

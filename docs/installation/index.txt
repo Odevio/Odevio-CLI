@@ -4,20 +4,20 @@
 Installation
 ============
 
-Appollo is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Appollo's $$Add link with anchor client.
+Odevio is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Odevio's $$Add link with anchor client.
 
 $$Add client download screenshot
 
 .. image:: 
-  :alt: Appollo download
+  :alt: Odevio download
   :align: center
 
 Once installed, you can easily run the client from your desktop.
 
-If it is your first time using Appollo, you are required to create an account. 
+If it is your first time using Odevio, you are required to create an account. 
 
 .. image:: /img/desktop-signup.jpg
-  :alt: Appollo sign up
+  :alt: Odevio sign up
   :align: center
 
 |
@@ -25,7 +25,7 @@ If it is your first time using Appollo, you are required to create an account.
 Otherwise, you can log in using your existing credentials.
 
 .. image:: /img/desktop-login.jpg
-  :alt: Appollo login
+  :alt: Odevio login
   :align: center
 
 |

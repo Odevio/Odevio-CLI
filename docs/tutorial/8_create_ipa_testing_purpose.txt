@@ -27,8 +27,8 @@ You can use the **Builds** tab but this time the **build type** is going to be *
 
 $$Add desktop IPA Screenshot
 
-.. image:: /img/appollo-build-adhoc.jpg
-  :alt: Appollo build start build type ad-hoc
+.. image:: /img/odevio-build-adhoc.jpg
+  :alt: Odevio build start build type ad-hoc
   :align: center
 
 |
@@ -40,7 +40,7 @@ Or just scan the QR code with an iPhone.
 You can also send the URL to a **registered device** of your Apple developer account to download the app, for example by e-mail.
 When clicking this link directly from your Apple device a prompt will be shown to install the application on your device.
 
-.. image:: /img/appollo-myapp.jpg
+.. image:: /img/myapp.jpg
   :alt: Myapp on iphone
   :align: center
 

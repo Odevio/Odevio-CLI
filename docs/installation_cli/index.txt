@@ -3,29 +3,29 @@
 CLI
 ===
 
-Appollo is a CLI utility developed in Python. It is easily installed with pip.
+Odevio is a CLI utility developed in Python. It is easily installed with pip.
 
 .. code-block::
 
-    pip install appollo
+    pip install odevio
 
 
-Once installed we can easily run the CLI in the terminal :code:`$ appollo` and you should get the ``help`` output of the terminal.
+Once installed we can easily run the CLI in the terminal :code:`$ odevio` and you should get the ``help`` output of the terminal.
 
-If it is your first time using Appollo, create an Appollo account by running :
+If it is your first time using Odevio, create an Odevio account by running :
 
 .. code-block::
 
-    appollo signup
+    odevio signup
 
 .. note::
 
-    PIP is the python package manager. PIP and python should be installed on your computer for Appollo to work.
+    PIP is the python package manager. PIP and python should be installed on your computer for Odevio to work.
     `Install python <https://www.python.org/downloads/>`_.
 
 .. warning::
 
-    python 3.6 or higher is required for Appollo to work properly.
+    python 3.6 or higher is required for Odevio to work properly.
 
 .. toctree::
    :maxdepth: 2

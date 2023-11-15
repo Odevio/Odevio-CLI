@@ -9,12 +9,14 @@ For this last part of the tutorial, you will learn how to publish your Flutter i
 .. note:: 
   If you are using the free trial, you have access to unlimited successful publication builds **for 10 days** to release your app on the App Store.
 
-  To **enjoy unlimited publication builds**, you must **upgrade to a paid subscription**. You can discover our paid plans |appollo_sub|.
+  To **enjoy unlimited publication builds**, you must **upgrade to a paid subscription**. You can discover our paid plans |odevio_sub|.
 
 Create your app in the App Store
 --------------------------------
 
 The first thing you will want to do is to create an iOS app on |app_store_connect|.
+
+$$Update screenshot Appollo
 
 .. image:: /img/apple-add-app.jpg
   :alt: Apple add app
@@ -32,6 +34,8 @@ Finally, for **SKU** you can choose anything you want as long as it is unique.
 
 You now have access to a dashboard for your app. If you scroll down, you will see the **Build** section.
 
+$$Update screenshot Appollo
+
 .. image:: /img/apple-build.jpg
   :alt: Apple app build
   :align: center
@@ -45,12 +49,12 @@ Now that this done, go over the client and go in the **Builds* tab.
 
 And this time, for the build type: **publication**
 
-Wait for Appollo to create and start the build.
+Wait for Odevio to create and start the build.
 
 $$Add desktop publication build screenshot
 
 .. image:: /img/appollo-build-publication.jpg
-  :alt: Appollo build start publication
+  :alt: Odevio build start publication
   :align: center
 
 |
@@ -89,6 +93,6 @@ the issues and publish it again.
 
    <a href="https://appstoreconnect.apple.com/apps" target="_blank">app store connect</a>
 
-.. |appollo_sub| raw:: html
+.. |odevio_sub| raw:: html
 
    <a href="https://appollo.space/plans/" target="_blank">here</a>

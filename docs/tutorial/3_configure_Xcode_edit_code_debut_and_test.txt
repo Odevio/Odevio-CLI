@@ -1,5 +1,5 @@
 ===============================================================================
-3. Configure Xcode, edit your code, debug and test your app with Appollo Remote
+3. Configure Xcode, edit your code, debug and test your app with Odevio Remote
 ===============================================================================
 
 Configure Xcode
@@ -8,7 +8,7 @@ Configure Xcode
 Now that you are connected, **you can freely configure Xcode!**
 
 .. image:: /img/rustdesk-desktop.jpg
-  :alt: Appollo RustDesk desktop
+  :alt: Odevio RustDesk desktop
   :align: center
 
 |
@@ -16,10 +16,10 @@ Now that you are connected, **you can freely configure Xcode!**
 Edit your code directly on the virtual machine
 ----------------------------------------------
 
-Appollo remote also gives you the possibility to direclty **edit your code** with **Android Studio**.
+Odevio remote also gives you the possibility to direclty **edit your code** with **Android Studio**.
 
 .. image:: /img/rustdesk-android-studio.jpg
-  :alt: Appollo RustDesk Android studio
+  :alt: Odevio RustDesk Android studio
   :align: center
 
 |
@@ -28,24 +28,27 @@ Appollo remote also gives you the possibility to direclty **edit your code** wit
   We are aware of an issue regarding keyboard mapping using the VM and are looking into it. For the time being, you can use the virtual keyboard or you can add your keyboard layout like shown on the following screenshot.
 
   .. image:: /img/rustdesk-keyboard.jpg
-    :alt: Appollo RustDesk Keyboard
+    :alt: Odevio RustDesk Keyboard
     :align: center
 
 Debug and test your Flutter app with the iOS simulator
 ------------------------------------------------------
 
-Debugging and testing your iOS app is fairly easy with Appollo.
+Debugging and testing your iOS app is fairly easy with Odevio.
 
-**Once you are on the Appollo-Remote**, an instance of the Simulator is ready for you.
+**Once you are on the Odevio-Remote**, an instance of the Simulator is ready for you.
 
-You can **open the terminal** on the Appollo-Remote.
+You can **open the terminal** on the Odevio-Remote.
 
 Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
 
 Wait a few instants and the app should start on the simulator, you can now debug and test it.
 
-.. image:: /img/appollo-flutter-run.jpg
-  :alt: Appollo flutter run
+..
+  $$Update screenshot Appollo
+
+.. image:: /img/odevio-flutter-run.jpg
+  :alt: Odevio flutter run
   :align: center
 
 |

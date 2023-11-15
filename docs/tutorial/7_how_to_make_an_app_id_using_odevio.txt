@@ -3,7 +3,7 @@
 .. _chapter_7:
 
 ========================================
-7. How to create an App ID using Appollo
+7. How to create an App ID using Odevio
 ========================================
 
 What is an App ID (aka identifier) ?
@@ -18,43 +18,47 @@ the App Store. The App ID is required to publish an app on the App Store.
 .. note::
     The bundle id should look like this : **com.company.appname**
 
-In Appollo, you can directly **manage your App IDs**. Thanks to the ``appollo app`` subcommands.
+In Odevio, you can directly **manage your App IDs**. It is the purpose of the **Applications** tab.
 
-.. image:: /img/appollo-app.jpg
-  :alt: Appollo app
+..
+  $$Update screenshot Appollo
+
+.. image:: /img/desktop-app.jpg
+  :alt: Desktop app
   :align: center
 
 |
 
 .. note::
-  If you are using the free version or the hobbyist plan, you can only link **one** application to your user account.
+  If you are using the free trial or the hobbyist plan, you can only link **one** application to your user account.
 
-  To **link multiple applications** to your user account, you have to **subscribe to Appollo**, check out our available plans |appollo_sub|.
+  To **link multiple applications** to your user account, you have to **subscribe to Odevio**, check out our available plans |odevio_sub|.
 
 .. _create_app_id:
 
 Make a new App ID
 -----------------
 
-You can **create a new one** using:
+You can **create a new one** by clicking on the **+ New application** button in the top right corner.
 
-.. code-block:: none
-
-  appollo app mk --name APP_NAME --bundle-id COM.YOURCOMPANY.YOURAPP
+**If it is your first application**, you will directly land on the **create a new app** page.
 
 The **name** is simply the one you want to give to the identifier. Choose an app name to make your life easier.
 
 The **bundle ID** (e.g.: com.yourcompany.yourapp)
 
-.. image:: /img/appollo-app-mk.jpg
-  :alt: Appollo app mk
+..
+  $$Update screenshot Appollo
+
+.. image:: /img/desktop-create-app.jpg
+  :alt: Desktop create app
   :align: center
 
 |
 
 .. note::
-  If you have more than one developper account configured in Appollo you will be asked which one you want to use
-  when running the command.
+  If you have more than one developper account configured in Odevio you can select the one you want to use
+  when creating a new app.
 
 Let's check if your App ID was created properly on Apple Developer.
 
@@ -63,35 +67,41 @@ For that, go over to your |apple_developer_account|, then to the **"Certificates
 There, you will find the **"Identifiers menu"** that contains the list with the possibility to create new ones.
 
 ..
-    TODO:change the image with one of the apple indentifiers.
+  $$Update screenshot Appollo
 
 .. image:: /img/apple-identifiers.jpg
-  :alt: Apple Identifiers
+  :alt: Apple identifiers
   :align: center
 
 |
 
-Modify your Bundle ID on the Appollo-Remote
+Modify your Bundle ID on the Odevio-Remote
 -------------------------------------------
 
-To modify your Bundle ID on Appollo remote, **you have to connect to a configuration build** just like we did in the :ref:`step 1 <start_configuration_build>` of our tutorial.
+To modify your Bundle ID on Odevio remote, **you have to connect to a configuration build** just like we did in the :ref:`step 1 <start_configuration_build>` of our tutorial.
 
-So, use the ``appollo build start`` command.
+So, go to the **Builds** tab.
 
 Select the configuration type.
 
 .. note::
   Remember that your virtual machine will be up for an hour, so make sure you finish everything you need in that time.
 
+..
+  $$Update screenshot Appollo  
+
 .. image:: /img/rustdesk-xcode.jpg
-  :alt: Appollo remote xcode
+  :alt: Odevio remote xcode
   :align: center
 
 |
 
-We will **configure the Bundle Identifier in XCode for our app** to be the same as the one we created with Appollo otherwise
+We will **configure the Bundle Identifier in XCode for our app** to be the same as the one we created with Odevio otherwise
 Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
 **Signing & Capacities** tab under Bundle Identifier you can find the field to change it.
+
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/rustdesk-bundle.jpg
    :alt: XCode bundle identifier
@@ -103,6 +113,6 @@ Apple will not accept our submission later on in the tutorial. In the left menu 
 
   <a href="https://developer.apple.com/account" target="_blank">Apple Developer account</a>
 
-.. |appollo_sub| raw:: html
+.. |odevio_sub| raw:: html
 
    <a href="https://appollo.space/plans/" target="_blank">here</a>
