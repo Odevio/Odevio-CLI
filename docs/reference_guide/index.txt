@@ -9,14 +9,21 @@ This guide references all the Odevio fields with their description and how they 
 Builds
 ------
 
-Settings
-^^^^^^^^
+**Settings**
 
-**Select a folder:** You should select the root folder of your app.
+Select a folder:
+""""""""""""""""
 
-**Application:** You should select the Apple application identifier you wish to build upon.
+You should select the root folder of your app.
 
-**Build type:** Select the type of build you wish to launch for your application.
+Application: 
+""""""""""""
+
+You should select the Apple application identifier you wish to build upon.
+
+Build type:
+"""""""""""
+Select the type of build you wish to launch for your application.
 
     * **Configuration:** launch an Odevio-Remote to allow you to configure your project on XCode
 
@@ -30,47 +37,97 @@ Settings
 
     * **Publication:** Build an .ipa file and publish it on the App Store. Once this build succeeds you have to go on the App Store to complete information and screenshots related to your new application version.
 
-Advanced Settings
-^^^^^^^^^^^^^^^^^
+**Advanced Settings**
 
-**Flutter:** Flutter version for your build (example "3.13.0).
+Flutter:
+""""""""
 
-**Minimal iOS version:** Minimal iOS version for your application (example "15.0").
+Flutter version for your build (example "3.13.0").
 
-**App version:** Build number to set for this build (the number after ‘+’ in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used.
+Minimal iOS version:
+""""""""""""""""""""
 
-**Mode:** Mode to build the app in. Defaults to release.
+Minimal iOS version for your application (example "15.0").
+
+App version:
+""""""""""""
+
+Build number to set for this build (the number after ‘+’ in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used.
+
+Mode:
+"""""
+
+Mode to build the app in. Defaults to release.
 
     * **Options:** release | profile | debug
 
-**Target:** The main entre-point file of the application. Defaults to lib/main.dart.
+Target:
+"""""""
 
-**Flavor:** Custom app Flavor
+The main entre-point file of the application. Defaults to lib/main.dart.
 
-**Tunnel port:** Start a reverse SSH tunnel when the build is started, forwarding to this sport. **Note:** This only applies to configuration builds.
+Flavor:
+"""""""
 
-**Tunnel host:** If –tunnel-port is specified, this is the host to forward to (defaults to localhost).
+Custom app Flavor
 
-**Tunnel remote port:** If –tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900).
+Tunnel port:
+""""""""""""
+
+Start a reverse SSH tunnel when the build is started, forwarding to this sport. **Note:** This only applies to configuration builds.
+
+Tunnel host:
+""""""""""""
+
+If –tunnel-port is specified, this is the host to forward to (defaults to localhost).
+
+Tunnel remote port:
+"""""""""""""""""""
+
+If –tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900).
 
 Applications
 ------------
 
-**Name:** Your app identifier name (e.g.: your app’s name).
+Name:
+"""""
 
-**Bundle ID:** The bundle ID for your app on Apple (e.g.: com.company.appname).
+Your app identifier name (e.g.: your app’s name).
 
-**Developer Account:** Your Apple Developer Account.
+Bundle ID:
+""""""""""
+
+The bundle ID for your app on Apple (e.g.: com.company.appname).
+
+Developer Account:
+"""""""""""""""""""""""
+
+Your Apple Developer Account.
 
 Apple
 -----
 
-**Team ID:** Required ID of your developer account on Apple.
+Team ID:
+""""""""
 
-**Name:** A user friendly name.
+Required ID of your developer account on Apple.
 
-**Key ID:** Required API key “Key ID” on App Store Connect.
+Name:
+"""""
 
-**Issuer ID:** Required Issuer ID on App Store Connect.
+A user friendly name.
 
-**Private key path:**: Required Path to the private key downloaded from App Store Connect.
+Key ID:
+"""""""
+
+Required API key “Key ID” on App Store Connect.
+
+Issuer ID:
+""""""""""
+
+Required Issuer ID on App Store Connect.
+
+Private key path:
+"""""""""""""""""
+
+Required Path to the private key downloaded from App Store Connect.

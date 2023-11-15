@@ -41,7 +41,7 @@ Or just scan the QR code with an iPhone.
 You can also send the URL to a **registered device** of your Apple developer account to download the app, for example by e-mail.
 When clicking this link directly from your Apple device a prompt will be shown to install the application on your device.
 
-.. image:: /img/odevio-myapp.jpg
+.. image:: /img/myapp.jpg
   :alt: Myapp on iphone
   :align: center
 
