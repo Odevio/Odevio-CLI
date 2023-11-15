@@ -25,7 +25,8 @@ Building the IPA
 ----------------
 You can use the **Builds** tab but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
 
-$$Add desktop IPA Screenshot
+..
+  $$Add desktop IPA Screenshot
 
 .. image:: /img/odevio-build-adhoc.jpg
   :alt: Odevio build start build type ad-hoc

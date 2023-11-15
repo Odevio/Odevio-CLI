@@ -16,7 +16,8 @@ Create your app in the App Store
 
 The first thing you will want to do is to create an iOS app on |app_store_connect|.
 
-$$Update screenshot Appollo
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/apple-add-app.jpg
   :alt: Apple add app
@@ -34,7 +35,8 @@ Finally, for **SKU** you can choose anything you want as long as it is unique.
 
 You now have access to a dashboard for your app. If you scroll down, you will see the **Build** section.
 
-$$Update screenshot Appollo
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/apple-build.jpg
   :alt: Apple app build
@@ -51,9 +53,10 @@ And this time, for the build type: **publication**
 
 Wait for Odevio to create and start the build.
 
-$$Add desktop publication build screenshot
+..
+  $$Add desktop publication build screenshot Appollo
 
-.. image:: /img/appollo-build-publication.jpg
+.. image:: /img/odevio-build-publication.jpg
   :alt: Odevio build start publication
   :align: center
 

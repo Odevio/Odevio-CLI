@@ -28,7 +28,8 @@ For this tutorial, you are not required to select an application (Xcode will not
 
 **Select the configuration type**
 
-$$Add screenshot build select
+..
+  $$Add screenshot build select
 
 .. image:: /img/desktop-configuration-build.jpg
   :alt: Desktop select configuration
@@ -38,7 +39,8 @@ $$Add screenshot build select
 
 Odevio will prepare your build in a few moments!
 
-$$Add build start loading screenshot
+..
+  $$Add build start loading screenshot
 
 .. image:: /img/desktop-build-start.jpg
   :alt: Desktop build start loading
@@ -48,7 +50,8 @@ $$Add build start loading screenshot
 
 Once it is done, you will receive all the credentials of your Mac virtual machine.
 
-$$Update screenshot Appollo
+..
+  $$Update screenshot Appollo
 
 .. image:: /img/desktop-connect.jpg
   :alt: Desktop vm credentials
@@ -65,4 +68,5 @@ Let's hop on to the next chapter of our tutorial to learn how to connect and set
 .. tip::
     If the build fails you can easily access the logs of your build in real time.
 
-$$Add real time logs screenshot
+..
+  $$Add real time logs screenshot

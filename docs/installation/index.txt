@@ -4,9 +4,13 @@
 Installation
 ============
 
-Odevio is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Odevio's $$Add link with anchor client.
+..
+  $$Add client's link
 
-$$Add client download screenshot
+Odevio is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Odevio's client.
+
+..
+  $$Add client download screenshot
 
 .. image:: 
   :alt: Odevio download

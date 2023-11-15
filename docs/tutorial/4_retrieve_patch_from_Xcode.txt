@@ -6,9 +6,10 @@ For this next part, make sure your configuration build is stopped by pressing th
 
 You will have two possibilities to retrieve the changes you made in Odevio Remote locally.
 
-$$Might change!!
+..
+  $$Might change!!
 
-    1. **If you use Git** for your project the easiest is to use the $$Add button name button which will `Retrieve changes with a patch file`_.
+    1. **If you use Git** for your project the easiest is to use the **Download Patch** button which will `Retrieve changes with a patch file`_.
     2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the $$Add button name button.
 
 
