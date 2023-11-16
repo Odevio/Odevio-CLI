@@ -1,5 +1,11 @@
 .. _start_configuration_build:
 
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+    
 ================================================
 1. Create your first Appollo configuration build
 ================================================

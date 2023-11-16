@@ -1,5 +1,11 @@
 .. _contribute:
 
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+
 ==========
 Contribute
 ==========
@@ -12,6 +18,12 @@ The goal is to keep Appollo evolving to make Flutter developer's lives easier.
 
 How can you make Appollo project evolve?
 ========================================
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 If you notice any bugs or issue, you can report it directly on |github_new_issue|.
 
@@ -29,6 +41,12 @@ We are also thrilled to receive a variety of other contributions, including:
 
 Get in touch!
 =============
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 If you have a general question or require some functional support, you can post it on |stackoverflow|.
 

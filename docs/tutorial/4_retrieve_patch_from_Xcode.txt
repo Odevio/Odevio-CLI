@@ -1,3 +1,9 @@
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+
 ===========================================================
 4. How to retrieve your updates from Appollo-Remote locally
 ===========================================================
@@ -10,6 +16,12 @@ Once you are satisfied with the configuration, you have two possibilities to ret
 
 Retrieve changes with a patch file
 ----------------------------------
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 **If you are using git** and decided to retrieve a git patch containing all the changes you made to Xcode.
 
@@ -43,6 +55,13 @@ To apply the changes, use the git command ``git apply appollo.patch``.
 
 Retrieve changes by downloading the project files
 -------------------------------------------------
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+    
 First, make sure your build is stopped.
 
 You can check the list of your ongoing builds with ``appollo build ls`` and the ``--all`` option to see all your other older builds.

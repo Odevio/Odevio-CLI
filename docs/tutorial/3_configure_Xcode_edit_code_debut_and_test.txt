@@ -1,9 +1,21 @@
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+
 ===============================================================================
 3. Configure Xcode, edit your code, debug and test your app with Appollo Remote
 ===============================================================================
 
 Configure Xcode
 ---------------
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 Now that you are connected, **you can freely configure Xcode!**
 
@@ -15,6 +27,12 @@ Now that you are connected, **you can freely configure Xcode!**
 
 Edit your code directly on the virtual machine
 ----------------------------------------------
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 Appollo remote also gives you the possibility to direclty **edit your code** with **Android Studio**.
 
@@ -33,6 +51,12 @@ Appollo remote also gives you the possibility to direclty **edit your code** wit
 
 Debug and test your Flutter app with the iOS simulator
 ------------------------------------------------------
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 Debugging and testing your iOS app is fairly easy with Appollo.
 

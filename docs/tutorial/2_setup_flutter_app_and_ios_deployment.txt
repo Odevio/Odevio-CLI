@@ -1,3 +1,9 @@
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+
 =============================================
 2. How to connect to your configuration build
 =============================================
@@ -6,6 +12,12 @@ In this chapter, you will learn how to **connect to your configuration build**
 
 Use RustDesk to connect to your configuration build
 ---------------------------------------------------
+
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 Now that your configuration build is ready and that you received your credentials, you can connect to your Mac virtual machine.
 

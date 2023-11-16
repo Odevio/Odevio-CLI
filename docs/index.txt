@@ -1,6 +1,13 @@
+.. danger::
+
+    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
+    
+    **Find the new doc at** https://odevio.readthedocs.io/en/master/
+
 =====================
 Appollo Documentation
 =====================
+
 ---------------------------------------------------------------------------------------
 The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
 ---------------------------------------------------------------------------------------
