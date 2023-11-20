@@ -6,7 +6,7 @@ from datetime import datetime
 import click
 import sseclient
 
-from appollo.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode, get_version_and_build
+from odevio.helpers import login_required_warning_decorator, ssh_tunnel, print_qrcode, get_version_and_build
 
 
 @click.group('build')
@@ -16,12 +16,12 @@ def build():
     \f
     When starting a new project commands are mostly executed in this order :
 
-        1. :code:`appollo build start --build-type="configuration [DIRECTORY]"` to create an Appollo-Remote with the right environment for your application.
-        2. :code:`appollo build connect` to get your connection settings and access the Appolo Remote on which you can test and setup your application with XCode.
-        3. :code:`appollo build stop` to stop your Appolo Remote when you're done editing your settings.
-        4. :code:`appollo build patch` to retrieve the changes made on the Appollo-Remote.
-        5. :code:`git apply appollo.patch` to apply the changes locally.
-        6. :code:`appollo build start [OPTIONS] [DIRECTORY]` to build your app with Flutter and generate an IPA or to publish your app on the App Store.
+        1. :code:`odevio build start --build-type="configuration [DIRECTORY]"` to create an Odevio-Remote with the right environment for your application.
+        2. :code:`odevio build connect` to get your connection settings and access the Appolo Remote on which you can test and setup your application with XCode.
+        3. :code:`odevio build stop` to stop your Appolo Remote when you're done editing your settings.
+        4. :code:`odevio build patch` to retrieve the changes made on the Odevio-Remote.
+        5. :code:`git apply odevio.patch` to apply the changes locally.
+        6. :code:`odevio build start [OPTIONS] [DIRECTORY]` to build your app with Flutter and generate an IPA or to publish your app on the App Store.
 
     Usage:
     """
@@ -33,9 +33,9 @@ def build():
 @click.option('-a', '--all', 'show_all', default=False, is_flag=True,
               help="shows your builds and the builds from your teams")
 def ls(show_all):
-    """ Lists builds on Appollo. """
-    from appollo import api
-    from appollo.settings import console
+    """ Lists builds on Odevio. """
+    from odevio import api
+    from odevio.settings import console
     from rich.syntax import Syntax
     from rich.table import Table
 
@@ -65,11 +65,11 @@ def ls(show_all):
         console.print(table)
     else:
         if show_all:
-            code = Syntax(code="$ appollo build start SOURCE_DIRECTORY --app-key APPLICATION_KEY", lexer="shell")
+            code = Syntax(code="$ odevio build start SOURCE_DIRECTORY --app-key APPLICATION_KEY", lexer="shell")
             console.print(f"You did not launch any builds. Create one with")
             console.print(code)
         else:
-            code = Syntax(code="$ appollo build ls --all", lexer="shell")
+            code = Syntax(code="$ odevio build ls --all", lexer="shell")
             console.print(f"You do not have any active builds. See all your builds with")
             console.print(code)
 
@@ -78,17 +78,17 @@ def ls(show_all):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def rm(key):
-    """ Deletes a build and its corresponding Appollo-Remote.
+    """ Deletes a build and its corresponding Odevio-Remote.
 
     \f
 
-    .. note:: Appollo-Remotes are MacOS build machines on which the flutter build of your application is executed.
+    .. note:: Odevio-Remotes are MacOS build machines on which the flutter build of your application is executed.
     """
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.text import Text
 
     if key is None:
@@ -120,9 +120,9 @@ def detail(key):
     """
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.panel import Panel
     from rich.syntax import Syntax
     from rich.text import Text
@@ -144,7 +144,7 @@ def detail(key):
             console.print(Panel(Text.from_markup(
                 textwrap.dedent(
                     f"""
-                    Appollo Key : [bold]{build_instance["key"]}[/bold]
+                    Odevio Key : [bold]{build_instance["key"]}[/bold]
                     Name : [bold]{build_instance["name"]}[/bold]
                     Application : [bold]{build_instance["application"]}[/bold]
                     Status : [bold]{build_instance["status"] + (" - " + build_instance["substatus"] if build_instance["substatus"] else "")}[/bold]
@@ -181,7 +181,7 @@ def detail(key):
                 ), title="Error details"))
                 # TODO Add errors codes in doc
 
-            code = Syntax(f"appollo build logs {key}", lexer="shell")
+            code = Syntax(f"odevio build logs {key}", lexer="shell")
             console.print("To see logs of this build, run")
             console.print(code)
         else:
@@ -193,17 +193,17 @@ def detail(key):
 def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None, tunnel_remote_port=None, no_progress=False):
     from rich.syntax import Syntax
     from rich.text import Text
-    from appollo.settings import console
-    from appollo import api
-    from appollo.helpers import handle_error
+    from odevio.settings import console
+    from odevio import api
+    from odevio.helpers import handle_error
 
     build_type = build_instance['build_type']
 
     console.print(f"{build_instance['name']} has been registered. It has key \"{build_instance['key']}\" "
                   f"and will be started as soon as possible.")
     if build_type == "configuration":
-        code = Syntax(code=f"appollo build connect {build_instance['key']}", lexer="shell")
-        console.print("To access your Appollo-Remote, you can use the following command when it has been started.")
+        code = Syntax(code=f"odevio build connect {build_instance['key']}", lexer="shell")
+        console.print("To access your Odevio-Remote, you can use the following command when it has been started.")
         console.print(code)
     console.print("Killing the command will not stop the build.")
 
@@ -278,7 +278,7 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 
     if status in ["config", "succeeded"]:
         console.print(Text.from_markup(f"\n\nYour build has succeeded, congrats ! Leave us a star on GitHub, we'd greatly appreciate it:"))
-        console.print(f"[link]https://github.com/Appollo-CLI/Appollo[/link]\n\n")
+        console.print(f"[link]https://github.com/Odevio/Odevio-CLI[/link]\n\n")
 
         if build_type == "publication":
             console.print("It will appear on your App Store Connect account shortly")
@@ -302,7 +302,7 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
                 required=False)
 @click.option('--build-type', help="Build type",
               type=click.Choice(["configuration", "development", "ad-hoc", "distribution", "validation", "publication"]))
-@click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use appollo build flutter-versions to see all available versions",)
+@click.option('--flutter', help="Flutter version for your build (example \"2.8.1\"). Use odevio build flutter-versions to see all available versions",)
 @click.option('--minimal-ios-version', help="Minimal iOS version for you application (example \"9.0\")")
 @click.option('--app-version', help="App version to set for this build (for example \"1.3.1\"). If not set, the version in pubspec.yaml will be used")
 @click.option('--build-number', type=int, help="Build number to set for this build (the number after '+' in the version in pubspec.yaml). If not set, the build number in pubspec.yaml will be used")
@@ -322,27 +322,27 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     DIRECTORY : Home directory of the flutter project. If not provided, gets the current directory.
 
     \f
-    The Appollo tool is composed of:
+    The Odevio tool is composed of:
 
-        - *Appollo-Remote* : The pre-configured build machines which handle the setup, build and release of your app
-        - *Appollo-cli* : The CLI command line that works as an interface to start Appollo-Remote build machines
+        - *Odevio-Remote* : The pre-configured build machines which handle the setup, build and release of your app
+        - *Odevio-cli* : The CLI command line that works as an interface to start Odevio-Remote build machines
 
-    :code:`appollo build start [DIRECTORY] --build-type <build-type>` creates an Appollo-Remote and builds the app
+    :code:`odevio build start [DIRECTORY] --build-type <build-type>` creates an Odevio-Remote and builds the app
     either for development, ad-hoc, distribution, validation or publication
 
-        * **Configuration**: launch an Appollo-Remote to allow you to configure your project on XCode
+        * **Configuration**: launch an Odevio-Remote to allow you to configure your project on XCode
         * **Development** : builds the app for testing on an iOS simulator.
         * **Ad-hoc** : Build an .ipa file for testing on the devices listed in your developer account. For the list of
-          devices check :code:`appollo apple detail <apple-dev-account-key>`.
+          devices check :code:`odevio apple detail <apple-dev-account-key>`.
         * **Distribution** : Build an .ipa file that can be distributed on any device.
         * **Validation** : Build an .ipa file and validates that it can be released on the App Store.
         * **Publication** : Build an .ipa file and publish it on the App Store. Once this build succeeds you have
           to go on the App Store to complete information and screenshots related to your new application version.
 
-    Killing this command will not stop the build. You can check the progress of all your Appollo-Remotes by running
-    :code:`appollo build ls` or get detailed information by running :code:`appollo build detail` and selecting your build.
+    Killing this command will not stop the build. You can check the progress of all your Odevio-Remotes by running
+    :code:`odevio build ls` or get detailed information by running :code:`odevio build detail` and selecting your build.
 
-    To avoid having to specify all the parameters each time, you can create a .appollo file in the directory where the
+    To avoid having to specify all the parameters each time, you can create a .odevio file in the directory where the
     command is run. Each parameter is specified on a line in the form PARAM=VALUE. For example:
 
     .. code-block::
@@ -363,18 +363,18 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         * .gradle/
         * source.zip
         * .app.zip
-        * appollo.patch
+        * odevio.patch
 
-    You can also specify additional files and directories in a .appolloignore file, with each files and directories
+    You can also specify additional files and directories in a .odevioignore file, with each files and directories
     you want to ignore on separate lines, with directories ending with '/'
 
     """
     import os
     import textwrap
     import questionary
-    from appollo import api
-    from appollo.helpers import terminal_menu, zip_directory
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu, zip_directory
+    from odevio.settings import console
     from rich.text import Text
     from questionary import Choice
 
@@ -391,13 +391,13 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     if post_build_command:
         post_build_commands = list(post_build_command)
 
-    # Get options from .appollo file
-    if os.path.isfile(".appollo"):
-        with open(".appollo") as config:
+    # Get options from .odevio file
+    if os.path.isfile(".odevio"):
+        with open(".odevio") as config:
             for i, line in enumerate(config.readlines()):
                 split = line.split("=")
                 if len(split) != 2:
-                    print("Error in .appollo file line "+str(i+1)+": should be KEY=VALUE")
+                    print("Error in .odevio file line "+str(i+1)+": should be KEY=VALUE")
                     continue
                 key = split[0].strip()
                 if key[0] == "#":  # Ignore commented lines
@@ -449,7 +449,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                     if no_flutter_warning is None:
                         no_flutter_warning = value in ["1", "true", "True"]
                 else:
-                    console.print(f"Warning: unknown option '{key}' in .appollo")
+                    console.print(f"Warning: unknown option '{key}' in .odevio")
 
     # Select build type if it was not specified
     if build_type is None:
@@ -469,7 +469,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
         app_key = terminal_menu("/applications/", "Application",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
-                                            You have no app identifiers in your account. Check out [code]$ appollo app mk [/code] to create an app identifier.
+                                            You have no app identifiers in your account. Check out [code]$ odevio app mk [/code] to create an app identifier.
                                         """
                                     )), name=lambda a: a['name']+(f" ({a['key']})" if a['key'] != "" else ""), extra_options=extra_options)
         if app_key is None:
@@ -486,12 +486,12 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                     next_build_date = datetime.strptime(permission["next_build_date"], "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
                 except ValueError:
                     next_build_date = datetime.strptime(permission["next_build_date"], "%Y-%m-%dT%H:%M:%S%z").astimezone()
-                console.print(f"Error: as a free Appollo user, you can only make one publication every {permission['days_delay']} days. You will be able to make a new build on {next_build_date.strftime('%Y-%m-%d at %H:%M')}")
-                console.print("To upgrade your account and make as many publication as you want, please go to https://appollo.space/plans")
+                console.print(f"Error: as a free Odevio user, you can only make one publication every {permission['days_delay']} days. You will be able to make a new build on {next_build_date.strftime('%Y-%m-%d at %H:%M')}")
+                console.print("To upgrade your account and make as many publication as you want, please go to https://odevio.com/plans")
                 return
             else:
-                console.print(f"Warning: as a free Appollo user, you can only make one publication every {permission['days_delay']} days. If this build succeeds, you won't be able to make another publication for {permission['days_delay']} days unless you upgrade.")
-                console.print("To upgrade your account and make as many publication as you want, please go to https://appollo.space/plans")
+                console.print(f"Warning: as a free Odevio user, you can only make one publication every {permission['days_delay']} days. If this build succeeds, you won't be able to make another publication for {permission['days_delay']} days unless you upgrade.")
+                console.print("To upgrade your account and make as many publication as you want, please go to https://odevio.com/plans")
                 res = console.input("Do you confirm you want to proceed with the build? (Y/n) ")
                 if res not in ["", "y", "Y"]:
                     return
@@ -525,7 +525,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                     local_version = match.group(1)
                     build_version = api.get("/flutter-versions/latest")['version']
                     if local_version.split("-")[0].split(".")[:2] != build_version.split("-")[0].split(".")[:2]:  # Only check major and minor
-                        console.print(f"Warning: your local flutter version is {local_version} but the build will be run with the latest flutter version ({build_version}). This could lead to unexpected errors if you have not tested your code with version {build_version}. To avoid this, specify the flutter version you want to use with the --flutter parameter or in a .appollo file.")
+                        console.print(f"Warning: your local flutter version is {local_version} but the build will be run with the latest flutter version ({build_version}). This could lead to unexpected errors if you have not tested your code with version {build_version}. To avoid this, specify the flutter version you want to use with the --flutter parameter or in a .odevio file.")
                         menu_entry_index = questionary.select(
                             "What do you want to do?",
                             choices=[
@@ -547,8 +547,8 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     console.print(f"Zipping {directory}")
     excluded_dirs = []
     excluded_files = []
-    if os.path.isfile(".appolloignore"):
-        with open(".appolloignore") as ignore:
+    if os.path.isfile(".odevioignore"):
+        with open(".odevioignore") as ignore:
             for line in ignore.readlines():
                 line = line.strip()
                 if line == "":
@@ -563,7 +563,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     file_size_mb = round(os.path.getsize(zip_file)/1000000, 2)
 
     if file_size_mb > 500:
-        console.print("Zipped directory size exceeds 500MB, very large applications are not supported by Appollo. Make sure that all files and directories not needed to build are listed in .appolloignore")
+        console.print("Zipped directory size exceeds 500MB, very large applications are not supported by Odevio. Make sure that all files and directories not needed to build are listed in .odevioignore")
         os.remove(".app.zip")
         return
 
@@ -606,9 +606,9 @@ def ipa(key):
     """
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.text import Text
 
     if key is None:
@@ -646,9 +646,9 @@ def download(key, output="source.zip"):
     """
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.text import Text
 
     if key is None:
@@ -679,34 +679,34 @@ def download(key, output="source.zip"):
 @click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel, forwarding to this port. Note: this only applies to configuration builds")
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
-@click.option("-y", "--yes", is_flag=True, help="Automatically create an Appollo Remote if your build was not setup for remote desktop", )
+@click.option("-y", "--yes", is_flag=True, help="Automatically create an Odevio Remote if your build was not setup for remote desktop", )
 @click.pass_context
 def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
-    """ Get the connection information for an Appollo-Remote linked to a build.
+    """ Get the connection information for an Odevio-Remote linked to a build.
 
     \b
-    This command is mainly used when it is needed to connect to the Appollo-Remote with a Remote Desktop client :
+    This command is mainly used when it is needed to connect to the Odevio-Remote with a Remote Desktop client :
         - Xcode configuration
         - Debugging and detailed log analysis
         - Correcting code and restarting a build after failure
         - Testing the application on the iPhone or iPad simulator.
 
     \f
-    This command will start an Appollo-Remote and return connection settings and credentials for you to connect with a
-    remote desktop client to the Appollo-Remote.
+    This command will start an Odevio-Remote and return connection settings and credentials for you to connect with a
+    remote desktop client to the Odevio-Remote.
 
-    .. note:: Appollo-Remotes are active for 30 minutes before being closed automatically.
-    .. note:: Appollo-Remotes are MacOS build machines on which the flutter build of your application is executed.
-    .. note:: The connection uses the VNC protocol, your Remote Desktop client must support it to allow you to use an Appollo-Remote.
+    .. note:: Odevio-Remotes are active for 30 minutes before being closed automatically.
+    .. note:: Odevio-Remotes are MacOS build machines on which the flutter build of your application is executed.
+    .. note:: The connection uses the VNC protocol, your Remote Desktop client must support it to allow you to use an Odevio-Remote.
     """
     import textwrap
     from datetime import datetime
     from rich.panel import Panel
     from rich.text import Text
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.syntax import Syntax
 
     if key is None:
@@ -736,7 +736,7 @@ def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
                         _show_build_progress(ctx, rebuild_instance, tunnel_port, tunnel_host, tunnel_remote_port)
 
             elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
-                console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
+                console.print("Your Odevio-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
             else:
                 rustdesk_id = build_instance["rustdesk_id"]
                 if len(rustdesk_id) == 9:
@@ -744,13 +744,13 @@ def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
                 auth_info = Panel(Text.from_markup(
                     textwrap.dedent(
                         f"""
-                            RustDesk relay server: appollo.space
+                            RustDesk relay server: odevio.com
                             RustDesk ID: [bold]{rustdesk_id}[/bold]
                             RustDesk password: [bold]{build_instance["rustdesk_password"]}[/bold]
                             
                             VNC: [bold]vnc://{build_instance["host_ip"]}:{build_instance["remote_desktop_port"]}[/bold]
                             
-                            user: [bold]appollo[/bold]
+                            user: [bold]odevio[/bold]
                             password: [bold]{build_instance["password"]}[/bold]
                         """
                     )
@@ -762,7 +762,7 @@ def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
                 except ValueError:
                     stop_time = datetime.strptime(build_instance["stop_time"], "%Y-%m-%dT%H:%M:%S%z").astimezone()
                 console.print("Your machine will automatically stop at "+stop_time.strftime("%H:%M")+", but remember to stop it as soon as you are finished to free up resources by typing")
-                console.print(Syntax(code="appollo build stop "+key, lexer="shell"))
+                console.print(Syntax(code="odevio build stop "+key, lexer="shell"))
                 console.print("")
                 console.print("Most Remote Desktop applications link the Mac Command key to the Windows key on your keyboard.")
                 if tunnel_port:
@@ -775,21 +775,21 @@ def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.option(
-    "-o", "--output", default="appollo.patch", help="Output filename (default: appollo.patch)",
+    "-o", "--output", default="odevio.patch", help="Output filename (default: odevio.patch)",
     type=click.Path(exists=False, resolve_path=True, file_okay=True, dir_okay=False))
-def patch(key, output="appollo.patch"):
+def patch(key, output="odevio.patch"):
     """ Retrieve a patch that gathers all changes made to the source code of a build.
 
     \b
-    This command is used when a build is finished and succeeded or when you have stopped an Appollo Remote on which you configured an app with XCode.
+    This command is used when a build is finished and succeeded or when you have stopped an Odevio Remote on which you configured an app with XCode.
 
     .. note:: The patch was made on a blank Git repo.
     """
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.syntax import Syntax
     from rich.text import Text
 
@@ -813,12 +813,12 @@ def patch(key, output="appollo.patch"):
         else:
             return
 
-        code = Syntax("git apply appollo.patch", lexer="shell")
+        code = Syntax("git apply odevio.patch", lexer="shell")
         console.print("To apply a patch, run")
         console.print(code)
         console.print("If the directory you are in is not the top-level git directory (the one where .git is located) you need to add --directory=<this_directory> to the command")
         console.print("For example if this directory is named flutter_app and is contained in the top-level git directory you need to run")
-        console.print(Syntax("git apply --directory=flutter_app appollo.patch", lexer="shell"))
+        console.print(Syntax("git apply --directory=flutter_app odevio.patch", lexer="shell"))
     except api.NotFoundException:
         console.print("This build does not exist or you cannot access it.")
 
@@ -830,9 +830,9 @@ def stop(key):
     """ Stops a running build"""
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.text import Text
 
     if key is None:
@@ -850,7 +850,7 @@ def stop(key):
         if build_instance:
             console.print(Text.from_markup(f"[bold]{build_instance['name']}[/bold] has been stopped."))
             if build_instance['build_type'] == "Configuration":
-                console.print(Text.from_markup(f"Do not forget to run [code]appollo build patch {key}[/code] or [code]appollo build download {key}[/code] to get your changes from the build machine!"))
+                console.print(Text.from_markup(f"Do not forget to run [code]odevio build patch {key}[/code] or [code]odevio build download {key}[/code] to get your changes from the build machine!"))
         else:
             console.print(f"Build with KEY \"{key}\" was not found.")
     except api.NotFoundException:
@@ -868,9 +868,9 @@ def logs(key):
     """
     import textwrap
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
     from rich.text import Text
 
     if key is None:
@@ -910,9 +910,9 @@ def build_name(build_instance):
 @build.command()
 @login_required_warning_decorator
 def flutter_versions():
-    """ Lists the Flutter versions available on Appollo. """
-    from appollo import api
-    from appollo.settings import console
+    """ Lists the Flutter versions available on Odevio. """
+    from odevio import api
+    from odevio.settings import console
     from rich.columns import Columns
 
     versions = api.get("/flutter-versions/")
@@ -939,7 +939,7 @@ def tunnel(key, port, remote_port, host):
 
     For example if you have a web server running on port 8000, type the command
 
-    appollo build tunnel --port 8000
+    odevio build tunnel --port 8000
 
     and your web server will be accessible on the VM at localhost:8000, which will enable you to run your app in the simulator while connecting to your local web server.
     """
@@ -948,9 +948,9 @@ def tunnel(key, port, remote_port, host):
 
     from rich.text import Text
 
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
-    from appollo import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
+    from odevio import api
 
     if remote_port is None:
         if remote_port not in [22, 5900]:
@@ -975,8 +975,8 @@ def tunnel(key, port, remote_port, host):
             if build_instance["remote_desktop_status"] == "no_remote_desktop":
                 console.print("This build was not setup for remote desktop.")
             elif build_instance["remote_desktop_status"] == "remote_desktop_preparation":
-                console.print("Your Appollo-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
+                console.print("Your Odevio-Remote is currently prepared for being used as Remote Desktop. Please try again in a few moments.")
             else:
-                ssh_tunnel(build_instance['host_ip'], build_instance['ssh_port'], "appollo", build_instance['password'], remote_port, host, port)
+                ssh_tunnel(build_instance['host_ip'], build_instance['ssh_port'], "odevio", build_instance['password'], remote_port, host, port)
     except api.NotFoundException:
         console.print("This build does not exist or you cannot access it.")

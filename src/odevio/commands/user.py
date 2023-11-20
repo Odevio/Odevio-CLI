@@ -1,6 +1,6 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator
+from odevio.helpers import login_required_warning_decorator
 
 
 @click.command()
@@ -8,12 +8,12 @@ from appollo.helpers import login_required_warning_decorator
 @click.option('--username', prompt=True)
 @click.option('--password', prompt=True, hide_input=True, confirmation_prompt=True)
 def signup(email, password, username):
-    """ Creates an Appollo user account.
+    """ Creates an Odevio user account.
 
     E-mail, username and password are required
     """
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
 
     user = api.post('/register/', authorization=False, json_data={
         "email": email,
@@ -23,7 +23,7 @@ def signup(email, password, username):
 
     if user:
         api.get_authorization_header(email, password)
-        console.print(f"Welcome to Appollo [green underline]{user['username']}[/green underline]")
+        console.print(f"Welcome to Odevio [green underline]{user['username']}[/green underline]")
         # TODO add a reset password option on this command
 
 
@@ -31,14 +31,14 @@ def signup(email, password, username):
 @click.option('--email', prompt=True)
 @click.option('--password', prompt=True, hide_input=True)
 def signin(email, password):
-    """ Logs in to your Appollo account.
+    """ Logs in to your Odevio account.
 
     \f
     Login is based on e-mail and password. This command stores the connection token for future commands in
-    a config.ini file. To get the location of the config.ini file run :option:`appollo profile --ini` once connected.
+    a config.ini file. To get the location of the config.ini file run :option:`odevio profile --ini` once connected.
     """
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
 
     # TODO verify that the user is not already signed in
     user = api.get("/my-account/", auth_data={
@@ -46,20 +46,20 @@ def signin(email, password):
         "password": password,
     })
     if user:
-        console.print(f"Welcome back to Appollo [green underline]{user['username']}[/green underline]")
+        console.print(f"Welcome back to Odevio [green underline]{user['username']}[/green underline]")
         # TODO add a reset password option on this command
         # TODO maybe show the profile output after the login
 
 
 @click.command()
 def signout():
-    """ Log out of your Appollo account.
+    """ Log out of your Odevio account.
 
     \f
-    This command deletes the connection token from the config.ini file associated with Appollo. To get the location of
-    the config.ini file run :option:`appollo profile --ini`
+    This command deletes the connection token from the config.ini file associated with Odevio. To get the location of
+    the config.ini file run :option:`odevio profile --ini`
     """
-    from appollo import api
+    from odevio import api
     api.disconnect()
 
 
@@ -72,11 +72,11 @@ def profile(ini):
     \f
     Example output :
 
-    .. image:: /img/appollo-profile.png
-        :alt: example output of the appollo profile command
+    .. image:: /img/odevio-profile.png
+        :alt: example output of the odevio profile command
         :align: center
 
-    The top part displays the user account information and the location of the Appollo config.ini file on your system.
+    The top part displays the user account information and the location of the Odevio config.ini file on your system.
 
     The bottom part either :
 
@@ -91,8 +91,8 @@ def profile(ini):
     from rich.panel import Panel
     from rich.table import Table
 
-    from appollo import api
-    from appollo.settings import console, get_config_path
+    from odevio import api
+    from odevio.settings import console, get_config_path
 
     user = api.get("/my-account/")
     teams = api.get("/teams/")

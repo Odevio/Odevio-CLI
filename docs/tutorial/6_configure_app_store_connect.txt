@@ -1,13 +1,13 @@
 =================================================================================
-6. How to configure App Store Connect for Flutter app iOS deployment with Appollo
+6. How to configure App Store Connect for Flutter app iOS deployment with Odevio
 =================================================================================
 
-In this tutorial, you will learn how to **link your Apple Developer account with Appollo**.
+In this tutorial, you will learn how to **link your Apple Developer account with Odevio**.
 
 .. note::
-  If you are using the free version of Appollo, you can only have **one** Apple developer account linked to your user account. 
+  If you are using the free version of Odevio, you can only have **one** Apple developer account linked to your user account.
   
-  To **link multiple accounts**, you have to **subscribe to a paid subscription**, you can discover our available plans |appollo_sub|.
+  To **link multiple accounts**, you have to **subscribe to a paid subscription**, you can discover our available plans |odevio_sub|.
 
 Step 1: How to get an Apple API key
 ===================================
@@ -84,59 +84,59 @@ You have the possibility to **copy¹** the key id and to **download the API key�
 
 **But wait, do not close that tab yet !**
 
-Step 2: Link the API key in Appollo
+Step 2: Link the API key in Odevio
 ===================================
 
-Now that you have successfully generated your API key, you can use it in Appollo CLI to link your accounts.
+Now that you have successfully generated your API key, you can use it in Odevio CLI to link your accounts.
 
 
-To get Appollo running, use the following command: ``appollo``.
+To get Odevio running, use the following command: ``odevio``.
 
 You will get the subsequent result:
 
-.. image:: /img/appollo-help.jpg
-  :alt: Appollo
+.. image:: /img/odevio-help.jpg
+  :alt: Odevio
   :align: center
 
 |
 
-If you do not have an Appollo account yet, you have to create one first.
+If you do not have an Odevio account yet, you have to create one first.
 
-To do so, simply enter ``appollo signup``.
+To do so, simply enter ``odevio signup``.
 
 And follow the prompt instructions.
 
-.. image:: /img/appollo-signup.jpg
-  :alt: Appollo signup
+.. image:: /img/odevio-signup.jpg
+  :alt: Odevio signup
   :align: center
 
 |
 
-The starting command that will be of use for this tutorial is ``appollo apple``.
+The starting command that will be of use for this tutorial is ``odevio apple``.
 
 Therefore, you can type it in to see what you can do next.
 
-.. image:: /img/appollo-apple.jpg
-  :alt: Appollo apple
+.. image:: /img/odevio-apple.jpg
+  :alt: Odevio apple
   :align: center
 
 |
 
 At this stage, you have 8 possible subcommands which are, ``add``, ``detail``, ``edit``, ``link``, ``ls``, ``refresh-devices``, ``rm`` and ``unlink``.
 
-With these commands, you can manage the access between your Apple Developer account and Appollo.
+With these commands, you can manage the access between your Apple Developer account and Odevio.
 
 You can **add** and **remove** an access or you can **list** all existing access.
 
-You can also easily **get more information** about your Apple Developer account with the ``detail`` command and **link** or **unlink** an Appollo team with an Apple Developer account.
+You can also easily **get more information** about your Apple Developer account with the ``detail`` command and **link** or **unlink** an Odevio team with an Apple Developer account.
 
-In this case, you want to add an access. So, type in ``appollo apple add``.
+In this case, you want to add an access. So, type in ``odevio apple add``.
 
 .. tip:: 
   You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
 
-.. image:: /img/appollo-apple-add.jpg
-  :alt: Appollo add Developer account
+.. image:: /img/odevio-apple-add.jpg
+  :alt: Odevio add Developer account
   :align: center
 
 |
@@ -147,14 +147,14 @@ You can also directly type in all the required information like this:
 
 .. code-block:: none
 
-  appollo apple add --apple-id TEXT --name TEXT --key-id TEXT --issuer-id TEXT --private-key FILE
+  odevio apple add --apple-id TEXT --name TEXT --key-id TEXT --issuer-id TEXT --private-key FILE
 
 
 
 Step 3: Complete the required missing information and where to find it
 ======================================================================
 
-Now that you know how to add an access between your Apple Developer account and Appollo, in this step, you will learn **where you can find the required information**.
+Now that you know how to add an access between your Apple Developer account and Odevio, in this step, you will learn **where you can find the required information**.
 
 For the **Apple ID**, you can find it on your |apple_developer_membership|.
 
@@ -178,7 +178,7 @@ Go back to your App Store Connect, in the Users and Access menu and in the keys 
 
 There will be your keys. You can easily **copy the key ID¹**.
 
-You can also copy the **Issuer ID²** right above because it will be the next line Appollo will ask you to complete.
+You can also copy the **Issuer ID²** right above because it will be the next line Odevio will ask you to complete.
 
 .. image:: /img/apple-id.jpg
   :alt: Apple Key ID
@@ -194,19 +194,19 @@ The path should look like this, depending on where you saved the file.
 
     /Users/USERNAME/Downloads/AuthKey_KeyID.p8
 
-You are told that your account was linked successfully with Appollo and you receive your **Appollo key**.
+You are told that your account was linked successfully with Odevio and you receive your **Odevio key**.
 
 It will be useful later.
 
-If you type in ``appollo apple ls``, you should now see your access.
+If you type in ``odevio apple ls``, you should now see your access.
 
-.. image:: /img/appollo-apple-ls.jpg
-  :alt: Appollo apple ls command
+.. image:: /img/odevio-apple-ls.jpg
+  :alt: Odevio apple ls command
   :align: center
 
 |
 
-And that is how you link your Apple Developer account with Appollo in just 3 easy steps!
+And that is how you link your Apple Developer account with Odevio in just 3 easy steps!
 
 .. |apple_developer| raw:: html
 
@@ -224,6 +224,6 @@ And that is how you link your Apple Developer account with Appollo in just 3 eas
 
    <a href="https://developer.apple.com/account/#!/membership/ZQHY6MWMN2" target="_blank">Apple developper account</a>
 
-.. |appollo_sub| raw:: html
+.. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>

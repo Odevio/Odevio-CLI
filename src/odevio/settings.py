@@ -4,15 +4,15 @@ from configparser import ConfigParser
 import click
 from rich.console import Console
 
-APP_NAME = "Appollo"
-API_BASE_URL = "https://appollo.space"
+APP_NAME = "Odevio"
+API_BASE_URL = "https://odevio.com"
 
 
 console = Console()
 
 
 def get_config_path():
-    """ :return Appollo's config file path """
+    """ :return Odevio's config file path """
     return os.path.join(click.get_app_dir(APP_NAME), 'config.ini')
 
 
@@ -46,7 +46,7 @@ def write_jwt_token(token):
 
     if not os.path.exists(config_directory):
         os.makedirs(config_directory)
-        console.print(f"Created a configuration file for Appollo : {config_file}")
+        console.print(f"Created a configuration file for Odevio : {config_file}")
 
     with open(config_file, 'w') as f:
         parser.write(f)

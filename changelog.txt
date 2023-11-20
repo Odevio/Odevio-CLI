@@ -23,12 +23,12 @@ v1.0.0:
     - Added check of version and build number before starting build
     - Improved the performance of the build machines
     - Builds of type configuration have now a duration of 1 hour instead of 30 min. When arriving at 5 minutes of the end 
-      a prompt tells the user that the Appollo Remote will be closed
+      a prompt tells the user that the Odevio Remote will be closed
     - Changed the connection to the build machines from Spice to RustDesk
     - Made it possible to make a configuration build without an Apple Developer account. An Apple Developer account is
       still necessary for the creation of the IPA or for publication
-    - Added a possibility to easily copy errors from Appollo to StackOverflow
-    - Updated the documentation with the new Appollo features
+    - Added a possibility to easily copy errors from Odevio to StackOverflow
+    - Updated the documentation with the new Odevio features
     - First version of the screenshot editor : to user run `appollo app screenshots`
     - Bug fixes and improvements
 
@@ -50,6 +50,6 @@ v0.2.0
     - Documentation: Removed the Usage section
     - CLI: While building added a "progress bar" to show the progress of the build in realtime
     - CLI: Minor improvements and cleanup of the code
-    - CLI: Added a GIF showing a quick Appollo demo
+    - CLI: Added a GIF showing a quick Odevio demo
     - CLI: Added flutter version list
     - CLI: Added more precise build progress status

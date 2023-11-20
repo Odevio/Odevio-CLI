@@ -4,10 +4,10 @@
 Reference Guide
 ===============
 
-After you mastered the basic concepts, you can come back to this page to learn what commands Appollo offers.
-You can learn more about individual Appollo commands with :code:`appollo COMMAND --help`.
+After you mastered the basic concepts, you can come back to this page to learn what commands Odevio offers.
+You can learn more about individual Odevio commands with :code:`odevio COMMAND --help`.
 
-.. click:: appollo.__main__:appollo
-    :prog: appollo
+.. click:: odevio.__main__:odevio
+    :prog: odevio
     :nested: full
     :naming: full

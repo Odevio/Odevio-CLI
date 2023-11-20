@@ -7,9 +7,9 @@
 For this last part of the tutorial, you will learn how to publish your Flutter iOS app on the App Store.
 
 .. note:: 
-  If you are using the free version of Appollo, you have access to **one** successful publication build **every 90 days** to release your app on the App Store.
+  If you are using the free version of Odevio, you have access to **one** successful publication build **every 90 days** to release your app on the App Store.
 
-  To **enjoy unlimited publication builds**, you must **upgrade to a paid subscription**. You can discover our paid plans |appollo_sub|.
+  To **enjoy unlimited publication builds**, you must **upgrade to a paid subscription**. You can discover our paid plans |odevio_sub|.
 
 Create your app in the App Store
 --------------------------------
@@ -41,14 +41,14 @@ You now have access to a dashboard for your app. If you scroll down, you will se
 Build your app
 --------------
 
-Now that this done, go over the Appollo CLI and use the command ``appollo build start`` for your app.
+Now that this done, go over the Odevio CLI and use the command ``odevio build start`` for your app.
 
 And this time, for the build type: **publication**
 
-Wait for Appollo to create and start the build.
+Wait for Odevio to create and start the build.
 
-.. image:: /img/appollo-build-publication.jpg
-  :alt: Appollo build start publication
+.. image:: /img/odevio-build-publication.jpg
+  :alt: Odevio build start publication
   :align: center
 
 |
@@ -87,6 +87,6 @@ the issues and publish it again.
 
    <a href="https://appstoreconnect.apple.com/apps" target="_blank">app store connect</a>
 
-.. |appollo_sub| raw:: html
+.. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>

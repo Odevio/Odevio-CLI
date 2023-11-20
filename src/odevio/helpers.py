@@ -11,12 +11,12 @@ import threading
 import qrcode
 import requests
 
-from appollo.settings import console, get_jwt_token, get_config_path
+from odevio.settings import console, get_jwt_token, get_config_path, APP_NAME
 
 
 def zip_directory(directory_path, excluded_dirs, excluded_files):
     """ Archives a directory in a zip file and returns its name."""
-    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, excluded_dirs+["build", "windows", "linux", ".dart_tool", ".pub-cache", ".pub", ".git", ".gradle"], excluded_files+["source.zip", ".app.zip", "appollo.patch"])
+    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, excluded_dirs+["build", "windows", "linux", ".dart_tool", ".pub-cache", ".pub", ".git", ".gradle"], excluded_files+["source.zip", ".app.zip", "odevio.patch"])
 
 
 
@@ -38,7 +38,7 @@ def login_required_warning_decorator(f):
     # If he is not logged in write some doc for connection or account creation right in the console.
     @click.pass_context
     def run(ctx, *args, **kwargs):
-        if get_jwt_token() is None and (ctx.command_path not in ["appollo signin", "appollo signout", "appollo signup"]):
+        if get_jwt_token() is None and (ctx.command_path not in ["odevio signin", "odevio signout", "odevio signup"]):
             import textwrap
 
             from rich.text import Text
@@ -46,11 +46,11 @@ def login_required_warning_decorator(f):
             console.print(Text.from_markup(
                 textwrap.dedent(
                     f"""
-                                    [red bold]You are not logged in. To use Appollo you need a user account.[/red bold]
+                                    [red bold]You are not logged in. To use Odevio you need a user account.[/red bold]
 
-                                    [code]$ appollo signup --help[/code] for instructions to create your account.
+                                    [code]$ odevio signup --help[/code] for instructions to create your account.
 
-                                    [code]$ appollo signin --help[/code] for instructions to log in your account.
+                                    [code]$ odevio signin --help[/code] for instructions to log in your account.
 
                                     =============================================
                                 """
@@ -69,7 +69,7 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
     import questionary
     from questionary import Choice
 
-    from appollo import api
+    from odevio import api
 
     if api_params:
         item_list = api.get(api_route, params=api_params)
@@ -259,14 +259,14 @@ def get_version_and_build(pubspec_file):
 def handle_error(key):
     from rich.text import Text
 
-    from appollo import api
+    from odevio import api
     try:
         response = api.get(f"/builds/{key}/help/")
     except api.NotFoundException:
         console.print("Build couldn't be found.")
         return
     if response:
-        console.print(Text.from_markup("Appollo identified an error. You can ask for help regarding this issue here:"))
+        console.print(Text.from_markup("Odevio identified an error. You can ask for help regarding this issue here:"))
         console.print(f"[link]{response['url']}[/link]")
 
 
@@ -277,7 +277,7 @@ def check_new_version():
     try:
         if parser.has_section("update") and parser.getfloat("update", "last_update_check", fallback=0) > (time.time()-3600):
             return
-        response = requests.get("https://pypi.org/pypi/appollo/json")
+        response = requests.get("https://pypi.org/pypi/odevio/json")
         if response.status_code != 200:
             return
         latest_version = response.json()["info"]["version"]
@@ -286,14 +286,14 @@ def check_new_version():
         except ImportError:
             # Python < 3.8
             import importlib_metadata as metadata
-        current_version = metadata.version("appollo")
+        current_version = metadata.version("odevio")
         if current_version and current_version != latest_version:
             import subprocess
-            console.print("A new version of Appollo is available! Updating to make sure you've got the latest features...")
+            console.print("A new version of Odevio is available! Updating to make sure you've got the latest features...")
             try:
-                subprocess.run("pip install -U appollo", stdout=subprocess.PIPE, text=True, shell=True)
+                subprocess.run("pip install -U odevio", stdout=subprocess.PIPE, text=True, shell=True)
             except Exception:
-                console.print("Could not update appollo using pip install -U appollo. Please update it yourself so you can have all the latest features and fixes.")
+                console.print("Could not update odevio using pip install -U odevio. Please update it yourself so you can have all the latest features and fixes.")
     except Exception:
         # Ignore, no need to crash if we can't check for new updates
         pass
@@ -301,5 +301,7 @@ def check_new_version():
         if not parser.has_section("update"):
             parser.add_section("update")
         parser.set("update", "last_update_check", str(time.time()))
+        if not os.path.exists(click.get_app_dir(APP_NAME)):
+            os.makedirs(click.get_app_dir(APP_NAME))
         with open(get_config_path(), "w") as fp:
             parser.write(fp)

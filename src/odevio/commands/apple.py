@@ -1,33 +1,33 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator, terminal_menu
+from odevio.helpers import login_required_warning_decorator, terminal_menu
 
 
 @click.group("apple")
 def apple():
-    """ Subcommands to manage Apple specific settings for Appollo.
+    """ Subcommands to manage Apple specific settings for Odevio.
 
-    Access to an Apple developer account makes it possible for Appollo to retrieve and/or create all information
+    Access to an Apple developer account makes it possible for Odevio to retrieve and/or create all information
     necessary to create a build of your application that you will be able to publish on the app store.
 
     \f
 
-    A number of Apple specific objects is linked to each developer account and make it possible for Appollo to build
+    A number of Apple specific objects is linked to each developer account and make it possible for Odevio to build
     iOS apps :
 
-        - **Certificates** : The certificates resource represents the digital certificates you use to sign your iOS or Mac apps for development and distribution. *These are managed automatically by Appollo.*
+        - **Certificates** : The certificates resource represents the digital certificates you use to sign your iOS or Mac apps for development and distribution. *These are managed automatically by Odevio.*
 
-        - **Profiles** : A provisioning profile is a collection of digital entities that uniquely ties developers and devices to an authorized iPhone Development Team and enables a device to be used for testing. *These are managed automatically by Appollo.*
+        - **Profiles** : A provisioning profile is a collection of digital entities that uniquely ties developers and devices to an authorized iPhone Development Team and enables a device to be used for testing. *These are managed automatically by Odevio.*
 
-        - **Identifiers** : Uniquely identifies your app throughout the Apple eco-system. *These are imported or created in Appollo through command : $ appollo app*
+        - **Identifiers** : Uniquely identifies your app throughout the Apple eco-system. *These are imported or created in Odevio through command : $ odevio app*
 
-        - **Devices** : List of devices on which you want to be able to test your builds prior to release on the App Store. At least one device should be added to the device list for Appollo to be able to build apps.
+        - **Devices** : List of devices on which you want to be able to test your builds prior to release on the App Store. At least one device should be added to the device list for Odevio to be able to build apps.
 
     These can be added, modified or deleted through |https://developers.apple.com|.
 
     \f
 
-    .. danger:: Deletion or modification of Certificates, Profiles or Identifiers managed by Appollo through |https://developers.apple.com| may break Appollo.
+    .. danger:: Deletion or modification of Certificates, Profiles or Identifiers managed by Odevio through |https://developers.apple.com| may break Odevio.
 
     .. |https://developers.apple.com| raw:: html
 
@@ -42,7 +42,7 @@ def apple():
 @login_required_warning_decorator
 @click.argument('key', required=False)
 def developer_account_detail(key):
-    """ Gets detailed information about your Apple Developer Account with key \"KEY\" on Appollo.
+    """ Gets detailed information about your Apple Developer Account with key \"KEY\" on Odevio.
 
     Returned information :
 
@@ -56,12 +56,12 @@ def developer_account_detail(key):
 
     \f
 
-    .. note:: Appollo updates Apple Developer Account information automatically when starting a build with Appollo.
+    .. note:: Odevio updates Apple Developer Account information automatically when starting a build with Odevio.
 
     Example output :
 
-    .. image:: /img/appollo-apple-detail.png
-        :alt: example output of the appollo team ls command
+    .. image:: /img/odevio-apple-detail.png
+        :alt: example output of the odevio team ls command
         :align: center
 
     Usage :
@@ -72,15 +72,15 @@ def developer_account_detail(key):
     from rich.table import Table
     import textwrap
 
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/developer-accounts/", "Developer account",
                                 does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                     f"""
-                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                            You have no Apple developer accounts setup with Odevio. Check out [code]$ odevio apple add [/code] to add one.
                                         """
                                 )))
         if key is None:
@@ -96,7 +96,7 @@ def developer_account_detail(key):
     if dev_account:
         console.print(Panel(Text.from_markup(
             f"""
-            Appollo Key : [bold]{dev_account["key"]}[/bold]
+            Odevio Key : [bold]{dev_account["key"]}[/bold]
             Name : [bold]{dev_account["name"]}[/bold]
             Team ID : [bold]{dev_account["apple_id"]}[/bold]
             Apple API Key ID : [bold]{dev_account["api_key_id"]}[/bold]
@@ -105,7 +105,7 @@ def developer_account_detail(key):
         ), title="Apple Developer Account"))
 
     if len(dev_account['apple_account_devices']) > 0:
-        table_devices = Table(expand=True, title="Devices in your Apple Developer Account registered on Appollo.")
+        table_devices = Table(expand=True, title="Devices in your Apple Developer Account registered on Odevio.")
         table_devices.add_column("Name")
         table_devices.add_column("Identifier/Device UDID")
         table_devices.add_column("Type")
@@ -114,7 +114,7 @@ def developer_account_detail(key):
         console.print(table_devices)
 
     if len(dev_account['apple_account_certificates']) > 0:
-        table_cert = Table(expand=True, title="Certificates in your Apple Developer Account registered on Appollo.")
+        table_cert = Table(expand=True, title="Certificates in your Apple Developer Account registered on Odevio.")
         table_cert.add_column("Name")
         table_cert.add_column("Type")
         table_cert.add_column("Expiration date")
@@ -124,7 +124,7 @@ def developer_account_detail(key):
 
     if len(provisioning_profiles) > 0:
         table_pp = Table(expand=True, title="Provisioning profiles in your Apple Developer Account registered on "
-                                            "Appollo.")
+                                            "Odevio.")
         table_pp.add_column("Name")
         table_pp.add_column("Apple Name")
         table_pp.add_column("Application")
@@ -133,7 +133,7 @@ def developer_account_detail(key):
             table_pp.add_row(pp['name'], pp['apple_name'], pp['application'], pp['expiration_date'],)
         console.print(table_pp)
 
-    console.print("Appollo updates these informations automatically when starting à build with Appollo")
+    console.print("Odevio updates these informations automatically when starting à build with Odevio")
 
 
 @apple.command("ls")
@@ -145,8 +145,8 @@ def developer_account_ls():
 
     Example output :
 
-    .. image:: /img/appollo-apple-ls.png
-        :alt: example output of the appollo apple ls command
+    .. image:: /img/odevio-apple-ls.png
+        :alt: example output of the odevio apple ls command
         :align: center
 
     Usage :
@@ -154,8 +154,8 @@ def developer_account_ls():
     """
     from rich.table import Table
 
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
 
     developer_accounts = api.get("/developer-accounts/")
 
@@ -171,17 +171,17 @@ def developer_account_ls():
 
         console.print(table)
 
-        console.print("Check out [code]$ appollo apple --help[/code] to know what part of the Apple Developer Account "
-                      "is used by Appollo or check related documentation at "
-                      "[link]https://appollo.readthedocs.io/en/master/reference_guide/index.html#appollo-apple[/link].")
+        console.print("Check out [code]$ odevio apple --help[/code] to know what part of the Apple Developer Account "
+                      "is used by Odevio or check related documentation at "
+                      "[link]https://odevio.readthedocs.io/en/master/reference_guide/index.html#odevio-apple[/link].")
     else:
-        console.print('You do not have access to a developer account with Appollo.')
+        console.print('You do not have access to a developer account with Odevio.')
 
 
 @apple.command("add")
 @login_required_warning_decorator
 @click.option("--apple-id", required=True, prompt=True, help="ID of your developer account on Apple")
-@click.option('--name', prompt=True, help="A user friendly name for Appollo")
+@click.option('--name', prompt=True, help="A user friendly name for Odevio")
 @click.option('--key-id', required=True, prompt=True, help="API key \"Key ID\" on App Store Connect")
 @click.option('--issuer-id', required=True, prompt=True, help="Issuer ID on App Store Connect")
 @click.option('--private-key', required=True, prompt=True,
@@ -189,14 +189,14 @@ def developer_account_ls():
               help="Path to the private key downloaded from App Store Connect")
 @click.option('--team', multiple=True, help="Key of the team to add the account to. Can be specified multiple times")
 def developer_account_add(apple_id, key_id, issuer_id, private_key, team, name=None):
-    """ Add access to an Apple developer account for Appollo.
+    """ Add access to an Apple developer account for Odevio.
 
     \f
-    .. warning:: Once the developer account has been created there is no way to retrieve the private key from Appollo.
+    .. warning:: Once the developer account has been created there is no way to retrieve the private key from Odevio.
     .. note:: We have no way to verify your developer account's ID on Apple. In case of error, your builds will fail.
     """
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
     import os.path
 
     account = api.post(
@@ -214,22 +214,22 @@ def developer_account_add(apple_id, key_id, issuer_id, private_key, team, name=N
     )
 
     if account:
-        console.print(f"Linked Appollo to the Apple developer account \"{account['name']}\" successfully. It has key {account['key']}")
+        console.print(f"Linked Odevio to the Apple developer account \"{account['name']}\" successfully. It has key {account['key']}")
 
 
 @apple.command("edit")
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.option("--apple-id", help="ID of your developer account on Apple")
-@click.option('--name', help="A user friendly name for Appollo")
+@click.option('--name', help="A user friendly name for Odevio")
 def developer_account_edit(key, apple_id=None, name=None):
-    """ Edit properties of a developer account linked to Appollo.
+    """ Edit properties of a developer account linked to Odevio.
 
     \f
     .. note:: We have no way to verify your developer account's ID on Apple. In case of error, your builds will fail.
     """
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
     from rich.text import Text
     import textwrap
 
@@ -237,7 +237,7 @@ def developer_account_edit(key, apple_id=None, name=None):
         key = terminal_menu("/developer-accounts/", "Developer account",
                             does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                 f"""
-                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                            You have no Apple developer accounts setup with Odevio. Check out [code]$ odevio apple add [/code] to add one.
                                         """
                             )))
         if key is None:
@@ -260,17 +260,17 @@ def developer_account_edit(key, apple_id=None, name=None):
 @click.argument('key', required=False)
 @click.confirmation_option(prompt="Everything related to this Developer Account will be deleted. Are you sure you want to do this ?")
 def developer_account_rm(key):
-    """ Removes access to Apple Developer account with key \"KEY\" for Appollo.
+    """ Removes access to Apple Developer account with key \"KEY\" for Odevio.
 
-    This does not remove the Apple Developer account from Apple, it only removes the link between Appollo and Apple.
+    This does not remove the Apple Developer account from Apple, it only removes the link between Odevio and Apple.
 
     \f
     ..note::
         This will also remove every application, every build, every devices, every certificate, every profile and every
-        objects related to that Apple Developer account on Appollo (it will not remove these from Apple).
+        objects related to that Apple Developer account on Odevio (it will not remove these from Apple).
     """
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
     from rich.text import Text
     import textwrap
 
@@ -278,14 +278,14 @@ def developer_account_rm(key):
         key = terminal_menu("/developer-accounts/?manager=me", "Developer account",
                             does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                 f"""
-                                            You have no Apple developer accounts setup with Appollo. Check out [code]$ appollo apple add [/code] to add one.
+                                            You have no Apple developer accounts setup with Odevio. Check out [code]$ odevio apple add [/code] to add one.
                                         """
                             )))
         if key is None:
             return
 
     api.delete(f"/developer-accounts/{key}", json_decode=False)
-    console.print(f"Removed Apple developer account with Appollo key \"{key}\" successfully.")
+    console.print(f"Removed Apple developer account with Odevio key \"{key}\" successfully.")
 
 
 @apple.command("link")
@@ -293,22 +293,22 @@ def developer_account_rm(key):
 @click.argument('key', required=False)
 @click.option('--team-key', help="Key of the team to link")
 def link(key, team_key):
-    """ Links the developer account with key \"KEY\" to an Appollo team.
+    """ Links the developer account with key \"KEY\" to an Odevio team.
 
     \f
 
-    By default a newly added Apple Developer Account created on Appollo is only linked to the user having created it.
-    When using this command you can link the Apple Developer Account directly to one of your teams on Appollo
+    By default a newly added Apple Developer Account created on Odevio is only linked to the user having created it.
+    When using this command you can link the Apple Developer Account directly to one of your teams on Odevio
     giving full access to your team members.
 
     .. warning:: All users who are in a team linked to an Apple Developer Account have full control over it.
 
-    .. note:: Once the developer account has been created, there is no way to retrieve the private key from Appollo.
+    .. note:: Once the developer account has been created, there is no way to retrieve the private key from Odevio.
               Making it impossible for team members to "steal" your Apple Developer account.
     """
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/developer-accounts/?manager=me", "Developer account",
@@ -334,11 +334,11 @@ def link(key, team_key):
 @click.argument('key', required=False)
 @click.option('--team-key', help="Key of the team to unlink")
 def unlink(key, team_key):
-    """ Unlinks the developer account with key \"KEY\" from an Appollo team.
+    """ Unlinks the developer account with key \"KEY\" from an Odevio team.
     """
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/developer-accounts/?manager=me&hasteams=1", "Apple account",
@@ -363,18 +363,18 @@ def unlink(key, team_key):
 @click.option("--quiet", "-q", is_flag=True, help="Flag to know if the refreshed list of devices should be hidden or not")
 def refresh_devices(key, quiet):
     """
-    Synchronizes the list of devices on Appollo with the Apple Developer account
+    Synchronizes the list of devices on Odevio with the Apple Developer account
 
     \f
-    This command is used when you have just added or removed a new device from your Apple Developer account and you need it on Appollo.
+    This command is used when you have just added or removed a new device from your Apple Developer account and you need it on Odevio.
 
     .. note: By default, this process is done each time you launch a build except if you have already made this process in the last few hours.
     """
     from rich.table import Table
 
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/developer-accounts/", "Apple account",

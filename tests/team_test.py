@@ -1,9 +1,9 @@
-from tests.appollo_test import AppolloTest
+from tests.odevio_test import OdevioTest
 from tests import fixture
-from appollo.commands import team
+from odevio.commands import team
 
 
-class TestTeamList(AppolloTest):
+class TestTeamList(OdevioTest):
     command = team.ls
 
     def _get_args(self, **args):
@@ -18,7 +18,7 @@ class TestTeamList(AppolloTest):
         if admin_username is None:
             admin_username = fixture.username
         if admin_email is None:
-            admin_email = f"{admin_username}@appollo.space"
+            admin_email = f"{admin_username}@odevio.com"
         if members is None:
             members = [fixture.username]
         if applications is None:
@@ -39,7 +39,7 @@ class TestTeamList(AppolloTest):
         ]))
 
 
-class TestTeamMake(AppolloTest):
+class TestTeamMake(OdevioTest):
     command = team.mk
 
     def _get_args(self, name="TestTeam"):
@@ -50,7 +50,7 @@ class TestTeamMake(AppolloTest):
         fixture.team_key = output[-4:-1]
 
 
-class TestTeamAddUser(AppolloTest):
+class TestTeamAddUser(OdevioTest):
     command = team.add_member
 
     def _get_args(self, key=None, username=None):
@@ -69,12 +69,12 @@ class TestTeamAddUser(AppolloTest):
     def test_correct(self):
         self.test_tree(("TestTeam", [
             f"Admin username : {fixture.username}",
-            f"Admin email : {fixture.username}@appollo.space",
+            f"Admin email : {fixture.username}@odevio.com",
             ("Members", [fixture.username, f"{fixture.username}_other"])
         ]))
 
 
-class TestTeamRemoveUser(AppolloTest):
+class TestTeamRemoveUser(OdevioTest):
     command = team.rm_member
 
     def _get_args(self, key=None, username=None):
@@ -97,7 +97,7 @@ class TestTeamRemoveUser(AppolloTest):
         self.test("Error: You cannot remove the admin of the team.", username=fixture.username)
 
 
-class TestTeamDelete(AppolloTest):
+class TestTeamDelete(OdevioTest):
     command = team.rm
 
     def _get_args(self, key=None):

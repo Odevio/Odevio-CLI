@@ -21,12 +21,12 @@ sys.path.append(os.path.abspath("./ext"))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Appollo'
-copyright = '2022, Appollo'
-author = 'Appollo'
+project = 'Odevio'
+copyright = '2023, Odevio'
+author = 'Odevio'
 
 # The full version, including alpha/beta/rc tags
-release = '2022'
+release = '1.2.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -36,7 +36,7 @@ release = '2022'
 # ones.
 extensions = [
     'sphinx_rtd_theme',
-    'sphinx_click_appollo',
+    'sphinx_click_odevio',
     #'sphinx_click',
     #'sphinx.ext.autodoc',
 ]
@@ -90,8 +90,8 @@ html_theme_options = {
 
 html_context = {
   'display_github': True,
-  'github_user': 'Appollo-CLI',
-  'github_repo': 'Appollo',
+  'github_user': 'Odevio',
+  'github_repo': 'Odevio-CLI',
   'github_version': 'master/docs/',
 }
 

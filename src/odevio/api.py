@@ -1,5 +1,5 @@
 #                                   #
-#   Requests to Appollo web server  #
+#   Requests to Odevio web server  #
 #                                   #
 import datetime
 import json
@@ -10,13 +10,13 @@ from click import ClickException
 
 import requests
 from rich.prompt import Prompt
-from appollo.helpers import print_validation_error
+from odevio.helpers import print_validation_error
 
-from appollo.settings import API_BASE_URL, console, get_jwt_token, write_jwt_token, delete_jwt_token
+from odevio.settings import API_BASE_URL, console, get_jwt_token, write_jwt_token, delete_jwt_token
 
 
 def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5, sse=False):
-    """ General request wrapper for Appollo API.
+    """ General request wrapper for Odevio API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
@@ -64,7 +64,7 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
             return False
         elif response.status_code == 402:
             console.print(f"Error: {response.json()['detail']}")
-            console.print("To upgrade your account, please go to https://appollo.space/plans")
+            console.print("To upgrade your account, please go to https://odevio.com/plans")
             return False
         elif response.status_code == 403:
             console.print(f"Permission error: {response.json()['detail']}")
@@ -82,7 +82,7 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
 
 
 def get(route, params=None, authorization=True, auth_data=None, json_decode=True, sse=False):
-    """ GET method wrapper for Appollo API.
+    """ GET method wrapper for Odevio API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
@@ -90,7 +90,7 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
 
 
 def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None):
-    """ POST method wrapper for Appollo API.
+    """ POST method wrapper for Odevio API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
@@ -98,7 +98,7 @@ def post(route, authorization=True, json_data=None, params=None, files=None, aut
 
 
 def put(route, authorization=True, json_data=None, params=None, files=None):
-    """ PUT method wrapper for Appollo API
+    """ PUT method wrapper for Odevio API
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
@@ -110,7 +110,7 @@ def put(route, authorization=True, json_data=None, params=None, files=None):
 
 
 def delete(route, authorization=True, params=None, auth_data=None, json_decode=True):
-    """ DELETE method wrapper for Appollo API.
+    """ DELETE method wrapper for Odevio API.
 
     :return True if the deletion was successful or False if an error occurred
     """
@@ -123,7 +123,7 @@ def delete(route, authorization=True, params=None, auth_data=None, json_decode=T
 
 
 def _generate_new_token(email, password):
-    """ Requests the JWT token to the Appollo API by providing email and password.
+    """ Requests the JWT token to the Odevio API by providing email and password.
 
     :return either returns the JWT token or False if the request failed.
     """

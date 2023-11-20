@@ -23,10 +23,10 @@ Once your device has been registered we can start building the IPA.
 
 Building the IPA
 ----------------
-You can use the command ``appollo build start`` but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
+You can use the command ``odevio build start`` but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
 
-.. image:: /img/appollo-build-adhoc.jpg
-  :alt: Appollo build start build type ad-hoc
+.. image:: /img/odevio-build-adhoc.jpg
+  :alt: Odevio build start build type ad-hoc
   :align: center
 
 |
@@ -38,7 +38,7 @@ Or just scan the QR code with an iPhone.
 You can also send the URL to a **registered device** of your Apple developer account to download the app, for example by e-mail.
 When clicking this link directly from your Apple device a prompt will be shown to install the application on your device.
 
-.. image:: /img/appollo-myapp.jpg
+.. image:: /img/odevio-myapp.jpg
   :alt: Myapp on iphone
   :align: center
 
