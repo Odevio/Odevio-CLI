@@ -28,19 +28,15 @@ For this tutorial, you are not required to select an application (Xcode will not
 
 **Select the configuration type**
 
-..
-  $$Add screenshot build select
-
 .. image:: /img/desktop-configuration-build.jpg
   :alt: Desktop select configuration
   :align: center
 
 |
 
-Odevio will prepare your build in a few moments!
+Make sure you specify the Flutter version you have installed aswell.
 
-..
-  $$Add build start loading screenshot
+Odevio will prepare your build in a few moments!
 
 .. image:: /img/desktop-build-start.jpg
   :alt: Desktop build start loading
@@ -67,6 +63,3 @@ Let's hop on to the next chapter of our tutorial to learn how to connect and set
 
 .. tip::
     If the build fails you can easily access the logs of your build in real time.
-
-..
-  $$Add real time logs screenshot
