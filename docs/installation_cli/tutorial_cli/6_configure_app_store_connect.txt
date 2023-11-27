@@ -24,17 +24,13 @@ Log into your Apple developer account if you need to.
 
 You can now see the overview of your account.
 
-Access **Users and Access**.
+Access **App Store Connect**.
+
+You can also directly go to |apple_overview|.
+
+Once that you are on the App Store Connect homepage, you can head over to **"Users and Access"**.
 
 .. image:: /img/app-store-connect-home.jpg
-  :alt: App Store Connect home
-  :align: center
-
-|
-
-Or via |apple_overview| and click on the **Users and Access** button.
-
-.. image:: /img/app-store-connect-users.jpg
   :alt: App Store Connect home
   :align: center
 
@@ -85,22 +81,81 @@ You have the possibility to **copy¹** the key id and to **download the API key�
 Step 2: Link the API key in Odevio
 ===================================
 
-Now that you have successfully generated your API key, you can use it in the desktop client to link your accounts.
+Now that you have successfully generated your API key, you can use it in Odevio CLI to link your accounts.
 
-Go into the **Apple** section.
+
+To get Odevio running, use the following command: ``odevio``.
+
+You will get the subsequent result:
 
 ..
   $$Update screenshot Odevio
 
-.. image:: /img/desktop-apple.jpg
-  :alt: Desktop apple
+.. image:: /img/odevio-help.jpg
+  :alt: Odevio
   :align: center
 
 |
 
-You are required to complete a form with your Apple developer account informations.
+If you do not have an Odevio account yet, you have to create one first.
 
-Once you are done, you can press the **Add** button.
+To do so, simply enter ``odevio signup``.
+
+And follow the prompt instructions.
+
+..
+  $$Update screenshot Odevio
+
+.. image:: /img/odevio-signup.jpg
+  :alt: Odevio signup
+  :align: center
+
+|
+
+The starting command that will be of use for this tutorial is ``odevio apple``.
+
+Therefore, you can type it in to see what you can do next.
+
+..
+  $$Update screenshot Odevio
+
+.. image:: /img/odevio-apple.jpg
+  :alt: Odevio apple
+  :align: center
+
+|
+
+At this stage, you have 8 possible subcommands which are, ``add``, ``detail``, ``edit``, ``link``, ``ls``, ``refresh-devices``, ``rm`` and ``unlink``.
+
+With these commands, you can manage the access between your Apple Developer account and Odevio.
+
+You can **add** and **remove** an access or you can **list** all existing access.
+
+You can also easily **get more information** about your Apple Developer account with the ``detail`` command and **link** or **unlink** an Odevio team with an Apple Developer account.
+
+In this case, you want to add an access. So, type in ``odevio apple add``.
+
+.. tip:: 
+  You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
+
+..
+  $$Update screenshot Odevio
+
+.. image:: /img/odevio-apple-add.jpg
+  :alt: Odevio add Developer account
+  :align: center
+
+|
+
+If you use the ``add`` command, the CLI will ask you to complete the information step-by-step.
+
+You can also directly type in all the required information like this:
+
+.. code-block:: none
+
+  odevio apple add --apple-id TEXT --name TEXT --key-id TEXT --issuer-id TEXT --private-key FILE
+
+
 
 Step 3: Complete the required missing information and where to find it
 ======================================================================
@@ -109,15 +164,9 @@ Now that you know how to add an access between your Apple Developer account and 
 
 For the **Apple ID**, you can find it on your |apple_developer_membership|.
 
-Go to the **"Membership Details"** section and there you will find it. It is actually your Apple **Team ID**.
+Go to the **"Membership"** menu and there you will find it. It is actually your Apple **Team ID**.
 
-Just **copy & paste** it into the client in the correct field.
-
-.. image:: /img/apple-membership.jpg
-  :alt: Apple Membership
-  :align: center
-
-|
+Just **copy & paste** it into the CLI and hit enter to continue.
 
 .. image:: /img/apple-team-id.jpg
   :alt: Apple Team ID
@@ -145,30 +194,26 @@ You can also copy the **Issuer ID²** right above because it will be the next li
 
 The **private key** is the last bit of information you need to complete. It is the **path** where you stored the file of the key you **downloaded³** earlier.
 
-**Select the file** where you stored your key. The path should look like this:
+The path should look like this, depending on where you saved the file.
 
 .. code-block:: python
 
     /Users/USERNAME/Downloads/AuthKey_KeyID.p8
 
-Now that your Apple Developer account was linked successfully you should see it appear in the **Apple** section like this:
+You are told that your account was linked successfully with Odevio and you receive your **Odevio key**.
+
+It will be useful later.
+
+If you type in ``odevio apple ls``, you should now see your access.
 
 ..
   $$Update screenshot Odevio
 
-.. image:: /img/desktop-apple-ls.jpg
-  :alt: Desktop Apple ls
+.. image:: /img/odevio-apple-ls.jpg
+  :alt: Odevio apple ls command
   :align: center
 
 |
-
-.. note::
-    You can only link one Apple Developer acccount at a time with the trial version or the hobbyist plant.
-
-    To **link multiple Apple Developer Account** to your user account, you have to **subscribe to Odevio**, check out our available plans |odevio_sub|.
-
-.. _create_app_id:
-
 
 And that is how you link your Apple Developer account with Odevio in just 3 easy steps!
 

@@ -7,7 +7,7 @@
 For this last part of the tutorial, you will learn how to publish your Flutter iOS app on the App Store.
 
 .. note:: 
-  If you are using the free trial, you have access to unlimited successful publication builds **for 10 days** to release your app on the App Store.
+  If you are using the free version of Odevio, you have access to **one** successful publication build **every 90 days** to release your app on the App Store.
 
   To **enjoy unlimited publication builds**, you must **upgrade to a paid subscription**. You can discover our paid plans |odevio_sub|.
 
@@ -47,14 +47,14 @@ You now have access to a dashboard for your app. If you scroll down, you will se
 Build your app
 --------------
 
-Now that this done, go over the client and go in the **Builds* tab.
+Now that this done, go over the Odevio CLI and use the command ``odevio build start`` for your app.
 
 And this time, for the build type: **publication**
 
 Wait for Odevio to create and start the build.
 
 ..
-  $$Add desktop publication build screenshot Odevio
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-publication.jpg
   :alt: Odevio build start publication
@@ -69,7 +69,7 @@ Wait for Odevio to create and start the build.
 Publish your app on the App Store
 ---------------------------------
 
-The **build section** should now look like this and you can **select your newest build**.
+The **build section** should now look like this and you can **select your latest build**.
 
 .. image:: /img/apple-build-select.jpg
   :alt: Apple build select button

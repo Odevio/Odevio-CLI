@@ -1,0 +1,69 @@
+===========================================================
+4. How to retrieve your updates from Odevio-Remote locally
+===========================================================
+
+Once you are satisfied with the configuration, you have two possibilities to retrieve the changes you made in Odevio locally.
+
+    1. **If you use Git** for your project the easiest is to use ``odevio build patch`` which will `Retrieve changes with a patch file`_.
+    2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the command ``odevio build download``.
+
+
+Retrieve changes with a patch file
+----------------------------------
+
+**If you are using git** and decided to retrieve a git patch containing all the changes you made to Xcode.
+
+First, make sure your build is stopped.
+
+You can check the list of your ongoing builds with ``odevio build ls`` and the ``--all`` option to see all your other older builds.
+
+Stopping a build manually is possible by using the command ``odevio build stop`` and selecting the build you want to stop.
+
+When your build is stopped, you can create the patch using ``odevio build patch``.
+
+..
+  $$Update screenshot Odevio
+
+.. image:: /img/odevio-build-patch.jpg
+  :alt: Odevio build patch
+  :align: center
+
+|
+
+By default, the file is called **odevio.patch** and is located in your app folder.
+
+..
+  $$Update screenshot Odevio
+
+.. image:: /img/odevio-patch.jpg
+  :alt: Odevio patch
+  :align: center
+
+|
+
+To apply the changes, use the git command ``git apply odevio.patch``.
+
+.. tip::
+
+  Use ``--help`` to see the options of a command. For exemple, with ``odevio build patch`` you have options to name the file of your patch.
+
+Retrieve changes by downloading the project files
+-------------------------------------------------
+First, make sure your build is stopped.
+
+You can check the list of your ongoing builds with ``odevio build ls`` and the ``--all`` option to see all your other older builds.
+
+Stopping a build manually is possible by using the command ``odevio build stop`` and selecting the build you want to stop.
+
+When your build is stopped, you can get your files as a zip file by using ``odevio build download``.
+
+Unzip the files and you get the last version of your source code as edited in XCode.
+
+..
+  $$Update screenshot Odevio
+  
+.. image:: /img/odevio-build-download.jpg
+  :alt: Odevio build download
+  :align: center
+
+|

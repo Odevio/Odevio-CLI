@@ -41,9 +41,6 @@ When creating your Apple ID, you are also required to **turn on two-factor authe
 
 Now that you are logged in, you can click on **"Join the Apple Developer Program"**.
 
-..
-  $$Change this screenshot!
-
 .. image:: /img/join-apple-dev-program.jpg
   :alt: Join the program
   :align: center

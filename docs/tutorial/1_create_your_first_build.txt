@@ -8,49 +8,53 @@ If you are here, it means that you managed to install Odevio and have created yo
 
 You are almost there, this is the only step you need to do to create your first configuration build.
 
-It is really easy, you just need to **use this one command**:
+It is really easy, go to the **Builds** page:
 
-.. code-block::
-
-  odevio build start
-
-.. note::
-    Make sure you are in the root folder of your app!
-
-.. tip:: 
-  You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
-
-**Select the configuration type**
-
-.. image:: /img/odevio-build-start-1.jpg
-  :alt: Odevio build start select type
+.. image:: /img/desktop-builds.jpg
+  :alt: Desktop builds page
   :align: center
 
 |
 
-Now, select the **No application (Xcode will not be configured) option.**
+.. tip:: 
+  You can click on the little i's, it will redirect you to the reference guide and the field's definition
+
+First, select the root folder of your app!
+
+For this tutorial, you are not required to select an application (Xcode will not be configured).
 
 .. note::
     If you have linked your Odevio account with your Apple Developer Account, you will be able to see a list of the Apps you added.
 
-.. image:: /img/odevio-build-start-2.jpg
-  :alt: Odevio build start select option
+**Select the configuration type**
+
+..
+  $$Add screenshot build select
+
+.. image:: /img/desktop-configuration-build.jpg
+  :alt: Desktop select configuration
   :align: center
 
 |
 
 Odevio will prepare your build in a few moments!
 
-.. image:: /img/odevio-build-start-3.jpg
-  :alt: Odevio build start prepare
+..
+  $$Add build start loading screenshot
+
+.. image:: /img/desktop-build-start.jpg
+  :alt: Desktop build start loading
   :align: center
 
 |
 
 Once it is done, you will receive all the credentials of your Mac virtual machine.
 
-.. image:: /img/odevio-build-start-4.jpg
-  :alt: Odevio build start ready
+..
+  $$Update screenshot Odevio
+
+.. image:: /img/desktop-connect.jpg
+  :alt: Desktop vm credentials
   :align: center
 
 |
@@ -62,10 +66,7 @@ Let's hop on to the next chapter of our tutorial to learn how to connect and set
     :doc:`how to create an app ID <7_how_to_make_an_app_id_using_odevio>` using Odevio.
 
 .. tip::
-    If the build fails you can easily access the logs of your build with the command ``odevio build logs`` and select
-    the build for which you want to view the logs.
+    If the build fails you can easily access the logs of your build in real time.
 
-.. tip::
-    If you closed your terminal while your app was building you can execute ``odevio build detail`` and select the last
-    build and you will have a detailed view of the build's status. Builds do not stop if the ``odevio build start``
-    command is killed.
+..
+  $$Add real time logs screenshot
