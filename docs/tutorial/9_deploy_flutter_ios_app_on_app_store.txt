@@ -16,9 +16,6 @@ Create your app in the App Store
 
 The first thing you will want to do is to create an iOS app on |app_store_connect|.
 
-..
-  $$Update screenshot Appollo
-
 .. image:: /img/apple-add-app.jpg
   :alt: Apple add app
   :align: center
@@ -34,9 +31,6 @@ If you have no app ID, you can refer to the :ref:`chapter 7 <create_app_id>` of 
 Finally, for **SKU** you can choose anything you want as long as it is unique.
 
 You now have access to a dashboard for your app. If you scroll down, you will see the **Build** section.
-
-..
-  $$Update screenshot Appollo
 
 .. image:: /img/apple-build.jpg
   :alt: Apple app build

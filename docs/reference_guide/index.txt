@@ -16,8 +16,11 @@ Select a folder:
 
 You should select the root folder of where your app is saved.
 
-..
-    $$Add screenshot
+.. image:: /img/root-folder.jpg
+  :alt: Root folder
+  :align: center
+
+|
 
 Application: 
 """"""""""""

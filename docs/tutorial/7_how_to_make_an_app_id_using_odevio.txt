@@ -20,9 +20,6 @@ the App Store. The App ID is required to publish an app on the App Store.
 
 In Odevio, you can directly **manage your App IDs**. It is the purpose of the **Applications** tab.
 
-..
-  $$Update screenshot Appollo
-
 .. image:: /img/desktop-app.jpg
   :alt: Desktop app
   :align: center
@@ -47,9 +44,6 @@ The **name** is simply the one you want to give to the identifier. Choose an app
 
 The **bundle ID** (e.g.: com.yourcompany.yourapp)
 
-..
-  $$Update screenshot Appollo
-
 .. image:: /img/desktop-create-app.jpg
   :alt: Desktop create app
   :align: center
@@ -65,9 +59,6 @@ Let's check if your App ID was created properly on Apple Developer.
 For that, go over to your |apple_developer_account|, then to the **"Certificates, Identifiers & Profile"** menu.
 
 There, you will find the **"Identifiers menu"** that contains the list with the possibility to create new ones.
-
-..
-  $$Update screenshot Appollo
 
 .. image:: /img/apple-identifiers.jpg
   :alt: Apple identifiers
