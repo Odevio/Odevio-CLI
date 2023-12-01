@@ -22,10 +22,7 @@ Odevio is an open-source tool to help developers setup and release their Flutter
 
 Thanks for checking it out.
 
-..
- $$Change GIF
-
-.. figure:: img/odevio--demo.gif
+.. figure:: img/Odevio-demo.gif
     :align: center
     :alt: Odevio demo gif
 

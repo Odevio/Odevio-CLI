@@ -101,9 +101,6 @@ Now that you have successfully generated your API key, you can use it in the des
 
 Go into the **Apple** section.
 
-..
-  $$Update screenshot Odevio
-
 .. image:: /img/desktop-apple.jpg
   :alt: Desktop apple
   :align: center
@@ -164,9 +161,6 @@ The **private key** is the last bit of information you need to complete. It is t
     /Users/USERNAME/Downloads/AuthKey_KeyID.p8
 
 Now that your Apple Developer account was linked successfully you should see it appear in the **Apple** section like this:
-
-..
-  $$Update screenshot Odevio
 
 .. image:: /img/desktop-apple-ls.jpg
   :alt: Desktop Apple ls

@@ -10,14 +10,7 @@
 
 For this next part, make sure your configuration build is stopped by pressing the **Stop build** button.
 
-You will have two possibilities to retrieve the changes you made in Odevio Remote locally.
-
-..
-  $$Might change!!
-
-    1. **If you use Git** for your project the easiest is to use the **Download Patch** button which will `Retrieve changes with a patch file`_.
-    2. Otherwise, you can `Retrieve changes by downloading the project files`_ locally with the $$Add button name button.
-
+You will have the possibility to retrieve the changes you made in Odevio Remote locally.
 
 Retrieve changes with a patch file
 ----------------------------------
@@ -39,16 +32,3 @@ By default, the file is called **odevio.patch** and is located in your app folde
 |
 
 To apply the changes, use the **Apply Patch (2)** button.
-
-Retrieve changes by downloading the project files
--------------------------------------------------
-
-When your build is stopped, you can get your files as a zip file by using the **Stop Build** button.
-
-Unzip the files and you get the last version of your source code as edited in XCode.
-
-.. image:: /img/odevio-build-download.jpg
-  :alt: Odevio build download
-  :align: center
-
-|
