@@ -1,0 +1,12 @@
+
+===================
+CLI Reference Guide
+===================
+
+After you mastered the basic concepts, you can come back to this page to learn what commands Odevio offers.
+You can learn more about individual Odevio commands with :code:`odevio COMMAND --help`.
+
+.. click:: odevio.__main__:odevio
+    :prog: odevio
+    :nested: full
+    :naming: full

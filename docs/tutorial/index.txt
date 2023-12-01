@@ -10,9 +10,9 @@
 Tutorial
 ========
 
-This is a complete guide to Appollo.
+This is a complete guide to Odevio.
 
-This tutorial is aimed towards beginning developers and new Appollo users.
+This tutorial is aimed towards beginning developers and new Odevio users.
 
 In this in-depth tutorial, you'll learn everything from the creation of your first configuration build, the creation of your |Apple_enroll| to releasing your app on the |App_store|.
 
@@ -36,6 +36,6 @@ Let's get started.
    4_retrieve_patch_from_Xcode
    5_create_apple_developer_account
    6_configure_app_store_connect
-   7_how_to_make_an_app_id_using_appollo
+   7_how_to_make_an_app_id_using_odevio
    8_create_ipa_testing_purpose
    9_deploy_flutter_ios_app_on_app_store

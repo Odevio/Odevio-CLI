@@ -36,17 +36,13 @@ Once your device has been registered we can start building the IPA.
 
 Building the IPA
 ----------------
+You can use the **Builds** tab but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
 
-.. danger::
+..
+  $$Add desktop IPA Screenshot
 
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
-    
-You can use the command ``appollo build start`` but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
-
-.. image:: /img/appollo-build-adhoc.jpg
-  :alt: Appollo build start build type ad-hoc
+.. image:: /img/odevio-build-adhoc.jpg
+  :alt: Odevio build start build type ad-hoc
   :align: center
 
 |
@@ -58,7 +54,7 @@ Or just scan the QR code with an iPhone.
 You can also send the URL to a **registered device** of your Apple developer account to download the app, for example by e-mail.
 When clicking this link directly from your Apple device a prompt will be shown to install the application on your device.
 
-.. image:: /img/appollo-myapp.jpg
+.. image:: /img/myapp.jpg
   :alt: Myapp on iphone
   :align: center
 
@@ -67,7 +63,7 @@ When clicking this link directly from your Apple device a prompt will be shown t
 And that is how you can build your app for testing purposes on physical devices.
 
 .. note:: 
-  The previously used build type ``configuration`` for the Xcode configuration does not generate an IPA file.
+  The previously used build type **configuration** for the Xcode configuration does not generate an IPA file.
 
 .. tip:: 
   To register a new device, visit |apple_device|.

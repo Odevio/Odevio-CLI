@@ -10,13 +10,13 @@
 Contribute
 ==========
 
-First off, thank you for considering contributing to Appollo.
+First off, thank you for considering contributing to Odevio.
 
 The main purpose of these guidelines is to establish a good communication channel between you and the developers behind the project.
 
-The goal is to keep Appollo evolving to make Flutter developer's lives easier.
+The goal is to keep Odevio evolving to make Flutter developer's lives easier.
 
-How can you make Appollo project evolve?
+How can you make Odevio project evolve?
 ========================================
 
 .. danger::
@@ -33,11 +33,11 @@ We recommend that you wait for a confirmation of your bug or an approval of your
 
 We are also thrilled to receive a variety of other contributions, including:
 
-* Tutorials, blog posts or simply mentioning Appollo
+* Tutorials, blog posts or simply mentioning Odevio
 * Improving the documentation, submitting bug reports and feature reports or writing code
 * Any suggestion to enhance the experience and design such as spelling and/or grammar fixes
 
-**Appollo's GitHub issue tracker is only intended for bugs and improvement suggestions.**
+**Odevio's GitHub issue tracker is only intended for bugs and improvement suggestions.**
 
 Get in touch!
 =============
@@ -56,15 +56,15 @@ It will be a pleasure for us to help you!
 
 Thank you all very much!
 
-The Appollo team.
+The Odevio team.
 
 .. |github_new_issue| raw:: html
 
-   <a href="https://github.com/Appollo-CLI/Appollo/issues" target="_blank">Github's issue tracker</a>
+   <a href="https://github.com/Odevio/Odevio-CLI/issues" target="_blank">Github's issue tracker</a>
 
 .. |stackoverflow| raw:: html
 
-    <a href="https://stackoverflow.com/questions/tagged/appollo" target="_blank">Stackoverflow</a>
+    <a href="https://stackoverflow.com/questions/tagged/odevio" target="_blank">Stackoverflow</a>
 
 .. |discord| raw:: html
 

@@ -3,12 +3,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "appollo"
-version = "1.1.0"
+name = "odevio"
+version = "1.2.0"
 authors = [
-    {name="Appollo", email="hello@appollo.space"}
+    {name="Odevio", email="hello@odevio.com"}
 ]
-description = "CLI to interact with Appollo, the easy way to setup, build & deploy flutter apps for iOS on Linux, Windows and MacOS"
+description = "CLI to interact with Odevio, the easy way to setup, build & deploy flutter apps for iOS on Linux, Windows and MacOS"
 readme = "Readme.rst"
 license = {file="LICENSE"}
 requires-python = ">=3.7.0"
@@ -16,7 +16,7 @@ keywords = ["Flutter", "iOS"]
 classifiers  = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Operating System :: OS Independent",
     "Environment :: Console",
     "Natural Language :: English",
@@ -28,12 +28,13 @@ dependencies = [
     "pyjwt==2.4.0",
     "questionary==1.10.0",
     "paramiko==3.0.0",
-    "qrcode==7.4.2"
+    "qrcode==7.4.2",
+    "sseclient-py==1.8.0",
 ]
 
 [project.urls]
-"Homepage" = "https://www.appollo.space"
-"Source" = "https://github.com/Appollo-CLI/Appollo"
+"Homepage" = "https://www.odevio.com"
+"Source" = "https://github.com/Odevio/Odevio-CLI"
 
 [project.scripts]
-appollo="appollo.__main__:appollo"
+odevio="odevio.__main__:odevio"

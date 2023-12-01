@@ -10,26 +10,28 @@
 Installation
 ============
 
-Appollo is a CLI utility developed in Python. It is easily installed with pip.
+..
+  $$Add client's link
 
-.. code-block::
+Odevio is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Odevio's client.
 
-    pip install appollo
+..
+  $$Add client download screenshot
 
+Once installed, you can easily run the client from your desktop.
 
-Once installed we can easily run the CLI in the terminal :code:`$ appollo` and you should get the ``help`` output of the terminal.
+If it is your first time using Odevio, you are required to create an account. 
 
-If it is your first time using Appollo, create an Appollo account by running :
+.. image:: /img/desktop-signup.jpg
+  :alt: Odevio sign up
+  :align: center
 
-.. code-block::
+|
 
-    appollo signup
+Otherwise, you can log in using your existing credentials.
 
-.. note::
+.. image:: /img/desktop-login.jpg
+  :alt: Odevio login
+  :align: center
 
-    PIP is the python package manager. PIP and python should be installed on your computer for Appollo to work.
-    `Install python <https://www.python.org/downloads/>`_.
-
-.. warning::
-
-    python 3.6 or higher is required for Appollo to work properly.
+|

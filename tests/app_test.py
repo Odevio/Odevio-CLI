@@ -1,11 +1,11 @@
 import re
 
-from tests.appollo_test import AppolloTest
+from tests.odevio_test import OdevioTest
 from tests import fixture
-from appollo.commands import app
+from odevio.commands import app
 
 
-class TestAppList(AppolloTest):
+class TestAppList(OdevioTest):
     command = app.ls
 
     def _get_args(self, **args):
@@ -16,16 +16,16 @@ class TestAppList(AppolloTest):
 
     def test_correct(self):
         self.test_table(["KEY", "Name", "Apple Name", "Bundle ID", "Account"], [
-            [fixture.app_key, "AppolloTestApp", "AppolloTestApp", "space.appollo."+fixture.username, f"TestAccount ({fixture.apple_account_key})"]
+            [fixture.app_key, "OdevioTestApp", "OdevioTestApp", "com.odevio."+fixture.username, f"TestAccount ({fixture.apple_account_key})"]
         ])
 
 
-class TestAppMake(AppolloTest):
+class TestAppMake(OdevioTest):
     command = app.mk
 
-    def _get_args(self, name="AppolloTestApp", bundle_id=None, account_key=None):
+    def _get_args(self, name="OdevioTestApp", bundle_id=None, account_key=None):
         if bundle_id is None:
-            bundle_id = "space.appollo."+fixture.username
+            bundle_id = "com.odevio."+fixture.username
         if account_key is None:
             account_key = fixture.apple_account_key
         return [
@@ -38,14 +38,14 @@ class TestAppMake(AppolloTest):
         self.test("Error: for account - ['Object with key=WRONG does not exist.']", account_key="WRONG")
 
     def test_correct(self):
-        output = self.test_contains(["Congratulations! Your application AppolloTestApp has been created in Appollo as AppolloTestApp with key \"", "\" and on the App Store as ID \""])
+        output = self.test_contains(["Congratulations! Your application OdevioTestApp has been created in Odevio as OdevioTestApp with key \"", "\" and on the App Store as ID \""])
         fixture.app_key = re.findall("with key \"([A-Z0-9]{3})\"", output)[0]
 
     def test_existing_bundle_id(self):
         self.test("Error: ['This bundle ID already exists']")
 
 
-class TestAppRemove(AppolloTest):
+class TestAppRemove(OdevioTest):
     command = app.rm
 
     def _get_args(self, key=None, delete_on_apple=False):
@@ -68,12 +68,12 @@ class TestAppRemove(AppolloTest):
         fixture.app_key = None
 
 
-class TestAppImport(AppolloTest):
+class TestAppImport(OdevioTest):
     command = app.import_app
 
-    def _get_args(self, name="AppolloTestApp", bundle_id=None, account_key=None):
+    def _get_args(self, name="OdevioTestApp", bundle_id=None, account_key=None):
         if bundle_id is None:
-            bundle_id = "space.appollo."+fixture.username
+            bundle_id = "com.odevio."+fixture.username
         if account_key is None:
             account_key = fixture.apple_account_key
         return [
@@ -86,17 +86,17 @@ class TestAppImport(AppolloTest):
         self.test("Error: for account - ['Object with key=WRONG does not exist.']", account_key="WRONG")
 
     def test_wrong_bundle_id(self):
-        self.test("Error: for bundle_id - Bundle ID not found on your Apple Developer account.", bundle_id=f"space.appollo.{fixture.username}_wrong")
+        self.test("Error: for bundle_id - Bundle ID not found on your Apple Developer account.", bundle_id=f"com.odevio.{fixture.username}_wrong")
 
     def test_correct(self):
-        output = self.test_contains(f"Congratulations! Your application AppolloTestApp has been imported on Appollo as AppolloTestApp. It is registered with key ")
+        output = self.test_contains(f"Congratulations! Your application OdevioTestApp has been imported on Odevio as OdevioTestApp. It is registered with key ")
         fixture.app_key = output[-6:-3]
 
     def test_existing(self):
         self.test("Error: ['This bundle ID already exists']")
 
 
-class TestAppLink(AppolloTest):
+class TestAppLink(OdevioTest):
     command = app.link
 
     def _get_args(self, key=None, team_key=None):
@@ -119,7 +119,7 @@ class TestAppLink(AppolloTest):
         self.test(f"Error: The app is already included in the team through the account TestAccount ({fixture.apple_account_key})")
 
 
-class TestAppUnlink(AppolloTest):
+class TestAppUnlink(OdevioTest):
     command = app.unlink
 
     def _get_args(self, key=None, team_key=None):
