@@ -1,8 +1,3 @@
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 ==============================================================
 9. How to publish a Flutter app on the App Store without a Mac
@@ -19,12 +14,6 @@ For this last part of the tutorial, you will learn how to publish your Flutter i
 
 Create your app in the App Store
 --------------------------------
-
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 The first thing you will want to do is to create an iOS app on |app_store_connect|.
 
@@ -74,12 +63,6 @@ Wait for Odevio to create and start the build.
 
 Publish your app on the App Store
 ---------------------------------
-
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 The **build section** should now look like this and you can **select your newest build**.
 

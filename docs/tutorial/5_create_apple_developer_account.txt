@@ -1,8 +1,3 @@
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 ===========================================
 5. How to create an Apple Developer Account
@@ -17,24 +12,12 @@
 A quick guide to enroll in Apple's Developer Program
 ----------------------------------------------------
 
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
-
 The Apple Developer Program is a must have if you want to publish on the App Store.
 
 Follow this easy 5-steps guide to enroll! **No downloads required**.
 
 **Step 1: Creating your Apple ID**
 ==================================
-
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 The first thing you want to do is head over to |apple_developer| and click on the **"Account"** menu.
 
@@ -56,12 +39,6 @@ When creating your Apple ID, you are also required to **turn on two-factor authe
 
 **Step 2: Enrolling in the Apple Developer Program**
 ====================================================
-
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 Now that you are logged in, you can click on **"Join the Apple Developer Program"**.
 
@@ -138,12 +115,6 @@ You will now be asked to review and accept the |apple_agreement|. **Check the bo
 **Step 3: Complete your purchase**
 ==================================
 
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
-
 On this page, you can review what you are purchasing. **Apple Developer Program is not free.**
 
 It has a price of **99€** per year.
@@ -168,12 +139,6 @@ You are then asked to reconnect with your Apple ID.
 
 **Step 4: Choosing your payment option**
 ========================================
-
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 On this page, fill in your billing information to finalize the purchase and **choose your payment options**.
 
@@ -221,12 +186,6 @@ And you are done.
 
 **Step 5: Access to the program**
 ========================================
-
-.. danger::
-
-    **Warning**, this doc is deprecated. Appollo has changed name and is now **Odevio**.
-    
-    **Find the new doc at** https://odevio.readthedocs.io/en/master/
 
 You will then receive an email from Apple telling you that your order is being reviewed.
 
