@@ -32,7 +32,7 @@ Otherwise, you can log in using your existing credentials.
 
 .. |windows_cient| raw:: html
 
-   <a href="https://odevio.com/media/desktop_versions/Odevio-Windows-Setup-1-0-0.exe/" target="_blank">Windows</a>
+   <a href="https://odevio.com/media/desktop_versions/Odevio-Windows-Setup-1-0-0.exe" target="_blank">Windows</a>
 
 .. |linux_cient| raw:: html
 
