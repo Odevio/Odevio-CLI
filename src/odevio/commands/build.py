@@ -952,8 +952,8 @@ def tunnel(key, port, remote_port, host):
     from odevio.helpers import terminal_menu
     from odevio import api
 
-    if remote_port is None:
-        if remote_port not in [22, 5900]:
+    if port is not None:
+        if port not in [22, 5900]:
             remote_port = port
         else:
             remote_port = random.Random().randrange(10000, 65000)

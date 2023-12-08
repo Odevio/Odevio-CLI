@@ -5,4 +5,4 @@ pyjwt==2.4.0
 questionary==1.10.0
 paramiko==3.0.0
 qrcode==7.4.2
-sseclient-py=1.8.0
+sseclient-py==1.8.0
