@@ -1,6 +1,8 @@
+
 =====================
 Odevio Documentation
 =====================
+
 ---------------------------------------------------------------------------------------
 The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
 ---------------------------------------------------------------------------------------
@@ -15,17 +17,14 @@ Odevio is an open-source tool to help developers setup and release their Flutter
 
 Thanks for checking it out.
 
-..
- $$Change GIF
-
-.. figure:: img/odevio--demo.gif
+.. figure:: img/Odevio-demo.gif
     :align: center
     :alt: Odevio demo gif
 
     **A tool for developers by developers**
 
 
-.. image:: https://img.shields.io/badge/version-1.2.0-blue
+.. image:: https://img.shields.io/badge/version-1.2.1-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli

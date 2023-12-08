@@ -5,7 +5,7 @@
 
 |
 
-.. image:: https://img.shields.io/badge/version-1.2.0-blue
+.. image:: https://img.shields.io/badge/version-1.2.1-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli

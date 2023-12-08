@@ -1,16 +1,16 @@
 .. _installation:
-
+    
 ============
 Installation
 ============
 
-..
-  $$Add client's link
+Odevio is a desktop client. It is easily installed by downloading and executing Odevio's client.
 
-Odevio is a desktop client developed in Flutter Web. It is easily installed by downloading and executing Odevio's client.
+For |windows_cient|.
 
-..
-  $$Add client download screenshot
+For |linux_cient|.
+
+For |mac_cient|.
 
 Once installed, you can easily run the client from your desktop.
 
@@ -29,3 +29,16 @@ Otherwise, you can log in using your existing credentials.
   :align: center
 
 |
+
+.. |windows_cient| raw:: html
+
+   <a href="https://odevio.com/media/desktop_versions/Odevio-Windows-Setup-1-0-0.exe" target="_blank">Windows</a>
+
+.. |linux_cient| raw:: html
+
+   <a href="https://odevio.com/media/desktop_versions/odevio-desktop-linux-1-0-0.zip" target="_blank">Linux</a>
+
+.. |mac_cient| raw:: html
+
+   <a href="https://odevio.com/media/desktop_versions/odevio-desktop-macos-1-0-0.zip" target="_blank">Mac</a>
+   

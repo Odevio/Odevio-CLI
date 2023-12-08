@@ -11,7 +11,7 @@ from odevio.helpers import check_new_version
 
 
 @click.group()
-@click.version_option(version='1.1.0', message="""Odevio, %(version)s
+@click.version_option(version='1.2.1', message="""Odevio, %(version)s
 Copyright (C) 2023 Odevio‡
 License : The MIT License
 This is free software: you are free to change and redistribute it.
