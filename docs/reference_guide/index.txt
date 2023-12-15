@@ -30,7 +30,7 @@ this |add_appid| on how to add one.
 
 .. |add_appid| raw:: html
 
-   <a href="https://odevio.readthedocs.io/en/master/tutorial/7_how_to_make_an_app_id_using_appollo.html" target="_blank">tutorial</a>
+   <a href="https://odevio-cli.readthedocs.io/en/latest/tutorial/7_how_to_make_an_app_id_using_odevio.html" target="_blank">tutorial</a>
 
 Build type:
 """""""""""

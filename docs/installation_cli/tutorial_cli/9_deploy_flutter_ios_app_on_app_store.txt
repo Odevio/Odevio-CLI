@@ -29,7 +29,7 @@ You can give whatever name you would like.
 
 Select the **bundle ID** from the list of App ID you have created earlier in the tutorial.
 
-If you have no app ID, you can refer to the :ref:`chapter 7 <create_app_id>` of this tutorial.
+If you have no app ID, you can refer to the :ref:`chapter 7 <create_app_id_cli>` of this tutorial.
 
 Finally, for **SKU** you can choose anything you want as long as it is unique.
 
