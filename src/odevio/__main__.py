@@ -3,7 +3,7 @@
 import click
 
 from odevio.commands.build import build
-from odevio.commands.user import signup, signin, signout, profile
+from odevio.commands.user import signup, signin, signout, profile, apikey
 from odevio.commands.team import team
 from odevio.commands.app import app
 from odevio.commands.apple import apple
@@ -63,6 +63,7 @@ odevio.add_command(profile)
 odevio.add_command(team)
 odevio.add_command(app)
 odevio.add_command(apple)
+odevio.add_command(apikey)
 
 if __name__ == '__main__':
     odevio()

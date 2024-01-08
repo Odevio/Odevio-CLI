@@ -1,6 +1,6 @@
 import click
 
-from odevio.helpers import login_required_warning_decorator
+from odevio.helpers import login_required_warning_decorator, terminal_menu
 
 
 @click.command()
@@ -119,3 +119,83 @@ def profile(ini):
 
         # TODO add a change password option on this command
         # TODO add a reset password option on this command
+
+
+@click.group()
+def apikey():
+    """ Manage your API keys.
+
+    \f
+    API keys are used to authenticate to the Odevio API with external programs.
+
+    Usage:
+    """
+    pass
+
+
+@apikey.command()
+@login_required_warning_decorator
+def ls():
+    """
+    List your API keys.
+
+    \f
+    Only the first 8 characters of the API key are shown. It is not possible to retrieve the full API key after it has been created.
+    """
+    from rich.table import Table
+
+    from odevio import api
+    from odevio.settings import console
+
+    apikeys = api.get("/apikeys/")
+    if len(apikeys) > 0:
+        table_apikeys = Table(expand=True, title="API keys")
+        table_apikeys.add_column("First 8 characters of the key")
+        for apikey in apikeys:
+            table_apikeys.add_row(apikey)
+        console.print(table_apikeys)
+    else:
+        console.print("You have no API keys")
+
+
+@apikey.command()
+@login_required_warning_decorator
+def new():
+    """
+    Create a new API key.
+
+    \f
+    The key will only be shown once so be sure to copy it.
+    """
+    from odevio import api
+    from odevio.settings import console
+
+    apikey = api.post("/apikeys/new")
+    console.print(f"API key: [bold]{apikey['key']}[/bold]")
+    console.print("This key will only be shown once so be sure to copy it.")
+
+
+@apikey.command()
+@login_required_warning_decorator
+@click.argument('key', required=False)
+def rm(key):
+    """
+    Delete an API key.
+
+    \f
+    You only need to provide the first 8 characters of the API key.
+    """
+    from odevio import api
+    from odevio.settings import console
+
+    if key is None:
+        key = terminal_menu("/apikeys/", "Which key do you want to delete?", name=lambda apikey: apikey,
+                            does_not_exist_msg="You have no API keys", key_fieldname=None)
+        if key is None:
+            return
+
+    try:
+        api.delete(f"/apikeys/{key}", json_decode=False)
+        console.print(f"API key [bold]{key}[/bold] deleted")
+    except api.NotFoundException:
+        console.print("This key does not exist or isn't linked to your account.")

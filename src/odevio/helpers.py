@@ -81,7 +81,7 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
         console.print(does_not_exist_msg)
         return
     elif len(terminal_ready_list) == 1:
-        value = item_list[0][key_fieldname]
+        value = item_list[0][key_fieldname] if key_fieldname else item_list[0]
     else:
         menu_entry_index = questionary.select(
             prompt_text,
@@ -91,7 +91,7 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
         if menu_entry_index is None:  # When ctrl-C, exit
             exit()
 
-        value = item_list[menu_entry_index][key_fieldname]
+        value = item_list[menu_entry_index][key_fieldname] if key_fieldname else item_list[menu_entry_index]
 
     return value
 

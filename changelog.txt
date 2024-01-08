@@ -1,3 +1,17 @@
+v1.2.2:
+    - Added API keys creation and management
+
+v1.2.1:
+    - Documentation update
+    - Fixed build tunnel command
+
+v1.2.0:
+    - Renamed Appollo to Odevio
+    - Added real time log streaming when building
+    - Added auto update when a new package version is available
+    - Added post-build-command parameter
+    - Small bug fixes
+
 v1.1.0:
     - Replaced flutter version warning with interactive menu
     - Added restrictions based on subscription plan
