@@ -161,6 +161,11 @@ Required Path to the private key downloaded from App Store Connect.
 
 **Select the file** where you stored your key. The path should look like this:
 
+Teams
+-----
+
+Coming soon...
+
 .. code-block:: python
 
     /Users/USERNAME/Downloads/AuthKey_KeyID.p8
