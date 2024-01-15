@@ -97,7 +97,7 @@ Your build failed ? No worries, you can check the logs with
 -------------
 Documentation
 -------------
-All documentation is in the :code:`docs` directory and online at https://odevio.readthedocs.io/.
+All documentation is in the :code:`docs` directory and online at https://odevio-cli.readthedocs.io/.
 If you are getting started this is how we recommend you use the docs :
 
 * First read our `installation instructions <https://odevio.readthedocs.io/en/master/installation/index.html>`_.
