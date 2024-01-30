@@ -1,8 +1,8 @@
-section#appollo {
+section#odevio {
     padding-left: 15px;
 }
 
-section#appollo h2, section#appollo h3, section#appollo h4, section#appollo h5 {
+section#odevio h2, section#odevio h3, section#odevio h4, section#odevio h5 {
     background: rgba(0, 128, 0, 0.1);
     border-top: 3px solid green;
     padding: 8px 5px;
@@ -12,12 +12,12 @@ section#appollo h2, section#appollo h3, section#appollo h4, section#appollo h5 {
     width: 100%;
 }
 
-section#appollo h2:before, section#appollo h3:before, section#appollo h4:before, section#appollo h5:before {
+section#odevio h2:before, section#odevio h3:before, section#odevio h4:before, section#odevio h5:before {
     content: "$";
     display: inline-block;
     padding-right: 10px;
 }
 
-section#appollo img {
+section#odevio img {
     margin-bottom: 24px;
 }

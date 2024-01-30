@@ -1,3 +1,4 @@
+
 =============================================
 2. How to connect to your configuration build
 =============================================
@@ -22,7 +23,7 @@ Launch RustDesk, it should look like the following screenshot.
 **The first step is to click on the three little dots and select 'ID/Relay Server'.**
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
   
 .. image:: /img/rustdesk-home.jpg
   :alt: Odevio RustDesk connect
@@ -35,7 +36,7 @@ Type in Odevio's relay server: **odevio.space**
 This step is to make sure you are connected to Odevio's relay server.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-relay-server.jpg
   :alt: Odevio RustDesk relay server
@@ -46,7 +47,7 @@ This step is to make sure you are connected to Odevio's relay server.
 Secondly, simply enter the **RustDesk ID** you were given to authenticate.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-connect.jpg
   :alt: Odevio RustDesk connect
@@ -65,7 +66,7 @@ Finally, RustDesk will ask you to enter the **RustDesk password** you received.
 That's it ! You are now connected to an Odevio-Remote build machine in remote desktop.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-desktop.jpg
   :alt: Odevio RustDesk desktop

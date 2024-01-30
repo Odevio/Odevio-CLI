@@ -6,3 +6,4 @@ rich==11.2.0
 requests==2.27.1
 paramiko==3.0.0
 qrcode==7.4.2
+sseclient-py==1.8.0

@@ -89,7 +89,7 @@ To get Odevio running, use the following command: ``odevio``.
 You will get the subsequent result:
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-help.jpg
   :alt: Odevio
@@ -104,7 +104,7 @@ To do so, simply enter ``odevio signup``.
 And follow the prompt instructions.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-signup.jpg
   :alt: Odevio signup
@@ -117,7 +117,7 @@ The starting command that will be of use for this tutorial is ``odevio apple``.
 Therefore, you can type it in to see what you can do next.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-apple.jpg
   :alt: Odevio apple
@@ -139,7 +139,7 @@ In this case, you want to add an access. So, type in ``odevio apple add``.
   You can always add ``--help`` to your command line to list all the options of the command. That way, you can see what your next action will be.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-apple-add.jpg
   :alt: Odevio add Developer account
@@ -207,7 +207,7 @@ It will be useful later.
 If you type in ``odevio apple ls``, you should now see your access.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-apple-ls.jpg
   :alt: Odevio apple ls command
@@ -235,4 +235,4 @@ And that is how you link your Apple Developer account with Odevio in just 3 easy
 
 .. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>

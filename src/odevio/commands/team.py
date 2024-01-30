@@ -1,6 +1,6 @@
 import click
 
-from appollo.helpers import login_required_warning_decorator
+from odevio.helpers import login_required_warning_decorator
 
 
 @click.group('team')
@@ -39,8 +39,8 @@ def ls():
     \f
     Example output :
 
-    .. image:: /img/appollo-team-ls.png
-        :alt: example output of the appollo team ls command
+    .. image:: /img/odevio-team-ls.png
+        :alt: example output of the odevio team ls command
         :align: center
 
     Usage :
@@ -48,8 +48,8 @@ def ls():
     """
     from rich.tree import Tree
     from rich.syntax import Syntax
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
 
     teams = api.get("/teams/")
 
@@ -73,7 +73,7 @@ def ls():
                     t_team_acc.add(f"[green]{acc_item['key']}[/green] | {acc_item['name']} | {acc_item['manager']}")
         console.print(tree)
     else:
-        code = Syntax(code="$ appollo team mk --name TEAM_NAME", lexer="shell")
+        code = Syntax(code="$ odevio team mk --name TEAM_NAME", lexer="shell")
         console.print(f"You are not part of any teams. Create one with")
         console.print(code)
 
@@ -83,8 +83,8 @@ def ls():
 @click.option('--name', prompt=True)
 def mk(name):
     """ Creates a team and sets the logged in user as team admin. """
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
 
     team_instance = api.post("/teams/", json_data={
         "name": name,
@@ -100,9 +100,9 @@ def mk(name):
 @click.confirmation_option(prompt='Are you sure you want to delete a team ?\nThis will remove access to all Apple developer accounts and applications shared to the team to all members of the team\nThis action cannot be reverted.')
 def rm(key):
     """ Deletes a team. """
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/teams/?me=1", "Team",
@@ -130,9 +130,9 @@ def add_member(key, username):
     """ Adds a user to a team. """
     from rich.tree import Tree
 
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/teams/", "Team",
@@ -163,9 +163,9 @@ def add_member(key, username):
 @click.confirmation_option(prompt="Warning: removing this user from a team will make them lose access to all of its applications and developer account,\nand will make the team lose access to any Apple account and application shared by this user to the team. Are you sure you want to continue?")
 def rm_member(key, username):
     """ Removes a user from a team."""
-    from appollo import api
-    from appollo.settings import console
-    from appollo.helpers import terminal_menu
+    from odevio import api
+    from odevio.settings import console
+    from odevio.helpers import terminal_menu
 
     if key is None:
         key = terminal_menu("/teams/", "Team",

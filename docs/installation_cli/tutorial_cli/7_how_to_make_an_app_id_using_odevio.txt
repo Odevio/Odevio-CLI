@@ -21,7 +21,7 @@ the App Store. The App ID is required to publish an app on the App Store.
 In Odevio, you can directly **manage your App IDs**. Thanks to the ``odevio app`` subcommands.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-app.jpg
   :alt: Odevio app
@@ -50,7 +50,7 @@ The **name** is simply the one you want to give to the identifier. Choose an app
 The **bundle ID** (e.g.: com.yourcompany.yourapp)
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-app-mk.jpg
   :alt: Odevio app mk
@@ -73,7 +73,7 @@ There, you will find the **"Identifiers menu"** that contains the list with the 
 
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/apple-identifiers.jpg
   :alt: Apple Identifiers
@@ -94,7 +94,7 @@ Select the configuration type.
   Remember that your virtual machine will be up for an hour, so make sure you finish everything you need in that time.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-xcode.jpg
   :alt: Odevio remote xcode
@@ -107,7 +107,7 @@ Apple will not accept our submission later on in the tutorial. In the left menu 
 **Signing & Capacities** tab under Bundle Identifier you can find the field to change it.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
   
 .. image:: /img/rustdesk-bundle.jpg
    :alt: XCode bundle identifier
@@ -121,4 +121,4 @@ Apple will not accept our submission later on in the tutorial. In the left menu 
 
 .. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>
