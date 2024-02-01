@@ -23,3 +23,12 @@ A readme with the inputs and outputs of the action and examples is available in 
 .. |repository| raw:: html
 
   <a href="https://github.com/Odevio/Odevio-CICD/tree/master/github-actions/build-ios">repository</a>
+
+Azure DevOps Pipelines
+--------------
+
+To deploy your iOS apps to the App Store or generate test IPAs using Azure DevOps Pipelines, you can follow the instructions in the readme available in the |repository|. An example of pipeline file ``azure-pipelines.yml`` is also given.
+
+.. |repository| raw:: html
+
+  <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_azure_cicd">repository</a>
