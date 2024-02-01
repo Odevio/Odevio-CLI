@@ -32,3 +32,12 @@ To deploy your iOS apps to the App Store or generate test IPAs using Azure DevOp
 .. |repository| raw:: html
 
   <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_azure_cicd">repository</a>
+
+GitLab CI/CD Pipelines
+--------------
+
+To deploy your iOS apps to the App Store or generate test IPAs using GitLab CI/CD pipelines, you can follow the instructions in the README available in the |repository|. An example of pipeline file ``.gitlab-ci.yml`` is also given.
+
+.. |repository| raw:: html
+
+  <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_gitlab_cicd">repository</a>
