@@ -48,6 +48,10 @@ Select the type of build you wish to launch for your application.
 
     * **Publication:** Build an .ipa file and publish it on the App Store. Once this build succeeds you have to go on the App Store to complete information and screenshots related to your new application version.
 
+.. |add_device| raw:: html
+
+   <a href="https://developer.apple.com/account/resources/devices/list" target="_blank">tutorial</a>
+
 **Advanced Settings**
 
 Flutter:
@@ -75,6 +79,10 @@ Mode to build the app in. Defaults to release. There are three different options
 * **Release** when you are ready to release your application.
 
 For more information, you can check out Flutter's official |flutter_mode|
+
+.. |flutter_mode| raw:: html
+
+   <a href="https://docs.flutter.dev/testing/build-modes" target="_blank">documentation</a>
 
 Target:
 """""""
@@ -186,12 +194,3 @@ If you are the team's manager you have addtional rights to add or remove members
 
   You can add applications and developer accounts that are already linked to your account. Adding a developer account gives access to all the applications that are linked to it to all the team's members.
 
-
-
-.. |add_device| raw:: html
-
-   <a href="https://developer.apple.com/account/resources/devices/list" target="_blank">tutorial</a>
-
-.. |flutter_mode| raw:: html
-
-   <a href="https://docs.flutter.dev/testing/build-modes" target="_blank">documentation</a>
