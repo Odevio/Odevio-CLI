@@ -71,5 +71,6 @@ This documentation is constantly evolving and we appreciate every help we can ge
    installation/index
    tutorial/index
    reference_guide/index
+   cicd/index
    installation_cli/index
    contribute/index

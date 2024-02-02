@@ -1,4 +1,4 @@
-.. image:: https://odevio.com/static/img/odevio--logo.svg
+.. image:: https://odevio.com/static/img/logo__odevio.svg
     :align: center
     :height: 200px
     :width: 100%
