@@ -1,3 +1,4 @@
+
 ==============================================================
 9. How to publish a Flutter app on the App Store without a Mac
 ==============================================================
@@ -48,7 +49,7 @@ And this time, for the build type: **publication**
 Wait for Odevio to create and start the build.
 
 ..
-  $$Add desktop publication build screenshot Appollo
+  $$Add desktop publication build screenshot Odevio
 
 .. image:: /img/odevio-build-publication.jpg
   :alt: Odevio build start publication
@@ -92,4 +93,4 @@ the issues and publish it again.
 
 .. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>

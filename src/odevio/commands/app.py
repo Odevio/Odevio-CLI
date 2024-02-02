@@ -1,12 +1,12 @@
 import click
 
-from appollo import settings
-from appollo.helpers import login_required_warning_decorator
+from odevio import settings
+from odevio.helpers import login_required_warning_decorator
 
 
 @click.group()
 def app():
-    """ Subcommands to manage your applications on Appollo. """
+    """ Subcommands to manage your applications on Odevio. """
 
 
 @app.command()
@@ -17,8 +17,8 @@ def ls():
     \f
     Example output:
 
-    .. image:: /img/appollo-ls.png
-        :alt: example output of the appollo ls command
+    .. image:: /img/odevio-ls.png
+        :alt: example output of the odevio ls command
         :align: center
 
     Usage:
@@ -26,8 +26,8 @@ def ls():
     from rich.syntax import Syntax
     from rich.table import Table
 
-    from appollo import api
-    from appollo.settings import console
+    from odevio import api
+    from odevio.settings import console
 
     apps = api.get("/applications/")
 
@@ -44,7 +44,7 @@ def ls():
         console.print(table_apps)
     else:
         code = Syntax(
-            code="$ appollo app mk --name NAME --bundle-id BUNDLE_ID --account-key APPLE_DEVELOPER_ACCOUNT_KEY",
+            code="$ odevio app mk --name NAME --bundle-id BUNDLE_ID --account-key APPLE_DEVELOPER_ACCOUNT_KEY",
             lexer="shell")
         console.print(f"You did not register any app identifiers. Create one with")
         console.print(code)
@@ -54,7 +54,7 @@ def ls():
 @login_required_warning_decorator
 @click.option('--name', prompt=True, help="Your app identifier name (e.g.: your app's name)")
 @click.option('--bundle-id', prompt=True, help="The bundle ID for your app on Apple (e.g.: com.company.appname)")
-@click.option('--account-key', prompt=False, help="Appollo key to the Apple Developer Account")
+@click.option('--account-key', prompt=False, help="Odevio key to the Apple Developer Account")
 def mk(name, bundle_id, account_key):
     """ Creates a new app identifier.
 
@@ -64,15 +64,15 @@ def mk(name, bundle_id, account_key):
 
     from rich.text import Text
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
 
     if account_key is None:
         account_key = terminal_menu("/developer-accounts/", "Developer Account",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
-                                            No developer accounts are linked to your profile. Check out [code]$ appollo apple add [/code] to link your developer account to Appollo.
+                                            No developer accounts are linked to your profile. Check out [code]$ odevio apple add [/code] to link your developer account to Odevio.
                                         """
                                     )))
         if account_key is None:
@@ -90,7 +90,7 @@ def mk(name, bundle_id, account_key):
 
     if application:
         console.print(f"Congratulations! Your app identifier {application['apple_name']} has been created "
-                      f"in Appollo as {application['name']} with key \"{application['key']}\" and on the "
+                      f"in Odevio as {application['name']} with key \"{application['key']}\" and on the "
                       f"App Store as ID \"{application['apple_id']}\"")
 
 
@@ -99,10 +99,10 @@ def mk(name, bundle_id, account_key):
 @click.argument('key', required=False)
 @click.option('--delete-on-apple', is_flag=True, help="Also delete the app identifier on Apple")
 def rm(key, delete_on_apple):
-    """ Deletes the app identifier with key \"KEY\" from Appollo and on Apple if specified. """
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    """ Deletes the app identifier with key \"KEY\" from Odevio and on Apple if specified. """
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
 
     if key is None:
         key = terminal_menu("/applications/", "Application",
@@ -124,14 +124,14 @@ def rm(key, delete_on_apple):
 @click.argument('key', required=False)
 @click.option('--team-key', prompt=False, help="Key of the team to link")
 def link(key, team_key):
-    """ Links an app identifier to Appollo team with key \"KEY\".
+    """ Links an app identifier to Odevio team with key \"KEY\".
 
     \f
     .. warning:: All users who are in a team linked to an Apple Developer Account have full control over it.
     """
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
 
     if key is None:
         key = terminal_menu("/applications/?manager=me", "Application", does_not_exist_msg="You do not have any app identifier.")
@@ -158,11 +158,11 @@ def link(key, team_key):
 @click.argument('key', required=False)
 @click.option('--team-key', prompt=False, help="Key of the team to link")
 def unlink(key, team_key):
-    """ Links or unlinks an app identifier to Appollo team with key \"KEY\".
+    """ Links or unlinks an app identifier to Odevio team with key \"KEY\".
     """
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
 
     if key is None:
         key = terminal_menu("/applications/?manager=me&hasteams=1", "Application", does_not_exist_msg="You do not have any app identifiers in a team.")
@@ -184,22 +184,22 @@ def unlink(key, team_key):
 @login_required_warning_decorator
 @click.option('--name', prompt=True, help="Your app identifier name (e.g.: your app's name)")
 @click.option('--bundle-id', prompt=True, help="The bundle ID for your app on Apple (e.g.: com.company.appname)")
-@click.option('--account-key', prompt=False, help="Appollo key to the Apple Developer Account")
+@click.option('--account-key', prompt=False, help="Odevio key to the Apple Developer Account")
 def import_app(name, bundle_id, account_key):
-    """ Imports an app identifier from Apple Developer to Appollo. """
+    """ Imports an app identifier from Apple Developer to Odevio. """
     import textwrap
 
     from rich.text import Text
 
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
 
     if account_key is None:
         account_key = terminal_menu("/developer-accounts/", "Developer Account",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
                                         f"""
-                                            No developer accounts are linked to your profile. Check out [code]$ appollo apple add [/code] to link your developer account to Appollo.
+                                            No developer accounts are linked to your profile. Check out [code]$ odevio apple add [/code] to link your developer account to Odevio.
                                         """
                                     )))
         if account_key is None:
@@ -216,7 +216,7 @@ def import_app(name, bundle_id, account_key):
     )
 
     if application:
-        console.print(f"Congratulations! Your app identifier {application['apple_name']} has been imported on Appollo "
+        console.print(f"Congratulations! Your app identifier {application['apple_name']} has been imported on Odevio "
                       f"as {application['name']}. It is registered with key \"{application['key']}\".")
 
 @app.command("screenshots")
@@ -224,9 +224,9 @@ def import_app(name, bundle_id, account_key):
 @click.argument('key', required=False)
 def screenshots(key):
     """ Returns a link to the screenshot editor for the app with key \"KEY\". """
-    from appollo import api
-    from appollo.helpers import terminal_menu
-    from appollo.settings import console
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
 
     if key is None:
         key = terminal_menu("/applications/", "Application",

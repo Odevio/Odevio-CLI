@@ -79,7 +79,7 @@ Select the configuration type.
   Remember that your virtual machine will be up for an hour, so make sure you finish everything you need in that time.
 
 ..
-  $$Update screenshot Appollo  
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-xcode.jpg
   :alt: Odevio remote xcode
@@ -92,7 +92,7 @@ Apple will not accept our submission later on in the tutorial. In the left menu 
 **Signing & Capacities** tab under Bundle Identifier you can find the field to change it.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-bundle.jpg
    :alt: XCode bundle identifier
@@ -106,4 +106,4 @@ Apple will not accept our submission later on in the tutorial. In the left menu 
 
 .. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>

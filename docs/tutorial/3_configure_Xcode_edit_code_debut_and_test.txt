@@ -45,7 +45,7 @@ Go into your app using ``cd Documents/app`` and use the ``flutter run`` command.
 Wait a few instants and the app should start on the simulator, you can now debug and test it.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-flutter-run.jpg
   :alt: Odevio flutter run

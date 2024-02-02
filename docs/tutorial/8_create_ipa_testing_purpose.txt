@@ -1,3 +1,4 @@
+
 ====================================================================
 8. How to create an IPA file for testing purposes on an Apple Device
 ====================================================================
@@ -10,6 +11,7 @@ for testing purposes on physical Apple devices.
 
 Adding your device to Apple Developer
 -------------------------------------
+
 IPA files can be used for testing purposes only if the physical devices on which you want to test them are added to the
 Apple Developer Devices.
 

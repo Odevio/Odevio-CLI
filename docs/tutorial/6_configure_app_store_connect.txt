@@ -1,3 +1,4 @@
+
 =================================================================================
 6. How to configure App Store Connect for Flutter app iOS deployment with Odevio
 =================================================================================
@@ -184,4 +185,4 @@ And that is how you link your Apple Developer account with Odevio in just 3 easy
 
 .. |odevio_sub| raw:: html
 
-   <a href="https://appollo.space/plans/" target="_blank">here</a>
+   <a href="https://odevio.com/plans/" target="_blank">here</a>
