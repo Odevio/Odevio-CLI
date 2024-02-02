@@ -163,7 +163,30 @@ Required Path to the private key downloaded from App Store Connect.
 
 .. code-block:: python
 
-    /Users/USERNAME/Downloads/AuthKey_KeyID.p8
+ /Users/USERNAME/Downloads/AuthKey_KeyID.p8
+
+Teams
+-----
+
+In the Teams menu you can have an overview of all the teams you are part of.
+
+You can create a new team, you just have to name it.
+
+By clicking on a team, you will see all the details of the team. A list of all the members, all the applications and developer accounts you have access too.
+
+.. image:: /img/odevio-teams.jpg
+  :alt: Odevio teams
+  :align: center
+
+|
+
+If you are the team's manager you have addtional rights to add or remove members, applications and developer accounts.
+
+.. note::
+
+  You can add applications and developer accounts that are already linked to your account. Adding a developer account gives access to all the applications that are linked to it to all the team's members.
+
+
 
 .. |add_device| raw:: html
 
