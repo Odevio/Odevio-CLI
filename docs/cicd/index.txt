@@ -18,26 +18,26 @@ To deploy your iOS apps to the App Store or generate test IPAs using Github Acti
 
 ``Odevio/Odevio-CICD/github-actions/build-ios``
 
-A readme with the inputs and outputs of the action and examples is available in the |repository|
+A readme with the inputs and outputs of the action and examples is available in the |github_repository|
 
-.. |repository| raw:: html
+.. |github_repository| raw:: html
 
   <a href="https://github.com/Odevio/Odevio-CICD/tree/master/github-actions/build-ios">repository</a>
 
 Azure DevOps Pipelines
---------------
+----------------------
 
-To deploy your iOS apps to the App Store or generate test IPAs using Azure DevOps Pipelines, you can follow the instructions in the readme available in the |repository|. An example of pipeline file ``azure-pipelines.yml`` is also given.
+To deploy your iOS apps to the App Store or generate test IPAs using Azure DevOps Pipelines, you can follow the instructions in the readme available in the |azure_repository|. An example of pipeline file ``azure-pipelines.yml`` is also given.
 
-.. |repository| raw:: html
+.. |azure_repository| raw:: html
 
   <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_azure_cicd">repository</a>
 
 GitLab CI/CD Pipelines
---------------
+----------------------
 
-To deploy your iOS apps to the App Store or generate test IPAs using GitLab CI/CD pipelines, you can follow the instructions in the README available in the |repository|. An example of pipeline file ``.gitlab-ci.yml`` is also given.
+To deploy your iOS apps to the App Store or generate test IPAs using GitLab CI/CD pipelines, you can follow the instructions in the README available in the |gitlab_repository|. An example of pipeline file ``.gitlab-ci.yml`` is also given.
 
-.. |repository| raw:: html
+.. |gitlab_repository| raw:: html
 
   <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_gitlab_cicd">repository</a>
