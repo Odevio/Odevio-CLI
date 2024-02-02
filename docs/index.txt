@@ -24,7 +24,7 @@ Thanks for checking it out.
     **A tool for developers by developers**
 
 
-.. image:: https://img.shields.io/badge/version-1.2.1-blue
+.. image:: https://img.shields.io/badge/version-1.2.2-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli

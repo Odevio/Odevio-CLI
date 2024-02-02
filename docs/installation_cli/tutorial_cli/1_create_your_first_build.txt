@@ -1,4 +1,4 @@
-.. _start_configuration_build:
+.. _start_configuration_build_cli:
 
 ================================================
 1. Create your first Odevio configuration build

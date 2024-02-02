@@ -20,7 +20,8 @@ For this step, you need a remote desktop access application. For Odevio, the one
 
 Launch RustDesk, it should look like the following screenshot.
 
-**The first step is to click on the three little dots and select 'ID/Relay Server'.**
+.. warning::
+  **The first step is to click on the three little dots and select 'ID/Relay Server'.**
 
 ..
   $$Update screenshot Odevio
@@ -31,7 +32,7 @@ Launch RustDesk, it should look like the following screenshot.
 
 |
 
-Type in Odevio's relay server: **odevio.space**
+Type in Odevio's relay server: **odevio.com**
 
 This step is to make sure you are connected to Odevio's relay server.
 
