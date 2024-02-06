@@ -7,7 +7,7 @@ from rich.table import Table
 from io import StringIO
 
 
-class AppolloTest:
+class OdevioTest:
     command = None
 
     def __init__(self):
@@ -27,7 +27,7 @@ class AppolloTest:
     def test(self, expected, **args):
         output = self._get_output(args)
         if output != self._console_output(expected):
-            raise AppolloTestFailed(expected, output)
+            raise OdevioTestFailed(expected, output)
         print("\u001b[32mOK\u001b[0m")
         return output
 
@@ -38,7 +38,7 @@ class AppolloTest:
             expected = [expected]
         for e in expected:
             if e not in output:
-                raise AppolloTestFailed(e, output)
+                raise OdevioTestFailed(e, output)
         print("\u001b[32mOK\u001b[0m")
         return output
 
@@ -56,7 +56,7 @@ class AppolloTest:
         _add_to_tree(tree, expected[1])
         expected = self._console_output(tree)
         if output != expected:
-            raise AppolloTestFailed(expected, output)
+            raise OdevioTestFailed(expected, output)
         print("\u001b[32mOK\u001b[0m")
 
     def _console_output(self, out):
@@ -74,11 +74,11 @@ class AppolloTest:
             table.add_row(*row)
         expected = self._console_output(table)
         if contains and expected not in output or not contains and output != expected:
-            raise AppolloTestFailed(expected, output)
+            raise OdevioTestFailed(expected, output)
         print("\u001b[32mOK\u001b[0m")
 
 
-class AppolloTestFailed(Exception):
+class OdevioTestFailed(Exception):
     def __init__(self, expected, output):
         self.expected = expected
         self.output = output

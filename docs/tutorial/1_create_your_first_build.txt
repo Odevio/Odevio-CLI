@@ -1,5 +1,5 @@
 .. _start_configuration_build:
-
+    
 ================================================
 1. Create your first Odevio configuration build
 ================================================
@@ -47,7 +47,7 @@ Odevio will prepare your build in a few moments!
 Once it is done, you will receive all the credentials of your Mac virtual machine.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/desktop-connect.jpg
   :alt: Desktop vm credentials

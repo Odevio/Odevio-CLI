@@ -9,32 +9,32 @@ apple_key_path =
 import os.path
 import random
 
-import appollo.settings
-import appollo.api
+import odevio.settings
+import odevio.api
 from tests import fixture, account_test, team_test, apple_test, app_test
-from tests.appollo_test import AppolloTestFailed
+from tests.odevio_test import OdevioTestFailed
 
-assert appollo.settings.API_BASE_URL != "https://appollo.space", "Do not run test on the production environment"
+assert odevio.settings.API_BASE_URL != "https://odevio.com", "Do not run test on the production environment"
 
 fixture.username = f"test_{random.Random().randint(100000, 999999)}"
-appollo.api.delete_jwt_token()
+odevio.api.delete_jwt_token()
 
 other_user_created = False
 
 
 def switch_other_user():
-    os.replace(appollo.settings.get_config_path(), "backup.ini")
+    os.replace(odevio.settings.get_config_path(), "backup.ini")
     if not os.path.exists("other.ini"):
-        appollo.api.get_authorization_header(f"{fixture.username}_other@appollo.space", "password")
+        odevio.api.get_authorization_header(f"{fixture.username}_other@odevio.com", "password")
     else:
-        os.replace("other.ini", appollo.settings.get_config_path())
+        os.replace("other.ini", odevio.settings.get_config_path())
 
 
 def switch_back_user():
     if not os.path.exists("backup.ini"):
         return
-    os.replace(appollo.settings.get_config_path(), "other.ini")
-    os.replace("backup.ini", appollo.settings.get_config_path())
+    os.replace(odevio.settings.get_config_path(), "other.ini")
+    os.replace("backup.ini", odevio.settings.get_config_path())
 
 
 try:
@@ -52,8 +52,8 @@ try:
     team_test.TestTeamList().test_empty()
     team_test.TestTeamMake().test_correct()
     team_test.TestTeamList().test_correct()
-    appollo.api.post('/register/', authorization=False, json_data={
-        "email": f"{fixture.username}_other@appollo.space",
+    odevio.api.post('/register/', authorization=False, json_data={
+        "email": f"{fixture.username}_other@odevio.com",
         "password": "password",
         "username": f"{fixture.username}_other"
     })
@@ -105,7 +105,7 @@ try:
     app_test.TestAppLink().test_correct()
     team_test.TestTeamList().test_correct(
         members=[fixture.username, fixture.username+"_other"],
-        applications=[{'key': fixture.app_key, 'name': "AppolloTestApp", 'bundle_id': "space.appollo."+fixture.username}]
+        applications=[{'key': fixture.app_key, 'name': "OdevioTestApp", 'bundle_id': "com.odevio."+fixture.username}]
     )
     switch_other_user()
     app_test.TestAppList().test_correct()
@@ -157,28 +157,28 @@ try:
 
     print("\u001b[32mAll tests passed\u001b[0m")
 
-except AppolloTestFailed as e:
+except OdevioTestFailed as e:
     print(e)
 
 finally:
     print("Cleaning test data...")
     switch_back_user()
     if hasattr(fixture, "team_key") and fixture.team_key:
-        appollo.api.delete(f"/teams/{fixture.team_key}")
+        odevio.api.delete(f"/teams/{fixture.team_key}")
         print("Deleted test team")
     if hasattr(fixture, "app_key") and fixture.app_key:
-        appollo.api.delete(f"/applications/{fixture.app_key}?apple=1")
+        odevio.api.delete(f"/applications/{fixture.app_key}?apple=1")
         print("Deleted test app")
     if hasattr(fixture, "apple_account_key") and fixture.apple_account_key:
-        appollo.api.delete(f"/developer-accounts/{fixture.apple_account_key}")
+        odevio.api.delete(f"/developer-accounts/{fixture.apple_account_key}")
         print("Deleted test Apple account")
-    appollo.api.delete('/my-account/')  # Delete all test data
+    odevio.api.delete('/my-account/')  # Delete all test data
     print("Deleted test user")
-    appollo.api.delete_jwt_token()
+    odevio.api.delete_jwt_token()
     if other_user_created:
-        appollo.api.get_authorization_header(f"{fixture.username}_other@appollo.space", "password")
-        appollo.api.delete('/my-account/')
-        appollo.api.delete_jwt_token()
+        odevio.api.get_authorization_header(f"{fixture.username}_other@odevio.com", "password")
+        odevio.api.delete('/my-account/')
+        odevio.api.delete_jwt_token()
         print("Deleted other test user")
     try:
         os.remove("backup.ini")

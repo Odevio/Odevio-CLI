@@ -22,7 +22,7 @@ Stopping a build manually is possible by using the command ``odevio build stop``
 When your build is stopped, you can create the patch using ``odevio build patch``.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-patch.jpg
   :alt: Odevio build patch
@@ -33,7 +33,7 @@ When your build is stopped, you can create the patch using ``odevio build patch`
 By default, the file is called **odevio.patch** and is located in your app folder.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-patch.jpg
   :alt: Odevio patch
@@ -60,7 +60,7 @@ When your build is stopped, you can get your files as a zip file by using ``odev
 Unzip the files and you get the last version of your source code as edited in XCode.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
   
 .. image:: /img/odevio-build-download.jpg
   :alt: Odevio build download

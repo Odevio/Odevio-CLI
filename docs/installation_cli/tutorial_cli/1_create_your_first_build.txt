@@ -23,7 +23,7 @@ It is really easy, you just need to **use this one command**:
 **Select the configuration type**
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-start-1.jpg
   :alt: Odevio build start select type
@@ -37,7 +37,7 @@ Now, select the **No application (Xcode will not be configured) option.**
     If you have linked your Odevio account with your Apple Developer Account, you will be able to see a list of the Apps you added.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-start-2.jpg
   :alt: Odevio build start select option
@@ -48,7 +48,7 @@ Now, select the **No application (Xcode will not be configured) option.**
 Odevio will prepare your build in a few moments!
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-start-3.jpg
   :alt: Odevio build start prepare
@@ -59,7 +59,7 @@ Odevio will prepare your build in a few moments!
 Once it is done, you will receive all the credentials of your Mac virtual machine.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-start-4.jpg
   :alt: Odevio build start ready

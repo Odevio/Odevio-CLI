@@ -11,7 +11,7 @@ Now that your configuration build is ready and that you received your credential
 
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-start-4.jpg
   :alt: Odevio build start
@@ -24,7 +24,7 @@ Now that your configuration build is ready and that you received your credential
     Odevio will suggest you to create one automatically.
 
     ..
-      $$Update screenshot Appollo
+      $$Update screenshot Odevio
       
     .. image:: /img/odevio-connect-other.jpg
       :alt: Odevio build connect with other build
@@ -37,7 +37,7 @@ Launch RustDesk, it should look like the following screenshot.
 **The first step is to click on the three little dots and select 'ID/Relay Server'.**
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/rustdesk-home.jpg
   :alt: Odevio RustDesk connect

@@ -42,11 +42,11 @@ The Odevio team.
 
 .. |github_new_issue| raw:: html
 
-   <a href="https://github.com/Appollo-CLI/Appollo/issues" target="_blank">Github's issue tracker</a>
+   <a href="https://github.com/Odevio/Odevio-CLI/issues" target="_blank">Github's issue tracker</a>
 
 .. |stackoverflow| raw:: html
 
-    <a href="https://stackoverflow.com/questions/tagged/appollo" target="_blank">Stackoverflow</a>
+    <a href="https://stackoverflow.com/questions/tagged/odevio" target="_blank">Stackoverflow</a>
 
 .. |discord| raw:: html
 

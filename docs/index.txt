@@ -1,6 +1,8 @@
+
 =====================
 Odevio Documentation
 =====================
+
 ---------------------------------------------------------------------------------------
 The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
 ---------------------------------------------------------------------------------------
@@ -22,24 +24,24 @@ Thanks for checking it out.
     **A tool for developers by developers**
 
 
-.. image:: https://img.shields.io/badge/version-1.1.0-blue
-    :target: https://github.com/Appollo-CLI/Appollo/
+.. image:: https://img.shields.io/badge/version-1.2.1-blue
+    :target: https://github.com/Odevio/Odevio-CLI/
 
-.. image:: https://img.shields.io/github/license/appollo-cli/appollo
-    :target: https://github.com/Appollo-CLI/Appollo/blob/master/LICENSE
+.. image:: https://img.shields.io/github/license/odevio/odevio-cli
+    :target: https://github.com/Odevio/Odevio-CLI/blob/master/LICENSE
 
-.. image:: https://img.shields.io/librariesio/release/pypi/appollo
-    :target: https://pypi.org/project/appollo/
+.. image:: https://img.shields.io/librariesio/release/pypi/odevio
+    :target: https://pypi.org/project/odevio/
 
 .. image:: https://img.shields.io/badge/downloads-100%2Fmonth-brightgreen
-    :target: https://pypi.org/project/appollo/
+    :target: https://pypi.org/project/odevio/
 
 .. image:: https://img.shields.io/uptimerobot/ratio/m792431382-e51d8a06926b56c359afe3b7
     :target: https://stats.uptimerobot.com/QqN9MFXvw3
     :alt: UptimeRobot
 
-.. image:: https://www.codefactor.io/repository/github/appollo-cli/appollo/badge
-   :target: https://www.codefactor.io/repository/github/appollo-cli/appollo
+.. image:: https://www.codefactor.io/repository/github/odevio/odevio-cli/badge
+   :target: https://www.codefactor.io/repository/github/odevio/odevio-cli
    :alt: CodeFactor
 
 .. image:: https://img.shields.io/discord/945256030869258280?logo=discord

@@ -26,7 +26,7 @@ Building the IPA
 You can use the command ``odevio build start`` but this time the **build type** is going to be **ad-hoc**. Select your app in your list of proposed apps.
 
 ..
-  $$Update screenshot Appollo
+  $$Update screenshot Odevio
 
 .. image:: /img/odevio-build-adhoc.jpg
   :alt: Odevio build start build type ad-hoc
