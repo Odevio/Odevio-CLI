@@ -5,7 +5,7 @@ import click
 from rich.console import Console
 
 APP_NAME = "Odevio"
-API_BASE_URL = "https://odevio.com"
+API_BASE_URL = "https://odevio.deuse.dev"
 
 
 console = Console()

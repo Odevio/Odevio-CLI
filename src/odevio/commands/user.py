@@ -1,4 +1,5 @@
 import click
+import questionary
 
 from odevio.helpers import login_required_warning_decorator, terminal_menu
 
@@ -24,7 +25,18 @@ def signup(email, password, username):
     if user:
         api.get_authorization_header(email, password)
         console.print(f"Welcome to Odevio [green underline]{user['username']}[/green underline]")
-        # TODO add a reset password option on this command
+        questions = api.get("/onboarding-questions/")
+        if questions:
+            console.print("Answer these few questions to help us provide you with a better personalized experience.")
+            answers = []
+            for question in questions:
+                answer = questionary.select(
+                    question["question"],
+                    choices=list(map(lambda a: questionary.Choice(a["answer"], a["id"]), question["answers"])),
+                ).ask()
+                if answer:
+                    answers.append(answer)
+            api.post("/onboarding-answers/", json_data={"answers": answers}, json_decode=False)
 
 
 @click.command()

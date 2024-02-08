@@ -40,7 +40,7 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
             f"{API_BASE_URL}{'/events' if sse else '/api/v1'}{route}",
             headers=headers,
             params=params,
-            data=data,
+            json=data,
             files=files,
             stream=sse
         )
@@ -89,12 +89,12 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
     return _request("get", route, params=params, authorization=authorization, auth_data=auth_data, json_decode=json_decode, sse=sse)
 
 
-def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None):
+def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None, json_decode=True):
     """ POST method wrapper for Odevio API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-    return _request("post", route, params=params, data=json_data, files=files, authorization=authorization, auth_data=auth_data)
+    return _request("post", route, params=params, data=json_data, files=files, authorization=authorization, auth_data=auth_data, json_decode=json_decode)
 
 
 def put(route, authorization=True, json_data=None, params=None, files=None):
