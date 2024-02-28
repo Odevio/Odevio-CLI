@@ -6,7 +6,7 @@
 In this tutorial, you will learn how to **link your Apple Developer account with Odevio**.
 
 .. note::
-  If you are using the free version of Odevio, you can only have **one** Apple developer account linked to your user account. 
+  During your Odevio trial, you can link as many account you want. 
   
   To **link multiple accounts**, you have to **subscribe to a paid subscription**, you can discover our available plans |odevio_sub|.
 
@@ -143,11 +143,7 @@ You can also copy the **Issuer ID²** right above because it will be the next li
 
 The **private key** is the last bit of information you need to complete. It is the **path** where you stored the file of the key you **downloaded³** earlier.
 
-**Select the file** where you stored your key. The path should look like this:
-
-.. code-block:: python
-
-    /Users/USERNAME/Downloads/AuthKey_KeyID.p8
+Simply **select the file** where you stored your key.
 
 Now that your Apple Developer account was linked successfully you should see it appear in the **Apple** section like this:
 
@@ -158,7 +154,7 @@ Now that your Apple Developer account was linked successfully you should see it 
 |
 
 .. note::
-    You can only link one Apple Developer acccount at a time with the trial version or the hobbyist plant.
+    You can only link one Apple Developer acccount at a time with the trial version or the hobbyist plan.
 
     To **link multiple Apple Developer Account** to your user account, you have to **subscribe to Odevio**, check out our available plans |odevio_sub|.
 

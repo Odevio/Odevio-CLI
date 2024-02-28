@@ -27,9 +27,9 @@ In Odevio, you can directly **manage your App IDs**. It is the purpose of the **
 |
 
 .. note::
-  If you are using the free trial or the hobbyist plan, you can only link **one** application to your user account.
+  During your Odevio trial you can link as many applications you want.
 
-  To **link multiple applications** to your user account, you have to **subscribe to Odevio**, check out our available plans |odevio_sub|.
+  After, to **link multiple applications** to your user account, you have to **subscribe to Odevio**, check out our available plans |odevio_sub|.
 
 .. _create_app_id:
 
@@ -81,14 +81,14 @@ Select the configuration type.
 ..
   $$Update screenshot Odevio
 
-.. image:: /img/rustdesk-xcode.jpg
+.. image:: /img/rustdesk-desktop.jpg
   :alt: Odevio remote xcode
   :align: center
 
 |
 
-We will **configure the Bundle Identifier in XCode for our app** to be the same as the one we created with Odevio otherwise
-Apple will not accept our submission later on in the tutorial. In the left menu of XCode select **Runner** and in the
+We will **configure the Bundle Identifier in Xcode for our app** to be the same as the one we created with Odevio otherwise
+Apple will not accept our submission later on in the tutorial. In the left menu of Xcode select **Runner** and in the
 **Signing & Capacities** tab under Bundle Identifier you can find the field to change it.
 
 ..

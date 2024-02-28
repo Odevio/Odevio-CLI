@@ -10,7 +10,7 @@ You will have the possibility to retrieve the changes you made in Odevio Remote 
 Retrieve changes with a patch file
 ----------------------------------
 
-When your build is stopped, you can create the patch using the **Download Patch (1)** button.
+When your build is stopped, you can **Download the code (1)** that will create a source.zip file in your folder.
 
 .. image:: /img/desktop-patch.jpg
   :alt: Desktop patch
@@ -18,7 +18,7 @@ When your build is stopped, you can create the patch using the **Download Patch 
 
 |
 
-By default, the file is called **odevio.patch** and is located in your app folder.
+Or you can **Download Patch (2)**. By default, the file created is called **odevio.patch** and is located in your app folder.
 
 .. image:: /img/odevio-patch.jpg
   :alt: Odevio patch

@@ -42,7 +42,7 @@ You now have access to a dashboard for your app. If you scroll down, you will se
 Build your app
 --------------
 
-Now that this done, go over the client and go in the **Builds* tab.
+Now that this done, go over the client and go in the **Builds** tab.
 
 And this time, for the build type: **publication**
 

@@ -1,14 +1,14 @@
 .. _start_configuration_build:
     
-================================================
+===============================================
 1. Create your first Odevio configuration build
-================================================
+===============================================
 
 If you are here, it means that you managed to install Odevio and have created your account.
 
 You are almost there, this is the only step you need to do to create your first configuration build.
 
-It is really easy, go to the **Builds** page:
+It is really easy, click on **Create a new build!** or go to the **Builds** page.
 
 .. image:: /img/desktop-builds.jpg
   :alt: Desktop builds page
@@ -19,7 +19,13 @@ It is really easy, go to the **Builds** page:
 .. tip:: 
   You can click on the little i's, it will redirect you to the reference guide and the field's definition
 
-First, select the root folder of your app!
+First, select the root folder of your app! Otherwise, you won't see any of the other fields of the form.
+
+.. image:: /img/odevio-select-folder.jpg
+  :alt: Odevio select folder
+  :align: center
+
+|
 
 For this tutorial, you are not required to select an application (Xcode will not be configured).
 
@@ -34,9 +40,9 @@ For this tutorial, you are not required to select an application (Xcode will not
 
 |
 
-Make sure you specify the Flutter version you have installed aswell.
+Odevio will detect the Flutter version for you. Make sure it is compatible otherwise you might have some troubles with your build or running your application with Flutter on the VM.
 
-Odevio will prepare your build in a few moments!
+Press tha **Start build** button whenever you are ready!
 
 .. image:: /img/desktop-build-start.jpg
   :alt: Desktop build start loading

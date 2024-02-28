@@ -8,7 +8,9 @@ In this chapter, you will learn how to **connect to your configuration build**
 Use RustDesk to connect to your configuration build
 ---------------------------------------------------
 
-Now that your configuration build is ready, you can directly connect to your Mac virtual machine.
+You must download |rustdesk| to connect to your Configuration build.
+
+Now that your configuration build is ready and Rustdesk installed, you can directly connect to your Mac virtual machine. Odevio will launch Rustdesk by its own.
 
 .. image:: /img/desktop-connect.jpg
   :alt: Desktop connect
@@ -24,11 +26,11 @@ Now that your configuration build is ready, you can directly connect to your Mac
 
 |
 
-For this step, you need a remote desktop access application. For Odevio, the one used is **RustDesk's** |rustdesk_client|.
+For this step, you need a remote desktop access application. For Odevio, the one used is |rustdesk|.
 
-Launch RustDesk, it should look like the following screenshot.
+Launch Rustdesk, it should look like the following screenshot.
 
-**The first step is to click on the three little dots and select 'ID/Relay Server'.**
+**The first step is to click on the three little dots, this will open the settings and go into the Network settings**
 
 ..
   $$Update screenshot Odevio
@@ -83,16 +85,16 @@ That's it ! You are now connected to an Odevio-Remote build machine in remote de
 |
 
 .. tip::
-    If you can not see the entire desktop, do not worry, there is a shrink option in the settings.
+    If the screen scrolls based on your mouse movement, click the button on top of the screen and switch to **Scale adaptive**.
 
       .. image:: /img/rustdesk-shrink.jpg
         :alt: Odevio RustDesk shrink
         :align: center
 
 
-.. |rustdesk_client| raw:: html
+.. |rustdesk| raw:: html
 
-   <a href="https://rustdesk.com/" target="_blank">client</a>
+   <a href="https://rustdesk.com/" target="_blank">Rustdesk</a>
 
 .. |flutter_app| raw:: html
 

@@ -51,27 +51,7 @@ Now that you are logged in, you can click on **"Join the Apple Developer Program
 
 |
 
-You will land on a page explaining what is the Apple Developer Program.
-
-To continue, click on the **"Enroll"** button at the top of the page.
-
-.. image:: /img/apple-dev-enroll.jpg
-  :alt: Enroll in the program
-  :align: center
-
-|
-
-Before you enroll, you are told what are the requirements to enroll as an individual or as a company. After acknowledging this page, you can click on **"Start Your Enrollment"**.
-
-.. image:: /img/apple-start-enroll.jpg
-  :alt: Start the enrollment
-  :align: center
-
-|
-
-You are then invited to download the new Apple Developer app from the store.
-
-You can just skip this part by clicking below on **"Continue enrollment on the web"**.
+Apple will ask you if you want to continue with the app. Ignore that and click  on **Continue enrollment on the web**
 
 .. image:: /img/apple-dev-app.jpg
   :alt: Apple Developer app
@@ -97,10 +77,13 @@ For the next step, you have to verify your personal contact information.
 
 |
 
-.. figure:: /img/apple-cie-req.jpg
-  :figclass: align-center
+Before you enroll, you are told what are the requirements to enroll as an individual or as a company. After acknowledging this page, you can click on **"Start Your Enrollment"**.
 
-  *Company requirements*
+.. image:: /img/apple-start-enroll.jpg
+  :alt: Start the enrollment
+  :align: center
+
+|
 
 You can look up |check_duns| if your company/organization already has a Dun & Bradstreet (DUNS) number. Otherwise, you can request a number on |request_duns|.
 
@@ -135,7 +118,7 @@ You can now press the **"Purchase"** button.
 
 |
 
-You are then asked to reconnect with your Apple ID.
+At this point, it is possible that Apple asks you to reconnect to your account.
 
 **Step 4: Choosing your payment option**
 ========================================
@@ -149,13 +132,6 @@ On this page, fill in your billing information to finalize the purchase and **ch
 |
 
 If you are buying as a company or an organization, **do not forget to indicate the VAT number**.
-
-
-.. image:: /img/apple-pay-vat.jpg
-  :alt: VAT number
-  :align: center
-
-|
 
 It is time to check your order.
 

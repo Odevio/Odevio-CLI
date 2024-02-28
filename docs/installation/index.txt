@@ -30,6 +30,14 @@ Otherwise, you can log in using your existing credentials.
 
 |
 
+Once logged in, you will see this welcome screen.
+
+.. image:: /img/odevio-welcome.jpg
+  :alt: Odevio Welcome Screen
+  :align: center
+
+|
+
 .. |windows_cient| raw:: html
 
    <a href="https://odevio.com/media/desktop_versions/Odevio-Windows-Setup-1-0-0.exe" target="_blank">Windows</a>

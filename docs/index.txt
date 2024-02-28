@@ -17,7 +17,7 @@ Odevio is an open-source tool to help developers setup and release their Flutter
 
 Thanks for checking it out.
 
-.. figure:: img/Odevio-demo.gif
+.. figure:: img/odevio-demo.gif
     :align: center
     :alt: Odevio demo gif
 
