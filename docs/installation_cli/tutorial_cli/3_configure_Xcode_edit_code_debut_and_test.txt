@@ -27,13 +27,6 @@ Odevio remote also gives you the possibility to direclty **edit your code** with
 
 |
 
-.. note::
-  We are aware of an issue regarding keyboard mapping using the VM and are looking into it. For the time being, you can use the virtual keyboard or you can add your keyboard layout like shown on the following screenshot.
-
-  .. image:: /img/rustdesk-keyboard.jpg
-    :alt: Odevio RustDesk Keyboard
-    :align: center
-
 Debug and test your Flutter app with the iOS simulator
 ------------------------------------------------------
 

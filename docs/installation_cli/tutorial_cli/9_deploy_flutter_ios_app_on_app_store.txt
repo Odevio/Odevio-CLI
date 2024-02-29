@@ -56,7 +56,7 @@ Wait for Odevio to create and start the build.
 ..
   $$Update screenshot Odevio
 
-.. image:: /img/odevio-build-publication.jpg
+.. image:: /img/odevio-build-publication-cli.jpg
   :alt: Odevio build start publication
   :align: center
 

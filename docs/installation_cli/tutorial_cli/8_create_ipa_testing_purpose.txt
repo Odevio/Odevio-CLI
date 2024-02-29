@@ -28,7 +28,7 @@ You can use the command ``odevio build start`` but this time the **build type** 
 ..
   $$Update screenshot Odevio
 
-.. image:: /img/odevio-build-adhoc.jpg
+.. image:: /img/odevio-build-adhoc-cli.jpg
   :alt: Odevio build start build type ad-hoc
   :align: center
 

@@ -96,7 +96,7 @@ Select the configuration type.
 ..
   $$Update screenshot Odevio
 
-.. image:: /img/rustdesk-xcode.jpg
+.. image:: /img/rustdesk-desktop.jpg
   :alt: Odevio remote xcode
   :align: center
 
