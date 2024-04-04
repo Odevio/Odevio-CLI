@@ -1,4 +1,5 @@
 v1.2.2:
+    - Documentation update
     - Added API keys creation and management
 
 v1.2.1:
