@@ -6,11 +6,7 @@ Installation
 
 Odevio is a desktop client. It is easily installed by downloading and executing Odevio's client.
 
-For |windows_cient|.
-
-For |linux_cient|.
-
-For |mac_cient|.
+You can find the client for Windows, Linux and Mac |odevio_cient|.
 
 Once installed, you can easily run the client from your desktop.
 

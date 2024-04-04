@@ -1,0 +1,43 @@
+.. _cidi:
+
+=====
+CI/CD
+=====
+
+Odevio can easily be integrated with your CI/CD pipeline to deploy your iOS apps to the App Store or generate test IPAs.
+
+We currently support Github Actions, Gitlab and Azure DevOps, but you can use the provided scripts to integrate with other CI/CD providers.
+
+.. tip::
+  Let us know what other tools you would like to see supported by Odevio.
+
+Github Actions
+--------------
+
+To deploy your iOS apps to the App Store or generate test IPAs using Github Actions, you can insert this action in your workflow:
+
+``Odevio/Odevio-CICD/github-actions/build-ios``
+
+A readme with the inputs and outputs of the action and examples is available in the |github_repository|
+
+.. |github_repository| raw:: html
+
+  <a href="https://github.com/Odevio/Odevio-CICD/tree/master/github-actions/build-ios">repository</a>
+
+Azure DevOps Pipelines
+----------------------
+
+To deploy your iOS apps to the App Store or generate test IPAs using Azure DevOps Pipelines, you can follow the instructions in the readme available in the |azure_repository|. An example of pipeline file ``azure-pipelines.yml`` is also given.
+
+.. |azure_repository| raw:: html
+
+  <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_azure_cicd">repository</a>
+
+GitLab CI/CD Pipelines
+----------------------
+
+To deploy your iOS apps to the App Store or generate test IPAs using GitLab CI/CD pipelines, you can follow the instructions in the README available in the |gitlab_repository|. An example of pipeline file ``.gitlab-ci.yml`` is also given.
+
+.. |gitlab_repository| raw:: html
+
+  <a href="https://github.com/Odevio/Odevio-CICD/tree/master/doc_gitlab_cicd">repository</a>

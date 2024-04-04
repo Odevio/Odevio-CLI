@@ -1,11 +1,11 @@
-.. image:: https://odevio.com/static/img/odevio--logo.svg
+.. image:: https://odevio.com/static/img/logo__odevio.svg
     :align: center
     :height: 200px
     :width: 100%
 
 |
 
-.. image:: https://img.shields.io/badge/version-1.2.1-blue
+.. image:: https://img.shields.io/badge/version-1.2.2-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli
@@ -97,7 +97,7 @@ Your build failed ? No worries, you can check the logs with
 -------------
 Documentation
 -------------
-All documentation is in the :code:`docs` directory and online at https://odevio.readthedocs.io/.
+All documentation is in the :code:`docs` directory and online at https://odevio-cli.readthedocs.io/.
 If you are getting started this is how we recommend you use the docs :
 
 * First read our `installation instructions <https://odevio.readthedocs.io/en/master/installation/index.html>`_.
