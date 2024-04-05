@@ -695,7 +695,7 @@ def connect(ctx, key, tunnel_port, tunnel_host, tunnel_remote_port, yes):
     This command will start an Odevio-Remote and return connection settings and credentials for you to connect with a
     remote desktop client to the Odevio-Remote.
 
-    .. note:: Odevio-Remotes are active for 30 minutes before being closed automatically.
+    .. note:: Odevio-Remotes are active for 1 hour before being closed automatically.
     .. note:: Odevio-Remotes are MacOS build machines on which the flutter build of your application is executed.
     .. note:: The connection uses the VNC protocol, your Remote Desktop client must support it to allow you to use an Odevio-Remote.
     """
