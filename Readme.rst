@@ -3,7 +3,11 @@
     :height: 200px
     :width: 100%
 
-|
+.. image:: https://img.shields.io/badge/status-deprecated-red
+
+⚠️ **This project is no longer maintained.**
+
+Thank you for your support — it’s been a great journey!
 
 .. image:: https://img.shields.io/badge/version-1.2.2-blue
     :target: https://github.com/Odevio/Odevio-CLI/
