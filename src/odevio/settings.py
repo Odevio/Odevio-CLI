@@ -6,9 +6,19 @@ from rich.console import Console
 
 APP_NAME = "Odevio"
 API_BASE_URL = "https://odevio.com"
+API_KEY_ENV_VAR = "ODEVIO_API_KEY"
 
 
 console = Console()
+
+
+def get_api_key():
+    """ Returns the API key found in the environment, or None.
+
+    An API key lets automated callers such as CI pipelines use the CLI without an interactive sign-in.
+    Create one with "odevio apikey new".
+    """
+    return os.environ.get(API_KEY_ENV_VAR) or None
 
 
 def get_config_path():

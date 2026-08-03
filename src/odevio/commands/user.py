@@ -128,6 +128,10 @@ def apikey():
     \f
     API keys are used to authenticate to the Odevio API with external programs.
 
+    They also authenticate the CLI itself: set the :code:`ODEVIO_API_KEY` environment variable and every
+    command runs without ever asking for credentials, which is what CI pipelines and automated tools need.
+    The environment variable takes precedence over the locally signed-in account.
+
     Usage:
     """
     pass
