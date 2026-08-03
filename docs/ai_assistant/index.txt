@@ -1,0 +1,181 @@
+
+============================
+Publish with an AI assistant
+============================
+
+Odevio can be driven by an AI coding assistant such as `Claude Code <https://claude.com/claude-code>`_.
+You describe what you want in plain words, and the assistant handles the rest: it checks your project,
+builds and signs it on one of our Macs, fixes build errors on its own, and gets the app onto your phone.
+
+This is for you if you would rather not learn what a provisioning profile is.
+
+.. note::
+
+    You still need a paid Apple Developer account to put an app on a real iPhone — 99 € per year, no way
+    around it. Everything else is handled for you.
+
+
+-------------------
+What you need first
+-------------------
+
+**1. Python and pip.** PIP is Python's package manager. If you do not have Python,
+`install it first <https://www.python.org/downloads/>`_.
+
+**2. Odevio.** In a terminal:
+
+.. code-block::
+
+    pip install odevio
+
+**3. An Odevio account.** If you do not have one yet, create it on the website —
+`odevio.com/user/registration <https://www.odevio.com/user/registration/>`_ — or from the terminal:
+
+.. code-block::
+
+    odevio signup
+
+Already have one? Sign in:
+
+.. code-block::
+
+    odevio signin
+
+You only do this once. The assistant cannot sign in for you, because the command asks for your password —
+so if it ever tells you to run ``odevio signin``, that is why.
+
+**4. An AI assistant.** These instructions use Claude Code, which runs in your terminal and in VS Code.
+
+
+------------------------
+Install the Odevio skill
+------------------------
+
+A *skill* is a set of instructions that teaches your assistant how to use Odevio properly. Install it once
+for your whole machine:
+
+.. code-block::
+
+    odevio skill install
+
+That is it. It is now available in every project on your computer.
+
+Prefer to keep it inside one project, for instance to commit it with your repository?
+
+.. code-block::
+
+    odevio skill install --project
+
+And if you would like the skill to update itself whenever you upgrade Odevio:
+
+.. code-block::
+
+    odevio skill install --link
+
+
+-----------
+Use it
+-----------
+
+Open your assistant in your Flutter project's folder and ask for what you want, in your own words:
+
+.. code-block::
+
+    Get my app onto my iPhone
+
+Or type ``/odevio`` to start it explicitly.
+
+The assistant works out what needs doing. If your Apple account and your app are already set up, it asks
+nothing and gets straight to work.
+
+
+-----------------------------
+What it will ask you, and why
+-----------------------------
+
+It only stops when the answer is something no one else can give:
+
+.. list-table::
+    :widths: 40 60
+    :header-rows: 1
+
+    * - What it asks
+      - Why
+    * - What you want to do with your app
+      - Trying it on your own phone, sharing it with testers and publishing on the App Store are three
+        different jobs
+    * - To sign in to Odevio
+      - The command asks for a password, which it cannot type for you
+    * - Whether you have a paid Apple Developer account
+      - Without one, nothing can reach a phone
+    * - Your Apple API key
+      - Only you can create it, in your Apple account. It walks you through where to click
+    * - Your app's name, and confirming its identifier
+      - The name is your choice; it proposes the identifier so you do not have to understand the format
+    * - To create the app once in App Store Connect
+      - Apple does not allow this to be automated. About two minutes, once per app
+
+Everything else — versions, certificates, signing, build numbers — it works out by itself.
+
+
+-------------------
+While it is working
+-------------------
+
+Your project is compiled on a real Mac, so expect **around fifteen minutes** for a build — longer for a
+large app, and longer again if all our machines are busy and yours waits for the next free one.
+
+There is nothing for you to do in the meantime. The assistant tells you when it starts, keeps you posted as
+it goes, and you can ask it where things are at any time — or tell it to stop.
+
+If your app fails to build, it reads the error, fixes your code, and starts again — up to three attempts,
+then it stops and explains what it found rather than making things worse.
+
+
+-----------------------
+What you get at the end
+-----------------------
+
+Depending on what you asked for:
+
+- **On your phone straight away** — you get a link and a QR code. Scan it with your iPhone camera and the
+  app installs like any other. Your device needs to be registered on your Apple account once
+- **Through TestFlight** — Apple processes the build on its side first, usually five to thirty minutes, then
+  it appears in the TestFlight app. Handy for sharing with a few people
+- **On the App Store** — the build is uploaded, and you then fill in the description, screenshots and
+  privacy answers in App Store Connect and submit it
+
+.. warning::
+
+    A successful build does not mean a published app. Apple reviews every App Store submission, which takes
+    from a few hours to a few days, and it can be refused — most often for a missing privacy policy, or for
+    an app judged too limited. That part is between you and Apple.
+
+
+----------------
+If it goes wrong
+----------------
+
+**"You need to sign in first"** — run ``odevio signin`` in your terminal, then tell the assistant it is
+done.
+
+**"The Odevio command is not installed"** — run ``pip install odevio``. If it still cannot find it, your
+terminal and your Python installation may not agree; ``pip --version`` and ``odevio --version`` tell you
+what is available.
+
+**Your app never shows up in TestFlight** — usually Apple's encryption question left unanswered. The
+assistant normally handles this for you; ask it to check.
+
+**Your build seems stuck waiting** — our Macs may all be busy, or one may need attention. The assistant
+tells you rather than waiting for ever.
+
+Never paste your password or the contents of your Apple key file into the conversation. The assistant is
+built to refuse them, and asks for a file path instead.
+
+
+------------------------------
+Using it without an assistant
+------------------------------
+
+Everything the skill does, you can do yourself with the CLI: see :doc:`../tutorial/index` and the
+:doc:`../reference_guide/index`. And for automated pipelines, see :doc:`../cicd/index`.
