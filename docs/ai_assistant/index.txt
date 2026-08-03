@@ -53,7 +53,14 @@ Already have one? Sign in:
 You only do this once. The assistant cannot sign in for you, because the command asks for your password —
 so if it ever tells you to run ``odevio signin``, that is why.
 
-**4. An AI assistant.** These instructions use Claude Code, which runs in your terminal and in VS Code.
+**4. An AI assistant.** These instructions are written for `Claude Code <https://claude.com/claude-code>`_,
+which runs in your terminal and in VS Code, and which ``odevio skill install`` configures for you.
+
+.. note::
+
+    The skill follows the open `Agent Skills <https://agentskills.io>`_ standard, so it is not tied to one
+    tool. For now the installer only sets up Claude Code; with another assistant that supports the standard,
+    copy the same files by hand from ``odevio skill install --project`` into wherever it expects them.
 
 
 ------------------------
@@ -61,7 +68,7 @@ Install the Odevio skill
 ------------------------
 
 A *skill* is a set of instructions that teaches your assistant how to use Odevio properly. Install it once
-for your whole machine:
+for your whole machine — this sets up **Claude Code**:
 
 .. code-block::
 

@@ -27,7 +27,9 @@ def install(project, directory, link, force):
 
     \f
     By default the skill is installed for the whole machine, in :code:`~/.claude/skills/odevio/`, and
-    becomes available as :code:`/odevio` in every project. Pass :code:`--project` to install it inside one
+    becomes available as :code:`/odevio` in every project. That path is where Claude Code looks, so this
+    command configures Claude Code specifically. The skill itself follows the open Agent Skills standard, so
+    another assistant supporting it can use the same files placed wherever it expects them. Pass :code:`--project` to install it inside one
     project's :code:`.claude/skills/` instead, which is what you want when the skill should be committed
     with the repository.
 
