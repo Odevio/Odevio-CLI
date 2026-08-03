@@ -1,18 +1,27 @@
 
-============================
-Publish with an AI assistant
-============================
+.. _ai_assistant:
 
-Odevio can be driven by an AI coding assistant such as `Claude Code <https://claude.com/claude-code>`_.
-You describe what you want in plain words, and the assistant handles the rest: it checks your project,
-builds and signs it on one of our Macs, fixes build errors on its own, and gets the app onto your phone.
+============
+AI Assistant
+============
+
+Odevio can be driven by an AI coding assistant such as `Claude Code <https://claude.com/claude-code>`_. You
+describe what you want in plain words, and the assistant handles the rest.
+
+Depending on what you ask for, it can:
+
+- **show you your app running** on one of our Macs, in the iOS simulator — this needs no Apple account at all
+- **check that your app builds** for iOS, without publishing anything
+- **fix build errors on its own**, then start again, until it works
+- **install it on your iPhone**, or share it through TestFlight
+- **send it to the App Store**, ready for you to submit
 
 This is for you if you would rather not learn what a provisioning profile is.
 
 .. note::
 
-    You still need a paid Apple Developer account to put an app on a real iPhone — 99 € per year, no way
-    around it. Everything else is handled for you.
+    Only the first item works without a paid Apple Developer account. To reach a real iPhone you need one —
+    99 € per year, no way around it. Everything else is handled for you.
 
 
 -------------------
@@ -138,8 +147,12 @@ What you get at the end
 
 Depending on what you asked for:
 
+- **Running on a Mac we provide** — you get connection details for a remote desktop, with your project and the
+  iOS simulator already there, so you can watch your own app run. No Apple account needed. You will need a VNC
+  client on your computer, and the machine stays available for an hour
 - **On your phone straight away** — you get a link and a QR code. Scan it with your iPhone camera and the
-  app installs like any other. Your device needs to be registered on your Apple account once
+  app installs like any other. Your device needs to be registered on your Apple account once, which is easiest
+  from a Mac — if you are on Windows or Linux, TestFlight below is the shorter path
 - **Through TestFlight** — Apple processes the build on its side first, usually five to thirty minutes, then
   it appears in the TestFlight app. Handy for sharing with a few people
 - **On the App Store** — the build is uploaded, and you then fill in the description, screenshots and
