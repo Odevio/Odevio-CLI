@@ -57,6 +57,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 html_theme = "sphinx_rtd_theme"
 
+# Read the Docs passes the canonical URL of the default version in this variable, and Sphinx turns
+# html_baseurl into a rel="canonical" link on every page. Without it the docs declare no canonical
+# at all, so every version of a page competes with the others in search results. Left empty on a
+# local build, which simply omits the tag.
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
