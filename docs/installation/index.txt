@@ -4,7 +4,34 @@
 Installation
 ============
 
-Odevio is a desktop client. It is easily installed by downloading and executing Odevio's client.
+There are four ways to use Odevio. Pick the one that fits how you work — they all drive the same build
+machines, and you can mix them freely.
+
+.. list-table::
+    :widths: 25 75
+    :header-rows: 1
+
+    * - Way in
+      - Best for
+    * - :doc:`AI assistant <../ai_assistant/index>`
+      - Describing what you want in plain words and letting an assistant such as Claude Code do the rest,
+        including fixing build errors on its own. **Start here if you are new to iOS.**
+    * - Desktop client
+      - Clicking through builds in a window, with nothing to learn. Covered below.
+    * - :doc:`Command line <../installation_cli/index>`
+      - Scripting, and everything the desktop client does not expose.
+    * - :doc:`CI/CD <../cicd/index>`
+      - Building automatically from your pipeline on every push.
+
+The AI assistant route is the newest, and the shortest for a first iOS build: it installs in one command on
+top of the command line, and it walks you through the Apple side rather than leaving you to work it out.
+
+----
+
+The desktop client
+==================
+
+Install it by downloading and running Odevio's client.
 
 For |windows_cient|.
 
