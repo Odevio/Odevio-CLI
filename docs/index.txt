@@ -44,10 +44,6 @@ Thanks for checking it out.
    :target: https://www.codefactor.io/repository/github/odevio/odevio-cli
    :alt: CodeFactor
 
-.. image:: https://img.shields.io/discord/945256030869258280?logo=discord
-    :target: https://discord.gg/sCVTTsXbvE
-    :alt: Discord
-
 -----------
 Get started
 -----------

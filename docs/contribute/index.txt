@@ -47,7 +47,3 @@ The Odevio team.
 .. |stackoverflow| raw:: html
 
     <a href="https://stackoverflow.com/questions/tagged/odevio" target="_blank">Stackoverflow</a>
-
-.. |discord| raw:: html
-
-    <a href="https://discord.gg/AzVwZ7yRFF" target="_blank">Discord</a>

@@ -3,12 +3,6 @@
     :height: 200px
     :width: 100%
 
-.. image:: https://img.shields.io/badge/status-deprecated-red
-
-⚠️ **This project is no longer maintained.**
-
-Thank you for your support — it’s been a great journey!
-
 .. image:: https://img.shields.io/badge/version-1.3.0-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
@@ -28,10 +22,6 @@ Thank you for your support — it’s been a great journey!
 .. image:: https://www.codefactor.io/repository/github/odevio/odevio-cli/badge
    :target: https://www.codefactor.io/repository/github/odevio/odevio-cli
    :alt: CodeFactor
-
-.. image:: https://img.shields.io/discord/945256030869258280?logo=discord
-    :target: https://discord.gg/sCVTTsXbvE
-    :alt: Discord
 
 =======================================================================================
 The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
@@ -134,7 +124,7 @@ Please report improvements, bugs and issues to Github's issue tracker.
 Pull requests linked to open issues are even more appreciated.
 
 Odevio's GitHub issue tracker is not intended to provide help or support.
-For that check out our `discord <https://discord.gg/sCVTTsXbvE>`_.
+For that, see the `documentation <https://odevio-cli.readthedocs.io/>`_.
 
 We are also thrilled to receive a variety of other contributions including:
 
