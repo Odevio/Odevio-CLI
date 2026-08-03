@@ -9,7 +9,7 @@
 
 Thank you for your support — it’s been a great journey!
 
-.. image:: https://img.shields.io/badge/version-1.2.2-blue
+.. image:: https://img.shields.io/badge/version-1.3.0-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli
