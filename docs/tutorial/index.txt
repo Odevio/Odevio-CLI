@@ -4,7 +4,20 @@
 Tutorial
 ========
 
-This is a complete guide to Odevio.
+This is a complete guide to Odevio, **using the desktop client**. Every step here is a click in the Odevio
+window.
+
+.. note::
+
+    **Using something else?** The steps are the same underneath, but the way you trigger them differs:
+
+    - with an AI assistant, you do not follow this tutorial at all — it asks you what it needs and drives the
+      whole thing itself. See :doc:`../ai_assistant/index`
+    - from the terminal, follow the :doc:`CLI tutorial <../installation_cli/tutorial_cli/index>` instead
+    - from a pipeline, see :doc:`../cicd/index`
+
+    The Apple parts — the developer account, the API key, the App Store Connect record — are identical
+    whichever way you go, so those chapters are worth reading even if you use another route.
 
 This tutorial is aimed towards beginning developers and new Odevio users.
 

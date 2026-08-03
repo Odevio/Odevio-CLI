@@ -6,6 +6,12 @@
 
 If you are here, it means that you managed to install Odevio and have created your account.
 
+.. note::
+
+    This chapter uses the **desktop client**. If you are working with an AI assistant, you do not need any of
+    this — it creates the build for you. See :doc:`../ai_assistant/index`. From the terminal, see the
+    :doc:`CLI tutorial <../installation_cli/tutorial_cli/1_create_your_first_build>`.
+
 You are almost there, this is the only step you need to do to create your first configuration build.
 
 It is really easy, click on **Create a new build!** or go to the **Builds** page.
