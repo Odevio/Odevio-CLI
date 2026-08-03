@@ -6,13 +6,20 @@ import json
 import time
 
 import jwt
-from click import ClickException
-
 import requests
+from click import ClickException
 from rich.prompt import Prompt
-from odevio.helpers import print_validation_error
 
-from odevio.settings import API_BASE_URL, console, get_jwt_token, write_jwt_token, delete_jwt_token
+from odevio.helpers import print_validation_error
+from odevio.settings import (
+    API_BASE_URL,
+    API_KEY_ENV_VAR,
+    console,
+    delete_jwt_token,
+    get_api_key,
+    get_jwt_token,
+    write_jwt_token,
+)
 
 
 def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5, sse=False):
@@ -59,6 +66,13 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
             return response.content
     else:
         if response.status_code in [400, 401]:
+            if response.status_code == 401 and get_api_key():
+                # Never fall back to an interactive prompt when an API key was supplied: an automated
+                # caller has no way to answer it and would hang or crash instead of failing clearly.
+                raise ClickException(
+                    f"Authentication failed with the API key from {API_KEY_ENV_VAR}. "
+                    "Check the key, or create a new one with 'odevio apikey new'."
+                )
             error = response.json()
             print_validation_error(console, error)
             return False
@@ -178,7 +192,14 @@ def _refresh_token(token):
 
 
 def get_authorization_header(email=None, password=None):
-    """ Get the authorization header (JWT token), either locally or remotely. """
+    """ Get the authorization header, either from an API key, or from a JWT token local or remote. """
+    # An API key takes precedence over the cached token so that an automated environment behaves the same
+    # on every machine, and never falls back to whichever account happens to be signed in locally.
+    # Explicit credentials still go through the token flow, so "odevio signin" keeps working as before.
+    api_key = get_api_key()
+    if api_key and email is None and password is None:
+        return f"Token {api_key}"
+
     token = get_jwt_token()
     if token:
         decoded = jwt.decode(token, options={"verify_signature": False})
