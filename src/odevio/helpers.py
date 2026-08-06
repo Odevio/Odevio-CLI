@@ -11,7 +11,7 @@ import threading
 import qrcode
 import requests
 
-from odevio.settings import console, get_jwt_token, get_config_path, APP_NAME
+from odevio.settings import console, get_api_key, get_jwt_token, get_config_path, APP_NAME
 
 
 def zip_directory(directory_path, excluded_dirs, excluded_files):
@@ -38,7 +38,11 @@ def login_required_warning_decorator(f):
     # If he is not logged in write some doc for connection or account creation right in the console.
     @click.pass_context
     def run(ctx, *args, **kwargs):
-        if get_jwt_token() is None and (ctx.command_path not in ["odevio signin", "odevio signout", "odevio signup"]):
+        # An API key authenticates just as well as a sign-in, and is how automated callers such as CI
+        # pipelines and AI assistants use the CLI. Warning them to sign in would be wrong and, worse,
+        # would send an assistant looking for an interactive command it must never run.
+        signed_in = get_jwt_token() is not None or get_api_key() is not None
+        if not signed_in and (ctx.command_path not in ["odevio signin", "odevio signout", "odevio signup"]):
             import textwrap
 
             from rich.text import Text
