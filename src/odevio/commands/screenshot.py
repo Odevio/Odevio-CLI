@@ -115,7 +115,9 @@ def start(key, device, ipad, no_app):
         _remember_device(key, device)
     else:
         console.print("Choosing a simulator that is quick to start...")
-    payload = {"device": device} if device else {"ipad": 1 if ipad else 0}
+    # The flag is left out entirely rather than sent as 0: this is posted as form data, where every
+    # value becomes text, and a "0" on the other side reads as true.
+    payload = {"device": device} if device else ({"ipad": 1} if ipad else {})
     started = api.post(f"/builds/{key}/simulator/", json_data=payload)
     if not started:
         return
