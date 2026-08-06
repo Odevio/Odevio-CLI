@@ -3,6 +3,36 @@ import click
 from odevio.helpers import login_required_warning_decorator
 
 
+def _device_memory_path(key):
+    """ Where the simulator chosen for a build is remembered between commands.
+
+    Kept beside the other Odevio settings rather than in the project, since it describes a running
+    machine rather than anything belonging to the code.
+    """
+    import os
+
+    from odevio.settings import get_config_path
+
+    return os.path.join(os.path.dirname(get_config_path()), f"simulator-{key}")
+
+
+def _remember_device(key, device):
+    import os
+
+    path = _device_memory_path(key)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as memory:
+        memory.write(device)
+
+
+def _remembered_device(key):
+    try:
+        with open(_device_memory_path(key)) as memory:
+            return memory.read().strip() or None
+    except OSError:
+        return None
+
+
 @click.group()
 def screenshot():
     """ Take App Store screenshots from a simulator on an Odevio machine.
@@ -56,9 +86,10 @@ def devices(key):
 @screenshot.command()
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.option('--device', prompt=True, help="Name of the simulator to start, as shown by 'devices'.")
+@click.option('--device', help="Simulator to start, as named by 'devices'. Chosen for you if omitted.")
+@click.option('--ipad', is_flag=True, help="Choose an iPad rather than an iPhone.")
 @click.option('--no-app', is_flag=True, help="Only start the simulator, without building and installing.")
-def start(key, device, no_app):
+def start(key, device, ipad, no_app):
     """ Starts a simulator on the machine of the build with key \"KEY\", with your app on it.
 
     \f
@@ -78,9 +109,18 @@ def start(key, device, no_app):
         if key is None:
             return
 
-    started = api.post(f"/builds/{key}/simulator/", json_data={"device": device})
+    if device:
+        # Remembered before the call: booting outlives the request that asked for it, so a capture must
+        # be able to name the device even when starting it appeared to fail.
+        _remember_device(key, device)
+    else:
+        console.print("Choosing a simulator that is quick to start...")
+    payload = {"device": device} if device else {"ipad": 1 if ipad else 0}
+    started = api.post(f"/builds/{key}/simulator/", json_data=payload)
     if not started:
         return
+    device = started.get("device", device)
+    _remember_device(key, device)
     console.print(f"[success]{device} is running on the build machine.[/success]")
 
     if no_app:
@@ -110,24 +150,36 @@ def start(key, device, no_app):
 @screenshot.command()
 @login_required_warning_decorator
 @click.argument('key', required=False)
-def capture(key):
+@click.option('--device', help="Simulator to photograph. Defaults to the one 'start' was given.")
+def capture(key, device):
     """ Photographs what the simulator is showing, for the build with key \"KEY\".
 
     \f
     Run this once per screen you want on your App Store page: navigate to a screen, capture, navigate to
     the next, capture again. Apple takes up to ten per device size and needs at least one.
 
+    The device is named rather than left to chance. A build machine usually has more than one simulator
+    running — Xcode opens one of its own — and asking for "the booted one" then picks whichever it
+    happens to find, which can quietly photograph the wrong phone.
+
     The image is kept with your app, ready to be sent to the App Store.
     """
     from odevio import api
-    from odevio.helpers import terminal_menu
     from odevio.settings import console
 
     if key is None:
+        from odevio.helpers import terminal_menu
         key = terminal_menu("/builds/", "Build", does_not_exist_msg="You have no build running.")
         if key is None:
             return
-    taken = api.post(f"/builds/{key}/screenshot/", json_data={})
+    device = device or _remembered_device(key)
+    if device is None:
+        console.print("[warning]No simulator was started from here, so there is no way to tell which one "
+                      "to photograph.[/warning]")
+        console.print("Start one with [code]odevio screenshot start[/code], or name it with "
+                      "[code]--device[/code].")
+        return
+    taken = api.post(f"/builds/{key}/screenshot/", json_data={"device": device})
     if taken:
         console.print(f"[success]Captured at {taken['width']}x{taken['height']}.[/success]")
         if taken.get("display_type") is None:
