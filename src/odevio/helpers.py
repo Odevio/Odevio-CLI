@@ -5,7 +5,6 @@ from configparser import ConfigParser
 from functools import update_wrapper
 
 import click
-import paramiko
 import sys
 import threading
 import qrcode
@@ -213,6 +212,11 @@ def tunnel_handler(chan, host, port):
 
 
 def ssh_tunnel(host, port, username, password, remote_port, forward_host, forward_port):
+    # Imported here rather than at module level: paramiko is only needed to reach a build machine, it is
+    # slow to import, and it prints deprecation warnings that would otherwise appear on every command,
+    # including ones that never open a connection.
+    import paramiko
+
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
