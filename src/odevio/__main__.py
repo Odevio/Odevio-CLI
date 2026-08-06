@@ -5,6 +5,7 @@ import click
 from odevio.commands.app import app
 from odevio.commands.apple import apple
 from odevio.commands.build import build
+from odevio.commands.privacy import privacy
 from odevio.commands.skill import skill
 from odevio.commands.team import team
 from odevio.commands.user import apikey, profile, signin, signout, signup
@@ -65,6 +66,7 @@ odevio.add_command(team)
 odevio.add_command(app)
 odevio.add_command(apple)
 odevio.add_command(apikey)
+odevio.add_command(privacy)
 odevio.add_command(skill)
 
 if __name__ == '__main__':
