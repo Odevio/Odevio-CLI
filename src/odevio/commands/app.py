@@ -46,7 +46,7 @@ def ls():
         code = Syntax(
             code="$ odevio app mk --name NAME --bundle-id BUNDLE_ID --account-key APPLE_DEVELOPER_ACCOUNT_KEY",
             lexer="shell")
-        console.print(f"You did not register any app identifiers. Create one with")
+        console.print("You did not register any app identifiers. Create one with")
         console.print(code)
 
 
@@ -71,7 +71,7 @@ def mk(name, bundle_id, account_key):
     if account_key is None:
         account_key = terminal_menu("/developer-accounts/", "Developer Account",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
-                                        f"""
+                                        """
                                             No developer accounts are linked to your profile. Check out [code]$ odevio apple add [/code] to link your developer account to Odevio.
                                         """
                                     )))
@@ -198,7 +198,7 @@ def import_app(name, bundle_id, account_key):
     if account_key is None:
         account_key = terminal_menu("/developer-accounts/", "Developer Account",
                                     does_not_exist_msg=Text.from_markup(textwrap.dedent(
-                                        f"""
+                                        """
                                             No developer accounts are linked to your profile. Check out [code]$ odevio apple add [/code] to link your developer account to Odevio.
                                         """
                                     )))
@@ -241,4 +241,60 @@ def screenshots(key):
     if screenshot_link:
         console.print("Here's the link to the screenshot editor:")
         console.print(f"[link]{settings.API_BASE_URL}{screenshot_link['url']}[/link]")
+
+
+@app.command("store-status")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+def store_status(key):
+    """ Shows what the App Store listing of the app with key \"KEY\" still needs.
+
+    \f
+    The answer is read from Apple every time rather than remembered, so it stays right even when the
+    listing was edited in App Store Connect since the last run, or from another machine. Filling an App
+    Store page rarely happens in one sitting, and this is what makes it possible to stop and come back.
+
+    One thing cannot be checked: Apple offers no way to read the App Privacy answers, so they are always
+    listed as something to confirm rather than reported as done or missing.
+
+    Usage:
+    """
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return
+    try:
+        status = api.get(f"/applications/{key}/store-status/")
+    except api.NotFoundException:
+        console.print("This key is invalid or you do not have access to it.")
+        return
+    if not status:
+        return
+
+    if not status.get("listing_exists"):
+        console.print(f"[warning]{status['bundle_id']} has no App Store listing yet.[/warning]")
+        console.print("Create it once on [link]https://appstoreconnect.apple.com[/link] — Apple does not "
+                      "allow an app to be created any other way.")
+        return
+
+    console.print(f"[title]{status['name']}[/title]  version {status.get('version') or '-'}"
+                  f"  ({status.get('version_state', 'unknown state')})")
+    console.print(f"Listing language: [code]{status['locale']}[/code]")
+    screenshots_by_slot = status.get("screenshots") or {}
+    if screenshots_by_slot:
+        console.print("Screenshots: " + ", ".join(
+            f"{count} for {slot}" for slot, count in sorted(screenshots_by_slot.items())))
+    console.print("")
+
+    if status.get("missing"):
+        console.print("[title]Still to do[/title]")
+        for item in status["missing"]:
+            console.print(f"  - {item}")
+    else:
+        console.print("[success]Nothing left to fill in.[/success]")
         
