@@ -57,33 +57,54 @@ def devices(key):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.option('--device', prompt=True, help="Name of the simulator to start, as shown by 'devices'.")
-@click.option('--bundle-id', help="Bundle identifier of the app to launch once the simulator is up.")
-def start(key, device, bundle_id):
-    """ Starts a simulator on the machine of the build with key \"KEY\".
+@click.option('--no-app', is_flag=True, help="Only start the simulator, without building and installing.")
+def start(key, device, no_app):
+    """ Starts a simulator on the machine of the build with key \"KEY\", with your app on it.
 
     \f
     Booting takes a moment, and the command waits for it: a screenshot taken too early catches a black
     screen or the boot logo, which Apple accepts happily and a human reviewer refuses much later.
 
+    Your app is then built for the simulator, installed and launched, which takes a few minutes.
+
     Connect to the machine with :code:`odevio build connect` to see the simulator and use your app.
     """
     from odevio import api
-    from odevio.helpers import terminal_menu
     from odevio.settings import console
 
     if key is None:
+        from odevio.helpers import terminal_menu
         key = terminal_menu("/builds/", "Build", does_not_exist_msg="You have no build running.")
         if key is None:
             return
-    data = {"device": device}
-    if bundle_id:
-        data["bundle_id"] = bundle_id
-    started = api.post(f"/builds/{key}/simulator/", json_data=data)
-    if started:
-        console.print(f"[success]{device} is running on the build machine.[/success]")
-        console.print("Connect with [code]odevio build connect[/code] to see it, open your app and go to "
-                      "the screen you want to show.")
-        console.print("Then take the picture with [code]odevio screenshot capture[/code].")
+
+    started = api.post(f"/builds/{key}/simulator/", json_data={"device": device})
+    if not started:
+        return
+    console.print(f"[success]{device} is running on the build machine.[/success]")
+
+    if no_app:
+        console.print("Install your app yourself, then take pictures with "
+                      "[code]odevio screenshot capture[/code].")
+        return
+
+    console.print("Building your app for the simulator, this takes a few minutes...")
+    installed = api.post(f"/builds/{key}/simulator-app/", json_data={"device": device})
+    if not installed:
+        return
+    console.print(f"[success]{installed.get('bundle_id') or 'Your app'} is running on the "
+                  f"simulator.[/success]")
+    # Flutter refuses to build a simulator app in anything but debug mode, and a debug build paints a
+    # DEBUG ribbon over the top right corner. Better said now than discovered on the finished pictures.
+    console.print("")
+    console.print("[warning]Your app will show a DEBUG ribbon in the corner.[/warning] Apple only lets "
+                  "Flutter build for a simulator in debug mode, and that is what debug mode looks like.")
+    console.print("Remove it by adding this as the first line of [code]main()[/code], then start again:")
+    console.print("    [code]WidgetsApp.debugAllowBannerOverride = false;[/code]")
+    console.print("It changes nothing for a published app: the ribbon only exists in debug builds.")
+    console.print("")
+    console.print("Connect with [code]odevio build connect[/code], go to the screen you want to show, "
+                  "then run [code]odevio screenshot capture[/code].")
 
 
 @screenshot.command()
