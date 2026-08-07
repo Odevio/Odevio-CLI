@@ -86,6 +86,16 @@ def terminal_menu(api_route, prompt_text, api_params=None, key_fieldname="key", 
     elif len(terminal_ready_list) == 1:
         value = item_list[0][key_fieldname] if key_fieldname else item_list[0]
     else:
+        # Without a terminal the prompt cannot be drawn, and questionary fails deep inside its event
+        # loop with an OSError that says nothing about the cause. Callers driving the CLI from a script
+        # need to be told to name what they want instead.
+        if not sys.stdin.isatty():
+            console.print("[warning]Several items match and there is no terminal to choose in.[/warning] "
+                          "Pass the key on the command line to say which one you mean:")
+            for item in item_list:
+                console.print(f"  {name(item)}")
+            exit(1)
+
         menu_entry_index = questionary.select(
             prompt_text,
             choices=terminal_ready_list,
