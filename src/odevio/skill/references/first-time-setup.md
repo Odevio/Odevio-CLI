@@ -129,6 +129,18 @@ The project may still carry `com.example.<name>` locally. Leave it: Odevio rewri
 from the app record, during every build. Editing the Xcode project locally is unnecessary and risks corrupting
 it.
 
+**This holds even when the identifier plainly disagrees with the app they are publishing to.** Discovering
+that the project says one thing and the Odevio app another is not a reason to edit
+`PRODUCT_BUNDLE_IDENTIFIER` — it is a reason to say so and ask which they meant:
+
+> Your project is set up as `odevio.deuse.demo`, but you have pointed it at an app registered as
+> `be.deuse.probe`. Which of the two are you publishing? I will not change your project either way — Odevio
+> uses whichever app you name, and the setting inside the project makes no difference to the build.
+
+Editing it silently changes the identity of their application. On an app already on the App Store that is
+unrecoverable: the identifier is what Apple uses to know it is the same app, and a different one is a
+different product. Never touch it, in any file, for any reason.
+
 ## Answer Apple's encryption question, without asking
 
 Apple asks about encryption for every uploaded build. Until it is answered the build sits waiting and **never
@@ -147,7 +159,29 @@ and an app using only standard HTTPS answers no. The one case where `<false/>` i
 its own encryption beyond the system's HTTPS — if the project pulls in a cryptography package, say so and let
 them decide.
 
-## The App Store Connect record — the one manual step
+## iPhone only, or iPad too — ask, because they do not know they chose
+
+`flutter create` writes `TARGETED_DEVICE_FAMILY = "1,2"` into the Xcode project, so **every Flutter app
+declares itself for iPhone and iPad** without its author ever deciding that. Two consequences neither of them
+expects:
+
+- Apple then wants iPad pictures as well as iPhone ones
+- the app is reviewed **on an iPad**, where a layout built for a phone stretches and looks broken. It is a
+  common reason for a first submission to be refused
+
+Unlike the two above, this one is theirs to decide, so ask — once, in a sentence:
+
+> Your app is currently set up for iPhone **and** iPad. Publishing for iPhone alone saves you preparing iPad
+> pictures, and avoids a refusal if the layout does not suit a tablet. You can add iPad later. iPhone only?
+
+If they say yes, set `TARGETED_DEVICE_FAMILY = 1` in all three configurations of
+`ios/Runner.xcodeproj/project.pbxproj`. Odevio rewrites the identifier, the minimum iOS version and the
+signing settings during a build, but never this — so what is in the project is what ships.
+
+Only ask when the App Store is the goal. For putting the app on their own phone it changes nothing, and it is
+one question too many.
+
+## The App Store Connect record — the first of two manual steps
 
 Before a build can be delivered, the app must exist in App Store Connect. **This cannot be automated:**
 Apple's public API does not expose app creation, and neither does Odevio. Even `fastlane produce` cannot do it
@@ -163,8 +197,13 @@ So guide them, precisely, and stay with them:
 6. leave the rest as proposed and create
 
 Confirm it is done before going further: a build uploaded without this record fails in a way that is hard to
-read. And say plainly that this is the **only** step they have to do themselves, about two minutes, once per
-app. Users accept a manual step far better knowing it is the only one.
+read.
+
+Say plainly how much of this there is in total, and be accurate about it. For getting the app onto a phone or
+into TestFlight, this is the **only** thing they do themselves — two minutes, once per app. For the App Store
+there is exactly one more, later: answering Apple's questions about data. Nothing else.
+
+Promising "the only one" and producing a second later costs more trust than naming both now.
 
 ## Write the `.odevio` file
 
