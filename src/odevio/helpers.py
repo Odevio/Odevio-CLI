@@ -312,6 +312,16 @@ def check_new_version():
                 subprocess.run("pip install -U odevio", stdout=subprocess.PIPE, text=True, shell=True)
             except Exception:
                 console.print("Could not update odevio using pip install -U odevio. Please update it yourself so you can have all the latest features and fixes.")
+            else:
+                # A skill installed as a copy does not follow the upgrade, and since the upgrade
+                # happens on its own there is no moment when anyone would think to reinstall it. It
+                # would go on answering with the previous version's instructions indefinitely.
+                try:
+                    from odevio.commands.skill import refresh_copied_skill
+                    if refresh_copied_skill():
+                        console.print("The Odevio skill was updated as well.")
+                except Exception:
+                    console.print("The Odevio skill could not be updated. Run 'odevio skill install --force' to bring it up to date.")
     except Exception:
         # Ignore, no need to crash if we can't check for new updates
         pass

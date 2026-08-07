@@ -62,6 +62,57 @@ HELP_COMMANDS = [
 ]
 
 
+STAMP_FILE = ".installed-version"
+
+
+def installed_version():
+    """ The version of Odevio currently running. """
+    try:
+        from importlib import metadata
+    except ImportError:  # Python < 3.8
+        import importlib_metadata as metadata
+    return metadata.version("odevio")
+
+
+def skill_source():
+    """ The skill shipped inside this installation of Odevio. """
+    import os
+
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "skill")
+
+
+def refresh_copied_skill():
+    """ Bring a copied skill back in step with the Odevio that was just upgraded.
+
+    A linked skill follows the upgrade by itself. A copied one does not: it keeps answering with last
+    month's instructions, and nothing the assistant does says so. Since Odevio updates itself in the
+    background, there is no moment when the user would think to reinstall — so it is done for them.
+
+    Returns the version copied, or None when there was nothing to do.
+    """
+    import os
+    import shutil
+
+    destination = os.path.join(os.path.expanduser("~"), ".claude", "skills", "odevio")
+    if os.path.islink(destination) or not os.path.isdir(destination):
+        return None
+
+    current = installed_version()
+    stamp = os.path.join(destination, STAMP_FILE)
+    try:
+        with open(stamp, encoding="utf-8") as handle:
+            if handle.read().strip() == current:
+                return None
+    except OSError:
+        pass  # No stamp: installed before stamping existed, so it is certainly behind.
+
+    shutil.rmtree(destination)
+    shutil.copytree(skill_source(), destination)
+    with open(stamp, "w", encoding="utf-8") as handle:
+        handle.write(f"{current}\n")
+    return current
+
+
 def permission_rules():
     """ The allow rules that let the skill work without a prompt on every command.
 
@@ -129,12 +180,14 @@ def skill():
               help="Install for a single project instead of the whole machine. Use this to commit the skill with a repository.")
 @click.option('--directory', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
               help="With --project, the project to install into. Defaults to the current directory.")
-@click.option('--link', is_flag=True,
-              help="Symlink the skill instead of copying it, so upgrading Odevio also upgrades the skill.")
+@click.option('--copy', 'copy_files', is_flag=True,
+              help="Copy the skill instead of linking it. It then stays as it is until you install again.")
+@click.option('--link', is_flag=True, hidden=True,
+              help="Kept for existing scripts; linking is now what happens by default.")
 @click.option('--force', is_flag=True, help="Replace an existing installation.")
 @click.option('--no-permissions', is_flag=True,
               help="Do not pre-approve the skill's commands. Every one of them will then ask for approval.")
-def install(project, directory, link, force, no_permissions):
+def install(project, directory, copy_files, link, force, no_permissions):
     """ Install the Odevio skill.
 
     \f
@@ -145,16 +198,22 @@ def install(project, directory, link, force, no_permissions):
     project's :code:`.claude/skills/` instead, which is what you want when the skill should be committed
     with the repository.
 
-    :code:`--link` creates a symlink rather than a copy. The assistant follows it, so a later
-    :code:`pip install --upgrade odevio` also upgrades the skill. A copy is more robust: it survives the
-    Python environment being moved or removed.
+    The skill is linked rather than copied, so upgrading Odevio upgrades the skill with it. This is the
+    default because the alternative fails quietly: a copy goes on answering with the instructions it was
+    installed with, and nothing about the assistant's behaviour reveals that it is out of date. A broken
+    link, by contrast, is obvious at once.
+
+    :code:`--copy` takes a copy instead, which survives the Python environment being moved or removed.
+    A copy left behind by an upgrade is refreshed automatically the next time Odevio updates itself, so
+    it does not silently rot either. :code:`--project` always copies, since a link would be meaningless
+    to anyone else who clones the repository.
 
     The command also adds allow rules for the skill's commands to the matching
     :code:`settings.json`, unless :code:`--no-permissions` is given. Without them the assistant asks
     for approval before nearly every command: a skill's own :code:`allowed-tools` only covers the one
     turn that invokes it, and the grant is gone as soon as you reply, so a conversation that waits for
-    a build or a decision loses it immediately. Three commands are left out on purpose and always ask
-    — starting a build, sending screenshots to Apple, and opening a submission.
+    a build or a decision loses it immediately. Four commands are left out on purpose and always ask —
+    starting a build, sending screenshots to Apple, opening a submission, and sending an app for review.
 
     Existing rules and settings are kept: the allow list is only ever added to, so running this again
     is harmless.
@@ -167,7 +226,7 @@ def install(project, directory, link, force, no_permissions):
 
     from odevio.settings import console
 
-    source = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "skill")
+    source = skill_source()
     if not os.path.isdir(source):
         raise click.ClickException(
             "The skill files are missing from this Odevio installation. Reinstall with 'pip install --upgrade odevio'."
@@ -196,10 +255,18 @@ def install(project, directory, link, force, no_permissions):
         shutil.rmtree(destination)
     os.makedirs(os.path.dirname(destination), exist_ok=True)
 
-    if link:
-        os.symlink(source, destination)
-    else:
+    # Linking is the default because the alternative fails silently: a copy keeps working after
+    # "pip install --upgrade odevio" while holding last month's instructions, and nothing about the
+    # assistant's behaviour says so. A broken link is at least visible. Inside a project the skill is
+    # meant to be committed and read on other machines, so there a copy is the only thing that works.
+    as_copy = copy_files or project
+    if as_copy:
         shutil.copytree(source, destination)
+        # Stamped so a later run of the CLI can notice the copy has fallen behind and say so.
+        with open(os.path.join(destination, ".installed-version"), "w", encoding="utf-8") as handle:
+            handle.write(f"{installed_version()}\n")
+    else:
+        os.symlink(source, destination)
 
     console.print(f"Odevio skill installed in {destination}")
     console.print(f"It is now available as [code]/odevio[/code] in {scope}.")
