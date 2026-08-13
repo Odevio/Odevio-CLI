@@ -4,76 +4,35 @@
 Installation
 ============
 
-There are four ways to use Odevio. Pick the one that fits how you work — they all drive the same build
-machines, and you can mix them freely.
+You use Odevio through your AI agent. Install it once, connect your agent, then just tell the agent what
+you want.
 
-.. list-table::
-    :widths: 25 75
-    :header-rows: 1
+**1. Install Odevio** (needs `Python <https://www.python.org/downloads/>`_):
 
-    * - Way in
-      - Best for
-    * - :doc:`AI assistant <../ai_assistant/index>`
-      - Describing what you want in plain words and letting an assistant such as Claude Code do the rest,
-        including fixing build errors on its own. **Start here if you are new to iOS.**
-    * - Desktop client
-      - Clicking through builds in a window, with nothing to learn. Covered below.
-    * - :doc:`Command line <../installation_cli/index>`
-      - Scripting, and everything the desktop client does not expose.
-    * - :doc:`CI/CD <../cicd/index>`
-      - Building automatically from your pipeline on every push.
+.. code-block::
 
-The AI assistant route is the newest, and the shortest for a first iOS build: it installs in one command on
-top of the command line, and it walks you through the Apple side rather than leaving you to work it out.
+    pip install odevio
 
-----
+**2. Create your Odevio account:**
 
-The desktop client
-==================
+.. code-block::
 
-Install it by downloading and running Odevio's client.
+    odevio signup
 
-For |windows_cient|.
+**3. Connect your AI agent:**
 
-For |linux_cient|.
+.. code-block::
 
-For |mac_cient|.
+    odevio skill install
 
-Once installed, you can easily run the client from your desktop.
+That is it. Open your AI agent — Claude Code today — in your Flutter project's folder and ask it to put
+your app on your iPhone.
 
-If it is your first time using Odevio, you are required to create an account. 
+- The :doc:`AI agent guide <../ai_assistant/index>` is the full walkthrough.
+- The :doc:`Apple side <../apple/index>` covers the one-time Apple setup your agent will guide you through.
 
-.. image:: /img/desktop-signup.jpg
-  :alt: Odevio sign up
-  :align: center
+.. note::
 
-|
-
-Otherwise, you can log in using your existing credentials.
-
-.. image:: /img/desktop-login.jpg
-  :alt: Odevio login
-  :align: center
-
-|
-
-Once logged in, you will see this welcome screen.
-
-.. image:: /img/odevio-welcome.jpg
-  :alt: Odevio Welcome Screen
-  :align: center
-
-|
-
-.. |windows_cient| raw:: html
-
-   <a href="https://odevio.com/odevio-desktop/odevio-desktop-windows/" target="_blank">Windows</a>
-
-.. |linux_cient| raw:: html
-
-   <a href="https://odevio.com/odevio-desktop/odevio-desktop-linux/" target="_blank">Linux</a>
-
-.. |mac_cient| raw:: html
-
-   <a href="https://odevio.com/odevio-desktop/odevio-desktop-macos/" target="_blank">Mac</a>
-   
+    Would rather drive Odevio yourself? You can run the :doc:`command line <../installation_cli/index>`
+    directly, or wire it into your :doc:`CI/CD pipeline <../cicd/index>` — but with an AI agent you do not
+    need to.

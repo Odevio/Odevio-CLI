@@ -3,9 +3,9 @@
 Odevio Documentation
 =====================
 
----------------------------------------------------------------------------------------
-The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
----------------------------------------------------------------------------------------
+------------------------------------------------------------------------
+Build and publish iOS apps with your AI agent — no Mac, no iOS jargon
+------------------------------------------------------------------------
 
 Welcome to the documentation pages for Odevio.
 
@@ -13,7 +13,9 @@ Welcome to the documentation pages for Odevio.
 What is Odevio ?
 -----------------
 
-Odevio is an open-source tool to help developers setup and release their Flutter apps on iOS.
+Odevio lets an AI agent build and publish your iOS apps for you. It runs the build and
+signing on remote Macs, so you need no Mac, no Xcode and no iOS knowledge. Claude Code is
+the first AI agent supported.
 
 Thanks for checking it out.
 
@@ -48,13 +50,20 @@ Thanks for checking it out.
 Get started
 -----------
 
-Here, you will find informations regarding Odevio and how to use it.
+Odevio is driven by your AI agent. Install it, connect your agent, then just say what you want:
 
-If you are getting started this is how we recommend you use the docs :
+.. code-block::
 
-* First, we advise you to read our :ref:`Installation guide <installation>` for instructions on how to install Odevio.
-* Next, check how to setup your app with Odevio following our complete :ref:`Tutorial <tutorial>` and build your Flutter app to iOS.
-* If you want to know every option Odevio has to offer, check out our :ref:`Reference Guide <reference_guide>`
+    pip install odevio
+    odevio signup
+    odevio skill install
+
+Now open your AI agent — Claude Code today — in your Flutter project's folder and ask it to put your app on
+your iPhone. The :ref:`AI agent guide <ai_assistant>` is the full walkthrough, and the
+:doc:`Apple side <apple/index>` covers the one-time Apple setup.
+
+Prefer to drive Odevio yourself? See the :doc:`command line <installation_cli/index>` or the
+:ref:`Reference Guide <reference_guide>`.
 
 This documentation is constantly evolving and we appreciate every help we can get, so feel free to contribute.
 
@@ -62,12 +71,17 @@ This documentation is constantly evolving and we appreciate every help we can ge
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Getting started:
 
-   installation/index
    ai_assistant/index
-   tutorial/index
+   installation/index
+   apple/index
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Advanced (drive it yourself):
+
    reference_guide/index
-   cicd/index
    installation_cli/index
+   cicd/index
    contribute/index
