@@ -164,10 +164,10 @@ def write_permission_rules(settings_path):
 
 @click.group()
 def skill():
-    """ Install the Odevio skill for AI coding assistants.
+    """ Install the Odevio skill for AI agents.
 
     \f
-    The skill teaches an assistant such as Claude Code how to take a Flutter project all the way to an
+    The skill teaches an AI agent such as Claude Code how to take a Flutter project all the way to an
     iPhone through Odevio: Apple setup, remote iOS build, automatic fixing of build failures, and
     delivery to TestFlight.
 

@@ -23,10 +23,12 @@
    :target: https://www.codefactor.io/repository/github/odevio/odevio-cli
    :alt: CodeFactor
 
-=======================================================================================
-The easy way to setup, build & release flutter apps for iOS on Linux, Windows and MacOS
-=======================================================================================
-Odevio is a tool to help developers setup and release their Flutter apps on iOS.
+======================================================================
+Build and publish iOS apps with your AI agent — no Mac, no iOS jargon
+======================================================================
+Odevio lets an AI agent build and publish your iOS apps for you. It runs the build and signing on
+remote Macs, so you need no Mac, no Xcode and no iOS knowledge. Claude Code is the first AI agent
+supported.
 Thanks for checking it out.
 
 .. figure:: https://raw.githubusercontent.com/Odevio/Odevio-CLI/master/docs/img/odevio--demo.gif
@@ -44,10 +46,24 @@ pip.
 
     pip install odevio
 
------
-Usage
------
-To start using Odevio simply run :code:`odevio` in your console.
+-------------------------
+Use it with an AI agent
+-------------------------
+The way to use Odevio is to let your AI agent drive it. Install the skill once (this sets up Claude Code,
+the first AI agent supported):
+
+.. code-block::
+
+    odevio skill install
+
+Then, in your Flutter project, just ask your agent to put your app on your iPhone. It writes the code,
+Odevio builds and signs it on a real Mac, fixes what breaks, and ships it to TestFlight. See the
+`AI agent guide <https://odevio-cli.readthedocs.io/en/latest/ai_assistant/index.html>`_.
+
+----------------------
+Use the CLI yourself
+----------------------
+Prefer to drive Odevio directly? To start using Odevio simply run :code:`odevio` in your console.
 
 Start by creating an account
 
@@ -101,19 +117,17 @@ If you are getting started this is how we recommend you use the docs :
 -----
 About
 -----
-**Our mission is to reduce the time it takes to setup, build and release Flutter
-apps on iOS to the bare minimum.**
+**Our mission is to let anyone build and publish an iOS app through an AI agent, without owning a Mac
+or knowing the iOS ecosystem.**
 
-The tool allows developers working alone or in teams and on
-multiple OS (Linux, Windows, MacOS) to build and publish their apps easily
-to the app store.
+Odevio gives your AI agent the tools to build and ship iOS apps for you.
 
-**What can Odevio be used for ?**
+**What does Odevio do for you ?**
 
-#. It allows you to setup the XCode project on a remote MacOS machine if you do not own one.
-#. It manages common iOS specific settings for your team : certificates, devices, provisioning profiles, bundle IDs, Xcode configuration files, ...
-#. It builds your Flutter app on remote iOS machines.
-#. It hosts the iOS app artifacts or publish them to the App Store.
+#. It lets an AI agent such as Claude Code drive the whole flow from plain-language requests.
+#. It manages iOS specifics — certificates, devices, provisioning profiles, bundle IDs, Xcode configuration.
+#. It builds your Flutter app on remote Macs, so you need no Mac of your own.
+#. It fixes build failures, then hosts the app or ships it to TestFlight and the App Store.
 
 ------------
 Contributing
