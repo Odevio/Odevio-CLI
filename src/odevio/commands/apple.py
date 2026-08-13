@@ -173,7 +173,7 @@ def developer_account_ls():
 
         console.print("Check out [code]$ odevio apple --help[/code] to know what part of the Apple Developer Account "
                       "is used by Odevio or check related documentation at "
-                      "[link]https://odevio.readthedocs.io/en/master/reference_guide/index.html#odevio-apple[/link].")
+                      "[link]https://odevio-cli.readthedocs.io/en/master/reference_guide/index.html#odevio-apple[/link].")
     else:
         console.print('You do not have access to a developer account with Odevio.')
 

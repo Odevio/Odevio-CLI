@@ -3,7 +3,7 @@
     :height: 200px
     :width: 100%
 
-.. image:: https://img.shields.io/badge/version-1.3.0-blue
+.. image:: https://img.shields.io/badge/version-1.3.1-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli
@@ -110,9 +110,9 @@ Documentation
 All documentation is in the :code:`docs` directory and online at https://odevio-cli.readthedocs.io/.
 If you are getting started this is how we recommend you use the docs :
 
-* First read our `installation instructions <https://odevio.readthedocs.io/en/master/installation/index.html>`_.
-* Next, check how to `setup your app with Odevio at and build your Flutter app to iOS <https://odevio.readthedocs.io/en/master/tutorial/index.html>`_ .
-* Finally, if you want to know every option Odevio has to offer check our `reference guide <https://odevio.readthedocs.io/en/master/reference_guide/index.html>`_
+* First read our `installation instructions <https://odevio-cli.readthedocs.io/en/master/installation/index.html>`_.
+* Next, check how to `setup your app with Odevio at and build your Flutter app to iOS <https://odevio-cli.readthedocs.io/en/master/tutorial/index.html>`_ .
+* Finally, if you want to know every option Odevio has to offer check our `reference guide <https://odevio-cli.readthedocs.io/en/master/reference_guide/index.html>`_
 
 -----
 About

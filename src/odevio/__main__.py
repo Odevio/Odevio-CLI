@@ -24,7 +24,7 @@ def odevio():
 
     \b
     Github : https://github.com/Odevio/Odevio-CLI
-    Documentation : https://odevio.readthedocs.io/en/master/
+    Documentation : https://odevio-cli.readthedocs.io/en/master/
     Download : https://pypi.org/project/odevio/
 
     \f
