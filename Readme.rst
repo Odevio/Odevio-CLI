@@ -24,7 +24,7 @@
    :alt: CodeFactor
 
 ======================================================================
-Build and publish iOS apps with your AI agent — no Mac, no iOS jargon
+Build and publish iOS apps with your AI agent - no Mac, no iOS jargon
 ======================================================================
 Odevio lets an AI agent build and publish your iOS apps for you. It runs the build and signing on
 remote Macs, so you need no Mac, no Xcode and no iOS knowledge. Claude Code is the first AI agent
@@ -120,7 +120,7 @@ Odevio gives your AI agent the tools to build and ship iOS apps for you.
 **What does Odevio do for you ?**
 
 #. It lets an AI agent such as Claude Code drive the whole flow from plain-language requests.
-#. It manages iOS specifics — certificates, devices, provisioning profiles, bundle IDs, Xcode configuration.
+#. It manages iOS specifics - certificates, devices, provisioning profiles, bundle IDs, Xcode configuration.
 #. It builds your Flutter app on remote Macs, so you need no Mac of your own.
 #. It fixes build failures, then hosts the app or ships it to TestFlight and the App Store.
 

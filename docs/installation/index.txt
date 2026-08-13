@@ -36,5 +36,5 @@ That is it. Open your AI agent in your Flutter project's folder and ask it to pu
 .. note::
 
     Would rather drive Odevio yourself? You can run the :doc:`command line <../installation_cli/index>`
-    directly, or wire it into your :doc:`CI/CD pipeline <../cicd/index>` — but with an AI agent you do not
+    directly, or wire it into your :doc:`CI/CD pipeline <../cicd/index>` - but with an AI agent you do not
     need to.

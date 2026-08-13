@@ -5,9 +5,9 @@
 AI Agent
 ========
 
-Odevio can be driven by an AI coding agent such as `Claude Code <https://claude.com/claude-code>`_. You
-describe what you want in plain words, and the agent handles the rest. Claude Code is the first AI agent
-supported; the skill follows the open `Agent Skills <https://agentskills.io>`_ standard, so more can follow.
+Odevio can be driven by any AI coding agent that supports the open `Agent Skills <https://agentskills.io>`_
+standard - `Claude Code <https://claude.com/claude-code>`_, Codex, Cursor and Gemini CLI are supported
+today. You describe what you want in plain words, and the agent handles the rest.
 
 ----------
 Quickstart
@@ -33,7 +33,7 @@ More than just that ask
 
 ``Get my app onto my iPhone`` is one example. Depending on what you ask for, the agent can also:
 
-- **show you your app running** on one of our Macs, in the iOS simulator — this needs no Apple account at all
+- **show you your app running** on one of our Macs, in the iOS simulator - this needs no Apple account at all
 - **check that your app builds** for iOS, without publishing anything
 - **fix build errors on its own**, then start again, until it works
 - **share it through TestFlight** with your testers
@@ -43,7 +43,7 @@ This is for you if you would rather not learn what a provisioning profile is.
 
 .. note::
 
-    Only the first item works without a paid Apple Developer account. To reach a real iPhone you need one —
+    Only the first item works without a paid Apple Developer account. To reach a real iPhone you need one -
     99 € per year, no way around it. Everything else is handled for you.
 
 
@@ -60,8 +60,8 @@ What you need first
 
     pip install odevio
 
-**3. An Odevio account.** If you do not have one yet, create it on the website —
-`odevio.com/user/registration <https://www.odevio.com/user/registration/>`_ — or from the terminal:
+**3. An Odevio account.** If you do not have one yet, create it on the website -
+`odevio.com/user/registration <https://www.odevio.com/user/registration/>`_ - or from the terminal:
 
 .. code-block::
 
@@ -73,11 +73,12 @@ Already have one? Sign in:
 
     odevio signin
 
-You only do this once. The agent cannot sign in for you, because the command asks for your password —
+You only do this once. The agent cannot sign in for you, because the command asks for your password -
 so if it ever tells you to run ``odevio signin``, that is why.
 
-**4. An AI agent.** These instructions are written for `Claude Code <https://claude.com/claude-code>`_,
-which runs in your terminal and in VS Code, and which ``odevio skill install`` configures for you.
+**4. An AI agent.** The examples here use `Claude Code <https://claude.com/claude-code>`_, which
+``odevio skill install`` sets up. Any agent that reads the Agent Skills standard works the same - see the
+note below for Codex, Cursor and Gemini CLI.
 
 .. note::
 
@@ -93,7 +94,7 @@ Install the Odevio skill
 ------------------------
 
 A *skill* is a set of instructions that teaches your agent how to use Odevio properly. Install it once
-for your whole machine — this sets up **Claude Code**:
+for your whole machine - this sets up **Claude Code**:
 
 .. code-block::
 
@@ -152,20 +153,20 @@ It only stops when the answer is something no one else can give:
     * - To create the app once in App Store Connect
       - Apple does not allow this to be automated. About two minutes, once per app
 
-Everything else — versions, certificates, signing, build numbers — it works out by itself.
+Everything else - versions, certificates, signing, build numbers - it works out by itself.
 
 
 -------------------
 While it is working
 -------------------
 
-Your project is compiled on a real Mac, so expect **around fifteen minutes** for a build — longer for a
+Your project is compiled on a real Mac, so expect **around fifteen minutes** for a build - longer for a
 large app, and longer again if all our machines are busy and yours waits for the next free one.
 
 There is nothing for you to do in the meantime. The agent tells you when it starts, keeps you posted as
-it goes, and you can ask it where things are at any time — or tell it to stop.
+it goes, and you can ask it where things are at any time - or tell it to stop.
 
-If your app fails to build, it reads the error, fixes your code, and starts again — up to three attempts,
+If your app fails to build, it reads the error, fixes your code, and starts again - up to three attempts,
 then it stops and explains what it found rather than making things worse.
 
 
@@ -175,21 +176,21 @@ What you get at the end
 
 Depending on what you asked for:
 
-- **Running on a Mac we provide** — you get connection details for a remote desktop, with your project and the
+- **Running on a Mac we provide** - you get connection details for a remote desktop, with your project and the
   iOS simulator already there, so you can watch your own app run. No Apple account needed. You will need a VNC
   client on your computer, and the machine stays available for an hour
-- **On your phone straight away** — you get a link and a QR code. Scan it with your iPhone camera and the
+- **On your phone straight away** - you get a link and a QR code. Scan it with your iPhone camera and the
   app installs like any other. Your device needs to be registered on your Apple account once, which is easiest
-  from a Mac — if you are on Windows or Linux, TestFlight below is the shorter path
-- **Through TestFlight** — Apple processes the build on its side first, usually five to thirty minutes, then
+  from a Mac - if you are on Windows or Linux, TestFlight below is the shorter path
+- **Through TestFlight** - Apple processes the build on its side first, usually five to thirty minutes, then
   it appears in the TestFlight app. Handy for sharing with a few people
-- **On the App Store** — the build is uploaded, and you then fill in the description, screenshots and
+- **On the App Store** - the build is uploaded, and you then fill in the description, screenshots and
   privacy answers in App Store Connect and submit it
 
 .. warning::
 
     A successful build does not mean a published app. Apple reviews every App Store submission, which takes
-    from a few hours to a few days, and it can be refused — most often for a missing privacy policy, or for
+    from a few hours to a few days, and it can be refused - most often for a missing privacy policy, or for
     an app judged too limited. That part is between you and Apple.
 
 
@@ -197,17 +198,17 @@ Depending on what you asked for:
 If it goes wrong
 ----------------
 
-**"You need to sign in first"** — run ``odevio signin`` in your terminal, then tell the agent it is
+**"You need to sign in first"** - run ``odevio signin`` in your terminal, then tell the agent it is
 done.
 
-**"The Odevio command is not installed"** — run ``pip install odevio``. If it still cannot find it, your
+**"The Odevio command is not installed"** - run ``pip install odevio``. If it still cannot find it, your
 terminal and your Python installation may not agree; ``pip --version`` and ``odevio --version`` tell you
 what is available.
 
-**Your app never shows up in TestFlight** — usually Apple's encryption question left unanswered. The
+**Your app never shows up in TestFlight** - usually Apple's encryption question left unanswered. The
 agent normally handles this for you; ask it to check.
 
-**Your build seems stuck waiting** — our Macs may all be busy, or one may need attention. The agent
+**Your build seems stuck waiting** - our Macs may all be busy, or one may need attention. The agent
 tells you rather than waiting for ever.
 
 Never paste your password or the contents of your Apple key file into the conversation. The agent is

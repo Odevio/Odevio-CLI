@@ -1,7 +1,7 @@
 import click
 
 # Commands the skill may run without asking each time. Everything here either only reads, or writes
-# something that can be written again differently — never something that cannot be taken back.
+# something that can be written again differently - never something that cannot be taken back.
 #
 # Deliberately absent, and to stay absent: "build start", which spends an hour of a Mac someone else
 # is queued for; "screenshot push", which replaces the pictures on Apple with no copy kept;
@@ -64,14 +64,14 @@ HELP_COMMANDS = [
 
 STAMP_FILE = ".installed-version"
 
-# The skill name, and where Claude Code — the turn-key target — looks for skills and keeps its
+# The skill name, and where Claude Code - the turn-key target - looks for skills and keeps its
 # settings. Other agents that support the open Agent Skills standard read the same skill files from
 # their own directory; install into it with ``--to``.
 SKILL_NAME = "odevio"
 CLAUDE_SKILLS_DIR = (".claude", "skills")
 CLAUDE_SETTINGS_FILE = (".claude", "settings.json")
 
-# Agents that read the open Agent Skills standard, and where each keeps its skills — the same relative
+# Agents that read the open Agent Skills standard, and where each keeps its skills - the same relative
 # path under the home directory (machine-wide) or a project root (with --project). Only Claude Code also
 # gets its commands pre-approved; the others place the same skill and apply their own approval rules.
 # Any agent not listed here is still reachable with --to <its skills directory>.
@@ -129,7 +129,7 @@ def refresh_copied_skill():
 
     A linked skill follows the upgrade by itself. A copied one does not: it keeps answering with last
     month's instructions, and nothing the assistant does says so. Since Odevio updates itself in the
-    background, there is no moment when the user would think to reinstall — so it is done for them.
+    background, there is no moment when the user would think to reinstall - so it is done for them.
 
     Returns the version copied, or None when there was nothing to do.
     """
@@ -262,7 +262,7 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
     :code:`settings.json`, unless :code:`--no-permissions` is given. Without them the assistant asks
     for approval before nearly every command: a skill's own :code:`allowed-tools` only covers the one
     turn that invokes it, and the grant is gone as soon as you reply, so a conversation that waits for
-    a build or a decision loses it immediately. Four commands are left out on purpose and always ask —
+    a build or a decision loses it immediately. Four commands are left out on purpose and always ask -
     starting a build, sending screenshots to Apple, opening a submission, and sending an app for review.
 
     Existing rules and settings are kept: the allow list is only ever added to, so running this again

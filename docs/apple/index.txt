@@ -5,16 +5,16 @@ The Apple side
 ==============
 
 Publishing an iPhone app means dealing with Apple, and a few things there only a human with an Apple
-account can do — no tool can do them for you. This page explains each one in plain words, so you know what
+account can do - no tool can do them for you. This page explains each one in plain words, so you know what
 it is and why it is needed. If you use an :doc:`AI agent <../ai_assistant/index>`, it walks you through
-these and asks only for the parts it cannot do itself — this page is just your reference.
+these and asks only for the parts it cannot do itself - this page is just your reference.
 
 There are four pieces, and you set each up once:
 
-- an **Apple Developer Program** membership — your paid account with Apple (99 € / year)
-- an **App Store Connect API key** — a credential that lets Odevio talk to Apple on your behalf
-- the **app record** — the entry in Apple's console that your app's page and versions hang off
-- a **bundle identifier** — your app's unique id, like ``com.acme.mybudget``
+- an **Apple Developer Program** membership - your paid account with Apple (99 € / year)
+- an **App Store Connect API key** - a credential that lets Odevio talk to Apple on your behalf
+- the **app record** - the entry in Apple's console that your app's page and versions hang off
+- a **bundle identifier** - your app's unique id, like ``com.acme.mybudget``
 
 None of this is something you keep doing: it is a one-time setup, mostly per account and once per app.
 
@@ -22,7 +22,7 @@ Apple Developer Program
 =======================
 
 To put an app on a real iPhone, on TestFlight or on the App Store, you need a paid **Apple Developer
-Program** membership — 99 € per year. Enrol at
+Program** membership - 99 € per year. Enrol at
 `developer.apple.com/programs/enroll <https://developer.apple.com/programs/enroll/>`_. There is no way
 around this: no build service can replace the membership.
 
@@ -44,7 +44,7 @@ Give them to Odevio once:
 
     odevio apple add --apple-id APPLE_TEAM_ID --name TEXT --key-id APPLE_KEY_ID --issuer-id APPLE_ISSUER_ID --private-key PATH_TO_P8
 
-An AI agent does this step for you — it only asks you to create the key and point it at the file, because
+An AI agent does this step for you - it only asks you to create the key and point it at the file, because
 the file is a secret it will not read.
 
 The app record in App Store Connect
@@ -56,8 +56,8 @@ it by hand:
 #. Go to `App Store Connect → Apps <https://appstoreconnect.apple.com/apps>`_ and click **+** → **New App**.
 #. Pick the platform, a public name, the primary language, your bundle identifier and an SKU.
 
-That is about two minutes, once per app. Everything after it — metadata, screenshots, the build and the
-submission — Odevio can do for you.
+That is about two minutes, once per app. Everything after it - metadata, screenshots, the build and the
+submission - Odevio can do for you.
 
 The bundle identifier (App ID)
 ==============================
