@@ -71,6 +71,42 @@ SKILL_NAME = "odevio"
 CLAUDE_SKILLS_DIR = (".claude", "skills")
 CLAUDE_SETTINGS_FILE = (".claude", "settings.json")
 
+# Agents that read the open Agent Skills standard, and where each keeps its skills — the same relative
+# path under the home directory (machine-wide) or a project root (with --project). Only Claude Code also
+# gets its commands pre-approved; the others place the same skill and apply their own approval rules.
+# Any agent not listed here is still reachable with --to <its skills directory>.
+AGENTS = {
+    "claude-code": {
+        "label": "Claude Code",
+        "skills_dir": CLAUDE_SKILLS_DIR,
+        "permissions": True,
+        "invoke": "It is now available as [code]/odevio[/code] in {scope}.",
+        "note": None,
+    },
+    "codex": {
+        "label": "Codex CLI",
+        "skills_dir": (".codex", "skills"),
+        "permissions": False,
+        "invoke": "It is now available to Codex CLI in {scope}.",
+        "note": None,
+    },
+    "gemini": {
+        "label": "Gemini CLI",
+        "skills_dir": (".gemini", "skills"),
+        "permissions": False,
+        "invoke": "It is now available to Gemini CLI in {scope}.",
+        "note": None,
+    },
+    "cursor": {
+        "label": "Cursor",
+        "skills_dir": (".cursor", "skills"),
+        "permissions": False,
+        "invoke": "It is now available to Cursor in {scope}.",
+        "note": "Cursor loads project skills most reliably; if a machine-wide install is not picked up, "
+                "run it again with --project inside your repository.",
+    },
+}
+
 
 def installed_version():
     """ The version of Odevio currently running. """
@@ -194,20 +230,23 @@ def skill():
 @click.option('--force', is_flag=True, help="Replace an existing installation.")
 @click.option('--no-permissions', is_flag=True,
               help="Do not pre-approve the skill's commands. Every one of them will then ask for approval.")
+@click.option('--agent', type=click.Choice(sorted(AGENTS)), default='claude-code', show_default=True,
+              help="Which AI agent to install for. Claude Code also gets its commands pre-approved; the "
+                   "others place the same skill and follow their own approval rules.")
 @click.option('--to', 'to_dir', type=click.Path(resolve_path=True, file_okay=False, dir_okay=True),
-              help="Install into another agent's skills directory (e.g. Cursor, Codex or Gemini CLI). "
-                   "Copies the standard Agent Skills files there; Claude Code-only auto-approval is skipped.")
-def install(project, directory, copy_files, link, force, no_permissions, to_dir):
+              help="Install into an explicit skills directory, for any Agent Skills-compatible agent not "
+                   "covered by --agent. Copies the standard files there; auto-approval is skipped.")
+def install(project, directory, copy_files, link, force, no_permissions, agent, to_dir):
     """ Install the Odevio skill.
 
     \f
     By default the skill is installed for the whole machine, in :code:`~/.claude/skills/odevio/`, and
     becomes available as :code:`/odevio` in every project. That path is where Claude Code looks, so this
     command configures Claude Code specifically. The skill itself follows the open Agent Skills standard, so
-    other agents that read it — Cursor, Codex, Gemini CLI and more — use the same files: install into one
-    with :code:`--to <its skills directory>` (auto-approval of commands stays Claude Code-only). Pass
-    :code:`--project` to install it inside one project's :code:`.claude/skills/` instead, which is what you
-    want when the skill should be committed with the repository.
+    other agents read the same files: pass :code:`--agent codex`, :code:`--agent cursor` or
+    :code:`--agent gemini` to install into theirs (only Claude Code also gets its commands pre-approved). For
+    an agent not listed, :code:`--to <its skills directory>` places the files anywhere. Pass
+    :code:`--project` to install inside one project's skills folder instead, to commit it with the repository.
 
     The skill is linked rather than copied, so upgrading Odevio upgrades the skill with it. This is the
     default because the alternative fails quietly: a copy goes on answering with the instructions it was
@@ -270,6 +309,7 @@ def install(project, directory, copy_files, link, force, no_permissions, to_dir)
                       "before each command, following its own rules.")
         return
 
+    profile = AGENTS[agent]
     if project:
         base = directory or os.getcwd()
         scope = "this project"
@@ -278,7 +318,7 @@ def install(project, directory, copy_files, link, force, no_permissions, to_dir)
             raise click.ClickException("--directory only applies together with --project.")
         base = os.path.expanduser("~")
         scope = "every project on this machine"
-    destination = os.path.join(base, *CLAUDE_SKILLS_DIR, SKILL_NAME)
+    destination = os.path.join(base, *profile["skills_dir"], SKILL_NAME)
 
     # islink is checked separately: a broken symlink is invisible to exists() and would otherwise make the
     # copy fail with a confusing error.
@@ -307,9 +347,16 @@ def install(project, directory, copy_files, link, force, no_permissions, to_dir)
         os.symlink(source, destination)
 
     console.print(f"Odevio skill installed in {destination}")
-    console.print(f"It is now available as [code]/odevio[/code] in {scope}.")
-    if link:
-        console.print("Linked to this Odevio installation, so upgrading Odevio upgrades the skill.")
+    console.print(profile["invoke"].format(scope=scope))
+    if profile["note"]:
+        console.print(profile["note"])
+
+    # Pre-approving commands writes Claude Code's own settings.json allow rules, so it only applies to
+    # Claude Code. Other agents place the same skill and apply their own approval rules.
+    if not profile["permissions"]:
+        console.print(f"{profile['label']} applies its own approval rules, so Odevio does not pre-approve "
+                      "its commands here.")
+        return
 
     if no_permissions:
         console.print("Its commands were not pre-approved, so each one will ask for approval.")

@@ -82,9 +82,10 @@ which runs in your terminal and in VS Code, and which ``odevio skill install`` c
 .. note::
 
     The skill follows the open `Agent Skills <https://agentskills.io>`_ standard, so it is not tied to one
-    tool. ``odevio skill install`` sets up Claude Code; for another agent that reads the standard — such as
-    Cursor, Codex or Gemini CLI — run ``odevio skill install --to <its skills directory>``. The commands
-    then follow that agent's own approval rules, since Odevio only pre-approves them for Claude Code.
+    tool. ``odevio skill install`` sets up Claude Code; for another agent that reads the standard, run
+    ``odevio skill install --agent codex`` (or ``--agent cursor``, ``--agent gemini``). For any other agent,
+    ``--to <its skills directory>`` places the files anywhere. The commands then follow that agent's own
+    approval rules, since Odevio only pre-approves them for Claude Code.
 
 
 ------------------------
