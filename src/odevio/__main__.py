@@ -20,7 +20,7 @@ License : The MIT License
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""")
 def odevio():
-    """ Odevio lets your AI agent build and publish iOS apps for you — no Mac, no Xcode.
+    """ Odevio lets your AI agent build and publish iOS apps for you - no Mac, no Xcode.
 
     \b
     Github : https://github.com/Odevio/Odevio-CLI

@@ -4,7 +4,7 @@ Odevio Documentation
 =====================
 
 ------------------------------------------------------------------------
-Build and publish iOS apps with your AI agent — no Mac, no iOS jargon
+Build and publish iOS apps with your AI agent - no Mac, no iOS jargon
 ------------------------------------------------------------------------
 
 Welcome to the documentation pages for Odevio.
@@ -51,7 +51,7 @@ Odevio is driven by your AI agent. Install it, connect your agent, then just say
     odevio signup
     odevio skill install
 
-Now open your AI agent — Claude Code today — in your Flutter project's folder and ask it to put your app on
+Now open your AI agent - Claude Code today - in your Flutter project's folder and ask it to put your app on
 your iPhone. The :ref:`AI agent guide <ai_assistant>` is the full walkthrough, and the
 :doc:`Apple side <apple/index>` covers the one-time Apple setup.
 

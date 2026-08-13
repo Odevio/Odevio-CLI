@@ -8,7 +8,7 @@ version = "1.3.0"
 authors = [
     {name="Odevio", email="hello@odevio.com"}
 ]
-description = "Let your AI agent build and publish iOS apps with Odevio — no Mac, no Xcode. Works with Claude Code."
+description = "Let your AI agent build and publish iOS apps with Odevio - no Mac, no Xcode. Works with any AI agent that supports the Agent Skills standard."
 readme = "Readme.rst"
 license = {file="LICENSE"}
 requires-python = ">=3.7.0"
