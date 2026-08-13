@@ -31,11 +31,6 @@ remote Macs, so you need no Mac, no Xcode and no iOS knowledge. Claude Code is t
 supported.
 Thanks for checking it out.
 
-.. figure:: https://raw.githubusercontent.com/Odevio/Odevio-CLI/master/docs/img/odevio--demo.gif
-    :align: center
-
-    **A tool for developers by developers**
-
 ------------
 Installation
 ------------
