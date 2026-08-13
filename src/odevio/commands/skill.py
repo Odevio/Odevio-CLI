@@ -64,6 +64,13 @@ HELP_COMMANDS = [
 
 STAMP_FILE = ".installed-version"
 
+# The skill name, and where Claude Code — the turn-key target — looks for skills and keeps its
+# settings. Other agents that support the open Agent Skills standard read the same skill files from
+# their own directory; install into it with ``--to``.
+SKILL_NAME = "odevio"
+CLAUDE_SKILLS_DIR = (".claude", "skills")
+CLAUDE_SETTINGS_FILE = (".claude", "settings.json")
+
 
 def installed_version():
     """ The version of Odevio currently running. """
@@ -93,7 +100,7 @@ def refresh_copied_skill():
     import os
     import shutil
 
-    destination = os.path.join(os.path.expanduser("~"), ".claude", "skills", "odevio")
+    destination = os.path.join(os.path.expanduser("~"), *CLAUDE_SKILLS_DIR, SKILL_NAME)
     if os.path.islink(destination) or not os.path.isdir(destination):
         return None
 
@@ -187,16 +194,20 @@ def skill():
 @click.option('--force', is_flag=True, help="Replace an existing installation.")
 @click.option('--no-permissions', is_flag=True,
               help="Do not pre-approve the skill's commands. Every one of them will then ask for approval.")
-def install(project, directory, copy_files, link, force, no_permissions):
+@click.option('--to', 'to_dir', type=click.Path(resolve_path=True, file_okay=False, dir_okay=True),
+              help="Install into another agent's skills directory (e.g. Cursor, Codex or Gemini CLI). "
+                   "Copies the standard Agent Skills files there; Claude Code-only auto-approval is skipped.")
+def install(project, directory, copy_files, link, force, no_permissions, to_dir):
     """ Install the Odevio skill.
 
     \f
     By default the skill is installed for the whole machine, in :code:`~/.claude/skills/odevio/`, and
     becomes available as :code:`/odevio` in every project. That path is where Claude Code looks, so this
     command configures Claude Code specifically. The skill itself follows the open Agent Skills standard, so
-    another assistant supporting it can use the same files placed wherever it expects them. Pass :code:`--project` to install it inside one
-    project's :code:`.claude/skills/` instead, which is what you want when the skill should be committed
-    with the repository.
+    other agents that read it — Cursor, Codex, Gemini CLI and more — use the same files: install into one
+    with :code:`--to <its skills directory>` (auto-approval of commands stays Claude Code-only). Pass
+    :code:`--project` to install it inside one project's :code:`.claude/skills/` instead, which is what you
+    want when the skill should be committed with the repository.
 
     The skill is linked rather than copied, so upgrading Odevio upgrades the skill with it. This is the
     default because the alternative fails quietly: a copy goes on answering with the instructions it was
@@ -232,6 +243,33 @@ def install(project, directory, copy_files, link, force, no_permissions):
             "The skill files are missing from this Odevio installation. Reinstall with 'pip install --upgrade odevio'."
         )
 
+    # --to installs the standard skill files into any Agent Skills-compatible agent's directory. The
+    # skill content is the same everywhere; only Claude Code's auto-approval of commands is specific, so
+    # it is skipped here and the agent applies its own permission rules.
+    if to_dir:
+        if project or directory:
+            raise click.ClickException(
+                "--to installs for another agent and cannot be combined with --project or --directory."
+            )
+        destination = os.path.join(to_dir, SKILL_NAME)
+        if (os.path.exists(destination) or os.path.islink(destination)) and not force:
+            console.print(f"The skill is already installed in {destination}")
+            console.print("Run the command again with --force to replace it.")
+            return
+        if os.path.islink(destination):
+            os.unlink(destination)
+        elif os.path.exists(destination):
+            shutil.rmtree(destination)
+        os.makedirs(to_dir, exist_ok=True)
+        shutil.copytree(source, destination)
+        with open(os.path.join(destination, STAMP_FILE), "w", encoding="utf-8") as handle:
+            handle.write(f"{installed_version()}\n")
+        console.print(f"Odevio skill installed in {destination}")
+        console.print("It is ready for any agent that supports the open Agent Skills standard.")
+        console.print("Auto-approval of the skill's commands is Claude Code-only, so this agent will ask "
+                      "before each command, following its own rules.")
+        return
+
     if project:
         base = directory or os.getcwd()
         scope = "this project"
@@ -240,7 +278,7 @@ def install(project, directory, copy_files, link, force, no_permissions):
             raise click.ClickException("--directory only applies together with --project.")
         base = os.path.expanduser("~")
         scope = "every project on this machine"
-    destination = os.path.join(base, ".claude", "skills", "odevio")
+    destination = os.path.join(base, *CLAUDE_SKILLS_DIR, SKILL_NAME)
 
     # islink is checked separately: a broken symlink is invisible to exists() and would otherwise make the
     # copy fail with a confusing error.
@@ -277,7 +315,7 @@ def install(project, directory, copy_files, link, force, no_permissions):
         console.print("Its commands were not pre-approved, so each one will ask for approval.")
         return
 
-    settings_path = os.path.join(base, ".claude", "settings.json")
+    settings_path = os.path.join(base, *CLAUDE_SETTINGS_FILE)
     try:
         added = write_permission_rules(settings_path)
     except (OSError, ValueError) as error:
