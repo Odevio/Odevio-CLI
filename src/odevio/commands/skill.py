@@ -80,7 +80,7 @@ AGENTS = {
         "label": "Claude Code",
         "skills_dir": CLAUDE_SKILLS_DIR,
         "permissions": True,
-        "invoke": "It is now available as [code]/odevio[/code] in {scope}.",
+        "invoke": "It is set up for Claude Code, the default, and available as [code]/odevio[/code] in {scope}.",
         "note": None,
     },
     "codex": {
@@ -350,6 +350,9 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
     console.print(profile["invoke"].format(scope=scope))
     if profile["note"]:
         console.print(profile["note"])
+    if agent == "claude-code":
+        console.print("Using Codex, Cursor or Gemini CLI instead? Run it again with --agent codex, "
+                      "--agent cursor or --agent gemini.")
 
     # Pre-approving commands writes Claude Code's own settings.json allow rules, so it only applies to
     # Claude Code. Other agents place the same skill and apply their own approval rules.

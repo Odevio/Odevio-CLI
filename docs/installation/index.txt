@@ -19,14 +19,22 @@ you want.
 
     odevio signup
 
-**3. Connect your AI agent:**
+**3. Connect your AI agent.** By default this sets up **Claude Code** - the one integration that also
+pre-approves Odevio's commands, so it does not prompt on every step:
 
 .. code-block::
 
     odevio skill install
 
-Using Codex, Cursor or Gemini CLI instead of Claude Code? Install into it with ``odevio skill install
---agent codex`` (or ``--agent cursor``, ``--agent gemini``).
+Using Codex, Cursor or Gemini CLI instead? Add ``--agent`` (these place the same skill and follow the
+agent's own approval rules):
+
+.. code-block::
+
+    odevio skill install --agent codex
+
+Replace ``codex`` with ``cursor`` or ``gemini`` for those. For any other agent that reads the standard,
+``--to <its skills directory>`` installs it anywhere.
 
 That is it. Open your AI agent in your Flutter project's folder and ask it to put your app on your iPhone.
 
