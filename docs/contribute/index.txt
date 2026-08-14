@@ -32,8 +32,6 @@ Get in touch!
 
 If you have a general question or require some functional support, you can post it on |stackoverflow|.
 
-Moreover, do not hesitate to ask about your issue on our community |Discord|.
-
 It will be a pleasure for us to help you!
 
 Thank you all very much!
