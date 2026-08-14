@@ -2,34 +2,26 @@
 .. _ai_assistant:
 
 ========
-AI Agent
+Tutorial
 ========
 
-Odevio can be driven by any AI coding agent that supports the open `Agent Skills <https://agentskills.io>`_
-standard - `Claude Code <https://claude.com/claude-code>`_, Codex, Cursor and Gemini CLI are supported
-today. You describe what you want in plain words, and the agent handles the rest.
-
-----------
-Quickstart
-----------
-
-.. code-block::
-
-    pip install odevio
-    odevio signup
-    odevio skill install
-
-Then open your AI agent in your Flutter project's folder and ask it, in plain words:
+You drive Odevio entirely through your AI agent, in plain words - there are no Odevio commands to learn.
+Once it is set up (see :doc:`Installation <../installation/index>`), open your agent in your Flutter
+project's folder and tell it what you want:
 
 .. code-block::
 
     Get my app onto my iPhone
 
-That is the whole workflow. The rest of this page explains what happens, what it will ask you, and why.
+Or type ``/odevio`` to start it explicitly. The agent works out what needs doing; if your Apple account
+and app are already set up, it asks nothing and gets straight to work.
 
-------------------------
-More than just that ask
-------------------------
+Odevio works with any AI agent that supports the open `Agent Skills <https://agentskills.io>`_ standard -
+`Claude Code <https://claude.com/claude-code>`_, Codex, Cursor and Gemini CLI are supported today.
+
+----------------
+What you can ask
+----------------
 
 ``Get my app onto my iPhone`` is one example. Depending on what you ask for, the agent can also:
 
@@ -45,86 +37,6 @@ This is for you if you would rather not learn what a provisioning profile is.
 
     Only the first item works without a paid Apple Developer account. To reach a real iPhone you need one -
     99 € per year, no way around it. Everything else is handled for you.
-
-
--------------------
-What you need first
--------------------
-
-**1. Python and pip.** PIP is Python's package manager. If you do not have Python,
-`install it first <https://www.python.org/downloads/>`_.
-
-**2. Odevio.** In a terminal:
-
-.. code-block::
-
-    pip install odevio
-
-**3. An Odevio account.** If you do not have one yet, create it on the website -
-`odevio.com/user/registration <https://www.odevio.com/user/registration/>`_ - or from the terminal:
-
-.. code-block::
-
-    odevio signup
-
-Already have one? Sign in:
-
-.. code-block::
-
-    odevio signin
-
-You only do this once. The agent cannot sign in for you, because the command asks for your password -
-so if it ever tells you to run ``odevio signin``, that is why.
-
-**4. An AI agent.** The examples here use `Claude Code <https://claude.com/claude-code>`_, which
-``odevio skill install`` sets up. Any agent that reads the Agent Skills standard works the same - see the
-note below for Codex, Cursor and Gemini CLI.
-
-.. note::
-
-    The skill follows the open `Agent Skills <https://agentskills.io>`_ standard, so it is not tied to one
-    tool. ``odevio skill install`` sets up Claude Code; for another agent that reads the standard, run
-    ``odevio skill install --agent codex`` (or ``--agent cursor``, ``--agent gemini``). For any other agent,
-    ``--to <its skills directory>`` places the files anywhere. The commands then follow that agent's own
-    approval rules, since Odevio only pre-approves them for Claude Code.
-
-
-------------------------
-Install the Odevio skill
-------------------------
-
-A *skill* is a set of instructions that teaches your agent how to use Odevio properly. Install it once
-for your whole machine - this sets up **Claude Code**:
-
-.. code-block::
-
-    odevio skill install
-
-That is it. It is now available in every project on your computer.
-
-Prefer to keep it inside one project, for instance to commit it with your repository?
-
-.. code-block::
-
-    odevio skill install --project
-
-The skill updates itself automatically whenever you upgrade Odevio, so there is nothing more to do.
-
-
------------
-Use it
------------
-
-Open your agent in your Flutter project's folder and ask for what you want, in your own words:
-
-.. code-block::
-
-    Get my app onto my iPhone
-
-Or type ``/odevio`` to start it explicitly.
-
-The agent works out what needs doing. If your Apple account and your app are already set up, it asks
-nothing and gets straight to work.
 
 
 -----------------------------

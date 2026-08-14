@@ -51,9 +51,9 @@ Odevio is driven by your AI agent. Install it, connect your agent, then just say
     odevio signup
     odevio skill install
 
-Now open your AI agent - Claude Code today - in your Flutter project's folder and ask it to put your app on
-your iPhone. The :ref:`AI agent guide <ai_assistant>` is the full walkthrough, and the
-:doc:`Apple side <apple/index>` covers the one-time Apple setup.
+Now open your AI agent in your Flutter project's folder and ask it to put your app on your iPhone. The
+:ref:`Tutorial <ai_assistant>` shows how to use Odevio, and the :doc:`Apple side <apple/index>` covers the
+one-time Apple setup.
 
 Prefer to drive Odevio yourself? See the :doc:`command line <installation_cli/index>` or the
 :ref:`Reference Guide <reference_guide>`.
@@ -66,8 +66,8 @@ This documentation is constantly evolving and we appreciate every help we can ge
    :maxdepth: 2
    :caption: Getting started:
 
-   ai_assistant/index
    installation/index
+   ai_assistant/index
    apple/index
 
 .. toctree::

@@ -30,7 +30,7 @@ Using Codex, Cursor or Gemini CLI instead of Claude Code? Install into it with `
 
 That is it. Open your AI agent in your Flutter project's folder and ask it to put your app on your iPhone.
 
-- The :doc:`AI agent guide <../ai_assistant/index>` is the full walkthrough.
+- The :doc:`Tutorial <../ai_assistant/index>` shows how to use Odevio once it is set up.
 - The :doc:`Apple side <../apple/index>` covers the one-time Apple setup your agent will guide you through.
 
 .. note::
