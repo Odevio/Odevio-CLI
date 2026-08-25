@@ -22,7 +22,7 @@ If not, this is a **stopping point**, said kindly and clearly:
 
 - the Apple Developer Program costs **99 € per year**. There is no free path to a device or to TestFlight
 - Apple reviews the enrolment, so access typically arrives about **24 hours** later
-- the guide: https://odevio-cli.readthedocs.io/en/latest/tutorial/5_create_apple_developer_account.html
+- the guide: https://odevio-cli.readthedocs.io/en/latest/apple/index.html
 
 Then say exactly how to resume: come back and run `/odevio` again once Apple's welcome e-mail arrives.
 
@@ -46,7 +46,7 @@ inside it the **App Store Connect API** keys — and the fourth from the develop
 | **Team ID** | **ten characters, letters and digits, like `A1B2C3D4E5`** | https://developer.apple.com/account, under *Membership details* — also top right of the portal |
 
 The guide, with screenshots:
-https://odevio-cli.readthedocs.io/en/latest/tutorial/6_configure_app_store_connect.html
+https://odevio-cli.readthedocs.io/en/latest/apple/index.html
 
 **The Team ID is not an e-mail address.** The CLI option is called `--apple-id` and its help says "ID of your
 developer account on Apple", which reads like an Apple ID. It is not: the value is stored as the Team ID and
