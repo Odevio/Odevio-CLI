@@ -33,8 +33,9 @@ agent's own approval rules):
 
     odevio skill install --agent codex
 
-Replace ``codex`` with ``cursor`` or ``gemini`` for those. For any other agent that reads the standard,
-``--to <its skills directory>`` installs it anywhere.
+Replace ``codex`` with ``cursor``, ``gemini`` or ``universal`` for those - ``universal`` installs under
+``.agents/skills``, a location several agents read. Use ``--agent all`` to install for every one at once.
+For any other agent that reads the standard, ``--to <its skills directory>`` installs it anywhere.
 
 That is it. Open your AI agent in your Flutter project's folder and ask it to put your app on your iPhone.
 

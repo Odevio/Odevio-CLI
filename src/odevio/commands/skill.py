@@ -105,6 +105,16 @@ AGENTS = {
         "note": "Cursor loads project skills most reliably; if a machine-wide install is not picked up, "
                 "run it again with --project inside your repository.",
     },
+    # A shared convention adopted by some agents, not a guaranteed path in the standard. Installing here
+    # in addition to AGENTS.md gives the widest reach; agents that do not read it are unaffected.
+    "universal": {
+        "label": "Agent Standard",
+        "skills_dir": (".agents", "skills"),
+        "permissions": False,
+        "invoke": "It is now available under .agents/skills in {scope}.",
+        "note": "This is a shared convention, not guaranteed for every agent. An AGENTS.md pointing at "
+                "the skill is the portable fallback.",
+    },
 }
 
 
@@ -205,6 +215,84 @@ def write_permission_rules(settings_path):
     return len(added)
 
 
+def _install_for_agent(agent_name, base, scope, source, *, copy_files, project, force,
+                        no_permissions, single):
+    """ Place the skill for one agent under ``base`` and pre-approve its commands where that applies.
+
+    Shared by a single ``--agent`` install and each step of ``--agent all``; ``single`` is False during
+    a fan-out so per-agent hints that only make sense on their own are left out.
+    """
+    import os
+    import shutil
+
+    from odevio.settings import console
+
+    profile = AGENTS[agent_name]
+    destination = os.path.join(base, *profile["skills_dir"], SKILL_NAME)
+
+    # islink is checked separately: a broken symlink is invisible to exists() and would otherwise make the
+    # copy fail with a confusing error.
+    if (os.path.exists(destination) or os.path.islink(destination)) and not force:
+        console.print(f"The skill is already installed in {destination}")
+        console.print("Run the command again with --force to replace it.")
+        return
+
+    if os.path.islink(destination):
+        os.unlink(destination)
+    elif os.path.exists(destination):
+        shutil.rmtree(destination)
+    os.makedirs(os.path.dirname(destination), exist_ok=True)
+
+    # Linking is the default because the alternative fails silently: a copy keeps working after
+    # "pip install --upgrade odevio" while holding last month's instructions, and nothing about the
+    # assistant's behaviour says so. A broken link is at least visible. Inside a project the skill is
+    # meant to be committed and read on other machines, so there a copy is the only thing that works.
+    as_copy = copy_files or project
+    if as_copy:
+        shutil.copytree(source, destination)
+        # Stamped so a later run of the CLI can notice the copy has fallen behind and say so.
+        with open(os.path.join(destination, ".installed-version"), "w", encoding="utf-8") as handle:
+            handle.write(f"{installed_version()}\n")
+    else:
+        os.symlink(source, destination)
+
+    console.print(f"Odevio skill installed in {destination}")
+    console.print(profile["invoke"].format(scope=scope))
+    if profile["note"]:
+        console.print(profile["note"])
+    if single and agent_name == "claude-code":
+        console.print("Using another agent? Run it again with --agent codex, --agent cursor, "
+                      "--agent gemini or --agent universal - or --agent all for every one.")
+
+    # Pre-approving commands writes Claude Code's own settings.json allow rules, so it only applies to
+    # Claude Code. Other agents place the same skill and apply their own approval rules.
+    if not profile["permissions"]:
+        console.print(f"{profile['label']} applies its own approval rules, so Odevio does not pre-approve "
+                      "its commands here.")
+        return
+
+    if no_permissions:
+        console.print("Its commands were not pre-approved, so each one will ask for approval.")
+        return
+
+    settings_path = os.path.join(base, *CLAUDE_SETTINGS_FILE)
+    try:
+        added = write_permission_rules(settings_path)
+    except (OSError, ValueError) as error:
+        # A hand-edited settings file that no longer parses should not lose the installation that
+        # already succeeded, so this is reported rather than raised.
+        console.print(f"[warning]Could not pre-approve its commands in {settings_path}:[/warning] {error}")
+        console.print("The skill works regardless; it will just ask before each command.")
+        return
+
+    if added:
+        console.print(f"Pre-approved {added} command patterns in {settings_path}, so it can read your "
+                      "project and Odevio without asking each time.")
+    else:
+        console.print("Its commands were already pre-approved.")
+    console.print("Starting a build, sending screenshots to Apple and opening a submission still ask.")
+
+
 @click.group()
 def skill():
     """ Install the Odevio skill for AI agents.
@@ -230,9 +318,11 @@ def skill():
 @click.option('--force', is_flag=True, help="Replace an existing installation.")
 @click.option('--no-permissions', is_flag=True,
               help="Do not pre-approve the skill's commands. Every one of them will then ask for approval.")
-@click.option('--agent', type=click.Choice(sorted(AGENTS)), default='claude-code', show_default=True,
+@click.option('--agent', type=click.Choice(sorted(AGENTS) + ["all"]), default='claude-code',
+              show_default=True,
               help="Which AI agent to install for. Claude Code also gets its commands pre-approved; the "
-                   "others place the same skill and follow their own approval rules.")
+                   "others place the same skill and follow their own approval rules. Use 'all' to install "
+                   "for every supported agent at once.")
 @click.option('--to', 'to_dir', type=click.Path(resolve_path=True, file_okay=False, dir_okay=True),
               help="Install into an explicit skills directory, for any Agent Skills-compatible agent not "
                    "covered by --agent. Copies the standard files there; auto-approval is skipped.")
@@ -243,10 +333,11 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
     By default the skill is installed for the whole machine, in :code:`~/.claude/skills/odevio/`, and
     becomes available as :code:`/odevio` in every project. That path is where Claude Code looks, so this
     command configures Claude Code specifically. The skill itself follows the open Agent Skills standard, so
-    other agents read the same files: pass :code:`--agent codex`, :code:`--agent cursor` or
-    :code:`--agent gemini` to install into theirs (only Claude Code also gets its commands pre-approved). For
-    an agent not listed, :code:`--to <its skills directory>` places the files anywhere. Pass
-    :code:`--project` to install inside one project's skills folder instead, to commit it with the repository.
+    other agents read the same files: pass :code:`--agent codex`, :code:`--agent cursor`,
+    :code:`--agent gemini` or :code:`--agent universal` to install into theirs (only Claude Code also gets
+    its commands pre-approved), or :code:`--agent all` to install for every one at once. For an agent not
+    listed, :code:`--to <its skills directory>` places the files anywhere. Pass :code:`--project` to install
+    inside one project's skills folder instead, to commit it with the repository.
 
     The skill is linked rather than copied, so upgrading Odevio upgrades the skill with it. This is the
     default because the alternative fails quietly: a copy goes on answering with the instructions it was
@@ -290,6 +381,10 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
             raise click.ClickException(
                 "--to installs for another agent and cannot be combined with --project or --directory."
             )
+        if agent == "all":
+            raise click.ClickException(
+                "--to installs into one explicit directory and cannot be combined with --agent all."
+            )
         destination = os.path.join(to_dir, SKILL_NAME)
         if (os.path.exists(destination) or os.path.islink(destination)) and not force:
             console.print(f"The skill is already installed in {destination}")
@@ -309,7 +404,7 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
                       "before each command, following its own rules.")
         return
 
-    profile = AGENTS[agent]
+    # Resolve where to install once; when installing for several agents they all share this base.
     if project:
         base = directory or os.getcwd()
         scope = "this project"
@@ -318,66 +413,14 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
             raise click.ClickException("--directory only applies together with --project.")
         base = os.path.expanduser("~")
         scope = "every project on this machine"
-    destination = os.path.join(base, *profile["skills_dir"], SKILL_NAME)
 
-    # islink is checked separately: a broken symlink is invisible to exists() and would otherwise make the
-    # copy fail with a confusing error.
-    if (os.path.exists(destination) or os.path.islink(destination)) and not force:
-        console.print(f"The skill is already installed in {destination}")
-        console.print("Run the command again with --force to replace it.")
-        return
-
-    if os.path.islink(destination):
-        os.unlink(destination)
-    elif os.path.exists(destination):
-        shutil.rmtree(destination)
-    os.makedirs(os.path.dirname(destination), exist_ok=True)
-
-    # Linking is the default because the alternative fails silently: a copy keeps working after
-    # "pip install --upgrade odevio" while holding last month's instructions, and nothing about the
-    # assistant's behaviour says so. A broken link is at least visible. Inside a project the skill is
-    # meant to be committed and read on other machines, so there a copy is the only thing that works.
-    as_copy = copy_files or project
-    if as_copy:
-        shutil.copytree(source, destination)
-        # Stamped so a later run of the CLI can notice the copy has fallen behind and say so.
-        with open(os.path.join(destination, ".installed-version"), "w", encoding="utf-8") as handle:
-            handle.write(f"{installed_version()}\n")
-    else:
-        os.symlink(source, destination)
-
-    console.print(f"Odevio skill installed in {destination}")
-    console.print(profile["invoke"].format(scope=scope))
-    if profile["note"]:
-        console.print(profile["note"])
-    if agent == "claude-code":
-        console.print("Using Codex, Cursor or Gemini CLI instead? Run it again with --agent codex, "
-                      "--agent cursor or --agent gemini.")
-
-    # Pre-approving commands writes Claude Code's own settings.json allow rules, so it only applies to
-    # Claude Code. Other agents place the same skill and apply their own approval rules.
-    if not profile["permissions"]:
-        console.print(f"{profile['label']} applies its own approval rules, so Odevio does not pre-approve "
-                      "its commands here.")
-        return
-
-    if no_permissions:
-        console.print("Its commands were not pre-approved, so each one will ask for approval.")
-        return
-
-    settings_path = os.path.join(base, *CLAUDE_SETTINGS_FILE)
-    try:
-        added = write_permission_rules(settings_path)
-    except (OSError, ValueError) as error:
-        # A hand-edited settings file that no longer parses should not lose the installation that
-        # already succeeded, so this is reported rather than raised.
-        console.print(f"[warning]Could not pre-approve its commands in {settings_path}:[/warning] {error}")
-        console.print("The skill works regardless; it will just ask before each command.")
-        return
-
-    if added:
-        console.print(f"Pre-approved {added} command patterns in {settings_path}, so it can read your "
-                      "project and Odevio without asking each time.")
-    else:
-        console.print("Its commands were already pre-approved.")
-    console.print("Starting a build, sending screenshots to Apple and opening a submission still ask.")
+    # 'all' fans out over every known agent; a single --agent installs for just that one.
+    agents_to_install = list(AGENTS) if agent == "all" else [agent]
+    for index, agent_name in enumerate(agents_to_install):
+        if index:
+            console.print("")
+        _install_for_agent(
+            agent_name, base, scope, source,
+            copy_files=copy_files, project=project, force=force,
+            no_permissions=no_permissions, single=(agent != "all"),
+        )
