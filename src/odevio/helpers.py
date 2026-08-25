@@ -12,10 +12,72 @@ import requests
 
 from odevio.settings import console, get_api_key, get_jwt_token, get_config_path, APP_NAME
 
+import tempfile
+from fnmatch import fnmatch
 
-def zip_directory(directory_path, excluded_dirs, excluded_files):
-    """ Archives a directory in a zip file and returns its name."""
-    return make_zip(os.path.join(os.getcwd(), '.app'), directory_path, excluded_dirs+["build", "windows", "linux", ".dart_tool", ".pub-cache", ".pub", ".git", ".gradle"], excluded_files+["source.zip", ".app.zip", "odevio.patch"])
+# Never uploaded. Build artefacts + VCS, plus credentials that must never leave the developer's machine
+# (Apple keys, keystores, env files). All entries are matched with fnmatch, so glob patterns work.
+DEFAULT_EXCLUDED_DIRS = ["build", "windows", "linux", ".dart_tool", ".pub-cache", ".pub", ".git", ".gradle"]
+DEFAULT_EXCLUDED_FILES = ["source.zip", ".app.zip", "odevio.patch"]
+SECRET_FILE_PATTERNS = ["*.p8", ".env", ".env.*", "*.keystore", "*.jks", "*.mobileprovision", "*.p12", "*.cer", "*.pem"]
+
+
+def zip_directory(directory_path, excluded_dirs, excluded_files, output_dir=None):
+    """ Archive a directory into a zip and return its path.
+
+    The zip is written to a temp directory - never inside the project, never the cwd. Build artefacts, VCS
+    and credential files are excluded by default; caller patterns are added. All patterns are globs.
+    """
+    out = os.path.join(output_dir or tempfile.mkdtemp(prefix="odevio-"), ".app")
+    return make_zip(
+        out,
+        directory_path,
+        excluded_dirs + DEFAULT_EXCLUDED_DIRS,
+        excluded_files + DEFAULT_EXCLUDED_FILES + SECRET_FILE_PATTERNS,
+    )
+
+
+def scan_upload(directory_path, excluded_dirs, excluded_files):
+    """ Inspect what would be uploaded, without zipping.
+
+    Returns (breakdown, secret_files, total_mb): per top-level entry size in MB (largest first), the list of
+    credential files found (which the zip excludes), and the total MB. Lets the caller refuse a huge upload
+    before spending time zipping it, and name the folders responsible.
+    """
+    ex_dirs = excluded_dirs + DEFAULT_EXCLUDED_DIRS
+    ex_files = excluded_files + DEFAULT_EXCLUDED_FILES
+    secret_files, sizes = [], {}
+
+    def is_secret(name):
+        return any(fnmatch(name, p) for p in SECRET_FILE_PATTERNS)
+
+    for entry in sorted(os.listdir(directory_path)):
+        full = os.path.join(directory_path, entry)
+        if os.path.isdir(full):
+            if any(fnmatch(entry, p) for p in ex_dirs):
+                continue
+            total = 0
+            for dp, dns, fns in os.walk(full, topdown=True):
+                dns[:] = [d for d in dns if not any(fnmatch(d, p) for p in ex_dirs)]
+                for fn in fns:
+                    if is_secret(fn):
+                        secret_files.append(os.path.relpath(os.path.join(dp, fn), directory_path))
+                        continue
+                    if any(fnmatch(fn, p) for p in ex_files):
+                        continue
+                    fp = os.path.join(dp, fn)
+                    if os.path.isfile(fp):
+                        total += os.path.getsize(fp)
+            sizes[entry] = total
+        elif os.path.isfile(full):
+            if is_secret(entry):
+                secret_files.append(entry)
+            elif not any(fnmatch(entry, p) for p in ex_files):
+                sizes[entry] = os.path.getsize(full)
+
+    breakdown = sorted(((n, round(s / 1e6, 1)) for n, s in sizes.items()), key=lambda x: -x[1])
+    total_mb = round(sum(sizes.values()) / 1e6, 1)
+    return breakdown, secret_files, total_mb
 
 
 
@@ -141,14 +203,14 @@ def _make_zipfile(base_name, base_dir, exclude_dir=None, exclude_files=None, ver
                     logger.info("adding '%s'", path)
             for dirpath, dirnames, filenames in os.walk(base_dir, topdown=True):
                 if exclude_dir is not None:
-                    dirnames[:] = [d for d in dirnames if d not in exclude_dir]
+                    dirnames[:] = [d for d in dirnames if not any(fnmatch(d, p) for p in exclude_dir)]
                 for name in sorted(dirnames):
                     path = os.path.normpath(os.path.join(dirpath, name))
                     zf.write(path, path)
                     if logger is not None:
                         logger.info("adding '%s'", path)
                 for name in filenames:
-                    if exclude_files is not None and name in exclude_files:
+                    if exclude_files is not None and any(fnmatch(name, p) for p in exclude_files):
                         continue
                     path = os.path.normpath(os.path.join(dirpath, name))
                     if os.path.isfile(path):

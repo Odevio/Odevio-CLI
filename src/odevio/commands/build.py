@@ -373,7 +373,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     import textwrap
     import questionary
     from odevio import api
-    from odevio.helpers import terminal_menu, zip_directory
+    from odevio.helpers import terminal_menu, zip_directory, scan_upload
     from odevio.settings import console
     from rich.text import Text
     from questionary import Choice
@@ -544,11 +544,13 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     except Exception:  # If flutter is not installed or the command fails, ignore it
         pass
 
-    console.print(f"Zipping {directory}")
+    # .odevioignore is read from the project directory (not the cwd), so it is honoured wherever the
+    # command is run from. One entry per line; a trailing "/" marks a directory. Globs are supported.
     excluded_dirs = []
     excluded_files = []
-    if os.path.isfile(".odevioignore"):
-        with open(".odevioignore") as ignore:
+    ignore_path = os.path.join(directory, ".odevioignore")
+    if os.path.isfile(ignore_path):
+        with open(ignore_path) as ignore:
             for line in ignore.readlines():
                 line = line.strip()
                 if line == "":
@@ -558,13 +560,32 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 else:
                     excluded_files.append(line)
 
+    # Look before zipping: name the biggest folders and refuse an oversized payload up front (a 76 GB data
+    # dir should not be silently zipped), and tell the user which credential files are being left out.
+    breakdown, secret_files, total_mb = scan_upload(directory, excluded_dirs, excluded_files)
+    if secret_files:
+        shown = ", ".join(secret_files[:5]) + (" ..." if len(secret_files) > 5 else "")
+        console.print(f"Leaving {len(secret_files)} credential file(s) out of the upload for safety: {shown}")
+
+    def _print_biggest():
+        for name, mb in breakdown[:8]:
+            console.print(f"  {mb} MB  {name}")
+        console.print("List anything not needed to build in .odevioignore (globs allowed), then try again.")
+
+    if total_mb > 1500:
+        console.print(f"The upload would be about {total_mb} MB - too large for Odevio (500 MB limit). Biggest folders:")
+        _print_biggest()
+        return
+
+    console.print(f"Zipping {directory}")
     zip_file = zip_directory(directory, excluded_dirs, excluded_files)
 
     file_size_mb = round(os.path.getsize(zip_file)/1000000, 2)
 
     if file_size_mb > 500:
-        console.print("Zipped directory size exceeds 500MB, very large applications are not supported by Odevio. Make sure that all files and directories not needed to build are listed in .odevioignore")
-        os.remove(".app.zip")
+        console.print(f"Zipped size {file_size_mb} MB exceeds Odevio's 500 MB limit. Biggest folders:")
+        _print_biggest()
+        os.remove(zip_file)
         return
 
     # Start build
@@ -584,11 +605,11 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             "post_build_commands": post_build_commands,
         },
         files={
-            "source": ("source.zip", open(".app.zip", "rb"), "application/zip")
+            "source": ("source.zip", open(zip_file, "rb"), "application/zip")
         },
     )
 
-    os.remove(".app.zip")
+    os.remove(zip_file)
 
     if build_instance:
         _show_build_progress(ctx, build_instance, tunnel_port, tunnel_host, tunnel_remote_port, no_progress)
