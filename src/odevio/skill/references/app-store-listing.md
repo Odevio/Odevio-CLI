@@ -93,6 +93,16 @@ There is no state kept anywhere and nothing to resume: every run reads Apple afr
 things actually are, including changes they made on Apple's website in between or from another machine. Never
 ask what they did last time.
 
+**Screenshots are checked, never assumed.** `store-status` reports how many pictures each device slot holds.
+Treat any expected slot showing zero as missing and raise it - **even when the page already exists and
+otherwise looks complete.** A page made earlier, or created on Apple's website, very often has no pictures;
+that a listing exists never means the pictures do. Never move toward submission without confirming them.
+
+The one publication input the API cannot read is the **privacy answers** - `odevio privacy scan` reads what
+the libraries declare, but the answers themselves live only behind Apple's login. That is the single thing you
+always confirm with the user rather than verify. Everything else - name, description, keywords, URLs,
+category, age rating, and the pictures - `store-status` reports, so ask only for what it shows as missing.
+
 ---
 
 ## 2. The page has to be created by hand
