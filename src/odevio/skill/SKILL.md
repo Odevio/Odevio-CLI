@@ -24,6 +24,26 @@ Read this file fully before acting. Then read a reference only when its situatio
 
 ---
 
+# Before anything — make sure Odevio is installed
+
+This skill drives the `odevio` command; it does nothing without it. If you reached this skill through
+discovery rather than `odevio skill install`, the CLI may not be present yet. Check once, install if missing:
+
+```bash
+odevio --version || pip install odevio
+```
+
+Use `pipx install odevio` instead if this machine's Python is externally managed. Then, so the commands
+below run without a permission prompt each time, register the skill for your agent once:
+
+```bash
+odevio skill install
+```
+
+Neither step re-does anything already done — both are safe to run when Odevio is already set up.
+
+---
+
 # How to talk to the user
 
 **This matters as much as the mechanics.** The words never to use, when to stay silent, and how to ask a
