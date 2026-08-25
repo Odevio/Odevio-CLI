@@ -449,8 +449,12 @@ def categories(key):
 @app.command("attach-build")
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.option('--version', help="Version of the build to attach. Defaults to the most recent usable one.")
-def attach_build(key, version):
+@click.option('--build-number',
+              help='Build number (CFBundleVersion) to attach, as listed under "Builds Apple holds" by '
+                   'store-status. Defaults to the most recent usable build.')
+@click.option('--version', hidden=True,
+              help="Deprecated: use --build-number. Kept for existing scripts.")
+def attach_build(key, build_number, version):
     """ Points the App Store page of the app with key \"KEY\" at an uploaded build.
 
     \f
@@ -460,6 +464,9 @@ def attach_build(key, version):
 
     Rather than wait, this command can simply be run again: it either attaches a build or tells you what
     it is waiting for.
+
+    Without :code:`--build-number` the most recent usable build is attached. Pass it to choose a specific
+    build by its build number - the sequential value :code:`store-status` lists under "Builds Apple holds".
 
     Usage:
     """
@@ -472,7 +479,11 @@ def attach_build(key, version):
                             does_not_exist_msg="You do not have any app identifiers.")
         if key is None:
             return
-    data = {"version": version} if version else {}
+    data = {}
+    if build_number:
+        data["build_number"] = build_number
+    if version:
+        data["version"] = version
     try:
         result = api.post(f"/applications/{key}/attach-build/", json_data=data)
     except api.NotFoundException:
