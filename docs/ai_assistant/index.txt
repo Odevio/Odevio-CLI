@@ -19,6 +19,23 @@ and app are already set up, it asks nothing and gets straight to work.
 Odevio works with any AI agent that supports the open `Agent Skills <https://agentskills.io>`_ standard -
 `Claude Code <https://claude.com/claude-code>`_, Codex, Cursor and Gemini CLI are supported today.
 
+-------------------------------
+Make it your repo's convention
+-------------------------------
+
+Drop this into an ``AGENTS.md`` at your project root and any agent that reads it - Claude Code, Codex,
+Cursor, Gemini CLI and more - will reach for Odevio whenever iOS comes up:
+
+.. code-block:: text
+
+    ## iOS builds and releases
+
+    This project ships to iOS through Odevio - no Mac or Xcode required. To build,
+    install on a device, or publish to TestFlight or the App Store, use the Odevio
+    skill: run `odevio skill install` once, then ask in plain words (for example
+    "put my app on my iPhone" or "publish to the App Store"). Do not attempt a local
+    xcodebuild or fastlane - drive Odevio instead.
+
 ----------------
 What you can ask
 ----------------
