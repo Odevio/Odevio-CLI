@@ -343,6 +343,11 @@ def store_status(key):
 @click.option('--name', help="The public name on the App Store. 30 characters, unique across the store.")
 @click.option('--subtitle', help="One line under the app name. 30 characters.")
 @click.option('--promotional-text', help="170 characters, changeable without a new version.")
+@click.option('--release-notes',
+              help='"What\'s New" for an update - what changed since the last version. For updates only; '
+                   'Apple refuses it on a first version.')
+@click.option('--release-notes-file', type=click.Path(exists=True, dir_okay=False),
+              help="Read the release notes from a file instead. Better for anything with line breaks.")
 @click.option('--support-url', help="A page where people can get help. Apple checks that it answers.")
 @click.option('--marketing-url', help="The app's own web page, if it has one.")
 @click.option('--privacy-policy-url', help="A page saying what the app does with people's data.")
@@ -361,6 +366,9 @@ def store_status(key):
               help="Whether the app contains anything made by someone else.")
 @click.option('--category', help="Apple category the app is filed under. See 'odevio app categories'.")
 @click.option('--free', is_flag=True, help="Make the app free. Apple requires a price even when it is none.")
+@click.option('--price',
+              help='Set a paid price, for example "4.99", matched to Apple\'s USA prices. Use --free '
+                   'instead for a free app.')
 @click.option('--age-rating', is_flag=True,
               help="Answer the age rating questionnaire as containing nothing objectionable.")
 def set_metadata(key, **fields):
@@ -405,6 +413,19 @@ def set_metadata(key, **fields):
             return
         with open(review_notes_file, encoding="utf-8") as handle:
             fields["review_notes"] = handle.read().strip()
+
+    # "What's New" is another multi-line field, so it gets the same file option.
+    release_notes_file = fields.pop("release_notes_file", None)
+    if release_notes_file:
+        if fields.get("release_notes"):
+            console.print("Pass either --release-notes or --release-notes-file, not both.")
+            return
+        with open(release_notes_file, encoding="utf-8") as handle:
+            fields["release_notes"] = handle.read().strip()
+
+    if fields.get("price") and fields.get("free"):
+        console.print("Pass either --free or --price, not both.")
+        return
 
     # False is dropped for the switches, whose "off" only means the user did not pass them, but kept
     # for anything that genuinely has two values. Dropping it everywhere made
