@@ -11,8 +11,8 @@ authors = [
 description = "Let your AI agent build and publish iOS apps with Odevio - no Mac, no Xcode. Works with any AI agent that supports the Agent Skills standard."
 readme = "Readme.rst"
 license = {file="LICENSE"}
-requires-python = ">=3.7.0"
-keywords = ["Flutter", "iOS"]
+requires-python = ">=3.9"
+keywords = ["Flutter", "iOS", "AI agent", "Claude Code", "App Store", "code signing", "CI/CD", "without a Mac"]
 classifiers  = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -34,6 +34,7 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://www.odevio.com"
+"Documentation" = "https://odevio-cli.readthedocs.io/"
 "Source" = "https://github.com/Odevio/Odevio-CLI"
 
 [project.scripts]
