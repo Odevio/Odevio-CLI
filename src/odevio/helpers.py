@@ -87,10 +87,10 @@ def print_validation_error(console, response_dict):
     if error is not None:
         console.print(f"Error: {error}", markup=False)
     for field, errors in response_dict.items():
-        if errors is str:
-            console.print(f"Error: for {field} - {list(errors)}")
-        else:
-            console.print(f"Error: for {field} - {errors}")
+        # markup=False: the server's error text is data, not console markup. Without it a message holding
+        # square brackets - a URL such as /v1/apps?filter[bundleId]=... - is parsed as a rich tag and
+        # crashes with MarkupError, hiding the real error behind a traceback.
+        console.print(f"Error: for {field} - {errors}", markup=False)
 
 
 def login_required_warning_decorator(f):
