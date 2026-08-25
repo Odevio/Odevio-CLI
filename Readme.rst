@@ -51,6 +51,17 @@ the first AI agent supported):
 
     odevio skill install
 
+Using another agent? Add ``--agent``:
+
+.. code-block::
+
+    odevio skill install --agent codex      # or: cursor, gemini
+    odevio skill install --agent universal  # .agents/skills, read by several agents
+    odevio skill install --agent all        # every supported agent at once
+
+Only Claude Code also gets its commands pre-approved; the others follow their own approval rules. For any
+other agent that reads the open Agent Skills standard, ``--to <its skills directory>`` installs it anywhere.
+
 Then, in your Flutter project, just ask your agent to put your app on your iPhone. It writes the code,
 Odevio builds and signs it on a real Mac, fixes what breaks, and ships it to TestFlight. See the
 `AI agent guide <https://odevio-cli.readthedocs.io/en/latest/ai_assistant/index.html>`_.
