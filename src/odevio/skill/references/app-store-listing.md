@@ -103,6 +103,15 @@ the libraries declare, but the answers themselves live only behind Apple's login
 always confirm with the user rather than verify. Everything else - name, description, keywords, URLs,
 category, age rating, and the pictures - `store-status` reports, so ask only for what it shows as missing.
 
+**Read the copy, not only whether it is there.** `store-status` prints what the listing already holds -
+name, subtitle, keywords, promotional text and description. Read it. Present is not the same as good: a page
+put up quickly, or by hand, often carries thin or generic text, and the description, keywords and subtitle
+are the part Apple's search ranks on. When the copy is weak - keywords empty, stuffed, or just repeating the
+name; a description that is generic or a single line; no subtitle earning its place - say so plainly and
+offer to improve it, with a concrete suggestion rather than a vague "want it better?". Make that offer once,
+apply it only if they agree, and never hold up a submission over it: the copy is theirs, and a complete
+listing can ship whether or not they take the polish. The writing guidance further down applies when they do.
+
 ---
 
 ## 2. The page has to be created by hand

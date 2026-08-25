@@ -254,6 +254,9 @@ def store_status(key):
     listing was edited in App Store Connect since the last run, or from another machine. Filling an App
     Store page rarely happens in one sitting, and this is what makes it possible to stop and come back.
 
+    It also prints the copy the listing already holds - name, subtitle, keywords, promotional text and
+    description - so weak or thin text can be read and improved, not just checked for being present.
+
     One thing cannot be checked: Apple offers no way to read the App Privacy answers, so they are always
     listed as something to confirm rather than reported as done or missing.
 
@@ -290,6 +293,26 @@ def store_status(key):
         console.print("Screenshots: " + ", ".join(
             f"{count} for {slot}" for slot, count in sorted(screenshots_by_slot.items())))
     console.print(f"Build on the page: {status.get('build') or 'none yet'}")
+
+    # The copy Apple holds, so it can be read and improved rather than only checked for presence. Older
+    # servers do not send it; then this block is simply skipped.
+    texts = status.get("texts") or {}
+    present = [
+        (label, texts.get(field))
+        for label, field in (
+            ("Name", "name"),
+            ("Subtitle", "subtitle"),
+            ("Keywords", "keywords"),
+            ("Promotional text", "promotional_text"),
+            ("Description", "description"),
+        )
+        if texts.get(field)
+    ]
+    if present:
+        console.print("")
+        console.print("[title]Current copy[/title]")
+        for label, value in present:
+            console.print(f"  [code]{label}[/code]: {value}")
 
     available = status.get("available_builds") or []
     if available:
