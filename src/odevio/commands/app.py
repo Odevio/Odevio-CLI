@@ -353,6 +353,10 @@ def store_status(key):
 @click.option('--contact-phone', help='With the country code, for example "+32 496 00 00 00".')
 @click.option('--demo-account-name', help="Login Apple's reviewer should use, if the app needs one.")
 @click.option('--demo-account-password', help="Its password. Apple refuses an app it cannot get into.")
+@click.option('--review-notes',
+              help="Notes for Apple's reviewer - anything they need to know to test the app.")
+@click.option('--review-notes-file', type=click.Path(exists=True, dir_okay=False),
+              help="Read the review notes from a file instead. Better for anything with line breaks.")
 @click.option('--uses-third-party-content', type=bool, default=None,
               help="Whether the app contains anything made by someone else.")
 @click.option('--category', help="Apple category the app is filed under. See 'odevio app categories'.")
@@ -391,6 +395,16 @@ def set_metadata(key, **fields):
             return
         with open(description_file, encoding="utf-8") as handle:
             fields["description"] = handle.read().strip()
+
+    # Review notes run to several lines just like a description, so the same file option avoids quoting
+    # line breaks through the shell.
+    review_notes_file = fields.pop("review_notes_file", None)
+    if review_notes_file:
+        if fields.get("review_notes"):
+            console.print("Pass either --review-notes or --review-notes-file, not both.")
+            return
+        with open(review_notes_file, encoding="utf-8") as handle:
+            fields["review_notes"] = handle.read().strip()
 
     # False is dropped for the switches, whose "off" only means the user did not pass them, but kept
     # for anything that genuinely has two values. Dropping it everywhere made
