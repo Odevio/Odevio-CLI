@@ -310,13 +310,17 @@ def _show_build_progress(ctx, build_instance, tunnel_port=None, tunnel_host=None
 @click.option('--target', help="The main entry-point file of the application. Defaults to lib/main.dart")
 @click.option('--flavor', help="Custom app flavor")
 @click.option('--post-build-command', multiple=True, help="Command to run after the build has finished. Can be specified multiple times.")
+@click.option('--dart-define', multiple=True, metavar='KEY=VALUE',
+              help="Pass a compile-time variable to the Flutter build (--dart-define). Can be specified multiple times.")
+@click.option('--dart-define-from-file', type=click.Path(exists=True, dir_okay=False),
+              help="Read compile-time variables from a JSON file, like flutter --dart-define-from-file. Its keys are expanded into individual defines.")
 @click.option('--tunnel-port', type=int, help="Start a reverse SSH tunnel when the build is started, forwarding to this port. Note: this only applies to configuration builds")
 @click.option('--tunnel-host', help="If --tunnel-port is specified, this is the host to forward to (defaults to localhost)")
 @click.option('--tunnel-remote-port', type=int, help="If --tunnel-port is specified, this is the port on the VM (defaults to the same port, except for 22 and 5900)")
 @click.option('--no-progress', is_flag=True, help="Do not display the progress and exit the command immediately.")
 @click.option('--no-flutter-warning', is_flag=True, help="Do not display a warning if no flutter version is specified and the local flutter version does not match the build version.")
 @click.pass_context
-def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, post_build_command, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, no_flutter_warning, app_key=None, directory=None):
+def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_number, mode, target, flavor, post_build_command, dart_define, dart_define_from_file, tunnel_port, tunnel_host, tunnel_remote_port, no_progress, no_flutter_warning, app_key=None, directory=None):
     """ Start a new build from scratch
 
     DIRECTORY : Home directory of the flutter project. If not provided, gets the current directory.
@@ -391,6 +395,35 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
     if post_build_command:
         post_build_commands = list(post_build_command)
 
+    # Inline --dart-define values plus, expanded here rather than on the server, the keys of any
+    # --dart-define-from-file. A define may carry a secret, so it is never printed.
+    dart_defines = []
+    for define in dart_define:
+        if "=" not in define:
+            console.print(f"--dart-define must be in KEY=VALUE form, got '{define.split('=')[0]}'.")
+            return
+        dart_defines.append(define)
+    if dart_define_from_file:
+        import json
+
+        with open(dart_define_from_file, encoding="utf-8") as handle:
+            try:
+                from_file = json.load(handle)
+            except json.JSONDecodeError as error:
+                console.print(f"--dart-define-from-file is not valid JSON: {error}")
+                return
+        if not isinstance(from_file, dict):
+            console.print("--dart-define-from-file must contain a JSON object of key/value pairs.")
+            return
+        for name, value in from_file.items():
+            # Match Dart's expectations: JSON booleans become lowercase true/false, numbers their plain
+            # text; strings pass through untouched.
+            if isinstance(value, bool):
+                value = "true" if value else "false"
+            elif not isinstance(value, str):
+                value = str(value)
+            dart_defines.append(f"{name}={value}")
+
     # Get options from .odevio file
     if os.path.isfile(".odevio"):
         with open(".odevio") as config:
@@ -433,6 +466,9 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
                 elif key == "post-build-command":
                     if not post_build_command:
                         post_build_commands.append(value)
+                elif key == "dart-define":
+                    if not dart_define and not dart_define_from_file:
+                        dart_defines.append(value)
                 elif key == "tunnel-port":
                     if not tunnel_port:
                         tunnel_port = int(value)
@@ -603,6 +639,7 @@ def start(ctx, build_type, flutter, minimal_ios_version, app_version, build_numb
             "target": target,
             "flavor": flavor,
             "post_build_commands": post_build_commands,
+            "dart_defines": dart_defines,
         },
         files={
             "source": ("source.zip", open(zip_file, "rb"), "application/zip")
