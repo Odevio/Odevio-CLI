@@ -63,9 +63,12 @@ export default function AppStoreCard(props) {
   const textBlock = {
     width: "100%",
     boxSizing: "border-box",
-    padding: headlineFirst ? `9cqw ${SIDE_PAD} 0` : `0 ${SIDE_PAD} 9cqw`,
+    padding: headlineFirst ? `9cqw ${SIDE_PAD} 0` : `4cqw ${SIDE_PAD} 4cqw`,
     textAlign: "center",
-    flex: "0 0 auto",
+    flex: headlineFirst ? "0 0 auto" : "1 1 auto",
+    display: headlineFirst ? "block" : "flex",
+    flexDirection: "column",
+    justifyContent: "center",
   };
 
   const eyebrowStyle = {
@@ -83,6 +86,8 @@ export default function AppStoreCard(props) {
     lineHeight: 1.1,
     fontWeight: 700,
     letterSpacing: "-0.01em",
+    // Honour explicit line breaks in the headline (a "\n" in the prop) while still wrapping long lines.
+    whiteSpace: "pre-line",
   };
 
   const subheadStyle = {
@@ -97,19 +102,22 @@ export default function AppStoreCard(props) {
   // margins — it never touches the top or bottom edge.
   const phoneWrap = {
     position: "relative",
-    flex: "1 1 auto",
+    flex: headlineFirst ? "1 1 auto" : "0 0 auto",
     width: "100%",
     minHeight: 0,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "3cqw 0",
+    padding: headlineFirst ? "2cqw 0" : "8cqw 0 0",
   };
 
+  // Width alone drives the phone, so the box height always equals the frame image's height and the
+  // screenshot, positioned with the window fractions, lands exactly in the screen. Never clamp this
+  // box's height: the frame keeps its own size while the screenshot follows the box, and the two
+  // come apart. Make room by giving the phone less width, never less height.
   const frameBox = {
     position: "relative",
     width: PHONE_WIDTH,
-    maxHeight: "100%",
   };
 
   const win = _frame_window || {};
