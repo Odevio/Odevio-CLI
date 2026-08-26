@@ -22,7 +22,7 @@ from odevio.settings import (
 )
 
 
-def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5, sse=False):
+def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5, sse=False, json_body=None):
     """ General request wrapper for Odevio API.
 
     :return dict of the JSON returned by the API or False if an error occurred
@@ -49,12 +49,13 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
             params=params,
             data=data,
             files=files,
+            json=json_body,
             stream=sse
         )
     except requests.exceptions.ConnectionError:
         if tries > 0:
             time.sleep(2)
-            return _request(method, route, params, data, files, authorization, auth_data, json_decode, tries-1)
+            return _request(method, route, params, data, files, authorization, auth_data, json_decode, tries-1, sse, json_body)
         raise ClickException("Server not available")
 
     if response.ok:
@@ -87,7 +88,7 @@ def _request(method, route, params=None, data=None, files=None, authorization=Tr
             raise NotFoundException()
         elif response.status_code in [302, 503] and tries > 0:  # Update or maintenance
             time.sleep(2)
-            return _request(method, route, params, data, files, authorization, auth_data, json_decode, tries-1)
+            return _request(method, route, params, data, files, authorization, auth_data, json_decode, tries-1, sse, json_body)
         else:
             if response.status_code == 503:
                 raise ClickException("The server is currently in maintenance. Please try again in a few moments.")
@@ -103,15 +104,18 @@ def get(route, params=None, authorization=True, auth_data=None, json_decode=True
     return _request("get", route, params=params, authorization=authorization, auth_data=auth_data, json_decode=json_decode, sse=sse)
 
 
-def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None):
+def post(route, authorization=True, json_data=None, params=None, files=None, auth_data=None, json_body=None):
     """ POST method wrapper for Odevio API.
+
+    ``json_data`` is form-encoded (used by the file-upload endpoints); ``json_body`` sends an
+    ``application/json`` request body, which is what the JSON-only endpoints expect.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-    return _request("post", route, params=params, data=json_data, files=files, authorization=authorization, auth_data=auth_data)
+    return _request("post", route, params=params, data=json_data, files=files, authorization=authorization, auth_data=auth_data, json_body=json_body)
 
 
-def put(route, authorization=True, json_data=None, params=None, files=None):
+def put(route, authorization=True, json_data=None, params=None, files=None, json_body=None):
     """ PUT method wrapper for Odevio API
 
     :return dict of the JSON returned by the API or False if an error occurred
@@ -120,7 +124,7 @@ def put(route, authorization=True, json_data=None, params=None, files=None):
         json_data = {key: value for key, value in json_data.items() if value is not None}
     if files:
         files = {key: value for key, value in files.items() if value is not None}
-    return _request("put", route, params=params, data=json_data, files=files, authorization=authorization)
+    return _request("put", route, params=params, data=json_data, files=files, authorization=authorization, json_body=json_body)
 
 
 def delete(route, authorization=True, params=None, auth_data=None, json_decode=True):

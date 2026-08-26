@@ -422,10 +422,10 @@ def visual(key, screenshot_id, jsx_file, props_file, font_spec):
         payload["font"] = _resolve_font(font_spec)
 
     if entry.get("visual_id"):
-        result = api.put(f"/marketing-visuals/{entry['visual_id']}/", json_data=payload)
+        result = api.put(f"/marketing-visuals/{entry['visual_id']}/", json_body=payload)
         action = "Updated"
     else:
-        result = api.post("/marketing-visuals/", json_data=payload)
+        result = api.post("/marketing-visuals/", json_body=payload)
         action = "Created"
     if not result:
         return
