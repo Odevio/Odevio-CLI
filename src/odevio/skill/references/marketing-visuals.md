@@ -24,6 +24,7 @@ scratch. `design-directions.md` covers *which* concept to choose.
 |---|---|
 | `appstore_card.jsx` | the clean fallback — centred phone, headline above or below (`layout` prop) |
 | `appstore_card_editorial.jsx` | oversized headline as the composition, phone bleeding off the bottom |
+| `appstore_card_hero.jsx` | one screen leads — phone bleeds off the top, headline centred below |
 
 Both take the same server-injected assets; each has its own authored props (read its header).
 
