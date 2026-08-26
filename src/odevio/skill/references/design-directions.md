@@ -92,7 +92,17 @@ Keep it short; a few words with impact beat a sentence shrunk to fit.
 ## How to work it with the user
 
 Explore before refining: sketch two or three *genuinely different* directions in words (e.g. an
-editorial-typographic take, a UI-as-object take, a transformation take) and let the user pick, rather
-than iterating one generic layout. Then author it, have them look in the editor, and refine. When a
-concept needs a composition the base template does not cover, write the JSX for it directly — the
-renderer takes any component; keep it title-safe and truthful.
+editorial take, a hero take, a headline-bottom take) and let the user pick, rather than iterating one
+generic layout. Then author it — a props file on one of the three templates — have them look in the
+editor, and refine.
+
+Reach the range first through the **three templates and the `layout` prop**: fallback (centred, headline
+top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top). Most
+directions are one of these plus the right words, colour and font — try that before anything else.
+
+For a direction none of the three covers, you *can* build a new template — deliberately: keep the two
+invariants that hold the frame and screenshot together (never clamp the frame box's height; size both
+off the same box — see `marketing-visuals.md`), and check it in the editor preview before relying on it.
+What breaks things is the opposite: hand-tweaking an existing template's geometry round after round to
+chase a look. That is what pulls the screenshot off its frame. New idea → a fresh, verified template;
+never a blind geometry edit mid-conversation.

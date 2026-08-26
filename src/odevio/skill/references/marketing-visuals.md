@@ -41,11 +41,28 @@ Both take the same server-injected assets; each has its own authored props (read
 The `_`-prefixed props arrive after your props, tied to the raw screenshot you targeted. Leaving them
 out of your props JSON is correct — writing them yourself is not.
 
-**The layout grid is locked, and you keep it that way.** The template's spacing, type sizes, phone size
-and side margins are constants tuned to stay title-safe and balanced. Fill the card through props —
-words, colours, font, and the `layout` preset — and do **not** edit those constants or add your own
-padding/font-size overrides. This is what keeps every card looking intentional instead of drifting into
-crowded or lopsided one-offs.
+**Default to a props file on an existing template — and don't rebuild what a prop already does.** Point
+`--jsx-file` at one of `references/templates/*.jsx` and vary the `--props-file` from card to card. The
+spacing, type sizes, phone size and the arrangements are already solved; the `layout` prop switches
+between `"headline-top"` and `"headline-bottom"`, and **headline-bottom already centres the text in the
+space under the phone.** So "centre the text below the phone" is a prop value — reach for the prop, not
+a geometry edit. Most requests are a prop or a different template; try that first, every time.
+
+**A genuinely new layout is welcome — build it as a new template, deliberately, keeping two
+invariants.** If the user has an idea the three templates don't cover, make a new template file for it
+rather than mangling an existing one mid-conversation. Two rules keep the frame and the screenshot from
+drifting apart — break either and the picture comes visibly undone, which is what went wrong when a card
+was hand-edited on the fly:
+
+1. **Never clamp the frame box's height** (no `maxHeight`, no fixed height). The screenshot is placed as
+   percentages of that box while the frame image keeps its own intrinsic height; clamp the box and the
+   two slide apart — screenshot in one place, frame in another. To make the phone smaller, give it less
+   **width**; the height follows.
+2. **Size the frame and the screenshot off the same box**, and let the phone's band hug the phone so the
+   text centres in the real space beside it.
+
+Build the new layout, check it in the editor preview, and only rely on it once it holds — do not tweak
+geometry blindly round after round to chase a look.
 
 ## The screenshots are the user's own
 
@@ -75,6 +92,22 @@ more impact — and deliver it **within** the grid rather than by crowding the e
 
 Never let text run to the edge, and never let the phone touch the top or bottom edge. A short headline
 (a few words) always beats a long one shrunk to fit — steer the copy that way.
+
+## The whole set is one campaign
+
+The screenshots for an app are read left to right as a set, so design them as one campaign, not one
+card at a time. Before you make the second or third, look at the ones already there and **keep the
+system**: the same background family, the same font, the same kind of layout. A violet card followed
+by a red one reads as two different apps — so reuse the first card's palette and font unless the user
+asks for contrast, and if you do change a colour, say so and confirm rather than just switching.
+
+Each card is a different **beat**, never the same idea reworded: the first says who the app is, the
+next shows a feature, the next the payoff. Two cards with the same words rearranged are not a story.
+
+One honest limit: if every card is built on the **same screenshot**, only the words can differ — that
+is a set of captions, not a campaign. A real story needs a second screen, a different moment in the
+app. When you hit that wall, say it, and ask the user to capture another screen on their phone or
+simulator and drop it in the editor; then build the next beat on it.
 
 ## The flow, start to finish
 
@@ -112,27 +145,35 @@ Only ask an open question when there is genuinely nothing to go on — and even 
 built from the app's name rather than a blank prompt. Whatever you derive, the user still has the last
 word: getting a nod before rendering saves a round.
 
-**3. Author it.** Adapt the base template into a JSX file, write the props as JSON, and create the
-visual for that id:
+**3. Author it.** Point `--jsx-file` at the chosen template in `references/templates/` **as-is**, write
+a props JSON for this card, and create the visual for that id:
 
 ```bash
-odevio screenshot visual <app-key> 150 --jsx-file <file> --props-file <file>
+odevio screenshot visual <app-key> 150 --jsx-file references/templates/appstore_card.jsx --props-file <file>
 ```
 
-This is their product content, made on their behalf — so make it, but **do not paste the command or
-the JSX at them**. One visual per screenshot: running it again on the same id updates in place and
-resets approval, so a stale image never ships. The command dry-compiles through the preview, so a
-broken component is caught here, not at approval.
+For most cards you write only the props file; a genuinely new layout is a new template (keeping the two
+invariants above). This is their product content, made on their behalf — so make it, but **do not paste
+the command or the props at them**. One visual per screenshot: running it again on the same id updates
+in place and resets approval, so a stale image never ships. The command dry-compiles through the
+preview, so a broken component is caught here, not at approval.
 
 **4. Send them to the editor to look.** The editor is the judging surface — the same compiled HTML the
 final PNG is made from, so what they see is what Apple gets.
 
 > Done — refresh the editor and it is under the 6.9-inch size. Tell me what to change.
 
-**5. Iterate on the preview, not on PNGs.** Adjust the headline, the colours, the layout; re-run the
-`visual` command; they refresh. Work against the light HTML preview every round. Do **not** approve
-just to look — approval is for when it is right, and rendering a PNG each iteration is slow and
-pointless when the preview already matches.
+**5. Iterate on the preview, not on PNGs.** Every change is a **props** change — headline, subhead,
+colours, font, `layout`. Re-run the `visual` command with the new props file; they refresh. Work
+against the light HTML preview every round. Do **not** approve just to look — approval is for when it
+is right, and rendering a PNG each iteration is slow and pointless when the preview already matches.
+
+**Say what you will change before you render it.** When the user reacts or asks for something, put the
+new line or the new look in words first and get a nod, then re-render — do not silently push a new
+version and tell them to refresh. A change they can read in one sentence saves a wasted render and
+keeps the words theirs. Most changes are a prop or a different template; if the ask is genuinely a new
+layout, build it as a new template with the two invariants above and verify it in the preview — never
+tweak an existing template's geometry blindly to chase the look.
 
 **6. Approve only on an explicit yes:**
 
