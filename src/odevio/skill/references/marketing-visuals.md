@@ -13,13 +13,19 @@ For the *creative* side — how to make a visual distinctive instead of a generi
 how to design a whole store page as one campaign — read `references/design-directions.md`. This file
 covers the mechanics: the template, the props, the flow, and the safe grid.
 
-## The one template, and why there is only one
+## The templates
 
-`references/templates/appstore_card.jsx` is the single base. Read it — the comments explain every
-prop — then derive whatever the app needs by editing a copy of it: change the layout, the type, the
-composition. It is a starting point, not a mould. Do not ask the user for JSX, and do not invent a
-second base from nothing when this one already solves the framing and the screenshot-in-window
-problem.
+`references/templates/` holds vetted, internally title-safe templates. Read the one you pick — the
+comments explain every prop — fill it through props, and keep its locked geometry (see below). Do not
+ask the user for JSX; start from a template rather than inventing framing and screenshot placement from
+scratch. `design-directions.md` covers *which* concept to choose.
+
+| Template | When to use |
+|---|---|
+| `appstore_card.jsx` | the clean fallback — centred phone, headline above or below (`layout` prop) |
+| `appstore_card_editorial.jsx` | oversized headline as the composition, phone bleeding off the bottom |
+
+Both take the same server-injected assets; each has its own authored props (read its header).
 
 **Props split in two.** Some are yours to write; some the server injects and you must never set:
 
@@ -46,6 +52,13 @@ You compose cards from the screenshots the user has already put in the editor. *
 screenshots for them** — do not offer to start a device, run the app and photograph screens. If a size
 has too few shots, ask the user to capture more on their own phone or simulator and drop them into the
 editor, then carry on. Never propose capturing screens on an Odevio machine.
+
+The phone frame matches a current Dynamic Island iPhone, so a capture from that kind of device sits in
+it perfectly. A screenshot from an older phone (a notch, a different status bar) still ships — the
+editor resizes it to the slot — but its top furniture will not line up with the frame's Dynamic Island.
+That is a device mismatch, not something to correct in the template; on a real app screen (the app's own
+top bar or full-bleed content) it is invisible anyway. If it shows, ask for a shot from a newer phone
+rather than distorting the fit.
 
 ## Good design is a floor, not a preference
 
