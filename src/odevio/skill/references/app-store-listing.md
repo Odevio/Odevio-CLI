@@ -452,6 +452,10 @@ whatever they give you. Never refuse their pictures over this; the decision is t
 One behaviour that looks like a bug otherwise: **sending replaces**. The pictures already on Apple for a size
 are removed and replaced by the ones being sent. Other sizes are untouched.
 
+If they want more than the bare shot — a headline, a styled background, the screen in a phone frame — that
+is `references/marketing-visuals.md`: you compose the visual, they judge it in the editor, and the approved
+one replaces the raw in what `push` sends.
+
 ---
 
 ## 5. The privacy questionnaire — the one thing that cannot be automated at all
