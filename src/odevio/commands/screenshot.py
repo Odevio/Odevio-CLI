@@ -213,3 +213,274 @@ def push(key):
     result = api.post(f"/applications/{key}/push-screenshots/", json_data={})
     if result:
         console.print(f"[success]{result['sent']} screenshot(s) sent to the App Store.[/success]")
+
+
+# Apple's slots, largest first. These are the only sizes App Store Connect accepts, to the pixel, so
+# they are also the sizes anything composed here has to be drawn at.
+STORE_SIZES = {
+    "6.9": (1320, 2868),
+    "6.7": (1290, 2796),
+    "6.5": (1242, 2688),
+    "ipad": (2048, 2732),
+}
+
+@screenshot.command()
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.option('--file', 'files', multiple=True, required=True, type=click.Path(exists=True, dir_okay=False),
+              help="A finished image to add. Repeat for several.")
+@click.option('--size', type=click.Choice(list(STORE_SIZES)),
+              help="Which slot it belongs to. Read from the image itself when it matches one exactly.")
+def upload(key, files, size):
+    """ Adds finished images to the App Store screenshots of the app with key \"KEY\".
+
+    \f
+    For pictures that are already composed — exported from a design tool, or produced by
+    :code:`odevio screenshot compose`. What is added here appears in the editor alongside the rest and
+    is sent to Apple by :code:`odevio screenshot push`.
+
+    An image already at one of Apple's exact sizes keeps its pixels untouched. Anything else is scaled
+    to the slot it is put in, which is what lets a picture App Store Connect refuses go through.
+
+    Usage:
+    """
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return
+
+    by_pixels = {dimensions: name for name, dimensions in STORE_SIZES.items()}
+
+    for path in files:
+        try:
+            from PIL import Image
+            with Image.open(path) as image:
+                pixels = image.size
+        except Exception as error:
+            console.print(f"[warning]{path} could not be read:[/warning] {error}")
+            continue
+
+        slot = size or by_pixels.get(pixels)
+        if slot is None:
+            console.print(f"[warning]{path} is {pixels[0]} × {pixels[1]}, which is not one of Apple's "
+                          "sizes.[/warning] Say which slot it is for with --size.")
+            continue
+
+        width, height = STORE_SIZES[slot]
+        with open(path, "rb") as handle:
+            created = api.post(
+                f"/applications/{key}/screenshots/",
+                json_data={"device_name": slot, "device_width": width, "device_height": height},
+                files={"screenshot": handle},
+            )
+        if created:
+            kept = "kept as it is" if pixels == (width, height) else f"scaled from {pixels[0]} × {pixels[1]}"
+            console.print(f"[success]Added {path}[/success] to the {slot} slot — {kept}.")
+
+
+def _font_cache_dir():
+    import os
+
+    from odevio.settings import get_config_path
+    d = os.path.join(os.path.dirname(get_config_path()), "fonts")
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def _resolve_font(spec):
+    """ Turn a "Family:400,700" spec into the structured font the renderer embeds.
+
+    Fonts are pulled from fontsource (jsdelivr) rather than Google's gstatic: the gstatic woff2 does not
+    decode in the render container's Chromium, while the fontsource files do. Each weight is cached on
+    this machine so a font is fetched once, then reused offline.
+    """
+    import base64
+    import os
+    import urllib.request
+
+    family, _, weights_str = spec.partition(":")
+    family = family.strip()
+    if not family:
+        raise click.ClickException("Font must be given as 'Family' or 'Family:400,700'.")
+    weights = [w.strip() for w in weights_str.split(",") if w.strip()] or ["400"]
+    slug = family.lower().replace(" ", "-")
+    faces = []
+    for weight in weights:
+        cache_path = os.path.join(_font_cache_dir(), f"{slug}-{weight}.woff2")
+        if not os.path.exists(cache_path):
+            url = (f"https://cdn.jsdelivr.net/npm/@fontsource/{slug}@5/files/"
+                   f"{slug}-latin-{weight}-normal.woff2")
+            try:
+                with urllib.request.urlopen(url, timeout=20) as resp:
+                    data = resp.read()
+            except Exception as error:
+                raise click.ClickException(
+                    f"Could not fetch {family} {weight} from fontsource ({error}). "
+                    f"Check the family name and that the weight exists.")
+            with open(cache_path, "wb") as fh:
+                fh.write(data)
+        with open(cache_path, "rb") as fh:
+            faces.append({"weight": int(weight), "woff2_b64": base64.b64encode(fh.read()).decode()})
+    return {"family": family, "faces": faces}
+
+
+def _screenshot_entry(key, screenshot_id):
+    """ Look up one screenshot in an app's list, returning its entry (with any visual id) or None. """
+    from odevio import api
+    rows = api.get(f"/applications/{key}/screenshot-list/") or []
+    for row in rows:
+        if row.get("id") == screenshot_id:
+            return row
+    return None
+
+
+@screenshot.command("ls")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+def ls(key):
+    """ Lists the raw screenshots of the app with key \"KEY\", with their id, size and visual state.
+
+    \f
+    The id is how a marketing visual is targeted: :code:`odevio screenshot visual KEY <id>`.
+
+    Usage:
+    """
+    from rich.table import Table
+
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return
+    rows = api.get(f"/applications/{key}/screenshot-list/")
+    if not rows:
+        console.print("No screenshots yet. Upload some in the editor first.")
+        return
+    table = Table("id", "size", "marketing visual")
+    for row in rows:
+        if row.get("has_visual"):
+            state = "approved" if row.get("visual_approved") else "draft"
+        else:
+            state = "—"
+        table.add_row(f"#{row['id']}", f"{row['width']}×{row['height']}", state)
+    console.print(table)
+
+
+@screenshot.command("visual")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.argument('screenshot_id', type=int)
+@click.option('--jsx-file', required=True, type=click.Path(exists=True, dir_okay=False),
+              help="React component (default export) for the visual.")
+@click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
+              help="JSON props for the component.")
+@click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
+def visual(key, screenshot_id, jsx_file, props_file, font_spec):
+    """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the app \"KEY\".
+
+    \f
+    One visual per screenshot: running this again on the same id updates it in place and resets its
+    approval, so it never ships a stale image. The result is visible in the editor after a refresh.
+
+    Usage:
+    """
+    import json
+
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return
+
+    entry = _screenshot_entry(key, screenshot_id)
+    if entry is None:
+        console.print(f"[warning]No screenshot #{screenshot_id} on this app.[/warning] "
+                      "Run 'odevio screenshot ls' to see the ids.")
+        return
+
+    with open(jsx_file) as fh:
+        jsx_source = fh.read()
+    props = {}
+    if props_file:
+        with open(props_file) as fh:
+            props = json.load(fh)
+    payload = {"source_screenshot": screenshot_id, "jsx_source": jsx_source, "props": props}
+    if font_spec:
+        payload["font"] = _resolve_font(font_spec)
+
+    if entry.get("visual_id"):
+        result = api.put(f"/marketing-visuals/{entry['visual_id']}/", json_data=payload)
+        action = "Updated"
+    else:
+        result = api.post("/marketing-visuals/", json_data=payload)
+        action = "Created"
+    if not result:
+        return
+    visual_id = result.get("pk")
+
+    # Dry-run compile through the preview route so a broken component is caught now, not at approve.
+    preview = api.get(f"/marketing-visuals/{visual_id}/preview/", json_decode=False)
+    console.print(f"[success]{action} the marketing visual for #{screenshot_id}.[/success] "
+                  "Refresh the editor to see it.")
+
+
+@screenshot.command("approve-visual")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.argument('screenshot_id', type=int)
+def approve_visual(key, screenshot_id):
+    """ Renders and approves the marketing visual for screenshot SCREENSHOT_ID of the app \"KEY\".
+
+    \f
+    Approving renders the submission PNG and marks the visual as the image that replaces the raw
+    screenshot on the App Store. Nothing is sent to Apple until :code:`odevio screenshot push`.
+
+    Usage:
+    """
+    import time
+
+    from odevio import api
+    from odevio.helpers import terminal_menu
+    from odevio.settings import console
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return
+    entry = _screenshot_entry(key, screenshot_id)
+    if entry is None or not entry.get("visual_id"):
+        console.print(f"[warning]No marketing visual on #{screenshot_id}.[/warning] "
+                      "Create one with 'odevio screenshot visual' first.")
+        return
+    visual_id = entry["visual_id"]
+    started = api.post(f"/marketing-visuals/{visual_id}/approve/", json_data={})
+    if not started:
+        return
+    task_id = started.get("task_id")
+    console.print("Rendering the visual…")
+    for _ in range(40):
+        time.sleep(1.5)
+        status = api.get(f"/marketing-visuals/{visual_id}/approve-status/{task_id}/")
+        state = (status or {}).get("state")
+        if state == "SUCCESS":
+            console.print(f"[success]Approved the marketing visual for #{screenshot_id}.[/success] "
+                          "It will replace the raw screenshot on the next push.")
+            return
+        if state == "FAILURE":
+            console.print(f"[warning]Render failed:[/warning] {(status or {}).get('error', 'unknown error')}")
+            return
+    console.print("[warning]Render timed out.[/warning] Try again.")

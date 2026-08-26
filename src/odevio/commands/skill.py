@@ -25,6 +25,11 @@ PRE_APPROVED_COMMANDS = [
     "odevio build flutter-versions",
     "odevio privacy scan",
     "odevio screenshot devices",
+    "odevio screenshot ls",
+    # Composing/approving marketing visuals is reversible and never reaches Apple on its own — the
+    # image only ships once the raw is pushed, which stays a held-back command.
+    "odevio screenshot visual",
+    "odevio screenshot approve-visual",
     "odevio team ls",
     # The project's own toolchain, for checking the code before spending a build on it.
     "flutter pub get",
