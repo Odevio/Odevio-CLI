@@ -20,6 +20,7 @@ Read this file fully before acting. Then read a reference only when its situatio
 | `references/delivery.md`           | a build succeeded                                                                      |
 | `references/app-store-listing.md`  | the goal is the App Store — read it **before building**, not after                     |
 | `references/marketing-visuals.md`  | the user wants composed screenshots — a headline and phone frame, not the bare shot    |
+| `references/design-directions.md`  | composing marketing visuals — how to make them distinctive, not generic mockups        |
 | `references/cli-contract.md`       | you are unsure how a command behaves — it records what was learned by getting it wrong |
 | `references/voice.md`              | **always, before acting** - how to speak; the words never to use       |
 

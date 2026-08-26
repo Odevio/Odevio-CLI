@@ -9,6 +9,10 @@ The whole point is that **you compose the visual and they judge it**. They never
 a command, never touch a design tool. You author, they look at the editor and react in words, you
 adjust. Keep that shape and the step feels like collaborating with a designer, not operating software.
 
+For the *creative* side — how to make a visual distinctive instead of a generic phone-on-gradient, and
+how to design a whole store page as one campaign — read `references/design-directions.md`. This file
+covers the mechanics: the template, the props, the flow, and the safe grid.
+
 ## The one template, and why there is only one
 
 `references/templates/appstore_card.jsx` is the single base. Read it — the comments explain every
