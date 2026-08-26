@@ -25,9 +25,9 @@ export default function AppStoreCardEditorial(props) {
 
   // ---- LOCKED GRID ------------------------------------------------------------------------------
   const SIDE_PAD = "9cqw"; // title-safe left/right margin for all text
-  const PHONE_WIDTH = "86%"; // large; the phone bleeds off the bottom, cropped by the card
+  const PHONE_WIDTH = "79%"; // the phone bleeds off the bottom, cropped by the card
   const PHONE_BLEED = "-15cqw"; // how far the phone runs past the bottom edge
-  const SCREEN_RADIUS = "10.8cqw"; // matches the frame's screen corners at PHONE_WIDTH
+  const SCREEN_RADIUS = "9.9cqw"; // matches the frame's screen corners at PHONE_WIDTH
   const HEADLINE_SIZE = "12cqw"; // the hero: deliberately oversized
   const SUBHEAD_SIZE = "4.4cqw";
   const EYEBROW_SIZE = "3.2cqw";
