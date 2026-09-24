@@ -20,38 +20,67 @@ comments explain every prop — fill it through props, and keep its locked geome
 ask the user for JSX; start from a template rather than inventing framing and screenshot placement from
 scratch. `design-directions.md` covers *which* concept to choose.
 
-| Template | When to use |
-|---|---|
-| `appstore_card.jsx` | the clean fallback — centred phone, headline above or below (`layout` prop) |
-| `appstore_card_editorial.jsx` | oversized headline as the composition, phone bleeding off the bottom |
-| `appstore_card_hero.jsx` | one screen leads — phone bleeds off the top, headline centred below |
+| Template | Name | When to use |
+|---|---|---|
+| `appstore_card.jsx` | fallback | the clean fallback — centred phone, headline above or below (`layout` prop) |
+| `appstore_card_editorial.jsx` | editorial | oversized headline as the composition, phone bleeding off the bottom |
+| `appstore_card_hero.jsx` | hero | one screen leads — phone bleeds off the top, headline centred below |
 
-Both take the same server-injected assets; each has its own authored props (read its header).
+All three take the same server-injected assets; each has its own authored props (read its header).
+
+**If the user names a template, use that one.** They browse the three in the editor's *Templates* panel
+and ask for one by name — e.g. "use the editorial template for #149". A `#<n>` there is a **screenshot
+id** (the number on each shot in the editor), so map it straight to step 3's flow: template name → its
+file (fallback → `appstore_card.jsx`, editorial → `appstore_card_editorial.jsx`, hero →
+`appstore_card_hero.jsx`), and `#<n>` → that id, then compose with
+`odevio screenshot visual <app-key> <n> --jsx-file references/templates/<file> --props-file <file>`.
+If you don't know the app or which screenshots exist, list them first with `odevio screenshot ls
+<app-key>`; don't stall asking the user what `#<n>` means. Without a named template, pick the concept
+yourself per `design-directions.md` — an explicit request always wins over the automatic pick.
 
 **Props split in two.** Some are yours to write; some the server injects and you must never set:
 
 | Prop | Who sets it | What it is |
 |---|---|---|
 | `headline`, `subhead`, `eyebrow`, `background`, `headlineColor`, `accent`, `fontFamily` | you | the words and the styling |
-| `layout` | you | `"headline-top"` (default) or `"headline-bottom"` — the two vetted arrangements |
+| `layout` | you | **`appstore_card.jsx` only** — `"headline-top"` (default) or `"headline-bottom"`. The editorial and hero cards each have one fixed arrangement and ignore it |
 | `_source_image` | the server | the user's raw screenshot, as a data URI |
 | `_frame_image` | the server | the phone frame PNG for that size |
 | `_frame_window` | the server | where the screen shows through the frame, as fractions |
+
+A props file is flat JSON — only your own props, never the `_`-prefixed ones:
+
+```json
+{
+  "eyebrow": "PLAN YOUR WEEK",
+  "headline": "Plan your week\nin one tap",
+  "subhead": "Every task, one screen.",
+  "layout": "headline-bottom",
+  "background": "linear-gradient(160deg, #2b1055 0%, #7b2ff7 100%)",
+  "headlineColor": "#ffffff",
+  "accent": "rgba(255, 255, 255, 0.82)",
+  "fontFamily": "Inter"
+}
+```
+
+`headline` honours `\n` — the templates render it with `white-space: pre-line`, so that is how you control
+where the line breaks instead of leaving it to the box width.
 
 The `_`-prefixed props arrive after your props, tied to the raw screenshot you targeted. Leaving them
 out of your props JSON is correct — writing them yourself is not.
 
 **Default to a props file on an existing template — and don't rebuild what a prop already does.** Point
 `--jsx-file` at one of `references/templates/*.jsx` and vary the `--props-file` from card to card. The
-spacing, type sizes, phone size and the arrangements are already solved; the `layout` prop switches
-between `"headline-top"` and `"headline-bottom"`, and **headline-bottom already centres the text in the
-space under the phone.** So "centre the text below the phone" is a prop value — reach for the prop, not
-a geometry edit. Most requests are a prop or a different template; try that first, every time.
+spacing, type sizes, phone size and the arrangements are already solved; on the fallback card the
+`layout` prop switches between `"headline-top"` and `"headline-bottom"`, and **headline-bottom already
+centres the text in the space under the phone.** So "centre the text below the phone" is a prop value —
+reach for the prop, not a geometry edit. Most requests are a prop or a different template; try that
+first, every time.
 
-**A genuinely new layout is welcome — build it as a new template, deliberately, keeping two
+**A genuinely new layout is welcome — build it as a new template, deliberately, keeping three
 invariants.** If the user has an idea the three templates don't cover, make a new template file for it
-rather than mangling an existing one mid-conversation. Two rules keep the frame and the screenshot from
-drifting apart — break either and the picture comes visibly undone, which is what went wrong when a card
+rather than mangling an existing one mid-conversation. These rules keep the frame and the screenshot from
+drifting apart — break one and the picture comes visibly undone, which is what went wrong when a card
 was hand-edited on the fly:
 
 1. **Never clamp the frame box's height** (no `maxHeight`, no fixed height). The screenshot is placed as
@@ -60,9 +89,17 @@ was hand-edited on the fly:
    **width**; the height follows.
 2. **Size the frame and the screenshot off the same box**, and let the phone's band hug the phone so the
    text centres in the real space beside it.
+3. **Set `containerType: "size"` on the root and express every size in `cqw`**, never in `px`. The card
+   is rendered at the slot's exact pixel size, which differs from one device size to the next; container
+   units make the whole locked grid scale with the card's own box, so one template serves every size.
+   A `px` value is right at one size and wrong at all the others.
 
 Build the new layout, check it in the editor preview, and only rely on it once it holds — do not tweak
 geometry blindly round after round to chase a look.
+
+Colours come in pairs: a template's default `background` and its default `headlineColor`/`accent` have to
+be readable together. The hero card is the light-ground one, so its type defaults are dark; the other two
+are dark-ground with white type. Change one and change the other.
 
 ## The screenshots are the user's own
 
@@ -70,6 +107,23 @@ You compose cards from the screenshots the user has already put in the editor. *
 screenshots for them** — do not offer to start a device, run the app and photograph screens. If a size
 has too few shots, ask the user to capture more on their own phone or simulator and drop them into the
 editor, then carry on. Never propose capturing screens on an Odevio machine.
+
+## When they already made the picture themselves
+
+Some users arrive with finished artwork — made in Figma, by a designer, or with another tool — and want it
+on the store as it is. That is not a failure of this step; it is a shorter route through it. Add their
+files directly, and compose nothing:
+
+```bash
+odevio screenshot upload <app-key> --file <path> --size 6.9
+```
+
+`--file` repeats for several images. `--size` is one of `6.9`, `6.7`, `6.5`, `ipad`, and can be left out
+when the image already matches a slot exactly — it is read from the image itself. The picture is fitted to
+the slot's exact pixels; it is never put inside a phone frame, because a finished visual already is the
+whole picture.
+
+So ask before composing anything: a card built over artwork someone already paid for is wasted work.
 
 The phone frame matches a current Dynamic Island iPhone, so a capture from that kind of device sits in
 it perfectly. A screenshot from an older phone (a notch, a different status bar) still ships — the
@@ -152,7 +206,7 @@ a props JSON for this card, and create the visual for that id:
 odevio screenshot visual <app-key> 150 --jsx-file references/templates/appstore_card.jsx --props-file <file>
 ```
 
-For most cards you write only the props file; a genuinely new layout is a new template (keeping the two
+For most cards you write only the props file; a genuinely new layout is a new template (keeping the
 invariants above). This is their product content, made on their behalf — so make it, but **do not paste
 the command or the props at them**. One visual per screenshot: running it again on the same id updates
 in place and resets approval, so a stale image never ships. The command dry-compiles through the
@@ -172,7 +226,7 @@ is right, and rendering a PNG each iteration is slow and pointless when the prev
 new line or the new look in words first and get a nod, then re-render — do not silently push a new
 version and tell them to refresh. A change they can read in one sentence saves a wasted render and
 keeps the words theirs. Most changes are a prop or a different template; if the ask is genuinely a new
-layout, build it as a new template with the two invariants above and verify it in the preview — never
+layout, build it as a new template with the invariants above and verify it in the preview — never
 tweak an existing template's geometry blindly to chase the look.
 
 **6. Approve only on an explicit yes:**

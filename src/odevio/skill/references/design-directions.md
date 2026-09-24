@@ -100,9 +100,9 @@ Reach the range first through the **three templates and the `layout` prop**: fal
 top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top). Most
 directions are one of these plus the right words, colour and font — try that before anything else.
 
-For a direction none of the three covers, you *can* build a new template — deliberately: keep the two
-invariants that hold the frame and screenshot together (never clamp the frame box's height; size both
-off the same box — see `marketing-visuals.md`), and check it in the editor preview before relying on it.
+For a direction none of the three covers, you *can* build a new template — deliberately: keep the
+invariants listed under "a genuinely new layout" in `marketing-visuals.md`, and check it in the editor
+preview before relying on it.
 What breaks things is the opposite: hand-tweaking an existing template's geometry round after round to
 chase a look. That is what pulls the screenshot off its frame. New idea → a fresh, verified template;
 never a blind geometry edit mid-conversation.

@@ -20,9 +20,11 @@ export default function AppStoreCardHero(props) {
     eyebrow = "",
     headline = "Your headline here",
     subhead = "",
+    // This card's default ground is light, so its default type is dark. Swap both together: white type
+    // on the light gradient is the one combination that renders unreadable.
     background = "linear-gradient(180deg, #efeaff 0%, #e6e0ff 100%)",
-    headlineColor = "#ffffff",
-    accent = "rgba(255, 255, 255, 0.82)",
+    headlineColor = "#1b1140",
+    accent = "rgba(27, 17, 64, 0.72)",
     fontFamily = "Inter, system-ui, sans-serif",
     _source_image = "",
     _frame_image = "",
