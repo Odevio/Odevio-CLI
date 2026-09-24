@@ -5,7 +5,8 @@ import click
 from rich.console import Console
 
 APP_NAME = "Odevio"
-API_BASE_URL = "https://odevio.com"
+# Overridable so a change can be exercised against a local server before it is deployed.
+API_BASE_URL = os.environ.get("ODEVIO_API_URL", "https://odevio.com")
 API_KEY_ENV_VAR = "ODEVIO_API_KEY"
 
 

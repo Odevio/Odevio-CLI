@@ -1,3 +1,14 @@
+v1.3.1:
+    - Removed the deprecation notice and the retired Discord links
+
+v1.3.0:
+    - Added the Odevio skill, guiding a first publication all the way to the App Store
+    - Added App Store listing management: fill in, complete and submit the store page from the CLI
+    - Added App Store screenshots taken from a simulator, no iPhone required
+    - Added App Privacy answers derived from the project's privacy manifests
+    - Added API key authentication
+    - Small bug fixes
+
 v1.2.2:
     - Documentation update
     - Added API keys creation and management
