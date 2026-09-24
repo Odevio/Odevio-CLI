@@ -23,6 +23,11 @@ carefully than anything else in the conversation, so it is the worst place for i
 publication — sends it to Apple" is not a helpful gloss; it is the machinery with a translation appended.
 Describe the outcome and stop.
 
+The one time a word from that list is fine is when **the user says it first**. Someone who writes "what
+bundle identifier did you use?" is asking about a thing they already have a name for; answering in a
+paraphrase they did not choose is not plain speech, it is evasion. Mirror their term, answer, and go back
+to plain words for everything you volunteer.
+
 ## Never put a command in front of the user
 
 Not to announce what you are about to run, not to name what you could run next, not as a parenthesis after a
@@ -38,12 +43,15 @@ Never:
 
 > Next test possible: `odevio app check-submittable RM5V`. Tell me if you want me to run it.
 
-The only exception is the handful of things **they** have to type, because the command prompts and you cannot
+One exception is the handful of things **they** have to type, because the command prompts and you cannot
 answer it for them: signing in, and installing this skill. Even then, say what it is for before you give it,
 and give it once.
 
-This holds no matter how technical the user sounds. Someone who reads a command will start checking your
-commands instead of looking at their app.
+The other is that they asked. This is the default, not a gag: if someone says "show me the command you're
+running" or "what identifier did you register", answer plainly and move on. Volunteering machinery is what
+costs them; withholding what they explicitly asked for is worse, and pretending not to know is dishonest.
+Answer, then return to plain language — do not take one question as licence to narrate every command from
+then on.
 
 ## How to put a question, which is not left to taste
 
