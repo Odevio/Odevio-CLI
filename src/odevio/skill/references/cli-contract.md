@@ -140,7 +140,28 @@ writing any command into a skill file.
 | `odevio profile`, `signin`, `signup`, `signout`, `apikey` | there is **no** `user` group |
 | `odevio apple ls` | the function is `developer_account_ls`, but the command is `ls` |
 
-Groups: `build`, `team`, `app`, `apple`. Everything else is top-level.
+Groups: `build`, `team`, `app`, `apple`, `privacy`, `screenshot`. Everything else is top-level.
+
+**The full surface, so there is never a need to guess.** Verified against `--help`; if something you want
+is not here, it does not exist, and a human has to do it somewhere else — say that rather than inventing
+a command or a plausible-sounding option.
+
+| Group | Commands |
+|---|---|
+| *(top level)* | `signup`, `signin`, `signout`, `profile`, `apikey`, `skill` |
+| `build` | `start`, `ls`, `detail`, `logs`, `ipa`, `download`, `patch`, `connect`, `tunnel`, `stop`, `rm`, `flutter-versions` |
+| `apple` | `ls`, `detail`, `add`, `edit`, `rm`, `link`, `unlink`, `refresh-devices` |
+| `app` | `ls`, `mk`, `rm`, `link`, `unlink`, `import`, `screenshots`, `store-status`, `set-metadata`, `categories`, `attach-build`, `check-submittable`, `submit` |
+| `privacy` | `scan` |
+| `screenshot` | `ls`, `visual`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture` |
+| `team` | — |
+
+Two of those carry a warning that is easy to miss:
+
+- `odevio app check-submittable` opens a submission on Apple that cannot afterwards be deleted. It gives
+  Apple's own verdict, which is worth having, but run it only when the user means to finish — never to
+  check on progress. `odevio app store-status` answers that and changes nothing.
+- `odevio screenshot push` clears the pictures already on a slot before sending.
 
 ## Parsing a build key
 
@@ -159,6 +180,9 @@ reader's `if ... is None` test can never apply. Writing them into the file looks
 Read from the **current directory**, not from the project directory given on the command line. One `KEY=VALUE`
 per line, `#` starts a comment, unknown keys warn. Useful keys: `app-key`, `build-type`, `flutter`,
 `minimal-ios-version`, `app-version`, `build-number`, `mode`, `target`, `flavor`, `post-build-command`.
+
+`build-type` is a valid key, but **this skill never writes it**: the type follows what the user wants
+each time, so it belongs on the command line — see `first-time-setup.md`.
 
 A value in the file applies only when the option was not given on the command line.
 

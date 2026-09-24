@@ -3,8 +3,8 @@
 Read this when there is no Apple developer account registered on Odevio, or no Odevio app for this project.
 Everything here happens once, then never again.
 
-This is where a beginner is most likely to give up, so be slow and precise. Two of the five hand-overs live
-here.
+This is where a beginner is most likely to give up, so be slow and precise. Several of the moments where you
+stop and hand control back to the user live here — `voice.md` holds the canonical list.
 
 ---
 
@@ -35,8 +35,18 @@ Beyond that, do not start any other kind of build "in the meantime", and do not 
 
 ## Question 2 — the credentials
 
-Four values. Three come from App Store Connect — start at **Users and Access**, look for **Integrations**, and
-inside it the **App Store Connect API** keys — and the fourth from the developer portal.
+**First, the API may not be switched on for their account at all.** Opening *Integrations* can show, instead
+of a list of keys, a message that permission is required and that **only the Account Holder can request
+access**. Nobody else can lift this — not an Admin, not a Developer, not the person you are talking to unless
+they happen to hold the account. It is the one prerequisite that no amount of clicking gets around.
+
+So ask early, before walking anyone through screens: are they the Account Holder on this Apple account? If
+not, say plainly that the Account Holder has to turn the API on first, and stop there rather than narrating
+a page they cannot use. This is the common case for an agency handling a client's account — the client holds
+it, so the request goes to them.
+
+Once the API is on, four values. Three come from App Store Connect — start at **Users and Access**, look for
+**Integrations**, and inside it the **App Store Connect API** keys — and the fourth from the developer portal.
 
 | What | What it looks like | Where |
 |---|---|---|
@@ -86,6 +96,49 @@ Key ID, an Issuer ID from the wrong account, or a revoked key. Say which you sus
 
 Never copy the `.p8` into the project, never print its contents, and never continue if `odevio apple ls` still
 shows no account — whatever the command printed, the registration did not take.
+
+## Adding another Apple account
+
+Read this when someone already has an Apple account here and wants a second one. It is an ordinary thing to
+want — a freelancer taking on a client, an agency publishing for several of them, someone keeping their own
+apps apart from a company's — and it is supported: `apple add` again, nothing to undo first, and
+`odevio apple ls` lists them all. An app then belongs to exactly one of those accounts.
+
+### Check they are allowed, before running anything
+
+Whether a second account is permitted is already on screen: `odevio profile`, which you ran in Step 1, prints
+**Account type** and the teams they belong to. The rule:
+
+- **Business** — no limit. Add as many as they like.
+- **Free or Hobbyist** — a second account is refused, *unless* it is attached to a team with `--team`. An
+  account that already sits in a team does not count towards the limit, so this is a real way through and not
+  a workaround.
+
+If they are not allowed, say so before the command fails, and put both ways forward in front of them: attach
+the new account to one of their teams — `profile` has just listed them — or move to a paid plan. Do not run
+`apple add` to find out; a refusal you could have predicted, delivered as a server error, reads as the tool
+breaking.
+
+If it is refused anyway, relay Odevio's own message rather than paraphrasing it. It names their current plan
+and, when they belong to a team, points at the `--team` option itself.
+
+### One limit that only shows up later
+
+Attaching the account to a team clears the way to *create* it, but a **second app** on that Apple account
+additionally requires the team's manager to be on a Business plan. `profile` shows each team's admin, not
+their plan, so this cannot be checked in advance — you find out when creating the second app. If that
+happens, the message says so plainly; the way out is the team manager's plan, not anything about the app.
+
+### Once there is more than one
+
+- **Always pass `--account-key` explicitly.** With a single account the CLI selects it silently; the moment a
+  second one exists that stops, and outside a terminal the command fails instead of choosing. Naming the
+  account every time is also the only thing standing between a client's app and the wrong Apple team.
+- **The account is fixed when the app is created.** `app mk` and `app import` take it, and it cannot be moved
+  afterwards — a wrong choice here is undone by deleting the app and creating it again. Read the account name
+  back to the user before creating, exactly as you would an identifier.
+- **Name the account in words they recognise** — the client's name, never the key — whenever you say which one
+  you are about to use.
 
 ---
 
