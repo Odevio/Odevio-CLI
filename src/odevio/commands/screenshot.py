@@ -224,6 +224,32 @@ STORE_SIZES = {
     "ipad": (2048, 2732),
 }
 
+
+def _app_base(key):
+    """ API base of an app's screenshots, asking which app when no key is given. """
+    from odevio.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/applications/", "Application",
+                            does_not_exist_msg="You do not have any app identifiers.")
+        if key is None:
+            return None
+    return f"/applications/{key}"
+
+
+def _listing_base(key):
+    """ API base of a store listing's screenshots, asking which listing when no key is given. """
+    from odevio.helpers import terminal_menu
+
+    if key is None:
+        key = terminal_menu("/store-listings/", "Store listing",
+                            does_not_exist_msg="You do not have any store listings. "
+                                               "Create one with 'odevio screenshot listing create'.")
+        if key is None:
+            return None
+    return f"/store-listings/{key}"
+
+
 @screenshot.command()
 @login_required_warning_decorator
 @click.argument('key', required=False)
@@ -244,15 +270,14 @@ def upload(key, files, size):
 
     Usage:
     """
-    from odevio import api
-    from odevio.helpers import terminal_menu
-    from odevio.settings import console
+    base = _app_base(key)
+    if base:
+        _upload(base, files, size)
 
-    if key is None:
-        key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any app identifiers.")
-        if key is None:
-            return
+
+def _upload(base, files, size):
+    from odevio import api
+    from odevio.settings import console
 
     by_pixels = {dimensions: name for name, dimensions in STORE_SIZES.items()}
 
@@ -274,7 +299,7 @@ def upload(key, files, size):
         width, height = STORE_SIZES[slot]
         with open(path, "rb") as handle:
             created = api.post(
-                f"/applications/{key}/screenshots/",
+                f"{base}/screenshots/",
                 json_data={"device_name": slot, "device_width": width, "device_height": height},
                 files={"screenshot": handle},
             )
@@ -329,10 +354,10 @@ def _resolve_font(spec):
     return {"family": family, "faces": faces}
 
 
-def _screenshot_entry(key, screenshot_id):
-    """ Look up one screenshot in an app's list, returning its entry (with any visual id) or None. """
+def _screenshot_entry(base, screenshot_id):
+    """ Look up one screenshot in an app's or listing's list, returning its entry or None. """
     from odevio import api
-    rows = api.get(f"/applications/{key}/screenshot-list/") or []
+    rows = api.get(f"{base}/screenshot-list/") or []
     for row in rows:
         if row.get("id") == screenshot_id:
             return row
@@ -350,18 +375,18 @@ def ls(key):
 
     Usage:
     """
+    base = _app_base(key)
+    if base:
+        _ls(base)
+
+
+def _ls(base):
     from rich.table import Table
 
     from odevio import api
-    from odevio.helpers import terminal_menu
     from odevio.settings import console
 
-    if key is None:
-        key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any app identifiers.")
-        if key is None:
-            return
-    rows = api.get(f"/applications/{key}/screenshot-list/")
+    rows = api.get(f"{base}/screenshot-list/")
     if not rows:
         console.print("No screenshots yet. Upload some in the editor first.")
         return
@@ -393,22 +418,21 @@ def visual(key, screenshot_id, jsx_file, props_file, font_spec):
 
     Usage:
     """
+    base = _app_base(key)
+    if base:
+        _visual(base, screenshot_id, jsx_file, props_file, font_spec, "odevio screenshot ls")
+
+
+def _visual(base, screenshot_id, jsx_file, props_file, font_spec, ls_command):
     import json
 
     from odevio import api
-    from odevio.helpers import terminal_menu
     from odevio.settings import console
 
-    if key is None:
-        key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any app identifiers.")
-        if key is None:
-            return
-
-    entry = _screenshot_entry(key, screenshot_id)
+    entry = _screenshot_entry(base, screenshot_id)
     if entry is None:
-        console.print(f"[warning]No screenshot #{screenshot_id} on this app.[/warning] "
-                      "Run 'odevio screenshot ls' to see the ids.")
+        console.print(f"[warning]No screenshot #{screenshot_id} here.[/warning] "
+                      f"Run '{ls_command}' to see the ids.")
         return
 
     with open(jsx_file) as fh:
@@ -432,7 +456,7 @@ def visual(key, screenshot_id, jsx_file, props_file, font_spec):
     visual_id = result.get("pk")
 
     # Dry-run compile through the preview route so a broken component is caught now, not at approve.
-    preview = api.get(f"/marketing-visuals/{visual_id}/preview/", json_decode=False)
+    api.get(f"/marketing-visuals/{visual_id}/preview/", json_decode=False)
     console.print(f"[success]{action} the marketing visual for #{screenshot_id}.[/success] "
                   "Refresh the editor to see it.")
 
@@ -450,21 +474,21 @@ def approve_visual(key, screenshot_id):
 
     Usage:
     """
+    base = _app_base(key)
+    if base:
+        _approve_visual(base, screenshot_id, "odevio screenshot visual")
+
+
+def _approve_visual(base, screenshot_id, visual_command):
     import time
 
     from odevio import api
-    from odevio.helpers import terminal_menu
     from odevio.settings import console
 
-    if key is None:
-        key = terminal_menu("/applications/", "Application",
-                            does_not_exist_msg="You do not have any app identifiers.")
-        if key is None:
-            return
-    entry = _screenshot_entry(key, screenshot_id)
+    entry = _screenshot_entry(base, screenshot_id)
     if entry is None or not entry.get("visual_id"):
         console.print(f"[warning]No marketing visual on #{screenshot_id}.[/warning] "
-                      "Create one with 'odevio screenshot visual' first.")
+                      f"Create one with '{visual_command}' first.")
         return
     visual_id = entry["visual_id"]
     started = api.post(f"/marketing-visuals/{visual_id}/approve/", json_data={})
@@ -484,3 +508,171 @@ def approve_visual(key, screenshot_id):
             console.print(f"[warning]Render failed:[/warning] {(status or {}).get('error', 'unknown error')}")
             return
     console.print("[warning]Render timed out.[/warning] Try again.")
+
+
+@screenshot.group()
+def listing():
+    """ Store listings: an app's screenshots and marketing visuals, with or without an Apple account.
+
+    \f
+    A store listing holds what the App Store shows — the screenshots and the marketing visuals composed
+    over them. It needs no Apple developer account and no build, so it can be prepared before the app is
+    built on Odevio, then attached with :code:`odevio screenshot listing link`. An app you already build
+    on Odevio gets its listing on its own: use the plain screenshot commands with the app key.
+
+    App keys and listing keys are separate: a listing is always addressed through these commands.
+
+    Usage:
+    """
+
+
+@listing.command("create")
+@login_required_warning_decorator
+@click.argument('name')
+@click.option('--team', 'team_key', help="Share the listing with this team right away.")
+def listing_create(name, team_key):
+    """ Creates a store listing named \"NAME\" and prints its key. """
+    from odevio import api
+    from odevio.settings import console
+
+    created = api.post("/store-listings/", json_body={"name": name})
+    if not created:
+        return
+    key = created["key"]
+    if team_key:
+        api.post(f"/store-listings/{key}/teams/{team_key}/", json_body={})
+    console.print(f"[success]Created the store listing {key}[/success] ('{name}'). "
+                  f"Add images with 'odevio screenshot listing upload {key} --file <image>'.")
+
+
+@listing.command("ls")
+@login_required_warning_decorator
+def listing_ls():
+    """ Lists the store listings you can reach, with their key and linked app. """
+    from rich.table import Table
+
+    from odevio import api
+    from odevio.settings import console
+
+    rows = api.get("/store-listings/")
+    if not rows:
+        console.print("No store listings yet. Create one with 'odevio screenshot listing create'.")
+        return
+    table = Table("key", "name", "app", "owner")
+    for row in rows:
+        table.add_row(row["key"], row["name"], row.get("application") or "—", row.get("owner") or "")
+    console.print(table)
+
+
+@listing.command("screenshots")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+def listing_screenshots(key):
+    """ Lists the raw screenshots of the store listing \"KEY\", with their id, size and visual state. """
+    base = _listing_base(key)
+    if base:
+        _ls(base)
+
+
+@listing.command("upload")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.option('--file', 'files', multiple=True, required=True, type=click.Path(exists=True, dir_okay=False),
+              help="A finished image to add. Repeat for several.")
+@click.option('--size', type=click.Choice(list(STORE_SIZES)),
+              help="Which slot it belongs to. Read from the image itself when it matches one exactly.")
+def listing_upload(key, files, size):
+    """ Adds finished images to the store listing \"KEY\", resized to Apple's exact slot size. """
+    base = _listing_base(key)
+    if base:
+        _upload(base, files, size)
+
+
+@listing.command("visual")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('screenshot_id', type=int)
+@click.option('--jsx-file', required=True, type=click.Path(exists=True, dir_okay=False),
+              help="React component (default export) for the visual.")
+@click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
+              help="JSON props for the component.")
+@click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
+def listing_visual(key, screenshot_id, jsx_file, props_file, font_spec):
+    """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the listing \"KEY\". """
+    _visual(f"/store-listings/{key}", screenshot_id, jsx_file, props_file, font_spec,
+            f"odevio screenshot listing screenshots {key}")
+
+
+@listing.command("approve-visual")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('screenshot_id', type=int)
+def listing_approve_visual(key, screenshot_id):
+    """ Renders and approves the marketing visual for screenshot SCREENSHOT_ID of the listing \"KEY\". """
+    _approve_visual(f"/store-listings/{key}", screenshot_id, "odevio screenshot listing visual")
+
+
+@listing.command("share")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('team_key')
+def listing_share(key, team_key):
+    """ Shares the store listing \"KEY\" with the team \"TEAM_KEY\", so its members can work on it. """
+    from odevio import api
+    from odevio.settings import console
+
+    if api.post(f"/store-listings/{key}/teams/{team_key}/", json_body={}):
+        console.print(f"[success]Shared {key} with the team {team_key}.[/success]")
+
+
+@listing.command("unshare")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('team_key')
+def listing_unshare(key, team_key):
+    """ Stops sharing the store listing \"KEY\" with the team \"TEAM_KEY\". """
+    from odevio import api
+    from odevio.settings import console
+
+    if api.delete(f"/store-listings/{key}/teams/{team_key}/"):
+        console.print(f"[success]{key} is no longer shared with the team {team_key}.[/success]")
+
+
+@listing.command("link")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('app_key')
+def listing_link(key, app_key):
+    """ Attaches the store listing \"KEY\" to the app \"APP_KEY\", once you build it on Odevio. """
+    from odevio import api
+    from odevio.settings import console
+
+    try:
+        linked = api.post(f"/store-listings/{key}/link/{app_key}/", json_body={})
+    except api.NotFoundException:
+        console.print("One of these keys is invalid or you do not have access to it.")
+        return
+    if linked:
+        console.print(f"[success]{key} is now the store listing of {app_key}.[/success] Its screenshots "
+                      f"stay as they are; 'odevio screenshot push {app_key}' sends them to Apple.")
+
+
+@listing.command("open")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+def listing_open(key):
+    """ Returns a link to the screenshot editor for the store listing \"KEY\". """
+    from odevio import api
+    from odevio.settings import API_BASE_URL, console
+
+    base = _listing_base(key)
+    if not base:
+        return
+    try:
+        link = api.get(f"{base}/editor/")
+    except api.NotFoundException:
+        console.print("This key is invalid or you do not have access to it.")
+        return
+    if link:
+        console.print("Here's the link to the screenshot editor:")
+        console.print(f"[link]{API_BASE_URL}{link['url']}[/link]")
