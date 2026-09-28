@@ -33,9 +33,11 @@ and ask for one by name — e.g. "use the editorial template for #149". A `#<n>`
 id** (the number on each shot in the editor), so map it straight to step 3's flow: template name → its
 file (fallback → `appstore_card.jsx`, editorial → `appstore_card_editorial.jsx`, hero →
 `appstore_card_hero.jsx`), and `#<n>` → that id, then compose with
-`odevio screenshot visual <app-key> <n> --jsx-file references/templates/<file> --props-file <file>`.
+`odevio screenshot visual <app-key> <n> --jsx-file references/templates/<file> --props-file <file>`
+(or `odevio screenshot listing visual <listing-key> <n> …` when they work in a store listing).
 If you don't know the app or which screenshots exist, list them first with `odevio screenshot ls
-<app-key>`; don't stall asking the user what `#<n>` means. Without a named template, pick the concept
+<app-key>` (`odevio screenshot listing screenshots <listing-key>` for a listing); don't stall asking the
+user what `#<n>` means. Without a named template, pick the concept
 yourself per `design-directions.md` — an explicit request always wins over the automatic pick.
 
 **Props split in two.** Some are yours to write; some the server injects and you must never set:
@@ -162,6 +164,35 @@ One honest limit: if every card is built on the **same screenshot**, only the wo
 is a set of captions, not a campaign. A real story needs a second screen, a different moment in the
 app. When you hit that wall, say it, and ask the user to capture another screen on their phone or
 simulator and drop it in the editor; then build the next beat on it.
+
+## No build yet — a store listing
+
+When they only want App Store screenshots — no Odevio app for this project, no Apple account, or no wish
+to build — do not walk them through Apple or app setup. A **store listing** needs neither:
+
+```bash
+odevio screenshot listing create "<app name>"
+```
+
+It prints the listing key. The flow below then runs unchanged through the `listing` sub-group, with the
+same screenshot ids and the same templates:
+
+| For an app | For a store listing |
+|---|---|
+| `odevio screenshot ls <app-key>` | `odevio screenshot listing screenshots <listing-key>` |
+| `odevio screenshot upload <app-key> --file …` | `odevio screenshot listing upload <listing-key> --file …` |
+| `odevio screenshot visual <app-key> <id> …` | `odevio screenshot listing visual <listing-key> <id> …` |
+| `odevio screenshot approve-visual <app-key> <id>` | `odevio screenshot listing approve-visual <listing-key> <id>` |
+| `odevio app screenshots <app-key>` (editor link) | `odevio screenshot listing open <listing-key>` |
+
+App keys and listing keys are separate and can be the same string, so a listing key only ever goes to a
+`listing` command. `odevio screenshot listing ls` shows the ones they already have — check it before
+creating a second. `listing share <listing-key> <team-key>` lets a teammate pick the work up.
+
+When they start building later, attach it once the app exists on Odevio:
+`odevio screenshot listing link <listing-key> <app-key>`. Nothing moves — the screenshots and visuals
+become the app's, and `odevio screenshot push <app-key>` sends them. It is refused when the app already
+has a listing with screenshots; say so and ask which set they want to keep.
 
 ## The flow, start to finish
 

@@ -153,8 +153,13 @@ a command or a plausible-sounding option.
 | `apple` | `ls`, `detail`, `add`, `edit`, `rm`, `link`, `unlink`, `refresh-devices` |
 | `app` | `ls`, `mk`, `rm`, `link`, `unlink`, `import`, `screenshots`, `store-status`, `set-metadata`, `categories`, `attach-build`, `check-submittable`, `submit` |
 | `privacy` | `scan` |
-| `screenshot` | `ls`, `visual`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture` |
+| `screenshot` | `ls`, `visual`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture`, and the `listing` sub-group |
+| `screenshot listing` | `create`, `ls`, `screenshots`, `upload`, `visual`, `approve-visual`, `share`, `unshare`, `link`, `open` |
 | `team` | — |
+
+App keys and store-listing keys are separate and can be the same string. The plain `screenshot` commands
+always take an **app** key; a store listing is only ever addressed through `screenshot listing`. There is
+no `push` for a listing: attach it to an app with `listing link <listing-key> <app-key>`, then push the app.
 
 Two of those carry a warning that is easy to miss:
 
