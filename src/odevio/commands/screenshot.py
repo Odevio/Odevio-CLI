@@ -477,6 +477,7 @@ def _visuals(base, as_json):
             "approved": bool(visual.get("approved")),
             "template": _template_name(visual.get("jsx_source")),
             "font": (visual.get("font") or {}).get("family"),
+            "last_edited_by": visual.get("last_edited_by", "agent"),
             "props": visual.get("props") or {},
         })
     if as_json:
@@ -485,11 +486,12 @@ def _visuals(base, as_json):
     if not rows:
         console.print("No marketing visuals yet.")
         return
-    table = Table("id", "state", "template", "headline", "background", "font")
+    table = Table("id", "state", "template", "headline", "background", "font", "last edited by")
     for row in rows:
         props = row["props"]
         table.add_row(f"#{row['screenshot_id']}", "approved" if row["approved"] else "draft", row["template"],
-                      str(props.get("headline", "")), str(props.get("background", "")), row["font"] or "—")
+                      str(props.get("headline", "")), str(props.get("background", "")), row["font"] or "—",
+                      row["last_edited_by"])
     console.print(table)
 
 
@@ -504,18 +506,20 @@ def _visuals(base, as_json):
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
               help="JSON props for the component.")
 @click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
-def visual(key, screenshot_id, template, jsx_file, props_file, font_spec):
+@click.option('--force', is_flag=True, help="Overwrite a visual the user retouched in the editor.")
+def visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force):
     """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the app \"KEY\".
 
     \f
     One visual per screenshot: running this again on the same id updates it in place and resets its
     approval, so it never ships a stale image. The result is visible in the editor after a refresh.
+    A visual the user retouched in the editor is refused unless :code:`--force`.
 
     Usage:
     """
     base = _app_base(key)
     if base:
-        _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls")
+        _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls", force)
 
 
 def _template_file(template, jsx_file):
@@ -531,7 +535,7 @@ def _template_file(template, jsx_file):
     return os.path.join(skill_source(), "references", "templates", TEMPLATES[template])
 
 
-def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command):
+def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command, force=False):
     import json
 
     from odevio import api
@@ -554,6 +558,8 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
     payload = {"source_screenshot": screenshot_id, "jsx_source": jsx_source, "props": props}
     if font_spec:
         payload["font"] = _resolve_font(font_spec)
+    if force:
+        payload["force"] = True
 
     if entry.get("visual_id"):
         result = api.put(f"/marketing-visuals/{entry['visual_id']}/", json_body=payload)
@@ -788,10 +794,11 @@ def listing_upload(key, files, size):
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
               help="JSON props for the component.")
 @click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
-def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec):
+@click.option('--force', is_flag=True, help="Overwrite a visual the user retouched in the editor.")
+def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force):
     """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the listing \"KEY\". """
     _visual(f"/store-listings/{key}", screenshot_id, template, jsx_file, props_file, font_spec,
-            f"odevio screenshot listing screenshots {key}")
+            f"odevio screenshot listing screenshots {key}", force)
 
 
 @listing.command("approve-visual")

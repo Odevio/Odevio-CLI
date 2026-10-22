@@ -162,12 +162,14 @@ App keys and store-listing keys are separate and can be the same string. The pla
 always take an **app** key; a store listing is only ever addressed through `screenshot listing`. There is
 no `push` for a listing: attach it to an app with `listing link <listing-key> <app-key>`, then push the app.
 
-Two of those carry a warning that is easy to miss:
+Three of those carry a warning that is easy to miss:
 
 - `odevio app check-submittable` opens a submission on Apple that cannot afterwards be deleted. It gives
   Apple's own verdict, which is worth having, but run it only when the user means to finish — never to
   check on progress. `odevio app store-status` answers that and changes nothing.
 - `odevio screenshot push` clears the pictures already on a slot before sending.
+- `odevio screenshot visual … --force` overwrites a card the user retouched in the editor. Without it
+  the command refuses that card; pass it only when the user asks to replace their changes.
 
 ## Parsing a build key
 

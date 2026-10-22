@@ -311,6 +311,14 @@ final PNG is made from, so what they see is what Apple gets.
 `layout`. Re-run the `visual` command with the new props file, look at a fresh `preview`, then they
 refresh. Do **not** approve just to look — `preview` is for looking, approval is for when it is right.
 
+**The user can retouch a card themselves.** The editor lets them change exactly the props in the table
+above — the words, the colours, the background, a font already used in the listing, `layout` — and
+re-approve. Keep those names in every template you write, so a card of yours stays retouchable. A card
+they touched shows `last_edited_by: "editor"` in `visuals --json` (and "editor" in the table). Before
+you change such a card, read it there and start from its current props: their edits are the brief, not
+something to overwrite. `visual` refuses to replace it — pass `--force` only when the user asks you to
+redo that card over their changes.
+
 **Say what you will change before you render it.** When the user reacts or asks for something, put the
 new line or the new look in words first and get a nod, then re-render — do not silently push a new
 version and tell them to refresh. A change they can read in one sentence saves a wasted render and
