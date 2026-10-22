@@ -33,7 +33,20 @@ def _remembered_device(key):
         return None
 
 
-@click.group()
+class _KeyCheckedGroup(click.Group):
+    """ Every screenshot command takes a key: an unknown one gets a sentence, not a traceback. """
+
+    def invoke(self, ctx):
+        from odevio import api
+
+        try:
+            return super().invoke(ctx)
+        except api.NotFoundException:
+            from odevio.settings import console
+            console.print("This key is invalid or you do not have access to it.")
+
+
+@click.group(cls=_KeyCheckedGroup)
 def screenshot():
     """ Take App Store screenshots from a simulator on an Odevio machine.
 
