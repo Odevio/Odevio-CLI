@@ -400,6 +400,74 @@ def _ls(base):
     console.print(table)
 
 
+@screenshot.command("visuals")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.option('--json', 'as_json', is_flag=True, help="Print the full props, to reuse them for the next card.")
+def visuals(key, as_json):
+    """ Shows the marketing visuals of the app with key \"KEY\": template, headline, colours and font.
+
+    \f
+    Read this before composing another card, so the set stays one campaign: reuse the background, font
+    and template of the cards already there.
+
+    Usage:
+    """
+    base = _app_base(key)
+    if base:
+        _visuals(base, as_json)
+
+
+def _template_name(jsx_source):
+    """ Which shipped template a visual was built from, or "custom" when it was written by hand. """
+    import os
+
+    from odevio.commands.skill import skill_source
+
+    folder = os.path.join(skill_source(), "references", "templates")
+    for name in sorted(os.listdir(folder)):
+        with open(os.path.join(folder, name)) as fh:
+            if fh.read().strip() == (jsx_source or "").strip():
+                return name
+    return "custom"
+
+
+def _visuals(base, as_json):
+    import json
+
+    from rich.table import Table
+
+    from odevio import api
+    from odevio.settings import console
+
+    rows = []
+    for entry in api.get(f"{base}/screenshot-list/") or []:
+        if not entry.get("visual_id"):
+            continue
+        visual = api.get(f"/marketing-visuals/{entry['visual_id']}/")
+        if not visual:
+            continue
+        rows.append({
+            "screenshot_id": entry["id"],
+            "approved": bool(visual.get("approved")),
+            "template": _template_name(visual.get("jsx_source")),
+            "font": (visual.get("font") or {}).get("family"),
+            "props": visual.get("props") or {},
+        })
+    if as_json:
+        click.echo(json.dumps(rows, indent=2, ensure_ascii=False))
+        return
+    if not rows:
+        console.print("No marketing visuals yet.")
+        return
+    table = Table("id", "state", "template", "headline", "background", "font")
+    for row in rows:
+        props = row["props"]
+        table.add_row(f"#{row['screenshot_id']}", "approved" if row["approved"] else "draft", row["template"],
+                      str(props.get("headline", "")), str(props.get("background", "")), row["font"] or "—")
+    console.print(table)
+
+
 @screenshot.command("visual")
 @login_required_warning_decorator
 @click.argument('key', required=False)
@@ -572,6 +640,17 @@ def listing_screenshots(key):
     base = _listing_base(key)
     if base:
         _ls(base)
+
+
+@listing.command("visuals")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.option('--json', 'as_json', is_flag=True, help="Print the full props, to reuse them for the next card.")
+def listing_visuals(key, as_json):
+    """ Shows the marketing visuals of the store listing \"KEY\": template, headline, colours and font. """
+    base = _listing_base(key)
+    if base:
+        _visuals(base, as_json)
 
 
 @listing.command("upload")
