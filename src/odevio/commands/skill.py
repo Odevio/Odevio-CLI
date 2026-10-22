@@ -28,7 +28,20 @@ PRE_APPROVED_COMMANDS = [
     # Composing/approving marketing visuals is reversible and never reaches Apple on its own — the
     # image only ships once the raw is pushed, which stays a held-back command.
     "odevio screenshot visual",
+    "odevio screenshot visuals",
+    "odevio screenshot preview",
     "odevio screenshot approve-visual",
+    "odevio screenshot upload",
+    # A store listing holds the same work before any app exists; sharing and linking it stay asked.
+    "odevio screenshot listing ls",
+    "odevio screenshot listing create",
+    "odevio screenshot listing screenshots",
+    "odevio screenshot listing upload",
+    "odevio screenshot listing visual",
+    "odevio screenshot listing visuals",
+    "odevio screenshot listing preview",
+    "odevio screenshot listing approve-visual",
+    "odevio screenshot listing open",
     "odevio team ls",
     # The project's own toolchain, for checking the code before spending a build on it.
     "flutter pub get",
@@ -55,6 +68,7 @@ HELP_COMMANDS = [
     "odevio build --help",
     "odevio privacy --help",
     "odevio screenshot --help",
+    "odevio screenshot listing --help",
     "odevio skill --help",
     "odevio team --help",
     "odevio user --help",
