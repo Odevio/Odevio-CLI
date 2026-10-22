@@ -41,40 +41,50 @@ def read_config():
     }
 
 
+def write_config(parser):
+    """ Writes config.ini in one step, creating its folder if needed.
+
+    Several odevio commands can run at once (an agent polling a render while it runs another), so the
+    file is replaced rather than truncated and rewritten: a reader never sees it empty.
+    """
+    import tempfile
+
+    config_directory = click.get_app_dir(APP_NAME)
+    if not os.path.exists(config_directory):
+        os.makedirs(config_directory)
+        console.print(f"Created a configuration file for Odevio : {get_config_path()}")
+    handle, temporary = tempfile.mkstemp(dir=config_directory, prefix=".config-", suffix=".ini")
+    try:
+        with os.fdopen(handle, "w") as f:
+            parser.write(f)
+        os.replace(temporary, get_config_path())
+    except BaseException:
+        os.unlink(temporary)
+        raise
+
+
 def write_jwt_token(token):
     """ Writes the JWT token to the config.ini file.
 
     creates the folder where the config lies and the config.ini file if necessary.
     """
-    config_directory = click.get_app_dir(APP_NAME)
-    config_file = os.path.join(config_directory, 'config.ini')
     parser = ConfigParser()
-    parser.read(config_file)
+    parser.read(get_config_path())
 
     if not parser.has_section("auth"):
         parser.add_section("auth")
     parser.set("auth", "JWT_TOKEN", token)
-
-    if not os.path.exists(config_directory):
-        os.makedirs(config_directory)
-        console.print(f"Created a configuration file for Odevio : {config_file}")
-
-    with open(config_file, 'w') as f:
-        parser.write(f)
+    write_config(parser)
 
 
 def delete_jwt_token():
     """ Deletes the JWT token from the config.ini file."""
-    config_directory = click.get_app_dir(APP_NAME)
-    config_file = os.path.join(config_directory, 'config.ini')
     parser = ConfigParser()
-    parser.read(config_file)
+    parser.read(get_config_path())
 
     if parser.has_section("auth") and parser.has_option("auth", "jwt_token"):
         parser.remove_option("auth", "jwt_token")
-
-        with open(config_file, 'w') as f:
-            parser.write(f)
+        write_config(parser)
 
 
 def get_jwt_token():

@@ -10,7 +10,7 @@ import threading
 import qrcode
 import requests
 
-from odevio.settings import console, get_api_key, get_jwt_token, get_config_path, APP_NAME
+from odevio.settings import console, get_api_key, get_jwt_token, get_config_path, write_config
 
 import tempfile
 from fnmatch import fnmatch
@@ -391,7 +391,4 @@ def check_new_version():
         if not parser.has_section("update"):
             parser.add_section("update")
         parser.set("update", "last_update_check", str(time.time()))
-        if not os.path.exists(click.get_app_dir(APP_NAME)):
-            os.makedirs(click.get_app_dir(APP_NAME))
-        with open(get_config_path(), "w") as fp:
-            parser.write(fp)
+        write_config(parser)
