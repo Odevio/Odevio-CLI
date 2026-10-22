@@ -3,6 +3,12 @@ Unreleased:
     - Added `odevio screenshot visuals` to read the marketing cards already made, so a new one matches the set
     - The skill makes App Store screenshots before any build or Apple account, through a store listing
     - A wrong or inaccessible key now gets a clear message instead of an error trace in the screenshot commands
+    - Added `odevio screenshot preview` to render a marketing visual and save the PNG before approving it
+    - `visual` takes a shipped template by name with `--template classic|editorial|hero`
+    - `approve-visual` takes several screenshots at once and can save the approved PNGs with `--out-dir`
+    - Screenshot lists show each upload's file name
+    - Commands run by an agent never stop on a sign-in prompt; they fail with a clear message instead
+    - A new version is announced instead of being installed in the middle of a command
 
 v1.3.1:
     - Removed the deprecation notice and the retired Discord links
