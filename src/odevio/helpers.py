@@ -5,6 +5,7 @@ from configparser import ConfigParser
 from functools import update_wrapper
 
 import click
+from rich.console import Console
 import sys
 import threading
 import qrcode
@@ -350,6 +351,10 @@ def handle_error(key):
         console.print(f"[link]{response['url']}[/link]")
 
 
+def _version_tuple(version):
+    return tuple(int(part) if part.isdigit() else 0 for part in version.split("."))
+
+
 def check_new_version():
     config_file = get_config_path()
     parser = ConfigParser()
@@ -367,23 +372,19 @@ def check_new_version():
             # Python < 3.8
             import importlib_metadata as metadata
         current_version = metadata.version("odevio")
-        if current_version and current_version != latest_version:
-            import subprocess
-            console.print("A new version of Odevio is available! Updating to make sure you've got the latest features...")
-            try:
-                subprocess.run("pip install -U odevio", stdout=subprocess.PIPE, text=True, shell=True)
-            except Exception:
-                console.print("Could not update odevio using pip install -U odevio. Please update it yourself so you can have all the latest features and fixes.")
-            else:
-                # A skill installed as a copy does not follow the upgrade, and since the upgrade
-                # happens on its own there is no moment when anyone would think to reinstall it. It
-                # would go on answering with the previous version's instructions indefinitely.
-                try:
-                    from odevio.commands.skill import refresh_copied_skill
-                    if refresh_copied_skill():
-                        console.print("The Odevio skill was updated as well.")
-                except Exception:
-                    console.print("The Odevio skill could not be updated. Run 'odevio skill install --force' to bring it up to date.")
+        if current_version and _version_tuple(latest_version) > _version_tuple(current_version):
+            # Announced, never installed: upgrading under a running command, or an agent's, is not ours to do.
+            # Stderr keeps the notice out of output an agent parses, such as --json.
+            Console(stderr=True).print(f"A new version of Odevio ({latest_version}) is available. "
+                                       "Update with: pip install -U odevio")
+        # A copied skill does not follow an upgrade: bring it in step once the user has upgraded.
+        try:
+            from odevio.commands.skill import refresh_copied_skill
+            if refresh_copied_skill():
+                Console(stderr=True).print("The Odevio skill was updated to match this version.")
+        except Exception:
+            Console(stderr=True).print("The Odevio skill could not be updated. "
+                                       "Run 'odevio skill install --force' to bring it up to date.")
     except Exception:
         # Ignore, no need to crash if we can't check for new updates
         pass
