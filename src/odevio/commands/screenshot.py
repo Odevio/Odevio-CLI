@@ -569,9 +569,10 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
 @screenshot.command("approve-visual")
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.argument('screenshot_id', type=int)
-def approve_visual(key, screenshot_id):
-    """ Renders and approves the marketing visual for screenshot SCREENSHOT_ID of the app \"KEY\".
+@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+@click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
+def approve_visual(key, screenshot_ids, out_dir):
+    """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the app \"KEY\".
 
     \f
     Approving renders the submission PNG and marks the visual as the image that replaces the raw
@@ -581,38 +582,99 @@ def approve_visual(key, screenshot_id):
     """
     base = _app_base(key)
     if base:
-        _approve_visual(base, screenshot_id, "odevio screenshot visual")
+        _render_visuals(base, screenshot_ids, True, out_dir, "odevio screenshot visual")
 
 
-def _approve_visual(base, screenshot_id, visual_command):
+@screenshot.command("preview")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+@click.option('--out-dir', type=click.Path(file_okay=False), default=".", show_default=True,
+              help="Folder the preview PNGs are saved in.")
+def preview(key, screenshot_ids, out_dir):
+    """ Renders the marketing visuals of SCREENSHOT_IDS of the app \"KEY\" as drafts and saves the PNGs.
+
+    \f
+    The exact image approval would produce, without approving it: look at it before asking the user.
+
+    Usage:
+    """
+    base = _app_base(key)
+    if base:
+        _render_visuals(base, screenshot_ids, False, out_dir, "odevio screenshot visual")
+
+
+def _wait_for_render(visual_id, task_id):
+    """ Poll a render task until it settles; None if it never does. """
     import time
 
     from odevio import api
+
+    # Long enough for a capture that hangs, is killed and is retried once on the server.
+    for _ in range(100):
+        time.sleep(1.5)
+        status = api.get(f"/marketing-visuals/{visual_id}/approve-status/{task_id}/") or {}
+        if status.get("state") in ("SUCCESS", "FAILURE"):
+            return status
+    return None
+
+
+def _save_png(visual_id, out_dir, name):
+    """ Download a visual's last render into OUT_DIR, returning the file written. """
+    import os
+    from urllib.parse import urlparse
+
+    import requests
+
+    from odevio import api
+    from odevio.settings import API_BASE_URL
+
+    url = (api.get(f"/marketing-visuals/{visual_id}/") or {}).get("rendered_png")
+    if not url:
+        return None
+    response = requests.get(API_BASE_URL + urlparse(url).path,
+                            headers={"Authorization": api.get_authorization_header()})
+    response.raise_for_status()
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, name)
+    with open(path, "wb") as handle:
+        handle.write(response.content)
+    return path
+
+
+def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command):
+    """ Render the visuals of these screenshots, as drafts or approved, saving the PNGs when asked. """
+    from odevio import api
     from odevio.settings import console
 
-    entry = _screenshot_entry(base, screenshot_id)
-    if entry is None or not entry.get("visual_id"):
-        console.print(f"[warning]No marketing visual on #{screenshot_id}.[/warning] "
-                      f"Create one with '{visual_command}' first.")
-        return
-    visual_id = entry["visual_id"]
-    started = api.post(f"/marketing-visuals/{visual_id}/approve/", json_data={})
-    if not started:
-        return
-    task_id = started.get("task_id")
-    console.print("Rendering the visual…")
-    for _ in range(40):
-        time.sleep(1.5)
-        status = api.get(f"/marketing-visuals/{visual_id}/approve-status/{task_id}/")
-        state = (status or {}).get("state")
-        if state == "SUCCESS":
+    entries = {row.get("id"): row for row in api.get(f"{base}/screenshot-list/") or []}
+    for screenshot_id in screenshot_ids:
+        entry = entries.get(screenshot_id)
+        if entry is None or not entry.get("visual_id"):
+            console.print(f"[warning]No marketing visual on #{screenshot_id}.[/warning] "
+                          f"Create one with '{visual_command}' first.")
+            continue
+        visual_id = entry["visual_id"]
+        started = api.post(f"/marketing-visuals/{visual_id}/{'approve' if approve else 'render'}/", json_data={})
+        if not started:
+            continue
+        console.print(f"Rendering #{screenshot_id}…")
+        status = _wait_for_render(visual_id, started.get("task_id"))
+        if status is None:
+            console.print(f"[warning]#{screenshot_id}: render timed out.[/warning] Try again.")
+            continue
+        if status["state"] == "FAILURE":
+            console.print(f"[warning]#{screenshot_id}: render failed:[/warning] {status.get('error', 'unknown error')}")
+            continue
+        if approve:
             console.print(f"[success]Approved the marketing visual for #{screenshot_id}.[/success] "
                           "It will replace the raw screenshot on the next push.")
-            return
-        if state == "FAILURE":
-            console.print(f"[warning]Render failed:[/warning] {(status or {}).get('error', 'unknown error')}")
-            return
-    console.print("[warning]Render timed out.[/warning] Try again.")
+        else:
+            console.print(f"[success]Rendered a draft of #{screenshot_id}.[/success] Not approved: nothing ships yet.")
+        if out_dir:
+            path = _save_png(visual_id, out_dir, f"{'approved' if approve else 'preview'}-{screenshot_id}.png")
+            if path:
+                console.print(f"Saved to {path}")
 
 
 @screenshot.group()
@@ -724,10 +786,22 @@ def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec
 @listing.command("approve-visual")
 @login_required_warning_decorator
 @click.argument('key')
-@click.argument('screenshot_id', type=int)
-def listing_approve_visual(key, screenshot_id):
-    """ Renders and approves the marketing visual for screenshot SCREENSHOT_ID of the listing \"KEY\". """
-    _approve_visual(f"/store-listings/{key}", screenshot_id, "odevio screenshot listing visual")
+@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+@click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
+def listing_approve_visual(key, screenshot_ids, out_dir):
+    """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the listing \"KEY\". """
+    _render_visuals(f"/store-listings/{key}", screenshot_ids, True, out_dir, "odevio screenshot listing visual")
+
+
+@listing.command("preview")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+@click.option('--out-dir', type=click.Path(file_okay=False), default=".", show_default=True,
+              help="Folder the preview PNGs are saved in.")
+def listing_preview(key, screenshot_ids, out_dir):
+    """ Renders the marketing visuals of SCREENSHOT_IDS of the listing \"KEY\" as drafts and saves the PNGs. """
+    _render_visuals(f"/store-listings/{key}", screenshot_ids, False, out_dir, "odevio screenshot listing visual")
 
 
 @listing.command("share")
