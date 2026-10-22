@@ -237,6 +237,13 @@ STORE_SIZES = {
     "ipad": (2048, 2732),
 }
 
+# The layouts shipped with the skill, by the name an agent or a user asks for.
+TEMPLATES = {
+    "classic": "appstore_card.jsx",
+    "editorial": "appstore_card_editorial.jsx",
+    "hero": "appstore_card_hero.jsx",
+}
+
 
 def _app_base(key):
     """ API base of an app's screenshots, asking which app when no key is given. """
@@ -485,12 +492,14 @@ def _visuals(base, as_json):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.argument('screenshot_id', type=int)
-@click.option('--jsx-file', required=True, type=click.Path(exists=True, dir_okay=False),
-              help="React component (default export) for the visual.")
+@click.option('--template', type=click.Choice(list(TEMPLATES)),
+              help="A shipped layout: classic, editorial or hero. Or give your own with --jsx-file.")
+@click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
+              help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
               help="JSON props for the component.")
 @click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
-def visual(key, screenshot_id, jsx_file, props_file, font_spec):
+def visual(key, screenshot_id, template, jsx_file, props_file, font_spec):
     """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the app \"KEY\".
 
     \f
@@ -501,14 +510,29 @@ def visual(key, screenshot_id, jsx_file, props_file, font_spec):
     """
     base = _app_base(key)
     if base:
-        _visual(base, screenshot_id, jsx_file, props_file, font_spec, "odevio screenshot ls")
+        _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls")
 
 
-def _visual(base, screenshot_id, jsx_file, props_file, font_spec, ls_command):
+def _template_file(template, jsx_file):
+    """ The JSX to send: a shipped template by name, or the agent's own file. """
+    import os
+
+    from odevio.commands.skill import skill_source
+
+    if bool(template) == bool(jsx_file):
+        raise click.UsageError("Give either --template or --jsx-file.")
+    if jsx_file:
+        return jsx_file
+    return os.path.join(skill_source(), "references", "templates", TEMPLATES[template])
+
+
+def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command):
     import json
 
     from odevio import api
     from odevio.settings import console
+
+    jsx_file = _template_file(template, jsx_file)
 
     entry = _screenshot_entry(base, screenshot_id)
     if entry is None:
@@ -684,14 +708,16 @@ def listing_upload(key, files, size):
 @login_required_warning_decorator
 @click.argument('key')
 @click.argument('screenshot_id', type=int)
-@click.option('--jsx-file', required=True, type=click.Path(exists=True, dir_okay=False),
-              help="React component (default export) for the visual.")
+@click.option('--template', type=click.Choice(list(TEMPLATES)),
+              help="A shipped layout: classic, editorial or hero. Or give your own with --jsx-file.")
+@click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
+              help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
               help="JSON props for the component.")
 @click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
-def listing_visual(key, screenshot_id, jsx_file, props_file, font_spec):
+def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec):
     """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the listing \"KEY\". """
-    _visual(f"/store-listings/{key}", screenshot_id, jsx_file, props_file, font_spec,
+    _visual(f"/store-listings/{key}", screenshot_id, template, jsx_file, props_file, font_spec,
             f"odevio screenshot listing screenshots {key}")
 
 
