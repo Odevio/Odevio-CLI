@@ -48,11 +48,16 @@ class _KeyCheckedGroup(click.Group):
 
 @click.group(cls=_KeyCheckedGroup)
 def screenshot():
-    """ Take App Store screenshots from a simulator on an Odevio machine.
+    """ App Store screenshots: add them, compose marketing visuals over them, send them to Apple.
 
     \f
-    The App Store needs screenshots, and taking them normally means owning an iPhone. These commands run
-    the app in a simulator on one of our Macs instead, and photograph it there.
+    Screenshots belong to an app, or to a store listing (see :code:`odevio screenshot listing`) when there
+    is no app or Apple account yet. Upload raw captures or finished pictures, compose a marketing visual
+    over a capture with :code:`visual`, look at it with :code:`preview`, approve it, and
+    :code:`push` sends the set to Apple.
+
+    Without an iPhone at hand, :code:`start` and :code:`capture` run the app in a simulator on one of
+    our Macs and photograph it there.
 
     The picture is taken from the simulator itself rather than from the remote desktop, so it comes out at
     exactly the pixel size Apple asks for, with no window borders and no rescaling.
@@ -274,16 +279,16 @@ def _listing_base(key):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.option('--file', 'files', multiple=True, required=True, type=click.Path(exists=True, dir_okay=False),
-              help="A finished image to add. Repeat for several.")
+              help="An image to add: a raw capture or a finished picture. Repeat for several.")
 @click.option('--size', type=click.Choice(list(STORE_SIZES)),
               help="Which slot it belongs to. Read from the image itself when it matches one exactly.")
 def upload(key, files, size):
-    """ Adds finished images to the App Store screenshots of the app with key \"KEY\".
+    """ Adds images to the App Store screenshots of the app with key \"KEY\".
 
     \f
-    For pictures that are already composed — exported from a design tool, or produced by
-    :code:`odevio screenshot compose`. What is added here appears in the editor alongside the rest and
-    is sent to Apple by :code:`odevio screenshot push`.
+    Raw captures from a phone or a simulator, to compose marketing visuals on, or pictures already
+    finished in a design tool. What is added here appears in the editor alongside the rest and is sent
+    to Apple by :code:`odevio screenshot push`.
 
     An image already at one of Apple's exact sizes keeps its pixels untouched. Anything else is scaled
     to the slot it is put in, which is what lets a picture App Store Connect refuses go through.
@@ -756,11 +761,11 @@ def listing_visuals(key, as_json):
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.option('--file', 'files', multiple=True, required=True, type=click.Path(exists=True, dir_okay=False),
-              help="A finished image to add. Repeat for several.")
+              help="An image to add: a raw capture or a finished picture. Repeat for several.")
 @click.option('--size', type=click.Choice(list(STORE_SIZES)),
               help="Which slot it belongs to. Read from the image itself when it matches one exactly.")
 def listing_upload(key, files, size):
-    """ Adds finished images to the store listing \"KEY\", resized to Apple's exact slot size. """
+    """ Adds images to the store listing \"KEY\" — raw captures or finished pictures — at Apple's exact slot size. """
     base = _listing_base(key)
     if base:
         _upload(base, files, size)
