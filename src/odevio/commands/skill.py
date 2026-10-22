@@ -156,8 +156,8 @@ def refresh_copied_skill():
     """ Bring a copied skill back in step with the Odevio that was just upgraded.
 
     A linked skill follows the upgrade by itself. A copied one does not: it keeps answering with last
-    month's instructions, and nothing the assistant does says so. Since Odevio updates itself in the
-    background, there is no moment when the user would think to reinstall - so it is done for them.
+    month's instructions, and nothing the assistant does says so. After an upgrade there is no moment
+    when the user would think to reinstall - so it is done for them.
 
     Returns the version copied, or None when there was nothing to do.
     """
@@ -175,7 +175,7 @@ def refresh_copied_skill():
             if handle.read().strip() == current:
                 return None
     except OSError:
-        pass  # No stamp: installed before stamping existed, so it is certainly behind.
+        return None  # No stamp: not a copy this command made, so it may be someone's own — leave it.
 
     shutil.rmtree(destination)
     shutil.copytree(skill_source(), destination)
@@ -363,7 +363,7 @@ def install(project, directory, copy_files, link, force, no_permissions, agent, 
     link, by contrast, is obvious at once.
 
     :code:`--copy` takes a copy instead, which survives the Python environment being moved or removed.
-    A copy left behind by an upgrade is refreshed automatically the next time Odevio updates itself, so
+    A copy left behind by an upgrade is refreshed automatically the next time Odevio runs after it, so
     it does not silently rot either. :code:`--project` always copies, since a link would be meaningless
     to anyone else who clones the repository.
 
