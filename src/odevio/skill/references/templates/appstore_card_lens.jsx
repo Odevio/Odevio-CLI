@@ -13,22 +13,19 @@
 // with a little margin; never cut through a line of text. Without `focus`, DEFAULT_FOCUS is used
 // (the band under a standard iOS large title, where the first rows of a list usually sit).
 //
-// The inset's position and size on the card are LOCKED; only the zone shown changes. The image is
-// scaled so the zone fills the inset's HEIGHT (image height = INSET_H / focus.height) and centred
-// horizontally, so it is wider than the inset and its far sides are cropped. If the zone is so tall that
-// the scaled image would be narrower than the inset, the scale is raised to fill the width and the zone
-// stays centred vertically (MIN_ZOOM, computed for the 6.9" aspect 1320×2868). The scale is also
-// capped (MAX_ZOOM = MIN_ZOOM × 1.15): a short zone (one tight row) is shown with a little context
-// above and below instead of being enlarged until its left and right ends are cropped away. So the
-// inset always shows (almost) the full width of the screen, as `focus` promises.
+// The inset's position and size on the card are LOCKED; only the zone shown changes. The screenshot is
+// scaled to exactly the inset's width (MIN_ZOOM = MAX_ZOOM, computed for the 6.9" aspect 1320×2868), so
+// the inset always shows the full width of the screen and never cuts a value off at its edges. It shows
+// a band about 17% of the screen's height, centred on the middle of `focus`: a shorter zone gets some
+// context above and below, a taller one is cut to that band.
 //
 // Invariants: the frame box is sized by WIDTH only; the phone screenshot is the FIRST <img>; the inset
 // is absolutely positioned inside the frame box, so it never changes the box's size and always sits
 // below the text. The phone band is `flex: 1 0 auto`: tall copy pushes the phone down.
 //
-// Space follows the text: the text block sits a fixed TEXT_GAP above the phone, and the phone is
-// anchored to the bottom with a minimum bleed. Short copy -> the free space goes ABOVE the text (a top
-// spacer absorbs it), never into a hole between text and phone; tall copy -> the spacer collapses and
+// Space follows the text: the phone is anchored to the bottom with a minimum bleed, and the free space
+// above it is shared between the top of the card and the gap under the text (TOP_SHARE : GAP_SHARE), so
+// short copy sits balanced instead of leaving the top empty; tall copy -> both collapse to TEXT_GAP and
 // the phone is pushed down and cropped further. The headline size also follows the copy (tiers).
 //
 // SERVER-INJECTED (never set): _source_image, _frame_image, _frame_window.
@@ -62,7 +59,7 @@ export default function AppStoreCardLens(props) {
   const INSET_RADIUS = "4cqw";
   const ASPECT = 1320 / 2868; // screenshot width / height (6.9")
   const MIN_ZOOM = (INSET_W / (ASPECT * INSET_H)) * 100; // image height %, below which sides show
-  const MAX_ZOOM = MIN_ZOOM * 1.15; // above this, the row's ends (icon, price) would be cropped
+  const MAX_ZOOM = MIN_ZOOM; // any further and the screen's left and right edges would be cropped
   const DEFAULT_FOCUS = { top: 0.148, height: 0.175 };
   const SUBHEAD_SIZE = "4.3cqw";
   const EYEBROW_SIZE = "3.1cqw";
@@ -80,7 +77,10 @@ export default function AppStoreCardLens(props) {
   const tier = headlineLines.length >= 3 || longestLine > 26 ? 3 : headlineLines.length === 2 || longestLine > 14 ? 2 : 1;
   const HEADLINE_SIZE = tier === 1 ? "12cqw" : tier === 2 ? "10.4cqw" : "9.2cqw"; // 1 / 2 / 3 lines
 
-  const spacer = { flex: "1 0 0", minHeight: 0 };
+  const TOP_SHARE = 1;
+  const GAP_SHARE = 0.6;
+  const spacer = { flex: `${TOP_SHARE} 0 0`, minHeight: 0 };
+  const gapSpacer = { flex: `${GAP_SHARE} 0 0`, minHeight: 0 };
 
   const root = {
     position: "relative",
@@ -203,6 +203,7 @@ export default function AppStoreCardLens(props) {
         <h1 style={headlineStyle}>{headline}</h1>
         {subhead ? <p style={subheadStyle}>{subhead}</p> : null}
       </div>
+      <div style={gapSpacer} />
       <div style={phoneWrap}>
         <div style={frameBox}>
           {_source_image ? <img src={_source_image} alt="" style={screenStyle} /> : null}

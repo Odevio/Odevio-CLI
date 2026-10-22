@@ -75,7 +75,9 @@ A props file is flat JSON — only your own props, never the `_`-prefixed ones:
 bottom in pixels by the image's height: `top = y_top / H`, `height = (y_bottom − y_top) / H`. Take whole
 elements (a row, a card) with a little margin, never a line of text cut in two. The inset shows the
 screenshot as framed in the editor, so if it has been zoomed or moved the fractions shift: always
-`preview`, look at the inset, and adjust until it shows what you meant.
+`preview`, look at the inset, and adjust until it shows what you meant. The inset always spans the
+full width of the screen and shows a band about 17% of its height, centred on the zone: pick one or
+two rows, not a whole section.
 
 `headline` honours `\n` — the templates render it with `white-space: pre-line`, so that is how you control
 where the line breaks instead of leaving it to the box width.

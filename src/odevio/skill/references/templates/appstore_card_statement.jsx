@@ -11,9 +11,9 @@
 // Geometry is LOCKED; you fill words, colours and a font. The phone band is `flex: 1 0 auto`: long
 // copy pushes the phone down, it never overlaps the type.
 //
-// Space follows the text: the text block sits a fixed TEXT_GAP above the phone, and the phone is
-// anchored to the bottom with a minimum bleed. Short copy -> the free space goes ABOVE the text (a top
-// spacer absorbs it), never into a hole between text and phone; tall copy -> the spacer collapses and
+// Space follows the text: the phone is anchored to the bottom with a minimum bleed, and the free space
+// above it is shared between the top of the card and the gap under the text (TOP_SHARE : GAP_SHARE), so
+// short copy sits balanced instead of leaving the top empty; tall copy -> both collapse to TEXT_GAP and
 // the phone is pushed down and cropped further. The headline size also follows the copy (tiers).
 //
 // SERVER-INJECTED (never set): _source_image, _frame_image, _frame_window.
@@ -54,7 +54,10 @@ export default function AppStoreCardStatement(props) {
   const hit = HEADLINE_TIERS.find(([max]) => longest <= max);
   const headlineSize = `${hit ? hit[1] : HEADLINE_FLOOR}cqw`;
 
-  const spacer = { flex: "1 0 0", minHeight: 0 };
+  const TOP_SHARE = 1;
+  const GAP_SHARE = 0.6;
+  const spacer = { flex: `${TOP_SHARE} 0 0`, minHeight: 0 };
+  const gapSpacer = { flex: `${GAP_SHARE} 0 0`, minHeight: 0 };
 
   const root = {
     position: "relative",
@@ -154,6 +157,7 @@ export default function AppStoreCardStatement(props) {
         <h1 style={headlineStyle}>{headline}</h1>
         {subhead ? <p style={subheadStyle}>{subhead}</p> : null}
       </div>
+      <div style={gapSpacer} />
       <div style={phoneWrap}>
         <div style={frameBox}>
           {_source_image ? <img src={_source_image} alt="" style={screenStyle} /> : null}
