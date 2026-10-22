@@ -52,7 +52,8 @@ def write_config(parser):
     config_directory = click.get_app_dir(APP_NAME)
     if not os.path.exists(config_directory):
         os.makedirs(config_directory)
-        console.print(f"Created a configuration file for Odevio : {get_config_path()}")
+        # Stderr: the first command on a fresh machine may be one whose output is parsed, such as --json.
+        Console(stderr=True).print(f"Created a configuration file for Odevio : {get_config_path()}")
     handle, temporary = tempfile.mkstemp(dir=config_directory, prefix=".config-", suffix=".ini")
     try:
         with os.fdopen(handle, "w") as f:

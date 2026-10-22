@@ -356,27 +356,25 @@ def _version_tuple(version):
 
 
 def check_new_version():
-    config_file = get_config_path()
     parser = ConfigParser()
-    parser.read(config_file)
+    parser.read(get_config_path())
+    if parser.has_section("update") and parser.getfloat("update", "last_update_check", fallback=0) > (time.time()-3600):
+        return
     try:
-        if parser.has_section("update") and parser.getfloat("update", "last_update_check", fallback=0) > (time.time()-3600):
-            return
-        response = requests.get("https://pypi.org/pypi/odevio/json")
-        if response.status_code != 200:
-            return
-        latest_version = response.json()["info"]["version"]
-        try:
-            from importlib import metadata
-        except ImportError:
-            # Python < 3.8
-            import importlib_metadata as metadata
-        current_version = metadata.version("odevio")
-        if current_version and _version_tuple(latest_version) > _version_tuple(current_version):
-            # Announced, never installed: upgrading under a running command, or an agent's, is not ours to do.
-            # Stderr keeps the notice out of output an agent parses, such as --json.
-            Console(stderr=True).print(f"A new version of Odevio ({latest_version}) is available. "
-                                       "Update with: pip install -U odevio")
+        response = requests.get("https://pypi.org/pypi/odevio/json", timeout=5)
+        if response.status_code == 200:
+            latest_version = response.json()["info"]["version"]
+            try:
+                from importlib import metadata
+            except ImportError:
+                # Python < 3.8
+                import importlib_metadata as metadata
+            current_version = metadata.version("odevio")
+            if current_version and _version_tuple(latest_version) > _version_tuple(current_version):
+                # Announced, never installed: upgrading under a running command, or an agent's, is not ours to do.
+                # Stderr keeps the notice out of output an agent parses, such as --json.
+                Console(stderr=True).print(f"A new version of Odevio ({latest_version}) is available. "
+                                           "Update with: pip install -U odevio")
         # A copied skill does not follow an upgrade: bring it in step once the user has upgraded.
         try:
             from odevio.commands.skill import refresh_copied_skill
@@ -388,8 +386,13 @@ def check_new_version():
     except Exception:
         # Ignore, no need to crash if we can't check for new updates
         pass
-    finally:
+    # Re-read just before writing: another command may have signed in or out during the network call.
+    try:
+        parser = ConfigParser()
+        parser.read(get_config_path())
         if not parser.has_section("update"):
             parser.add_section("update")
         parser.set("update", "last_update_check", str(time.time()))
         write_config(parser)
+    except OSError:
+        pass  # Another process holds the file (Windows); the check simply runs again next time.
