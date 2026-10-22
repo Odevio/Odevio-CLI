@@ -3,6 +3,7 @@
 #                                   #
 import datetime
 import json
+import sys
 import time
 
 import jwt
@@ -214,6 +215,10 @@ def get_authorization_header(email=None, password=None):
                 return f"JWT {token}"
         else:
             return f"JWT {token}"
+    if (email is None or password is None) and not sys.stdin.isatty():
+        # An agent or a script cannot answer a prompt: it would hang, or read "Aborted!" as the result.
+        raise ClickException("You are not signed in. Run 'odevio signin' in a terminal, "
+                             f"or set {API_KEY_ENV_VAR} to an API key from 'odevio apikey new'.")
     if email is None or password is None:
         console.print("If you already have an account, please enter your credentials and we will log you in :")
     if not email:
