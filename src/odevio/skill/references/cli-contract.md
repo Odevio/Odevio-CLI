@@ -6,8 +6,9 @@ exists because assuming otherwise produced a wrong result.
 ## Authentication is the one thing that can still block
 
 The CLI authenticates with a JWT token cached in its config file. It refreshes the token by itself while
-it is refreshable. **When there is no usable token, the CLI asks for an e-mail and a password — and that
-prompt lives in the shared authorization code, so any command can trigger it, not just `signin`.**
+it is refreshable. **When there is no usable token, any command — not just `signin` — stops. Without a
+terminal it fails with `You are not signed in. Run 'odevio signin' in a terminal…`; in a terminal it
+asks for an e-mail and a password.**
 
 Before running anything else, confirm a usable session:
 
@@ -16,13 +17,13 @@ COLUMNS=200 odevio profile
 ```
 
 If that returns the account details, a valid token is cached and every later command runs unattended. If
-it asks for credentials, stop immediately and tell the user to run `odevio signin` themselves. Never type
+it says they are not signed in, stop immediately and tell the user to run `odevio signin` themselves. Never type
 a password on their behalf, and never pass one on a command line — it lands in shell history and in the
 process list.
 
-If `ODEVIO_API_KEY` support has been added to the CLI, prefer it: it removes the config-file dependency
-and makes a mid-loop prompt impossible. Until then, treat the cached token as a prerequisite verified in
-preflight, not as something that can be fixed mid-run.
+When `ODEVIO_API_KEY` is set, the CLI uses that key instead of the cached token — no config file, no
+sign-in. Otherwise treat the cached token as a prerequisite verified in preflight, not as something
+that can be fixed mid-run.
 
 ## Why commands ask for approval, and what to do about it
 
@@ -153,8 +154,8 @@ a command or a plausible-sounding option.
 | `apple` | `ls`, `detail`, `add`, `edit`, `rm`, `link`, `unlink`, `refresh-devices` |
 | `app` | `ls`, `mk`, `rm`, `link`, `unlink`, `import`, `screenshots`, `store-status`, `set-metadata`, `categories`, `attach-build`, `check-submittable`, `submit` |
 | `privacy` | `scan` |
-| `screenshot` | `ls`, `visuals`, `visual`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture`, and the `listing` sub-group |
-| `screenshot listing` | `create`, `ls`, `screenshots`, `visuals`, `upload`, `visual`, `approve-visual`, `share`, `unshare`, `link`, `open` |
+| `screenshot` | `ls`, `visuals`, `visual`, `preview`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture`, and the `listing` sub-group |
+| `screenshot listing` | `create`, `ls`, `screenshots`, `visuals`, `upload`, `visual`, `preview`, `approve-visual`, `share`, `unshare`, `link`, `open` |
 | `team` | — |
 
 App keys and store-listing keys are separate and can be the same string. The plain `screenshot` commands

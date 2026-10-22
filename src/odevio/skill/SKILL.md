@@ -56,6 +56,11 @@ question live in `references/voice.md`. Read it before you act - it is not optio
 
 # Step 0 — What do they actually want
 
+**Only App Store screenshots?** When that is all they ask for — "make my App Store screenshots",
+marketing screenshots, with or without a build — this file's Steps 1 to 4 do not apply: no Flutter
+project, no Odevio app and no Apple account are needed. Run `odevio profile` for the session, then go
+straight to `references/marketing-visuals.md` (and `design-directions.md` when composing).
+
 Their goal decides the kind of build, whether Apple's side needs setting up at all, and what "done" means. It
 is the one thing you cannot read from the project.
 
@@ -150,7 +155,7 @@ rummaging. Two rules keep it short:
 | 1   | `odevio profile` — is the CLI there, and is there a session?                                                                      | **blocking** — if the command is not found, offer `pip install odevio` and stop; do not install it yourself, as the wrong Python environment is worse than none. If it asks for credentials, see below |
 | 2   | `odevio app ls` — an app matching this project?                                                                                   | `references/first-time-setup.md`                                                                                                                                                                       |
 | 3   | `odevio apple ls` — any Apple account registered? Only needed when step 2 found nothing, since an app already carries its account | `references/first-time-setup.md`                                                                                                                                                                       |
-| 4   | `pubspec.yaml` and `lib/` present?                                                                                                | **blocking** — say they are not in a Flutter project and stop, rather than uploading an unrelated directory                                                                                            |
+| 4   | `pubspec.yaml` and `lib/` present? Not needed when the goal is only screenshots                                                   | **blocking** — say they are not in a Flutter project and stop, rather than uploading an unrelated directory                                                                                            |
 
 From `pubspec.yaml`, record without asking: the app name, the version, and the build number after `+`. Note
 any `.odevio` file, and the identifier already configured in the project.
@@ -158,8 +163,8 @@ any `.odevio` file, and the identifier already configured in the project.
 Match step 2 against that identifier. A match settles both the app and the Apple account, so neither is asked.
 Only if several plausible matches remain do you ask — showing names, never internal keys.
 
-**If step 1 asks for credentials**, this is one of the hand-overs. You cannot sign in for them: these
-commands prompt, and a prompt without a terminal dies on an error rather than working.
+**If step 1 says they are not signed in**, this is one of the hand-overs. You cannot sign in for them:
+signing in asks for a password in their terminal.
 
 > You need to sign in to Odevio first — run `odevio signin` in your terminal, it'll ask for your e-mail and
 > password. Tell me when it's done and I'll carry on from there.

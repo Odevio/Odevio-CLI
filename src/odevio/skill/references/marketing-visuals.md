@@ -15,14 +15,15 @@ covers the mechanics: the template, the props, the flow, and the safe grid.
 
 ## The templates
 
-`references/templates/` holds vetted, internally title-safe templates. Read the one you pick — the
-comments explain every prop — fill it through props, and keep its locked geometry (see below). Do not
-ask the user for JSX; start from a template rather than inventing framing and screenshot placement from
+Three vetted, internally title-safe templates ship with Odevio; the CLI takes them by name with
+`--template classic|editorial|hero`. Read the one you pick in `references/templates/` — the comments
+explain every prop — fill it through props, and keep its locked geometry (see below). Do not ask the
+user for JSX; start from a template rather than inventing framing and screenshot placement from
 scratch. `design-directions.md` covers *which* concept to choose.
 
 | Template | Name | When to use |
 |---|---|---|
-| `appstore_card.jsx` | fallback | the clean fallback — centred phone, headline above or below (`layout` prop) |
+| `appstore_card.jsx` | classic | the clean default — centred phone, headline above or below (`layout` prop) |
 | `appstore_card_editorial.jsx` | editorial | oversized headline as the composition, phone bleeding off the bottom |
 | `appstore_card_hero.jsx` | hero | one screen leads — phone bleeds off the top, headline centred below |
 
@@ -30,10 +31,8 @@ All three take the same server-injected assets; each has its own authored props 
 
 **If the user names a template, use that one.** They browse the three in the editor's *Templates* panel
 and ask for one by name — e.g. "use the editorial template for #149". A `#<n>` there is a **screenshot
-id** (the number on each shot in the editor), so map it straight to step 3's flow: template name → its
-file (fallback → `appstore_card.jsx`, editorial → `appstore_card_editorial.jsx`, hero →
-`appstore_card_hero.jsx`), and `#<n>` → that id, then compose with
-`odevio screenshot visual <app-key> <n> --jsx-file references/templates/<file> --props-file <file>`
+id** (the number on each shot in the editor), so map it straight to step 3's flow, then compose with
+`odevio screenshot visual <app-key> <n> --template <name> --props-file <file>`
 (or `odevio screenshot listing visual <listing-key> <n> …` when they work in a store listing).
 If you don't know the app or which screenshots exist, list them first with `odevio screenshot ls
 <app-key>` (`odevio screenshot listing screenshots <listing-key>` for a listing); don't stall asking the
@@ -71,9 +70,9 @@ where the line breaks instead of leaving it to the box width.
 The `_`-prefixed props arrive after your props, tied to the raw screenshot you targeted. Leaving them
 out of your props JSON is correct — writing them yourself is not.
 
-**Default to a props file on an existing template — and don't rebuild what a prop already does.** Point
-`--jsx-file` at one of `references/templates/*.jsx` and vary the `--props-file` from card to card. The
-spacing, type sizes, phone size and the arrangements are already solved; on the fallback card the
+**Default to a props file on an existing template — and don't rebuild what a prop already does.** Pass
+`--template <name>` and vary the `--props-file` from card to card. The
+spacing, type sizes, phone size and the arrangements are already solved; on the classic card the
 `layout` prop switches between `"headline-top"` and `"headline-bottom"`, and **headline-bottom already
 centres the text in the space under the phone.** So "centre the text below the phone" is a prop value —
 reach for the prop, not a geometry edit. Most requests are a prop or a different template; try that
@@ -81,7 +80,8 @@ first, every time.
 
 **A genuinely new layout is welcome — build it as a new template, deliberately, keeping three
 invariants.** If the user has an idea the three templates don't cover, make a new template file for it
-rather than mangling an existing one mid-conversation. These rules keep the frame and the screenshot from
+rather than mangling an existing one mid-conversation — write it in the user's working folder and pass
+it with `--jsx-file <path>`. These rules keep the frame and the screenshot from
 drifting apart — break one and the picture comes visibly undone, which is what went wrong when a card
 was hand-edited on the fly:
 
@@ -105,10 +105,52 @@ are dark-ground with white type. Change one and change the other.
 
 ## The screenshots are the user's own
 
-You compose cards from the screenshots the user has already put in the editor. **Odevio does not take
-screenshots for them** — do not offer to start a device, run the app and photograph screens. If a size
-has too few shots, ask the user to capture more on their own phone or simulator and drop them into the
-editor, then carry on. Never propose capturing screens on an Odevio machine.
+You compose cards over raw screenshots the user captured on their own phone or simulator. **Odevio does
+not take screenshots for them** — do not offer to start a device, run the app and photograph screens,
+and never propose capturing screens on an Odevio machine. If a size has too few shots, ask the user to
+capture more and carry on.
+
+Raw captures come in the same way as finished pictures — `upload` — or through the editor's *Add
+screenshots*. Each upload becomes a row with an id you compose on:
+
+```bash
+odevio screenshot listing upload <listing-key> --file <path> --file <path>
+```
+
+### Check every capture before composing
+
+Look at each image yourself first — you can open them. A card amplifies whatever is in the shot, and
+Apple wants the app as people use it. Before composing on a capture, check:
+
+- **it is this app.** A capture of a web page, another app or the home screen does not belong in the
+  set — leave it out and say which one and why.
+- **nothing that should not be public**: names, messages, notifications, e-mail addresses, phone
+  numbers, someone's photos.
+- **nothing in the way**: a tutorial bubble or a dimmed overlay, a debug button, test data (a list
+  called "Test", placeholder text).
+
+When something is wrong, ask for a clean capture of that screen — it takes them seconds on their phone.
+The only fix you make yourself is **cropping or reframing**; never repaint pixels or splice parts of the
+screen together: the card would show an app that does not exist.
+
+**One usable capture is enough.** Apple needs at least one screenshot. Make that one strong card, ship
+it, and offer more beats when they capture more screens — do not stretch one screen across several
+cards.
+
+### Sizes
+
+Apple asks for exact pixel sizes per slot; **6.9-inch is the one that matters** — Apple scales it down
+for every smaller iPhone.
+
+| Slot | Exact size | Captures that go there |
+|---|---|---|
+| `6.9` | 1320 × 2868 | iPhone 16/17 Pro Max as is; any other recent iPhone — 1170 × 2532 (12–14), 1179 × 2556 (14 Pro, 15, 16), 1206 × 2622 (16/17 Pro) — with `--size 6.9` |
+| `6.7` | 1290 × 2796 | iPhone 14 Plus / 15 Plus / Pro Max, as is |
+| `6.5` | 1242 × 2688 | older Max phones, as is |
+| `ipad` | 2048 × 2732 | 12.9-inch iPad |
+
+A capture that is not an exact size is refused without `--size`, with a message saying so. Scaling a
+recent iPhone capture to 6.9 changes its proportions by under 1% — invisible.
 
 ## When they already made the picture themselves
 
@@ -188,7 +230,8 @@ same screenshot ids and the same templates:
 | `odevio screenshot visuals <app-key> --json` | `odevio screenshot listing visuals <listing-key> --json` |
 | `odevio screenshot upload <app-key> --file …` | `odevio screenshot listing upload <listing-key> --file …` |
 | `odevio screenshot visual <app-key> <id> …` | `odevio screenshot listing visual <listing-key> <id> …` |
-| `odevio screenshot approve-visual <app-key> <id>` | `odevio screenshot listing approve-visual <listing-key> <id>` |
+| `odevio screenshot preview <app-key> <id> …` | `odevio screenshot listing preview <listing-key> <id> …` |
+| `odevio screenshot approve-visual <app-key> <id> …` | `odevio screenshot listing approve-visual <listing-key> <id> …` |
 | `odevio app screenshots <app-key>` (editor link) | `odevio screenshot listing open <listing-key>` |
 
 App keys and listing keys are separate and can be the same string, so a listing key only ever goes to a
@@ -237,11 +280,11 @@ Only ask an open question when there is genuinely nothing to go on — and even 
 built from the app's name rather than a blank prompt. Whatever you derive, the user still has the last
 word: getting a nod before rendering saves a round.
 
-**3. Author it.** Point `--jsx-file` at the chosen template in `references/templates/` **as-is**, write
-a props JSON for this card, and create the visual for that id:
+**3. Author it.** Pick the template by name, write a props JSON for this card in the user's working
+folder, and create the visual for that id:
 
 ```bash
-odevio screenshot visual <app-key> 150 --jsx-file references/templates/appstore_card.jsx --props-file <file>
+odevio screenshot visual <app-key> 150 --template classic --props-file <file>
 ```
 
 For most cards you write only the props file; a genuinely new layout is a new template (keeping the
@@ -250,15 +293,23 @@ the command or the props at them**. One visual per screenshot: running it again 
 in place and resets approval, so a stale image never ships. The command dry-compiles through the
 preview, so a broken component is caught here, not at approval.
 
-**4. Send them to the editor to look.** The editor is the judging surface — the same compiled HTML the
+**4. Look at it yourself, then send them to the editor.** Render a draft and open the PNG before saying
+anything:
+
+```bash
+odevio screenshot preview <app-key> 150 151 --out-dir <folder>
+```
+
+It writes `preview-<id>.png` — the exact image approval would produce — and approves nothing. Check the
+words are whole and inside the margins, the contrast, the crop of the screenshot, and the typography;
+fix what you see, then show them. The editor is their judging surface — the same compiled HTML the
 final PNG is made from, so what they see is what Apple gets.
 
 > Done — refresh the editor and it is under the 6.9-inch size. Tell me what to change.
 
-**5. Iterate on the preview, not on PNGs.** Every change is a **props** change — headline, subhead,
-colours, font, `layout`. Re-run the `visual` command with the new props file; they refresh. Work
-against the light HTML preview every round. Do **not** approve just to look — approval is for when it
-is right, and rendering a PNG each iteration is slow and pointless when the preview already matches.
+**5. Iterate on props.** Every change is a **props** change — headline, subhead, colours, font,
+`layout`. Re-run the `visual` command with the new props file, look at a fresh `preview`, then they
+refresh. Do **not** approve just to look — `preview` is for looking, approval is for when it is right.
 
 **Say what you will change before you render it.** When the user reacts or asks for something, put the
 new line or the new look in words first and get a nod, then re-render — do not silently push a new
@@ -270,10 +321,10 @@ tweak an existing template's geometry blindly to chase the look.
 **6. Approve only on an explicit yes:**
 
 ```bash
-odevio screenshot approve-visual <app-key> 150
+odevio screenshot approve-visual <app-key> 150 151 152
 ```
 
-This renders the exact-pixel submission PNG and marks the visual as the image that replaces the raw
+Several ids go in one call. This renders the exact-pixel submission PNG and marks the visual as the image that replaces the raw
 screenshot. **Nothing reaches Apple until `odevio screenshot push`** — approval is a local decision,
 push is the Apple gate, and push still asks every time. Say both facts when you offer to approve, so
 the boundary is clear.
@@ -287,7 +338,7 @@ The card looks generic in the bundled font and distinctive in the right one, so 
 whether they have a font in mind. Name a Google Font and the weights you need:
 
 ```bash
-odevio screenshot visual <app-key> 150 --jsx-file <file> --props-file <file> --font 'Inter:600,800'
+odevio screenshot visual <app-key> 150 --template classic --props-file <file> --font 'Inter:600,800'
 ```
 
 The font is fetched once and cached locally, embedded into the render so the editor and the final PNG
@@ -295,6 +346,17 @@ show it identically. Set the template's `fontFamily` prop to the same family nam
 uses it. One honest limit: **only Google Fonts resolve this way** — a font from anywhere else will not
 embed, and the card falls back to Inter. If they want a specific non-Google face, say so rather than
 letting it silently fall back.
+
+## Words in another language
+
+Write the card in the language of their store page, with that language's typography:
+
+- **typographic apostrophes and quotes** — `’`, `“ ”` — never the straight `'` and `"` of a keyboard;
+- **French**: a narrow no-break space (U+202F) before `;` `:` `!` `?` and inside `« »`; keep the user's
+  *tu* or *vous*;
+- **accents**: the embedded font carries the Latin alphabet with Western European accents (é, ñ, ü, ç).
+  Letters beyond it (ł, ő, ș…) and non-Latin scripts fall back to another font — check the preview, and
+  pick a family that suits the language when it shows.
 
 ## Coming back later
 

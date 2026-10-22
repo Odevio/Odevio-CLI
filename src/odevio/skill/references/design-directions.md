@@ -22,8 +22,8 @@ Visuals are React/HTML/CSS/SVG rendered to a PNG — no image generation, no 3D,
 
 ## Do not default to phone-on-gradient
 
-A centred phone on a gradient with a caption above is the **fallback**, not the default —
-`appstore_card.jsx` is exactly that fallback, and it is fine when a clean, safe result is all that is
+A centred phone on a gradient with a caption above is the **safe fallback**, not the default — the
+`classic` template is exactly that, and it is fine when a clean, safe result is all that is
 wanted. Before reaching for it, consider a real concept:
 
 - **Typographic** — a large, deliberate headline *is* the composition; the UI is a supporting detail.
@@ -96,7 +96,7 @@ editorial take, a hero take, a headline-bottom take) and let the user pick, rath
 generic layout. Then author it — a props file on one of the three templates — have them look in the
 editor, and refine.
 
-Reach the range first through the **three templates and the `layout` prop**: fallback (centred, headline
+Reach the range first through the **three templates and the `layout` prop**: classic (centred, headline
 top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top). Most
 directions are one of these plus the right words, colour and font — try that before anything else.
 
