@@ -11,7 +11,7 @@ import random
 
 import odevio.settings
 import odevio.api
-from tests import fixture, account_test, team_test, apple_test, app_test
+from tests import fixture, account_test, team_test, apple_test, app_test, listing_test
 from tests.odevio_test import OdevioTestFailed
 
 assert odevio.settings.API_BASE_URL != "https://odevio.com", "Do not run test on the production environment"
@@ -67,6 +67,36 @@ try:
     team_test.TestTeamList().test_correct(members=[fixture.username, fixture.username+"_other"])
     team_test.TestTeamRemoveUser().test_remove_admin()
     team_test.TestTeamDelete().test_unauthorized()
+    switch_back_user()
+
+    # Store listings, which need no Apple account
+    listing_test.TestListingList().test_empty()
+    listing_test.TestListingCreate().test_correct()
+    listing_test.TestListingList().test_correct()
+    listing_test.TestListingUpload().test_wrong_key()
+    listing_test.TestListingUpload().test_correct()
+    listing_test.TestListingUpload().test_scaled()
+    listing_test.TestListingUpload().test_unknown_size()
+    listing_test.TestListingScreenshots().test_wrong_key()
+    listing_test.TestListingScreenshots().test_correct()
+    listing_test.TestListingVisuals().test_empty()
+    listing_test.TestListingVisuals().test_empty_json()
+    listing_test.TestListingOpen().test_wrong_key()
+    listing_test.TestListingOpen().test_correct()
+    switch_other_user()
+    listing_test.TestListingList().test_empty()
+    listing_test.TestListingScreenshots().test_wrong_key()
+    switch_back_user()
+    listing_test.TestListingShare().test_wrong_key()
+    listing_test.TestListingShare().test_correct()
+    switch_other_user()
+    listing_test.TestListingList().test_correct(owner=fixture.username)
+    listing_test.TestListingScreenshots().test_correct()
+    listing_test.TestListingShare().test_not_owner()
+    switch_back_user()
+    listing_test.TestListingShare().test_unshare()
+    switch_other_user()
+    listing_test.TestListingList().test_empty()
     switch_back_user()
 
     # Apple account
@@ -163,6 +193,9 @@ except OdevioTestFailed as e:
 finally:
     print("Cleaning test data...")
     switch_back_user()
+    if hasattr(fixture, "listing_key") and fixture.listing_key:
+        odevio.api.delete(f"/store-listings/{fixture.listing_key}/")
+        print("Deleted test store listing")
     if hasattr(fixture, "team_key") and fixture.team_key:
         odevio.api.delete(f"/teams/{fixture.team_key}")
         print("Deleted test team")
