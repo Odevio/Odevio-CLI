@@ -577,7 +577,7 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
 @click.argument('screenshot_ids', type=int, nargs=-1, required=True)
 @click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
 def approve_visual(key, screenshot_ids, out_dir):
-    """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the app \"KEY\".
+    """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the app \"KEY\" (KEY required).
 
     \f
     Approving renders the submission PNG and marks the visual as the image that replaces the raw
@@ -597,7 +597,7 @@ def approve_visual(key, screenshot_ids, out_dir):
 @click.option('--out-dir', type=click.Path(file_okay=False), default=".", show_default=True,
               help="Folder the preview PNGs are saved in.")
 def preview(key, screenshot_ids, out_dir):
-    """ Renders the marketing visuals of SCREENSHOT_IDS of the app \"KEY\" as drafts and saves the PNGs.
+    """ Renders the marketing visuals of SCREENSHOT_IDS of the app \"KEY\" (KEY required) as drafts, saving the PNGs.
 
     \f
     The exact image approval would produce, without approving it: look at it before asking the user.
@@ -615,8 +615,8 @@ def _wait_for_render(visual_id, task_id):
 
     from odevio import api
 
-    # Long enough for a capture that hangs, is killed and is retried once on the server.
-    for _ in range(100):
+    # Past the server's worst case: compile, a capture that hangs and is killed, its retry, and a queue.
+    for _ in range(200):
         time.sleep(1.5)
         status = api.get(f"/marketing-visuals/{visual_id}/approve-status/{task_id}/") or {}
         if status.get("state") in ("SUCCESS", "FAILURE"):
@@ -632,14 +632,20 @@ def _save_png(visual_id, out_dir, name):
     import requests
 
     from odevio import api
-    from odevio.settings import API_BASE_URL
+    from odevio.settings import API_BASE_URL, console
 
     url = (api.get(f"/marketing-visuals/{visual_id}/") or {}).get("rendered_png")
     if not url:
         return None
-    response = requests.get(API_BASE_URL + urlparse(url).path,
-                            headers={"Authorization": api.get_authorization_header()})
-    response.raise_for_status()
+    # The server may name itself by an internal host; the file is always reached through the API's own.
+    parts = urlparse(url)
+    try:
+        response = requests.get(API_BASE_URL + parts.path + (f"?{parts.query}" if parts.query else ""),
+                                headers={"Authorization": api.get_authorization_header()}, timeout=60)
+        response.raise_for_status()
+    except requests.RequestException as error:
+        console.print(f"[warning]Could not download the PNG:[/warning] {error}")
+        return None
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, name)
     with open(path, "wb") as handle:
