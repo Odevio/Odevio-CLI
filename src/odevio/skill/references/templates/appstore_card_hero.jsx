@@ -33,13 +33,19 @@ export default function AppStoreCardHero(props) {
 
   // ---- LOCKED GRID ------------------------------------------------------------------------------
   const SIDE_PAD = "10cqw";
-  const PHONE_WIDTH = "79%";
+  const PHONE_W = 79; // % of the card
   const PHONE_BLEED = "12cqw"; // how far the phone runs off the top edge
-  const SCREEN_RADIUS = "9.9cqw"; // matches the frame's screen corners at PHONE_WIDTH
-  const HEADLINE_SIZE = "8.2cqw";
+  const SCREEN_RADIUS = `${PHONE_W * 0.1256}cqw`;
   const SUBHEAD_SIZE = "4.3cqw";
   const EYEBROW_SIZE = "3.1cqw";
+  const SUBHEAD_MEASURE = "78cqw";
   // -----------------------------------------------------------------------------------------------
+
+  // Headline size follows the copy (computed once at render from props): 3 fixed tiers.
+  const headlineLines = String(headline).split("\n");
+  const longestLine = Math.max(1, ...headlineLines.map((l) => l.length));
+  const tier = headlineLines.length >= 3 || longestLine > 26 ? 3 : headlineLines.length === 2 || longestLine > 14 ? 2 : 1;
+  const HEADLINE_SIZE = tier === 1 ? "10.6cqw" : tier === 2 ? "9cqw" : "8cqw"; // 1 / 2 / 3 lines
 
   const root = {
     position: "relative",
@@ -55,8 +61,6 @@ export default function AppStoreCardHero(props) {
     containerType: "size",
   };
 
-  // The phone sits at the top and runs off the top edge; the card's overflow crops it. Its band hugs
-  // it (fix #2) so the text below centres in the real remaining space.
   const phoneWrap = {
     position: "relative",
     flex: "0 0 auto",
@@ -68,7 +72,7 @@ export default function AppStoreCardHero(props) {
 
   const frameBox = {
     position: "relative",
-    width: PHONE_WIDTH,
+    width: `${PHONE_W}%`,
     marginTop: `-${PHONE_BLEED}`,
   };
 
@@ -92,11 +96,11 @@ export default function AppStoreCardHero(props) {
     pointerEvents: "none",
   };
 
-  // Text fills the space under the phone and centres in it.
+  // Text fills the space under the phone; uneven padding puts it on the optical centre.
   const textBlock = {
     width: "100%",
     boxSizing: "border-box",
-    padding: `4cqw ${SIDE_PAD}`,
+    padding: `4cqw ${SIDE_PAD} 10cqw`,
     textAlign: "center",
     flex: "1 1 auto",
     minHeight: 0,
@@ -107,9 +111,9 @@ export default function AppStoreCardHero(props) {
   };
 
   const eyebrowStyle = {
-    margin: "0 0 3cqw",
+    margin: "0 0 2.6cqw",
     fontSize: EYEBROW_SIZE,
-    fontWeight: 600,
+    fontWeight: 700,
     letterSpacing: "0.22em",
     textTransform: "uppercase",
     color: accent,
@@ -118,18 +122,21 @@ export default function AppStoreCardHero(props) {
   const headlineStyle = {
     margin: 0,
     fontSize: HEADLINE_SIZE,
-    lineHeight: 1.1,
+    lineHeight: 1.04,
     fontWeight: 700,
-    letterSpacing: "-0.01em",
+    letterSpacing: "-0.015em",
     whiteSpace: "pre-line",
+    textWrap: "balance",
   };
 
   const subheadStyle = {
     margin: "3cqw 0 0",
+    maxWidth: SUBHEAD_MEASURE,
     fontSize: SUBHEAD_SIZE,
-    lineHeight: 1.25,
+    lineHeight: 1.3,
     fontWeight: 400,
     color: accent,
+    textWrap: "balance",
   };
 
   return (

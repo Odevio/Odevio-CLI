@@ -93,14 +93,16 @@ Keep it short; a few words with impact beat a sentence shrunk to fit.
 
 Explore before refining: sketch two or three *genuinely different* directions in words (e.g. an
 editorial take, a hero take, a headline-bottom take) and let the user pick, rather than iterating one
-generic layout. Then author it — a props file on one of the three templates — have them look in the
+generic layout. Then author it — a props file on one of the shipped templates — have them look in the
 editor, and refine.
 
-Reach the range first through the **three templates and the `layout` prop**: classic (centred, headline
-top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top). Most
-directions are one of these plus the right words, colour and font — try that before anything else.
+Reach the range first through the **shipped templates and the `layout` prop**: classic (centred, headline
+top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top),
+statement (enormous type, small phone low on the right), tilt (phone tilted and off-centre), lens (an
+enlarged zone of the screen over the phone — UI as object). Most directions are one of these plus the
+right words, colour and font — try that before anything else.
 
-For a direction none of the three covers, you *can* build a new template — deliberately: keep the
+For a direction none of them covers, you *can* build a new template — deliberately: keep the
 invariants listed under "a genuinely new layout" in `marketing-visuals.md`, and check it in the editor
 preview before relying on it.
 What breaks things is the opposite: hand-tweaking an existing template's geometry round after round to

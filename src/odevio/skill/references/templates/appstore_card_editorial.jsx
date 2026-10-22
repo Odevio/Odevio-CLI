@@ -25,12 +25,14 @@ export default function AppStoreCardEditorial(props) {
 
   // ---- LOCKED GRID ------------------------------------------------------------------------------
   const SIDE_PAD = "9cqw"; // title-safe left/right margin for all text
-  const PHONE_WIDTH = "79%"; // the phone bleeds off the bottom, cropped by the card
-  const PHONE_BLEED = "-15cqw"; // how far the phone runs past the bottom edge
-  const SCREEN_RADIUS = "9.9cqw"; // matches the frame's screen corners at PHONE_WIDTH
+  const PHONE_W = 79; // % of the card; the phone bleeds off the bottom, cropped by the card
+  const PHONE_BLEED = "-15cqw"; // how far the phone runs past the bottom edge (minimum)
+  const SCREEN_RADIUS = `${PHONE_W * 0.1256}cqw`;
+  const TEXT_GAP = "6cqw"; // minimum space between the last text line and the phone
   const HEADLINE_SIZE = "12cqw"; // the hero: deliberately oversized
   const SUBHEAD_SIZE = "4.4cqw";
   const EYEBROW_SIZE = "3.2cqw";
+  const SUBHEAD_MEASURE = "70cqw";
   // -----------------------------------------------------------------------------------------------
 
   const root = {
@@ -58,9 +60,9 @@ export default function AppStoreCardEditorial(props) {
   };
 
   const eyebrowStyle = {
-    margin: "0 0 3cqw",
+    margin: "0 0 3.4cqw",
     fontSize: EYEBROW_SIZE,
-    fontWeight: 600,
+    fontWeight: 700,
     letterSpacing: "0.24em",
     textTransform: "uppercase",
     color: accent,
@@ -70,9 +72,9 @@ export default function AppStoreCardEditorial(props) {
   const headlineStyle = {
     margin: 0,
     fontSize: HEADLINE_SIZE,
-    lineHeight: 1.02,
+    lineHeight: 1.0,
     fontWeight: 800,
-    letterSpacing: "-0.02em",
+    letterSpacing: "-0.025em",
     whiteSpace: "pre-line",
   };
 
@@ -82,16 +84,19 @@ export default function AppStoreCardEditorial(props) {
     lineHeight: 1.3,
     fontWeight: 400,
     color: accent,
-    maxWidth: "80%",
+    maxWidth: SUBHEAD_MEASURE,
+    textWrap: "pretty",
   };
 
-  // The phone fills the lower area and runs off the bottom edge; the card's overflow crops it.
+  // The phone band grows to fill the space under the text but NEVER shrinks below the phone
+  // (`1 0 auto`, no minHeight: 0). Short copy: the phone sits at the bottom with its usual bleed.
+  // Tall copy: the band is pushed down and the card's overflow crops more of the phone.
   const phoneWrap = {
     position: "relative",
     zIndex: 1,
-    flex: "1 1 auto",
+    flex: "1 0 auto",
     width: "100%",
-    minHeight: 0,
+    paddingTop: TEXT_GAP,
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-end",
@@ -99,7 +104,7 @@ export default function AppStoreCardEditorial(props) {
 
   const frameBox = {
     position: "relative",
-    width: PHONE_WIDTH,
+    width: `${PHONE_W}%`,
     marginBottom: PHONE_BLEED,
   };
 

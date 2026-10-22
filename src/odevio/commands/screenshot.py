@@ -247,6 +247,9 @@ TEMPLATES = {
     "classic": "appstore_card.jsx",
     "editorial": "appstore_card_editorial.jsx",
     "hero": "appstore_card_hero.jsx",
+    "statement": "appstore_card_statement.jsx",
+    "tilt": "appstore_card_tilt.jsx",
+    "lens": "appstore_card_lens.jsx",
 }
 
 
@@ -444,15 +447,25 @@ def visuals(key, as_json):
 
 
 def _template_name(jsx_source):
-    """ Which shipped template a visual was built from, or "custom" when it was written by hand. """
+    """ Which shipped template a visual was built from, or "custom" when it was written by hand.
+
+    Matched on the component's name, so a card made with an earlier version of a template is still
+    recognised after the template is refined.
+    """
     import os
+    import re
 
     from odevio.commands.skill import skill_source
 
+    def component(source):
+        match = re.search(r"export\s+default\s+function\s+(\w+)", source or "")
+        return match.group(1) if match else None
+
+    wanted = component(jsx_source)
     folder = os.path.join(skill_source(), "references", "templates")
     for name in sorted(os.listdir(folder)):
         with open(os.path.join(folder, name)) as fh:
-            if fh.read().strip() == (jsx_source or "").strip():
+            if wanted and component(fh.read()) == wanted:
                 return name
     return "custom"
 
@@ -500,7 +513,7 @@ def _visuals(base, as_json):
 @click.argument('key', required=False)
 @click.argument('screenshot_id', type=int)
 @click.option('--template', type=click.Choice(list(TEMPLATES)),
-              help="A shipped layout: classic, editorial or hero. Or give your own with --jsx-file.")
+              help="A shipped layout: classic, editorial, hero, statement, tilt or lens. Or give your own with --jsx-file.")
 @click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
               help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
@@ -788,7 +801,7 @@ def listing_upload(key, files, size):
 @click.argument('key')
 @click.argument('screenshot_id', type=int)
 @click.option('--template', type=click.Choice(list(TEMPLATES)),
-              help="A shipped layout: classic, editorial or hero. Or give your own with --jsx-file.")
+              help="A shipped layout: classic, editorial, hero, statement, tilt or lens. Or give your own with --jsx-file.")
 @click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
               help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),

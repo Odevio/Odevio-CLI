@@ -15,8 +15,8 @@ covers the mechanics: the template, the props, the flow, and the safe grid.
 
 ## The templates
 
-Three vetted, internally title-safe templates ship with Odevio; the CLI takes them by name with
-`--template classic|editorial|hero`. Read the one you pick in `references/templates/` — the comments
+Six vetted, internally title-safe templates ship with Odevio; the CLI takes them by name with
+`--template classic|editorial|hero|statement|tilt|lens`. Read the one you pick in `references/templates/` — the comments
 explain every prop — fill it through props, and keep its locked geometry (see below). Do not ask the
 user for JSX; start from a template rather than inventing framing and screenshot placement from
 scratch. `design-directions.md` covers *which* concept to choose.
@@ -26,10 +26,16 @@ scratch. `design-directions.md` covers *which* concept to choose.
 | `appstore_card.jsx` | classic | the clean default — centred phone, headline above or below (`layout` prop) |
 | `appstore_card_editorial.jsx` | editorial | oversized headline as the composition, phone bleeding off the bottom |
 | `appstore_card_hero.jsx` | hero | one screen leads — phone bleeds off the top, headline centred below |
+| `appstore_card_statement.jsx` | statement | the words are the subject — enormous headline, small phone low on the right; put the line breaks yourself |
+| `appstore_card_tilt.jsx` | tilt | asymmetric — phone tilted and pushed right, cropped by the edges; for a screen whose point is top-left |
+| `appstore_card_lens.jsx` | lens | UI as object — an inset enlarges one zone of the same screenshot over the phone (`focus` prop) |
+
+In every template the headline size steps down with its number of lines, and the phone follows the text,
+so a short title leaves no hole. Put the line breaks yourself with `\n`.
 
 All three take the same server-injected assets; each has its own authored props (read its header).
 
-**If the user names a template, use that one.** They browse the three in the editor's *Templates* panel
+**If the user names a template, use that one.** They browse them in the editor's *Templates* panel
 and ask for one by name — e.g. "use the editorial template for #149". A `#<n>` there is a **screenshot
 id** (the number on each shot in the editor), so map it straight to step 3's flow, then compose with
 `odevio screenshot visual <app-key> <n> --template <name> --props-file <file>`
@@ -44,7 +50,8 @@ yourself per `design-directions.md` — an explicit request always wins over the
 | Prop | Who sets it | What it is |
 |---|---|---|
 | `headline`, `subhead`, `eyebrow`, `background`, `headlineColor`, `accent`, `fontFamily` | you | the words and the styling |
-| `layout` | you | **`appstore_card.jsx` only** — `"headline-top"` (default) or `"headline-bottom"`. The editorial and hero cards each have one fixed arrangement and ignore it |
+| `layout` | you | **`appstore_card.jsx` only** — `"headline-top"` (default) or `"headline-bottom"`. The other cards each have one fixed arrangement and ignore it |
+| `focus` | you | **`appstore_card_lens.jsx` only** — the zone of the screenshot the inset enlarges: `{"top": 0.23, "height": 0.09}`, fractions of the screenshot's height (see below) |
 | `_source_image` | the server | the user's raw screenshot, as a data URI |
 | `_frame_image` | the server | the phone frame PNG for that size |
 | `_frame_window` | the server | where the screen shows through the frame, as fractions |
@@ -63,6 +70,12 @@ A props file is flat JSON — only your own props, never the `_`-prefixed ones:
   "fontFamily": "Inter"
 }
 ```
+
+**Measuring `focus`.** Open the capture you uploaded, find the element to feature, and divide its top and
+bottom in pixels by the image's height: `top = y_top / H`, `height = (y_bottom − y_top) / H`. Take whole
+elements (a row, a card) with a little margin, never a line of text cut in two. The inset shows the
+screenshot as framed in the editor, so if it has been zoomed or moved the fractions shift: always
+`preview`, look at the inset, and adjust until it shows what you meant.
 
 `headline` honours `\n` — the templates render it with `white-space: pre-line`, so that is how you control
 where the line breaks instead of leaving it to the box width.
