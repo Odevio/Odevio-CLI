@@ -1,4 +1,5 @@
 Unreleased:
+    - Three new marketing templates: `statement`, `tilt` and `lens` (an enlarged zone of the screen); the headline of every template now sizes itself to its lines
     - `visual` no longer overwrites a card the user retouched in the editor unless `--force`; `visuals` shows who edited each card last
     - Added store listings: prepare App Store screenshots and marketing visuals with no build or Apple account, share them with a team and attach them to an app later
     - Added `odevio screenshot visuals` to read the marketing cards already made, so a new one matches the set
