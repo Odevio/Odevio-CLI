@@ -157,6 +157,11 @@ system**: the same background family, the same font, the same kind of layout. A 
 by a red one reads as two different apps — so reuse the first card's palette and font unless the user
 asks for contrast, and if you do change a colour, say so and confirm rather than just switching.
 
+You read the cards already there with `odevio screenshot visuals <app-key> --json` (or
+`odevio screenshot listing visuals <listing-key> --json`): each comes with its template, font and full
+props. Start the next card's props file from the first card's, and change only the words. If the
+existing cards already disagree with each other, say so and ask which one sets the system.
+
 Each card is a different **beat**, never the same idea reworded: the first says who the app is, the
 next shows a feature, the next the payoff. Two cards with the same words rearranged are not a story.
 
@@ -180,6 +185,7 @@ same screenshot ids and the same templates:
 | For an app | For a store listing |
 |---|---|
 | `odevio screenshot ls <app-key>` | `odevio screenshot listing screenshots <listing-key>` |
+| `odevio screenshot visuals <app-key> --json` | `odevio screenshot listing visuals <listing-key> --json` |
 | `odevio screenshot upload <app-key> --file …` | `odevio screenshot listing upload <listing-key> --file …` |
 | `odevio screenshot visual <app-key> <id> …` | `odevio screenshot listing visual <listing-key> <id> …` |
 | `odevio screenshot approve-visual <app-key> <id>` | `odevio screenshot listing approve-visual <listing-key> <id>` |
@@ -203,7 +209,8 @@ odevio screenshot ls <app-key>
 ```
 
 Each row has an id — `#150` — its size, and its visual state: `—`, `draft`, or `approved`. The id is
-how everything below targets one shot. This is a read; run it freely.
+how everything below targets one shot. This is a read; run it freely. When some shots already carry a
+visual, read them too with `odevio screenshot visuals <app-key> --json` before composing anything new.
 
 **2. Propose the accroche — derived, not asked cold.** The headline is the app's own voice, so work it
 out from what already describes the app before putting a blank question to the user. Look, in order, at:
