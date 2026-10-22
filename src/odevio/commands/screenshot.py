@@ -410,13 +410,13 @@ def _ls(base):
     if not rows:
         console.print("No screenshots yet. Upload some in the editor first.")
         return
-    table = Table("id", "size", "marketing visual")
+    table = Table("id", "file", "size", "marketing visual")
     for row in rows:
         if row.get("has_visual"):
             state = "approved" if row.get("visual_approved") else "draft"
         else:
             state = "—"
-        table.add_row(f"#{row['id']}", f"{row['width']}×{row['height']}", state)
+        table.add_row(f"#{row['id']}", row.get("file") or "", f"{row['width']}×{row['height']}", state)
     console.print(table)
 
 
