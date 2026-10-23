@@ -167,6 +167,11 @@ When something is wrong, ask for a clean capture of that screen — it takes the
 The only fix you make yourself is **cropping or reframing**; never repaint pixels or splice parts of the
 screen together: the card would show an app that does not exist.
 
+To crop, `odevio screenshot listing crop <listing-key> <id> --top 0.06 --bottom 0.04` (or
+`screenshot crop <app-key> <id>`) cuts shares of the height and as much off each side, half the total;
+`--top 0 --bottom 0` restores the whole capture. Keep it small: the sides go too, and a title or a tab at
+the edge is cut first — check the preview. Cropping a shot puts its visual back to draft.
+
 **One usable capture is enough.** Apple needs at least one screenshot. Make that one strong card, ship
 it, and offer more beats when they capture more screens — do not stretch one screen across several
 cards.

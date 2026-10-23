@@ -333,7 +333,7 @@ def _upload(base, files, size):
             )
         if created:
             kept = "kept as it is" if pixels == (width, height) else f"scaled from {pixels[0]} × {pixels[1]}"
-            console.print(f"[success]Added {path}[/success] to the {slot} slot — {kept}.")
+            console.print(f"[success]Added {path}[/success] as #{created['pk']} to the {slot} slot — {kept}.")
 
 
 def _font_cache_dir():
@@ -426,6 +426,45 @@ def _ls(base):
             state = "—"
         table.add_row(f"#{row['id']}", row.get("file") or "", f"{row['width']}×{row['height']}", state)
     console.print(table)
+
+
+@screenshot.command("crop")
+@login_required_warning_decorator
+@click.argument('key', required=False)
+@click.argument('screenshot_id', type=int)
+@click.option('--top', type=float, default=0.0, show_default=True, help="Share of the height cut at the top, 0.1 = 10%.")
+@click.option('--bottom', type=float, default=0.0, show_default=True, help="Share of the height cut at the bottom.")
+def crop(key, screenshot_id, top, bottom):
+    """ Crops screenshot SCREENSHOT_ID of the app \"KEY\" (KEY required): cuts the top and bottom, zooming in.
+
+    \f
+    The sides are cut by as much, so the shot keeps its proportions; :code:`--top 0 --bottom 0` restores
+    the whole capture. A marketing visual is composed over the cropped shot, so it has to be previewed
+    and approved again.
+
+    Usage:
+    """
+    base = _app_base(key)
+    if base:
+        _crop(base, screenshot_id, top, bottom, "odevio screenshot ls")
+
+
+def _crop(base, screenshot_id, top, bottom, ls_command):
+    from odevio import api
+    from odevio.settings import console
+
+    if not (0 <= top and 0 <= bottom and top + bottom < 0.8):
+        raise click.UsageError("--top and --bottom are shares of the height, together under 0.8.")
+    entry = _screenshot_entry(base, screenshot_id)
+    if entry is None:
+        console.print(f"[warning]No screenshot #{screenshot_id} here.[/warning] Run '{ls_command}' to see the ids.")
+        return
+    side = (top + bottom) / 2
+    if api.patch(f"/screenshots/{screenshot_id}/", json_body={
+            "crop_top": top, "crop_bottom": bottom, "crop_left": side, "crop_right": side}):
+        console.print(f"[success]Cropped #{screenshot_id}[/success]: {top:.0%} off the top, {bottom:.0%} off the bottom.")
+        if entry.get("visual_id"):
+            console.print("Its marketing visual is no longer approved: preview it, then approve it again.")
 
 
 @screenshot.command("visuals")
@@ -839,6 +878,17 @@ def listing_approve_visual(key, screenshot_ids, out_dir):
 def listing_preview(key, screenshot_ids, out_dir):
     """ Renders the marketing visuals of SCREENSHOT_IDS of the listing \"KEY\" as drafts and saves the PNGs. """
     _render_visuals(f"/store-listings/{key}", screenshot_ids, False, out_dir, "odevio screenshot listing visual")
+
+
+@listing.command("crop")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('screenshot_id', type=int)
+@click.option('--top', type=float, default=0.0, show_default=True, help="Share of the height cut at the top, 0.1 = 10%.")
+@click.option('--bottom', type=float, default=0.0, show_default=True, help="Share of the height cut at the bottom.")
+def listing_crop(key, screenshot_id, top, bottom):
+    """ Crops screenshot SCREENSHOT_ID of the listing \"KEY\": cuts the top and bottom, zooming in. """
+    _crop(f"/store-listings/{key}", screenshot_id, top, bottom, f"odevio screenshot listing screenshots {key}")
 
 
 @listing.command("share")
