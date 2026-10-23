@@ -104,6 +104,35 @@ want — a freelancer taking on a client, an agency publishing for several of th
 apps apart from a company's — and it is supported: `apple add` again, nothing to undo first, and
 `odevio apple ls` lists them all. An app then belongs to exactly one of those accounts.
 
+**Which account an app goes on.** An agency publishes on its own Apple account by default. A client's account
+is for when the client wants to own the app — published under their name, theirs if they leave. The choice is
+made when the app is created and cannot be changed in Odevio afterwards; moving a published app means an app
+transfer on Apple's side, then creating the app again here on the client's account.
+
+### A client's account, keys in hand
+
+Only when they ask: the agency's own account is the normal case, so never suggest a client's account
+yourself. The ask sounds like "I have my client's Apple developer account and its API key, add it to the
+team." Skip the
+walk through Apple's screens — ask only for what is missing, in one message:
+
+- the path to the `.p8` file, the **Key ID**, the **Issuer ID** and the **Team ID** (ten characters, see the
+  table above);
+- the name to show for it — the client's name.
+
+Then the team: `odevio team ls`. One team: use it and say which. Several: ask which one. Register it straight
+into that team, so every member can build on it at once:
+
+```sh
+COLUMNS=200 odevio apple add --apple-id <team id> --name "<client name>" --key-id <key id> \
+  --issuer-id <issuer id> --private-key <path to the .p8 file> --team <team key>
+```
+
+Check it with `odevio apple ls`. An account already registered without the team is attached with
+`odevio apple link <account key> --team-key <team key>`; an app already created on it is shared with
+`odevio app link <app key> --team-key <team key>`. Say once that every member of the team gets full control
+of what is linked to it.
+
 ### Check they are allowed, before running anything
 
 Whether a second account is permitted is already on screen: `odevio profile`, which you ran in Step 1, prints

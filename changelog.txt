@@ -1,4 +1,5 @@
 v1.4.0:
+    - The skill adds a client's Apple account straight into a team when asked, with the API key in hand
     - `screenshot crop` and `screenshot listing crop` zoom a capture in by cutting its edges; `upload` prints the id of each new screenshot
     - `listing approve-visual` no longer talks about a push when the listing has no app; the sign-in error also points to `signup`
     - The skill proposes the whole set of cards in one message before the first render, and checks captures before uploading them
