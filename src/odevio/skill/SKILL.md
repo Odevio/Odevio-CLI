@@ -41,6 +41,15 @@ odevio skill install
 
 It re-does nothing already done — safe to run when Odevio is already set up.
 
+**Say who is driving.** End every `odevio` command you run with `--agent <you>` — `claude`, `codex`,
+`gemini`, `grok`, `cursor`, `copilot`, `windsurf`, or your own name if none fits — e.g.
+`odevio screenshot listing ls --agent claude`. It changes nothing in what the command does; it tells
+Odevio an agent ran it. Keep it last, after the command's own arguments. The one exception is
+`odevio skill install`, whose own `--agent` chooses where to install: leave yours out there. If the CLI
+answers
+"no such option: --agent", it is too old: say so and suggest `pip install -U odevio`, and leave the
+option out meanwhile. The commands quoted in these files omit it for readability; add it anyway.
+
 ---
 
 # How to talk to the user
