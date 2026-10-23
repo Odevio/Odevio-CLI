@@ -137,6 +137,16 @@ screenshots*. Each upload becomes a row with an id you compose on:
 odevio screenshot listing upload <listing-key> --file <path> --file <path>
 ```
 
+**When there are none yet, offer both ways in the same question** — never only one:
+
+> Two ways to get your captures in: tell me the folder they are in and I upload them, or drop them
+> yourself into the editor (*Add screenshots*, <editor link>) and tell me when it's done.
+
+Create the store listing first when there is none, so the link exists, and give it with the question
+(`listing open <listing-key>` or `app screenshots <app-key>` prints it; they sign in there with the same
+account). After they say they dropped them, list the screenshots to get
+the ids — do not ask them for the ids.
+
 ### Check every capture before composing
 
 Look at each image yourself first — you can open them. A card amplifies whatever is in the shot, and
