@@ -205,7 +205,8 @@ def get_authorization_header(email=None, password=None):
     if api_key and email is None and password is None:
         return f"Token {api_key}"
 
-    token = get_jwt_token()
+    # Explicit credentials sign in as that account, whatever session is cached.
+    token = None if email and password else get_jwt_token()
     if token:
         decoded = jwt.decode(token, options={"verify_signature": False})
         if decoded['exp'] <= datetime.datetime.utcnow().timestamp():

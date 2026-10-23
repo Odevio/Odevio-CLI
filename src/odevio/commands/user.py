@@ -40,7 +40,6 @@ def signin(email, password):
     from odevio import api
     from odevio.settings import console
 
-    # TODO verify that the user is not already signed in
     user = api.get("/my-account/", auth_data={
         "email": email,
         "password": password,
