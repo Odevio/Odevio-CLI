@@ -880,6 +880,24 @@ def listing_link(key, app_key):
                       f"stay as they are; 'odevio screenshot push {app_key}' sends them to Apple.")
 
 
+@listing.command("unlink")
+@login_required_warning_decorator
+@click.argument('key')
+def listing_unlink(key):
+    """ Detaches the store listing \"KEY\" from its app; its screenshots and visuals stay in the listing. """
+    from odevio import api
+    from odevio.settings import console
+
+    try:
+        unlinked = api.post(f"/store-listings/{key}/unlink/", json_body={})
+    except api.NotFoundException:
+        console.print("This key is invalid or you do not have access to it.")
+        return
+    if unlinked:
+        console.print(f"[success]{key} is no longer attached to an app.[/success] Link it to the right one with "
+                      f"'odevio screenshot listing link {key} <app-key>'.")
+
+
 @listing.command("open")
 @login_required_warning_decorator
 @click.argument('key', required=False)
