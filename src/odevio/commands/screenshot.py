@@ -672,7 +672,7 @@ def _save_png(visual_id, out_dir, name):
     return path
 
 
-def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command):
+def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command, linked=True):
     """ Render the visuals of these screenshots, as drafts or approved, saving the PNGs when asked. """
     from odevio import api
     from odevio.settings import console
@@ -698,7 +698,8 @@ def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command):
             continue
         if approve:
             console.print(f"[success]Approved the marketing visual for #{screenshot_id}.[/success] "
-                          "It will replace the raw screenshot on the next push.")
+                          + ("It will replace the raw screenshot on the next push." if linked
+                             else "Nothing goes to Apple: the listing is not linked to an app."))
         else:
             console.print(f"[success]Rendered a draft of #{screenshot_id}.[/success] Not approved: nothing ships yet.")
         if out_dir:
@@ -821,7 +822,12 @@ def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec
 @click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
 def listing_approve_visual(key, screenshot_ids, out_dir):
     """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the listing \"KEY\". """
-    _render_visuals(f"/store-listings/{key}", screenshot_ids, True, out_dir, "odevio screenshot listing visual")
+    from odevio import api
+
+    listing = api.get(f"/store-listings/{key}/")
+    if listing:
+        _render_visuals(f"/store-listings/{key}", screenshot_ids, True, out_dir, "odevio screenshot listing visual",
+                        bool(listing.get("application")))
 
 
 @listing.command("preview")

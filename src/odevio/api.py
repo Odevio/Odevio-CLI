@@ -231,7 +231,8 @@ def get_authorization_header(email=None, password=None):
             return f"JWT {token}"
     if (email is None or password is None) and not sys.stdin.isatty():
         # An agent or a script cannot answer a prompt: it would hang, or read "Aborted!" as the result.
-        raise ClickException("You are not signed in. Run 'odevio signin' in a terminal, "
+        raise ClickException("You are not signed in. Run 'odevio signin' in a terminal "
+                             "('odevio signup' if you have no account), "
                              f"or set {API_KEY_ENV_VAR} to an API key from 'odevio apikey new'.")
     if email is None or password is None:
         console.print("If you already have an account, please enter your credentials and we will log you in :")
