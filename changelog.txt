@@ -1,4 +1,6 @@
 Unreleased:
+    - `screenshot listing unlink` detaches a store listing linked to the wrong app
+    - The `lens` template takes `inset: top|bottom`, so the inset covers the rows it enlarges
     - Every command takes `--agent NAME`, so Odevio knows when an AI agent drives the CLI; agents that announce themselves are recognised without it
     - `signin` and `signup` sign in as the account given, even when another account is already signed in
     - Three new marketing templates: `statement`, `tilt` and `lens` (an enlarged zone of the screen); the headline of every template now sizes itself to its lines

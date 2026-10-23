@@ -33,8 +33,8 @@ scratch. `design-directions.md` covers *which* concept to choose.
 In every template the headline size steps down with its number of lines, and the phone follows the text,
 so a short title leaves no hole. Put the line breaks yourself with `\n`.
 
-All six take the same server-injected assets and the same authored props below; `layout` and `focus`
-are the only ones a single template adds (read its header).
+All six take the same server-injected assets and the same authored props below; `layout`, `focus` and
+`inset` are the only ones a single template adds (read its header).
 
 **If the user names a template, use that one.** They browse them in the editor's *Templates* panel
 and ask for one by name — e.g. "use the editorial template for #149". A `#<n>` there is a **screenshot
@@ -54,6 +54,7 @@ yourself per `design-directions.md` — an explicit request always wins over the
 | `headline`, `subhead`, `eyebrow`, `background`, `headlineColor`, `accent`, `fontFamily` | you | the words and the styling |
 | `layout` | you | **`appstore_card.jsx` only** — `"headline-top"` (default) or `"headline-bottom"`. The other cards each have one fixed arrangement and ignore it |
 | `focus` | you | **`appstore_card_lens.jsx` only** — the zone of the screenshot the inset enlarges: `{"top": 0.23, "height": 0.09}`, fractions of the screenshot's height (see below) |
+| `inset` | you | **`appstore_card_lens.jsx` only** — `"top"` (default) or `"bottom"`: where the inset sits. Put it where the zone is, so it covers the rows it enlarges instead of showing them twice. Always write it, even `"top"`: the editor offers the switch only when the prop is there |
 | `_source_image` | the server | the user's raw screenshot, as a data URI |
 | `_frame_image` | the server | the phone frame PNG for that size |
 | `_frame_window` | the server | where the screen shows through the frame, as fractions |
@@ -95,10 +96,12 @@ centres the text in the space under the phone.** So "centre the text below the p
 reach for the prop, not a geometry edit. Most requests are a prop or a different template; try that
 first, every time.
 
-**A genuinely new layout is welcome — build it as a new template, deliberately, keeping three
-invariants.** If the user has an idea the three templates don't cover, make a new template file for it
-rather than mangling an existing one mid-conversation — write it in the user's working folder and pass
-it with `--jsx-file <path>`. These rules keep the frame and the screenshot from
+**Never edit a shipped template, and do not offer a new one on your own.** When a card does not work
+with one template, try its props (`layout`, `inset`, `focus`), another shipped template or another
+screenshot, and say what the template cannot do. A new layout is for when the user asks for one
+outright: then build it as a new template, deliberately, keeping three invariants — a new file in the
+user's working folder, passed with `--jsx-file <path>`, never a change to a file in
+`references/templates/`. These rules keep the frame and the screenshot from
 drifting apart — break one and the picture comes visibly undone, which is what went wrong when a card
 was hand-edited on the fly:
 
@@ -258,7 +261,8 @@ creating a second. `listing share <listing-key> <team-key>` lets a teammate pick
 When they start building later, attach it once the app exists on Odevio:
 `odevio screenshot listing link <listing-key> <app-key>`. Nothing moves — the screenshots and visuals
 become the app's, and `odevio screenshot push <app-key>` sends them. It is refused when the app already
-has a listing with screenshots; say so and ask which set they want to keep.
+has a listing with screenshots; say so and ask which set they want to keep. Linked to the wrong app:
+`odevio screenshot listing unlink <listing-key>` detaches it, everything kept, then link the right one.
 
 ## The flow, start to finish
 
@@ -350,9 +354,9 @@ redo that card over their changes.
 **Say what you will change before you render it.** When the user reacts or asks for something, put the
 new line or the new look in words first and get a nod, then re-render — do not silently push a new
 version and tell them to refresh. A change they can read in one sentence saves a wasted render and
-keeps the words theirs. Most changes are a prop or a different template; if the ask is genuinely a new
-layout, build it as a new template with the invariants above and verify it in the preview — never
-tweak an existing template's geometry blindly to chase the look.
+keeps the words theirs. Most changes are a prop or a different template; only when the user asks for a
+new layout outright, build it as a new template with the invariants above and verify it in the preview
+— never tweak a template's geometry to chase the look.
 
 **6. Approve only on an explicit yes:**
 
@@ -362,8 +366,13 @@ odevio screenshot approve-visual <app-key> 150 151 152
 
 Several ids go in one call. This renders the exact-pixel submission PNG and marks the visual as the image that replaces the raw
 screenshot. **Nothing reaches Apple until `odevio screenshot push`** — approval is a local decision,
-push is the Apple gate, and push still asks every time. Say both facts when you offer to approve, so
-the boundary is clear.
+push is the Apple gate, and push still asks every time. Say it in terms of where they are:
+
+- **a store listing not linked to an app** (no app column in `listing ls`): the images stay in
+  Odevio, ready. Do not talk about sending to Apple — there is nothing to send them with yet. Say once
+  that they are ready for when the app exists: `listing link` attaches them, and the push sends them.
+- **an app, or a listing linked to one**: say both facts when you offer to approve — approval
+  chooses the image, the push sends it, and only on their word.
 
 The approved visual replaces the raw in what `push` sends; the raw stays in the database as the source
 you can always re-skin later.
