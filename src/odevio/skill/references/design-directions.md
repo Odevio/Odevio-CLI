@@ -91,10 +91,12 @@ Keep it short; a few words with impact beat a sentence shrunk to fit.
 
 ## How to work it with the user
 
-Explore before refining: sketch two or three *genuinely different* directions in words (e.g. an
-editorial take, a hero take, a headline-bottom take) and let the user pick, rather than iterating one
-generic layout. Then author it — a props file on one of the shipped templates — have them look in the
-editor, and refine.
+Explore before refining — once, for the set as a whole: sketch two or three *genuinely different*
+directions in words (e.g. a typographic set, a UI-as-object set, a calm classic set), one sentence each,
+and let the user pick, rather than iterating one generic layout. Once a direction is chosen, the cards
+follow it as one campaign, and each card gets one proposed line (`marketing-visuals.md`, step 2) — not a
+new choice of directions. Then author it — a props file on one of the shipped templates — have them look
+in the editor, and refine.
 
 Reach the range first through the **shipped templates and the `layout` prop**: classic (centred, headline
 top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top),

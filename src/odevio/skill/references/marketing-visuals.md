@@ -33,11 +33,13 @@ scratch. `design-directions.md` covers *which* concept to choose.
 In every template the headline size steps down with its number of lines, and the phone follows the text,
 so a short title leaves no hole. Put the line breaks yourself with `\n`.
 
-All three take the same server-injected assets; each has its own authored props (read its header).
+All six take the same server-injected assets and the same authored props below; `layout` and `focus`
+are the only ones a single template adds (read its header).
 
 **If the user names a template, use that one.** They browse them in the editor's *Templates* panel
 and ask for one by name — e.g. "use the editorial template for #149". A `#<n>` there is a **screenshot
-id** (the number on each shot in the editor), so map it straight to step 3's flow, then compose with
+id** (the number on each shot in the editor) — never the listing key, a separate short code even when it
+happens to be all digits (`751`) — so map it straight to step 3's flow, then compose with
 `odevio screenshot visual <app-key> <n> --template <name> --props-file <file>`
 (or `odevio screenshot listing visual <listing-key> <n> …` when they work in a store listing).
 If you don't know the app or which screenshots exist, list them first with `odevio screenshot ls
@@ -71,13 +73,13 @@ A props file is flat JSON — only your own props, never the `_`-prefixed ones:
 }
 ```
 
-**Measuring `focus`.** Open the capture you uploaded, find the element to feature, and divide its top and
-bottom in pixels by the image's height: `top = y_top / H`, `height = (y_bottom − y_top) / H`. Take whole
-elements (a row, a card) with a little margin, never a line of text cut in two. The inset shows the
-screenshot as framed in the editor, so if it has been zoomed or moved the fractions shift: always
-`preview`, look at the inset, and adjust until it shows what you meant. The inset always spans the
-full width of the screen and shows a band about 17% of its height, centred on the zone: pick one or
-two rows, not a whole section.
+**Placing `focus`.** The inset always spans the full width of the screen and shows a band about **17% of
+its height**, centred on the middle of `focus`: only that centre really counts. Open the capture you
+uploaded, find the one or two rows to feature, take the middle of them in pixels and divide by the image's
+height; then write `{"top": centre − 0.085, "height": 0.17}`. Check the band's top and bottom edges
+(`centre ± 0.085`) fall between rows, never through a line of text, and move the centre if they do. The
+inset shows the screenshot as framed in the editor, so after a zoom or a move the fractions shift: always
+`preview`, look at the inset, and adjust.
 
 `headline` honours `\n` — the templates render it with `white-space: pre-line`, so that is how you control
 where the line breaks instead of leaving it to the box width.
@@ -140,7 +142,7 @@ Apple wants the app as people use it. Before composing on a capture, check:
 - **it is this app.** A capture of a web page, another app or the home screen does not belong in the
   set — leave it out and say which one and why.
 - **nothing that should not be public**: names, messages, notifications, e-mail addresses, phone
-  numbers, someone's photos.
+  numbers, someone's photos. Demo data is fine — a first name the user confirms is invented can stay.
 - **nothing in the way**: a tutorial bubble or a dimmed overlay, a debug button, test data (a list
   called "Test", placeholder text).
 
@@ -280,6 +282,9 @@ out from what already describes the app before putting a blank question to the u
 - the App Store text you have written earlier **this session**, if you have not published it yet;
 - the project itself: `pubspec.yaml`'s `description` and name, the `README`, the app's own on-screen
   strings. These say what the app does even when nothing has reached Apple yet.
+- **the captures themselves**, when there is no project and no listing — often the case with a store
+  listing. Screen titles, on-screen subtitles and real numbers ("€44 under your budget") are the app's
+  own words: a headline built on them is true by construction.
 
 Turn that into a concrete proposed line and show it — do not open with "what should it say?".
 
@@ -288,7 +293,8 @@ Turn that into a concrete proposed line and show it — do not open with "what s
 
 **Derive the look too, not just the words.** Pull the card's colours from the app's own identity rather
 than a generic default: the Flutter theme's seed colour in `lib/main.dart` (e.g. a `seedColor` of
-`Colors.deepPurple` → a violet background), or the dominant colour of the app icon. A card that matches
+`Colors.deepPurple` → a violet background), the dominant colour of the app icon, or the colours of the
+captures when that is all there is. A card that matches
 the app's palette looks intentional; a stock blue does not.
 
 Only ask an open question when there is genuinely nothing to go on — and even then, offer a default
@@ -296,7 +302,8 @@ built from the app's name rather than a blank prompt. Whatever you derive, the u
 word: getting a nod before rendering saves a round.
 
 **3. Author it.** Pick the template by name, write a props JSON for this card in the user's working
-folder, and create the visual for that id:
+folder — with your file-writing tool, not a shell heredoc, so it costs them no permission prompt — and
+create the visual for that id:
 
 ```bash
 odevio screenshot visual <app-key> 150 --template classic --props-file <file>
@@ -320,7 +327,13 @@ words are whole and inside the margins, the contrast, the crop of the screenshot
 fix what you see, then show them. The editor is their judging surface — the same compiled HTML the
 final PNG is made from, so what they see is what Apple gets.
 
-> Done — refresh the editor and it is under the 6.9-inch size. Tell me what to change.
+> Done — refresh the editor and it is under the 6.9-inch size. Tell me what to change, or retouch the
+> words, colours, font or framing yourself there with **Retouch**.
+
+Give them the editor link the first time (`odevio app screenshots <app-key>`, or
+`odevio screenshot listing open <listing-key>`, which prints it), and say it opens on the web: they sign
+in there with the same Odevio account. Tell them once that they can retouch a card themselves — they
+will not find it otherwise.
 
 **5. Iterate on props.** Every change is a **props** change — headline, subhead, colours, font,
 `layout`. Re-run the `visual` command with the new props file, look at a fresh `preview`, then they
@@ -358,12 +371,14 @@ you can always re-skin later.
 ## Fonts
 
 The card looks generic in the bundled font and distinctive in the right one, so it is worth asking
-whether they have a font in mind. Name a Google Font and the weights you need:
+whether they have a font in mind. Name a Google Font with the weights the templates use — 400 for the
+subhead, 700 for the eyebrow, 800 for the headline:
 
 ```bash
-odevio screenshot visual <app-key> 150 --template classic --props-file <file> --font 'Inter:600,800'
+odevio screenshot visual <app-key> 150 --template classic --props-file <file> --font 'Inter:400,700,800'
 ```
 
+Pass `--font` when you create a card; it stays with the card when you update it later without the flag.
 The font is fetched once and cached locally, embedded into the render so the editor and the final PNG
 show it identically. Set the template's `fontFamily` prop to the same family name so the card actually
 uses it. One honest limit: **only Google Fonts resolve this way** — a font from anywhere else will not

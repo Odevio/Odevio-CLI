@@ -30,20 +30,16 @@ Read this file fully before acting. Then read a reference only when its situatio
 # Before anything — make sure Odevio is installed
 
 This skill drives the `odevio` command; it does nothing without it. If you reached this skill through
-discovery rather than `odevio skill install`, the CLI may not be present yet. Check once, install if missing:
-
-```bash
-odevio --version || pip install odevio
-```
-
-Use `pipx install odevio` instead if this machine's Python is externally managed. Then, so the commands
-below run without a permission prompt each time, register the skill for your agent once:
+discovery rather than `odevio skill install`, the CLI may not be present yet. Step 1's `odevio profile`
+tells you: if the command is not found, offer `pip install odevio` (`pipx install odevio` if this
+machine's Python is externally managed) and let them run it. Then, so the commands below run without a
+permission prompt each time, register the skill for your agent once:
 
 ```bash
 odevio skill install
 ```
 
-Neither step re-does anything already done — both are safe to run when Odevio is already set up.
+It re-does nothing already done — safe to run when Odevio is already set up.
 
 ---
 
@@ -58,8 +54,9 @@ question live in `references/voice.md`. Read it before you act - it is not optio
 
 **Only App Store screenshots?** When that is all they ask for — "make my App Store screenshots",
 marketing screenshots, with or without a build — this file's Steps 1 to 4 do not apply: no Flutter
-project, no Odevio app and no Apple account are needed. Run `odevio profile` for the session, then go
-straight to `references/marketing-visuals.md` (and `design-directions.md` when composing).
+project, no Odevio app and no Apple account are needed. Run `odevio profile` for the session — and check
+the account it names is theirs, as below — then go straight to `references/marketing-visuals.md` (and
+`design-directions.md` when composing).
 
 Their goal decides the kind of build, whether Apple's side needs setting up at all, and what "done" means. It
 is the one thing you cannot read from the project.
@@ -172,6 +169,11 @@ signing in asks for a password in their terminal.
 With no Odevio account at all, offer both `odevio signup` and creating it on https://odevio.com, usually
 gentler the first time. When they say they are done, verify with `odevio profile` rather than taking their
 word.
+
+**If step 1 names an account that may not be theirs** — a shared or borrowed machine, a colleague's
+session, an e-mail they do not mention — ask once whether it is theirs before creating anything, since
+everything you make lands in that account. If it is not, they run `odevio signin` with their own (or
+`odevio signup`, which signs in to the new account); check again with `odevio profile`.
 
 **What the user sees from this step: almost nothing.** These checks are your bookkeeping. When everything is in
 place, that is one warm sentence and you carry on.
