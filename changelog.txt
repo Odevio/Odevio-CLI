@@ -1,5 +1,6 @@
 Unreleased:
     - `listing approve-visual` no longer talks about a push when the listing has no app; the sign-in error also points to `signup`
+    - The skill proposes the whole set of cards in one message before the first render, and checks captures before uploading them
     - `screenshot listing unlink` detaches a store listing linked to the wrong app
     - The `lens` template takes `inset: top|bottom`, so the inset covers the rows it enlarges
     - Every command takes `--agent NAME`, so Odevio knows when an AI agent drives the CLI; agents that announce themselves are recognised without it

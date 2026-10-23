@@ -78,7 +78,10 @@ A props file is flat JSON — only your own props, never the `_`-prefixed ones:
 its height**, centred on the middle of `focus`: only that centre really counts. Open the capture you
 uploaded, find the one or two rows to feature, take the middle of them in pixels and divide by the image's
 height; then write `{"top": centre − 0.085, "height": 0.17}`. Check the band's top and bottom edges
-(`centre ± 0.085`) fall between rows, never through a line of text, and move the centre if they do. The
+(`centre ± 0.085`) fall between rows, never through a line of text, and move the centre if they do. A
+band holds about two ordinary list rows: it cannot isolate a single one, so feature a pair, or shift the
+centre off the row so the band ends on whole rows. Rows just past the inset's edge are half hidden by it
+on the phone: check them in the preview. The
 inset shows the screenshot as framed in the editor, so after a zoom or a move the fractions shift: always
 `preview`, look at the inset, and adjust.
 
@@ -149,7 +152,8 @@ the ids — do not ask them for the ids.
 
 ### Check every capture before composing
 
-Look at each image yourself first — you can open them. A card amplifies whatever is in the shot, and
+Look at each image yourself first — you can open them. From a folder, look **before** uploading, and
+upload only the ones that pass. A card amplifies whatever is in the shot, and
 Apple wants the app as people use it. Before composing on a capture, check:
 
 - **it is this app.** A capture of a web page, another app or the home screen does not belong in the
@@ -315,6 +319,14 @@ Only ask an open question when there is genuinely nothing to go on — and even 
 built from the app's name rather than a blank prompt. Whatever you derive, the user still has the last
 word: getting a nod before rendering saves a round.
 
+**One nod before the first render, not one per choice.** Put the whole proposal in a single message — the
+direction, the template and headline of each card, the colours, the font and the language — and ask
+once. They see a first set within minutes and react to images, which is faster than answering five
+questions in a row. Ask separately only what you cannot derive at all.
+
+**The language** is their store page's when there is one; otherwise the language of the app's own
+screens in the captures; otherwise the language they write to you in. Say which in the proposal.
+
 **3. Author it.** Pick the template by name, write a props JSON for this card in the user's working
 folder — with your file-writing tool, not a shell heredoc, so it costs them no permission prompt — and
 create the visual for that id:
@@ -336,7 +348,9 @@ anything:
 odevio screenshot preview <app-key> 150 151 --out-dir <folder>
 ```
 
-It writes `preview-<id>.png` — the exact image approval would produce — and approves nothing. Check the
+It writes `preview-<id>.png` — the exact image approval would produce — and approves nothing. A preview
+takes about twenty seconds a card and an approval about fifteen; for a set, say so once before you
+start rather than going quiet. Check the
 words are whole and inside the margins, the contrast, the crop of the screenshot, and the typography;
 fix what you see, then show them. The editor is their judging surface — the same compiled HTML the
 final PNG is made from, so what they see is what Apple gets.
@@ -368,7 +382,8 @@ keeps the words theirs. Most changes are a prop or a different template; only wh
 new layout outright, build it as a new template with the invariants above and verify it in the preview
 — never tweak a template's geometry to chase the look.
 
-**6. Approve only on an explicit yes:**
+**6. Approve only on an explicit yes** — and a new one after every change: updating an approved card
+puts it back to draft, so the earlier yes no longer covers it.
 
 ```bash
 odevio screenshot approve-visual <app-key> 150 151 152

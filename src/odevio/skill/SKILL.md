@@ -175,9 +175,10 @@ signing in asks for a password in their terminal.
 > You need to sign in to Odevio first — run `odevio signin` in your terminal, it'll ask for your e-mail and
 > password. Tell me when it's done and I'll carry on from there.
 
-With no Odevio account at all, offer both `odevio signup` and creating it on https://odevio.com, usually
-gentler the first time. When they say they are done, verify with `odevio profile` rather than taking their
-word.
+With no Odevio account at all, offer both `odevio signup` — it also asks for a password in their terminal —
+and creating it on the website, usually gentler the first time. The website is https://odevio.com, unless
+`ODEVIO_API_URL` points the CLI at another server: then it is that address. When they say they are
+done, verify with `odevio profile` rather than taking their word.
 
 **If step 1 names an account that may not be theirs** — a shared or borrowed machine, a colleague's
 session, an e-mail they do not mention — ask once whether it is theirs before creating anything, since

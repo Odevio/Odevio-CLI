@@ -93,7 +93,9 @@ Keep it short; a few words with impact beat a sentence shrunk to fit.
 
 Explore before refining — once, for the set as a whole: sketch two or three *genuinely different*
 directions in words (e.g. a typographic set, a UI-as-object set, a calm classic set), one sentence each,
-and let the user pick, rather than iterating one generic layout. Once a direction is chosen, the cards
+and let the user pick, rather than iterating one generic layout. Lead with the one you would choose and
+put the rest of the first proposal in the same message (`marketing-visuals.md`, step 2), so picking a
+direction is not a round of its own. Once a direction is chosen, the cards
 follow it as one campaign, and each card gets one proposed line (`marketing-visuals.md`, step 2) — not a
 new choice of directions. Then author it — a props file on one of the shipped templates — have them look
 in the editor, and refine.
