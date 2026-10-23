@@ -3,7 +3,7 @@
     :height: 200px
     :width: 100%
 
-.. image:: https://img.shields.io/badge/version-1.3.1-blue
+.. image:: https://img.shields.io/badge/version-1.4.0-blue
     :target: https://github.com/Odevio/Odevio-CLI/
 
 .. image:: https://img.shields.io/github/license/odevio/odevio-cli
