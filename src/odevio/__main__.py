@@ -2,6 +2,7 @@
 
 import click
 
+from odevio.agent import declare
 from odevio.commands.app import app
 from odevio.commands.apple import apple
 from odevio.commands.build import build
@@ -70,6 +71,26 @@ odevio.add_command(apikey)
 odevio.add_command(privacy)
 odevio.add_command(screenshot)
 odevio.add_command(skill)
+
+
+def _declare_agent(ctx, param, value):
+    if value:
+        declare(value)
+
+
+def _accept_agent_option(command):
+    """ Every command and group takes a hidden trailing ``--agent NAME``, so an agent's call still matches
+    the ``odevio <command>:*`` permission it was granted. ``skill install`` keeps its own ``--agent``. """
+    if not any("--agent" in getattr(param, "opts", ()) for param in command.params):
+        command.params.append(click.Option(
+            ["--agent"], hidden=True, expose_value=False, callback=_declare_agent,
+            help="The AI agent running this command (claude, codex, gemini, grok, cursor…)."))
+    if isinstance(command, click.Group):
+        for sub in command.commands.values():
+            _accept_agent_option(sub)
+
+
+_accept_agent_option(odevio)
 
 if __name__ == '__main__':
     odevio()

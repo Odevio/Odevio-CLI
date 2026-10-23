@@ -11,6 +11,7 @@ import requests
 from click import ClickException
 from rich.prompt import Prompt
 
+from odevio.agent import current as current_agent
 from odevio.helpers import print_validation_error
 from odevio.settings import (
     API_BASE_URL,
@@ -23,12 +24,24 @@ from odevio.settings import (
 )
 
 
+def _cli_version():
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        return version("odevio")
+    except PackageNotFoundError:
+        return "unknown"
+
+
 def _request(method, route, params=None, data=None, files=None, authorization=True, auth_data=None, json_decode=True, tries=5, sse=False, json_body=None):
     """ General request wrapper for Odevio API.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-    headers = dict()
+    headers = {"Platform": "cli", "User-Agent": f"odevio-cli/{_cli_version()}"}
+    agent = current_agent()
+    if agent:
+        headers["X-Odevio-Agent"] = agent
     if not sse:
         headers["Accept"] = "application/json"
     if authorization:
