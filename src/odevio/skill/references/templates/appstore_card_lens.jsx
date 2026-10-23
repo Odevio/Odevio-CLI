@@ -29,7 +29,12 @@
 // the phone is pushed down and cropped further. The headline size also follows the copy (tiers).
 //
 // SERVER-INJECTED (never set): _source_image, _frame_image, _frame_window.
-// YOU AUTHOR: eyebrow, headline, subhead, background, headlineColor, accent, fontFamily, focus.
+// YOU AUTHOR: eyebrow, headline, subhead, background, headlineColor, accent, fontFamily, focus, inset.
+//
+// THE `inset` PROP — where the inset sits: "top" (default), over the upper part of the phone, or
+// "bottom", low on the card over the lower part. Put it at the end of the phone where the zone is, so
+// it covers the rows it enlarges and they are not seen twice — "top" for a zone near the top of the
+// screen, "bottom" for one in the lower half that the phone still shows.
 
 export default function AppStoreCardLens(props) {
   const {
@@ -41,6 +46,7 @@ export default function AppStoreCardLens(props) {
     accent = "#3d6b52",
     fontFamily = "Inter, system-ui, sans-serif",
     focus = null,
+    inset: insetAt = "top",
     _source_image = "",
     _frame_image = "",
     _frame_window = { left: 0.05, top: 0.02, width: 0.9, height: 0.95 },
@@ -56,6 +62,7 @@ export default function AppStoreCardLens(props) {
   const INSET_H = 30; // cqw
   const INSET_LEFT = `${(100 - INSET_W) / 2 - (100 - PHONE_W) / 2}cqw`; // centred on the card
   const INSET_Y = "13%"; // of the phone box height, from the phone's top edge
+  const INSET_BOTTOM = "16cqw"; // from the card's bottom edge, for inset "bottom"
   const INSET_RADIUS = "4cqw";
   const ASPECT = 1320 / 2868; // screenshot width / height (6.9")
   const MIN_ZOOM = (INSET_W / (ASPECT * INSET_H)) * 100; // image height %, below which sides show
@@ -170,11 +177,12 @@ export default function AppStoreCardLens(props) {
     pointerEvents: "none",
   };
 
+  const atBottom = insetAt === "bottom";
   const inset = {
     position: "absolute",
     zIndex: 3,
-    left: INSET_LEFT,
-    top: INSET_Y,
+    // At the bottom it hangs from the card, not the phone, whose lower edge moves with the copy.
+    ...(atBottom ? { left: `${(100 - INSET_W) / 2}cqw`, bottom: INSET_BOTTOM } : { left: INSET_LEFT, top: INSET_Y }),
     width: `${INSET_W}cqw`,
     height: `${INSET_H}cqw`,
     overflow: "hidden",
@@ -195,6 +203,12 @@ export default function AppStoreCardLens(props) {
     transform: "translateX(-50%)",
   };
 
+  const lensInset = (
+    <div style={inset}>
+      <img src={_source_image} alt="" style={insetImg} />
+    </div>
+  );
+
   return (
     <div style={root}>
       <div style={spacer} />
@@ -208,13 +222,10 @@ export default function AppStoreCardLens(props) {
         <div style={frameBox}>
           {_source_image ? <img src={_source_image} alt="" style={screenStyle} /> : null}
           {_frame_image ? <img src={_frame_image} alt="" style={frameImg} /> : null}
-          {_source_image ? (
-            <div style={inset}>
-              <img src={_source_image} alt="" style={insetImg} />
-            </div>
-          ) : null}
+          {_source_image && !atBottom ? lensInset : null}
         </div>
       </div>
+      {_source_image && atBottom ? lensInset : null}
     </div>
   );
 }
