@@ -84,14 +84,17 @@ def scan_upload(directory_path, excluded_dirs, excluded_files):
 
 def print_validation_error(console, response_dict):
     """ Pretty print helper for validation errors in the console"""
+    def text(errors):
+        return " ".join(str(e) for e in errors) if isinstance(errors, list) else str(errors)
+
     error = response_dict.pop('non_field_errors', None)
     if error is not None:
-        console.print(f"Error: {error}", markup=False)
+        console.print(f"Error: {text(error)}", markup=False)
     for field, errors in response_dict.items():
         # markup=False: the server's error text is data, not console markup. Without it a message holding
         # square brackets - a URL such as /v1/apps?filter[bundleId]=... - is parsed as a rich tag and
         # crashes with MarkupError, hiding the real error behind a traceback.
-        console.print(f"Error: for {field} - {errors}", markup=False)
+        console.print(f"Error: for {field} - {text(errors)}", markup=False)
 
 
 def login_required_warning_decorator(f):

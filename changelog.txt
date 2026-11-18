@@ -1,3 +1,6 @@
+Unreleased:
+    - Server errors print as plain sentences, without list brackets
+
 v1.4.0:
     - The skill adds a client's Apple account straight into a team when asked, with the API key in hand
     - `screenshot crop` and `screenshot listing crop` zoom a capture in by cutting its edges; `upload` prints the id of each new screenshot
