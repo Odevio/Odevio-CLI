@@ -154,7 +154,7 @@ a command or a plausible-sounding option.
 | `apple` | `ls`, `detail`, `add`, `edit`, `rm`, `link`, `unlink`, `refresh-devices` |
 | `app` | `ls`, `mk`, `rm`, `link`, `unlink`, `import`, `screenshots`, `store-status`, `set-metadata`, `categories`, `attach-build`, `check-submittable`, `submit` |
 | `privacy` | `scan` |
-| `screenshot` | `ls`, `visuals`, `visual`, `preview`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture`, and the `listing` sub-group |
+| `screenshot` | `ls`, `templates`, `visuals`, `visual`, `preview`, `approve-visual`, `upload`, `push`, `devices`, `start`, `capture`, and the `listing` sub-group |
 | `screenshot listing` | `create`, `ls`, `screenshots`, `visuals`, `upload`, `visual`, `preview`, `approve-visual`, `share`, `unshare`, `link`, `unlink`, `open` |
 | `team` | — |
 

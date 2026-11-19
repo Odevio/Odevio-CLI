@@ -29,6 +29,7 @@ PRE_APPROVED_COMMANDS = [
     # image only ships once the raw is pushed, which stays a held-back command.
     "odevio screenshot visual",
     "odevio screenshot visuals",
+    "odevio screenshot templates",
     "odevio screenshot preview",
     "odevio screenshot approve-visual",
     "odevio screenshot upload",

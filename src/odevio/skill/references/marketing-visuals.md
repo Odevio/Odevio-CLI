@@ -15,20 +15,20 @@ covers the mechanics: the template, the props, the flow, and the safe grid.
 
 ## The templates
 
-Six vetted, internally title-safe templates ship with Odevio; the CLI takes them by name with
-`--template classic|editorial|hero|statement|tilt|lens`. Read the one you pick in `references/templates/` — the comments
-explain every prop — fill it through props, and keep its locked geometry (see below). Do not ask the
+Vetted, internally title-safe templates ship with Odevio; the CLI takes them by name with
+`--template NAME`. They live on the server: `odevio screenshot templates`
+lists them, and `odevio screenshot templates NAME` prints the one you pick — read it, its comments explain every prop — fill it through props, and keep its locked geometry (see below). Do not ask the
 user for JSX; start from a template rather than inventing framing and screenshot placement from
 scratch. `design-directions.md` covers *which* concept to choose.
 
-| Template | Name | When to use |
-|---|---|---|
-| `appstore_card.jsx` | classic | the clean default — centred phone, headline above or below (`layout` prop) |
-| `appstore_card_editorial.jsx` | editorial | oversized headline as the composition, phone bleeding off the bottom |
-| `appstore_card_hero.jsx` | hero | one screen leads — phone bleeds off the top, headline centred below |
-| `appstore_card_statement.jsx` | statement | the words are the subject — enormous headline, small phone low on the right; put the line breaks yourself |
-| `appstore_card_tilt.jsx` | tilt | asymmetric — phone tilted and pushed right, cropped by the edges; for a screen whose point is top-left |
-| `appstore_card_lens.jsx` | lens | UI as object — an inset enlarges one zone of the same screenshot over the phone (`focus` prop) |
+| Name | When to use |
+|---|---|
+| classic | the clean default — centred phone, headline above or below (`layout` prop) |
+| editorial | oversized headline as the composition, phone bleeding off the bottom |
+| hero | one screen leads — phone bleeds off the top, headline centred below |
+| statement | the words are the subject — enormous headline, small phone low on the right; put the line breaks yourself |
+| tilt | asymmetric — phone tilted and pushed right, cropped by the edges; for a screen whose point is top-left |
+| lens | UI as object — an inset enlarges one zone of the same screenshot over the phone (`focus` prop) |
 
 In every template the headline size steps down with its number of lines, and the phone follows the text,
 so a short title leaves no hole. Put the line breaks yourself with `\n`.
@@ -52,9 +52,9 @@ yourself per `design-directions.md` — an explicit request always wins over the
 | Prop | Who sets it | What it is |
 |---|---|---|
 | `headline`, `subhead`, `eyebrow`, `background`, `headlineColor`, `accent`, `fontFamily` | you | the words and the styling |
-| `layout` | you | **`appstore_card.jsx` only** — `"headline-top"` (default) or `"headline-bottom"`. The other cards each have one fixed arrangement and ignore it |
-| `focus` | you | **`appstore_card_lens.jsx` only** — the zone of the screenshot the inset enlarges: `{"top": 0.23, "height": 0.09}`, fractions of the screenshot's height (see below) |
-| `inset` | you | **`appstore_card_lens.jsx` only** — `"top"` (default) or `"bottom"`: where the inset sits. Put it where the zone is, so it covers the rows it enlarges instead of showing them twice. Always write it, even `"top"`: the editor offers the switch only when the prop is there |
+| `layout` | you | **classic only** — `"headline-top"` (default) or `"headline-bottom"`. The other cards each have one fixed arrangement and ignore it |
+| `focus` | you | **lens only** — the zone of the screenshot the inset enlarges: `{"top": 0.23, "height": 0.09}`, fractions of the screenshot's height (see below) |
+| `inset` | you | **lens only** — `"top"` (default) or `"bottom"`: where the inset sits. Put it where the zone is, so it covers the rows it enlarges instead of showing them twice. Always write it, even `"top"`: the editor offers the switch only when the prop is there |
 | `_source_image` | the server | the user's raw screenshot, as a data URI |
 | `_frame_image` | the server | the phone frame PNG for that size |
 | `_frame_window` | the server | where the screen shows through the frame, as fractions |
@@ -103,8 +103,8 @@ first, every time.
 with one template, try its props (`layout`, `inset`, `focus`), another shipped template or another
 screenshot, and say what the template cannot do. A new layout is for when the user asks for one
 outright: then build it as a new template, deliberately, keeping three invariants — a new file in the
-user's working folder, passed with `--jsx-file <path>`, never a change to a file in
-`references/templates/`. These rules keep the frame and the screenshot from
+user's working folder (start from `odevio screenshot templates NAME > my_card.jsx`), passed with
+`--jsx-file <path>`; a shipped template is never changed. These rules keep the frame and the screenshot from
 drifting apart — break one and the picture comes visibly undone, which is what went wrong when a card
 was hand-edited on the fly:
 

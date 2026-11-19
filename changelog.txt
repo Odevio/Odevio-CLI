@@ -1,4 +1,5 @@
 Unreleased:
+    - Marketing templates live on the server: `screenshot templates` lists them or prints one, `--template` sends only its name
     - Server errors print as plain sentences, without list brackets
 
 v1.4.0:

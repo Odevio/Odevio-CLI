@@ -242,17 +242,6 @@ STORE_SIZES = {
     "ipad": (2048, 2732),
 }
 
-# The layouts shipped with the skill, by the name an agent or a user asks for.
-TEMPLATES = {
-    "classic": "appstore_card.jsx",
-    "editorial": "appstore_card_editorial.jsx",
-    "hero": "appstore_card_hero.jsx",
-    "statement": "appstore_card_statement.jsx",
-    "tilt": "appstore_card_tilt.jsx",
-    "lens": "appstore_card_lens.jsx",
-}
-
-
 def _app_base(key):
     """ API base of an app's screenshots, asking which app when no key is given. """
     from odevio.helpers import terminal_menu
@@ -485,30 +474,6 @@ def visuals(key, as_json):
         _visuals(base, as_json)
 
 
-def _template_name(jsx_source):
-    """ Which shipped template a visual was built from, or "custom" when it was written by hand.
-
-    Matched on the component's name, so a card made with an earlier version of a template is still
-    recognised after the template is refined.
-    """
-    import os
-    import re
-
-    from odevio.commands.skill import skill_source
-
-    def component(source):
-        match = re.search(r"export\s+default\s+function\s+(\w+)", source or "")
-        return match.group(1) if match else None
-
-    wanted = component(jsx_source)
-    folder = os.path.join(skill_source(), "references", "templates")
-    for name in sorted(os.listdir(folder)):
-        with open(os.path.join(folder, name)) as fh:
-            if wanted and component(fh.read()) == wanted:
-                return name
-    return "custom"
-
-
 def _visuals(base, as_json):
     import json
 
@@ -527,7 +492,7 @@ def _visuals(base, as_json):
         rows.append({
             "screenshot_id": entry["id"],
             "approved": bool(visual.get("approved")),
-            "template": _template_name(visual.get("jsx_source")),
+            "template": visual.get("template") or "custom",
             "font": (visual.get("font") or {}).get("family"),
             "last_edited_by": visual.get("last_edited_by", "agent"),
             "props": visual.get("props") or {},
@@ -547,12 +512,50 @@ def _visuals(base, as_json):
     console.print(table)
 
 
+@screenshot.command("templates")
+@login_required_warning_decorator
+@click.argument('name', required=False)
+@click.option('--json', 'as_json', is_flag=True, help="Print the list as JSON (without NAME).")
+def templates(name, as_json):
+    """ Lists the shipped marketing-visual templates, or prints the JSX of template NAME.
+
+    \f
+    The JSX's comments explain each prop the template reads; start a template of your own from it.
+
+    Usage:
+    """
+    import json
+
+    from rich.table import Table
+
+    from odevio import api
+    from odevio.settings import console
+
+    if name:
+        try:
+            template = api.get(f"/marketing-templates/{name}/")
+        except api.NotFoundException:
+            raise click.ClickException(f"No template named '{name}'. Run 'odevio screenshot templates' to list them.")
+        if template:
+            click.echo(template["jsx_source"])
+        return
+    rows = api.get("/marketing-templates/")
+    if rows is None:
+        return
+    if as_json:
+        click.echo(json.dumps(rows, indent=2, ensure_ascii=False))
+        return
+    table = Table("name", "description", "props")
+    for row in rows:
+        table.add_row(row["name"], row["description"], ", ".join(row["props"]))
+    console.print(table)
+
+
 @screenshot.command("visual")
 @login_required_warning_decorator
 @click.argument('key', required=False)
 @click.argument('screenshot_id', type=int)
-@click.option('--template', type=click.Choice(list(TEMPLATES)),
-              help="A shipped layout: classic, editorial, hero, statement, tilt or lens. Or give your own with --jsx-file.")
+@click.option('--template', help="A shipped layout by name (see 'odevio screenshot templates'). Or give your own with --jsx-file.")
 @click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
               help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
@@ -574,26 +577,14 @@ def visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force)
         _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls", force)
 
 
-def _template_file(template, jsx_file):
-    """ The JSX to send: a shipped template by name, or the agent's own file. """
-    import os
-
-    from odevio.commands.skill import skill_source
-
-    if bool(template) == bool(jsx_file):
-        raise click.UsageError("Give either --template or --jsx-file.")
-    if jsx_file:
-        return jsx_file
-    return os.path.join(skill_source(), "references", "templates", TEMPLATES[template])
-
-
 def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command, force=False):
     import json
 
     from odevio import api
     from odevio.settings import console
 
-    jsx_file = _template_file(template, jsx_file)
+    if bool(template) == bool(jsx_file):
+        raise click.UsageError("Give either --template or --jsx-file.")
 
     entry = _screenshot_entry(base, screenshot_id)
     if entry is None:
@@ -601,13 +592,16 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
                       f"Run '{ls_command}' to see the ids.")
         return
 
-    with open(jsx_file) as fh:
-        jsx_source = fh.read()
     props = {}
     if props_file:
         with open(props_file) as fh:
             props = json.load(fh)
-    payload = {"source_screenshot": screenshot_id, "jsx_source": jsx_source, "props": props}
+    payload = {"source_screenshot": screenshot_id, "props": props}
+    if template:
+        payload["template"] = template
+    else:
+        with open(jsx_file) as fh:
+            payload["jsx_source"] = fh.read()
     if font_spec:
         payload["font"] = _resolve_font(font_spec)
     if force:
@@ -840,8 +834,7 @@ def listing_upload(key, files, size):
 @login_required_warning_decorator
 @click.argument('key')
 @click.argument('screenshot_id', type=int)
-@click.option('--template', type=click.Choice(list(TEMPLATES)),
-              help="A shipped layout: classic, editorial, hero, statement, tilt or lens. Or give your own with --jsx-file.")
+@click.option('--template', help="A shipped layout by name (see 'odevio screenshot templates'). Or give your own with --jsx-file.")
 @click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
               help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
