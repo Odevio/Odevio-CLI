@@ -49,7 +49,9 @@ message as whatever else you are telling them, so the prompt is expected rather 
 
 Almost nothing. Everything it runs is `odevio`, `flutter`, `dart` and read-only `git` — all of which work the
 same on macOS, Linux and Windows. No `sed`, no `awk`, no Apple-only tooling: the Mac is Odevio's, not the
-user's, which is the whole point of the product.
+user's, which is the whole point of the product. The one exception is **opt-in and checked first**: on a
+user who *is* on a Mac (`uname -s` is `Darwin` and `xcrun simctl` answers), you may capture App Store
+screenshots in their own simulator — see `marketing-visuals.md`.
 
 The one shell-specific habit is the `COLUMNS=200 …` prefix below. It is POSIX syntax and a shell that rejects
 it will say so on the first command. **It is an optimisation, not a requirement** — drop it and pass the

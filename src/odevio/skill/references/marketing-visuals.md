@@ -128,10 +128,9 @@ are dark-ground with white type. Change one and change the other.
 
 ## The screenshots are the user's own
 
-You compose cards over raw screenshots the user captured on their own phone or simulator. **Odevio does
-not take screenshots for them** — do not offer to start a device, run the app and photograph screens,
-and never propose capturing screens on an Odevio machine. If a size has too few shots, ask the user to
-capture more and carry on.
+You compose cards over raw screenshots of the user's own app: captured on their phone, or — **on a Mac —
+on their own simulator, by you** (below). Never propose capturing screens on an Odevio machine. If a size
+has too few shots, ask for more captures and carry on.
 
 Raw captures come in the same way as finished pictures — `upload` — or through the editor's *Add
 screenshots*. Each upload becomes a row with an id you compose on:
@@ -140,15 +139,45 @@ screenshots*. Each upload becomes a row with an id you compose on:
 odevio screenshot listing upload <listing-key> --file <path> --file <path>
 ```
 
-**When there are none yet, offer both ways in the same question** — never only one:
+**When there are none yet, offer both ways in the same question** — never only one — and, on a Mac, the
+third:
 
 > Two ways to get your captures in: tell me the folder they are in and I upload them, or drop them
 > yourself into the editor (*Add screenshots*, <editor link>) and tell me when it's done.
+> *(On a Mac)* Or I take them myself: I start your app in the iPhone simulator and capture the screens.
 
 Create the store listing first when there is none, so the link exists, and give it with the question
 (`listing open <listing-key>` or `app screenshots <app-key>` prints it; they sign in there with the same
 account). After they say they dropped them, list the screenshots to get
 the ids — do not ask them for the ids.
+
+### On a Mac, capture them yourself in the simulator
+
+The user's own Mac is the fastest source of clean, exact-size captures, and you can drive it. Check
+first — this is never proposed elsewhere: `uname -s` prints `Darwin` **and** `xcrun simctl list devices
+available` answers. Then offer it once, in the question above; on a yes:
+
+1. **A 6.9-inch iPhone**, so the captures are 1320 × 2868 as Apple wants them: pick an available
+   *iPhone … Pro Max* from `xcrun simctl list devices available`, `xcrun simctl boot <udid>`, and
+   `open -a Simulator`.
+2. **A clean status bar**: `xcrun simctl status_bar <udid> override --time 9:41 --dataNetwork wifi
+   --wifiBars 3 --cellularBars 4 --batteryState discharging --batteryLevel 100`.
+3. **Their app on it**, from the project folder: `flutter run -d <udid>` in the background (a debug run
+   shows the debug banner — `flutter run --profile` does not; use it when the project builds that way).
+4. **The screens**: agree on the 3 to 5 screens that tell the story (the same beats as the cards).
+   Drive the simulator yourself when you have a tool for it (tapping, typing, screenshots of the
+   simulator); otherwise ask the user to open each screen in the Simulator window and tell you, one at a
+   time. Prefer demo content: an empty list or a login form sells nothing — ask whether the app has a
+   demo account or sample data before capturing.
+5. **Capture**: `xcrun simctl io <udid> screenshot <folder>/<screen>.png` into the user's working folder
+   (not a temporary one: the files are theirs). Look at each image, check it as below, then
+   `upload` the ones that pass.
+6. **Leave it as you found it**: `xcrun simctl status_bar <udid> clear`, stop the `flutter run`, and
+   shut the simulator down if you booted it (`xcrun simctl shutdown <udid>`).
+
+This costs them nothing and takes a few minutes; say so once. If the project does not build on their
+Mac (no Xcode command line tools, a signing or pod error), do not debug their local setup for the sake of
+screenshots — fall back to the two other ways.
 
 ### Check every capture before composing
 

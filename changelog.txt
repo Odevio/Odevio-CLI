@@ -1,4 +1,5 @@
 Unreleased:
+    - On a Mac, the skill offers to capture the App Store screenshots itself in the iPhone simulator
     - `screenshot series` (and `listing series`) sets one theme and one sequence of layouts for a listing's cards; `visual` then needs only the words, and `approve-visual --all` re-approves the cards a series change touched
     - On a Mac, the skill offers to build there and still do the whole App Store side, or to let Odevio build
     - Marketing templates live on the server: `screenshot templates` lists them or prints one, `--template` sends only its name
