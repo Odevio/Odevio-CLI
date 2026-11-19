@@ -310,16 +310,23 @@ store page, so propose it **inside the series proposal, at most once per set**, 
 sequence (`--sequence hero,panorama,classic`) or with `--template panorama` on one card. Rules:
 
 - **Never across positions 3-4.** Search results show the first three images, and half a panorama there
-  looks cut off. Put it on positions 1-2, or from 4 on. `odevio screenshot series <app-key>` and
-  `visuals` show each card's positions (`2-3`); a panorama step shifts the cards after it by one
-  position, and their layouts do not change (the sequence follows the cards, not the positions).
-- **Always write a `headline2`** — the right card's line — so each half reads on its own.
+  looks cut off. Put it on positions 1-2 or 2-3 (both halves in search results), or from 4 on.
+  `odevio screenshot series <app-key>` and `visuals` show each card's positions (`2-3`) — for a store
+  listing, `odevio screenshot listing series <listing-key>` and `listing visuals`. A panorama step shifts
+  the cards after it by one position, and their layouts do not change (the sequence follows the cards,
+  not the positions).
+- **Always write a `headline2`** — the right card's line — so each half reads on its own. The tables do
+  not print it; `visuals --json` does. Give the left half an eyebrow or a subhead too: with a short
+  headline alone it reads half empty.
 - **One screenshot**, the card's own, in one phone: it needs no second capture.
-- **Check after setting the series.** A sequence repeats past its end, so a panorama step can come
-  round twice. Run `odevio screenshot series <app-key>`: exactly one card may show a two-position range,
-  and not `3-4`. Give any other card on a panorama step its own `--template`.
+- **Check once the cards have their words.** Positions show only for shots that have a card, so run the
+  check after writing them. A sequence repeats past its end, so a panorama step can come round twice:
+  `series` must show exactly one two-position range, and not `3-4`. Give any other card on a panorama
+  step its own `--template`.
 - `preview` saves the full image and its two halves (`…-1.png`, `…-2.png`): look at both halves before
   asking the user to approve. Until it is approved, Apple gets the card's plain screenshot once.
+- A first approval names the cards (`approve-visual <key> 150 151 …`); `--all` only re-approves cards a
+  series change un-approved.
 - Apple takes 10 images per display slot (all its pixel sizes together); an approved panorama counts
   for two, and a push over 10 is refused.
 
