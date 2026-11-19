@@ -493,6 +493,8 @@ def _visuals(base, as_json):
             "screenshot_id": entry["id"],
             "approved": bool(visual.get("approved")),
             "template": visual.get("template") or "custom",
+            "series": visual.get("series"),
+            "needs_approval": bool(visual.get("needs_approval")),
             "font": (visual.get("font") or {}).get("family"),
             "last_edited_by": visual.get("last_edited_by", "agent"),
             "props": visual.get("props") or {},
@@ -506,8 +508,12 @@ def _visuals(base, as_json):
     table = Table("id", "state", "template", "headline", "background", "font", "last edited by")
     for row in rows:
         props = row["props"]
-        table.add_row(f"#{row['screenshot_id']}", "approved" if row["approved"] else "draft", row["template"],
-                      str(props.get("headline", "")), str(props.get("background", "")), row["font"] or "—",
+        step = row["series"]
+        layout = f"{step['template']} · step {step['step']}" if step else row["template"]
+        state = "needs approval" if row["needs_approval"] else "approved" if row["approved"] else "draft"
+        table.add_row(f"#{row['screenshot_id']}", state, layout,
+                      str(props.get("headline", "")), str(props.get("background", "series" if step else "")),
+                      row["font"] or ("series" if step else "—"),
                       row["last_edited_by"])
     console.print(table)
 
@@ -516,7 +522,8 @@ def _visuals(base, as_json):
 @login_required_warning_decorator
 @click.argument('name', required=False)
 @click.option('--json', 'as_json', is_flag=True, help="Print the list as JSON (without NAME).")
-def templates(name, as_json):
+@click.option('--presets', is_flag=True, help="List the shipped series presets instead.")
+def templates(name, as_json, presets):
     """ Lists the shipped marketing-visual templates, or prints the JSX of template NAME.
 
     \f
@@ -538,6 +545,16 @@ def templates(name, as_json):
             raise click.ClickException(f"No template named '{name}'. Run 'odevio screenshot templates' to list them.")
         if template:
             click.echo(template["jsx_source"])
+        return
+    if presets:
+        rows = api.get("/marketing-templates/presets/") or []
+        if as_json:
+            click.echo(json.dumps(rows, indent=2, ensure_ascii=False))
+            return
+        table = Table("preset", "layouts", "what it looks like")
+        for row in rows:
+            table.add_row(row["name"], " · ".join(row["templates"]), row.get("description", ""))
+        console.print(table)
         return
     rows = api.get("/marketing-templates/")
     if rows is None:
@@ -577,14 +594,15 @@ def visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force)
         _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls", force)
 
 
-def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command, force=False):
+def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command, force=False,
+            follow_series=False):
     import json
 
     from odevio import api
     from odevio.settings import console
 
-    if bool(template) == bool(jsx_file):
-        raise click.UsageError("Give either --template or --jsx-file.")
+    if template and jsx_file:
+        raise click.UsageError("Give either --template or --jsx-file, not both.")
 
     entry = _screenshot_entry(base, screenshot_id)
     if entry is None:
@@ -599,9 +617,11 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
     payload = {"source_screenshot": screenshot_id, "props": props}
     if template:
         payload["template"] = template
-    else:
+    elif jsx_file:
         with open(jsx_file) as fh:
             payload["jsx_source"] = fh.read()
+    if follow_series:
+        payload["follows_sequence"] = True
     if font_spec:
         payload["font"] = _resolve_font(font_spec)
     if force:
@@ -626,9 +646,12 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
 @screenshot.command("approve-visual")
 @login_required_warning_decorator
 @click.argument('key', required=False)
-@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+@click.argument('screenshot_ids', type=int, nargs=-1)
+@click.option('--all', 'approve_changed', is_flag=True,
+              help="Approve again every card a change of the series un-approved (KEY required).")
 @click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
-def approve_visual(key, screenshot_ids, out_dir):
+@click.pass_context
+def approve_visual(ctx, key, screenshot_ids, approve_changed, out_dir):
     """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the app \"KEY\" (KEY required).
 
     \f
@@ -637,6 +660,14 @@ def approve_visual(key, screenshot_ids, out_dir):
 
     Usage:
     """
+    if approve_changed:
+        if not key or screenshot_ids:
+            raise click.UsageError("Give the app key and --all, without screenshot ids.")
+        ctx.invoke(listing_approve_visual, key=_listing_of_app(key), screenshot_ids=(), approve_changed=True,
+                   out_dir=out_dir)
+        return
+    if not screenshot_ids:
+        raise click.UsageError("Give screenshot ids, or --all.")
     base = _app_base(key)
     if base:
         _render_visuals(base, screenshot_ids, True, out_dir, "odevio screenshot visual")
@@ -741,6 +772,35 @@ def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command, link
                 console.print(f"Saved to {path}")
 
 
+def _listing_of_app(app_key):
+    """ The key of the store listing an app's screenshots live in. """
+    from odevio import api
+
+    for row in api.get("/store-listings/") or []:
+        if row.get("application") == app_key:
+            return row["key"]
+    raise click.ClickException(
+        f"The app {app_key} has no screenshots yet, so no listing to give a series. Upload or capture some first.")
+
+
+@screenshot.command("series")
+@click.argument('key')
+@click.option('--json', 'as_json', is_flag=True, help="Print the series and each card's step as JSON.")
+@click.option('--from-card', 'from_card', type=int,
+              help="Turn the series on from the card of screenshot ID: its look becomes the theme, nothing re-renders.")
+@click.option('--dry-run', is_flag=True, help="With --from-card: show the series it would create, change nothing.")
+@click.option('--theme-file', type=click.Path(exists=True, dir_okay=False),
+              help="JSON theme: palette, alternate_palette, eyebrow and font (a font of the listing by name).")
+@click.option('--font', 'font_spec', help="Google Font for every card, e.g. 'Fraunces:600,800'.")
+@click.option('--sequence', help="Steps as template[:main|alternate], comma-separated, e.g. 'statement,tilt:alternate,lens'.")
+@click.option('--preset', help="A shipped sequence by name (see 'odevio screenshot templates --presets').")
+@click.option('--off', is_flag=True, help="Turn the series off; each card keeps what it shows.")
+@click.pass_context
+def series(ctx, key, **options):
+    """ Shows or sets the series of the app with key \"KEY\": one theme and one sequence of layouts for its cards. """
+    ctx.invoke(listing_series, key=_listing_of_app(key), **options)
+
+
 @screenshot.group()
 def listing():
     """ Store listings: an app's screenshots and marketing visuals, with or without an Apple account.
@@ -805,6 +865,159 @@ def listing_screenshots(key):
         _ls(base)
 
 
+@listing.command("series")
+@login_required_warning_decorator
+@click.argument('key')
+@click.option('--json', 'as_json', is_flag=True, help="Print the series and each card's step as JSON.")
+@click.option('--from-card', 'from_card', type=int,
+              help="Turn the series on from the card of screenshot ID: its look becomes the theme, nothing re-renders.")
+@click.option('--dry-run', is_flag=True, help="With --from-card: show the series it would create, change nothing.")
+@click.option('--theme-file', type=click.Path(exists=True, dir_okay=False),
+              help="JSON theme: palette, alternate_palette, eyebrow and font (a font of the listing by name).")
+@click.option('--font', 'font_spec', help="Google Font for every card, e.g. 'Fraunces:600,800'.")
+@click.option('--sequence', help="Steps as template[:main|alternate], comma-separated, e.g. 'statement,tilt:alternate,lens'.")
+@click.option('--preset', help="A shipped sequence by name (see 'odevio screenshot templates --presets').")
+@click.option('--off', is_flag=True, help="Turn the series off; each card keeps what it shows.")
+def listing_series(key, as_json, from_card, dry_run, theme_file, font_spec, sequence, preset, off):
+    """ Shows or sets the series of the store listing \"KEY\": one theme and one sequence of layouts for its cards.
+
+    \f
+    A card on a series brings only its words; its colours, eyebrow, font and layout come from the series,
+    by its position, unless the card keeps one as an exception. Changing the series un-approves exactly
+    the cards whose image changes; 'approve-visual KEY --all' approves them again.
+
+    Usage:
+    """
+    import json
+
+    from odevio import api
+    from odevio.settings import console
+
+    base = f"/store-listings/{key}/series/"
+    if off:
+        try:
+            deleted = api.delete(base, json_decode=False)
+        except api.NotFoundException:
+            raise click.ClickException("This listing has no series.")
+        if deleted is not False:
+            console.print("[success]The series is off.[/success] Each card keeps what it showed.")
+        return
+    if from_card is not None:
+        route = f"{base}from-card/{from_card}/"
+        try:
+            derived = api.get(route) if dry_run else api.post(route, json_data={})
+        except api.NotFoundException:
+            raise click.ClickException(f"No marketing visual on screenshot #{from_card} of this listing.")
+        if not derived:
+            return
+        if dry_run:
+            console.print(f"Would create this series; {derived.get('exceptions', 0)} value(s) would stay the cards' own.")
+            _print_series(_compact(derived), [], as_json)
+            return
+        console.print("[success]Series created.[/success] Nothing re-renders: every card keeps its look.")
+    elif theme_file or font_spec or sequence or preset:
+        body = {}
+        if theme_file or font_spec:
+            with open(theme_file) if theme_file else _nullcontext() as fh:
+                theme = json.load(fh) if fh else _current_theme(base)
+            if font_spec:
+                theme["font"] = _resolve_font(font_spec)
+            body["theme"] = theme
+        if sequence:
+            body["sequence"] = _parse_sequence(sequence)
+        if preset:
+            body["preset"] = preset
+        if not api.put(base, json_body=body):
+            return
+    try:
+        series = api.get(base)
+    except api.NotFoundException:
+        console.print("This listing has no series. Turn one on with --from-card ID, "
+                      "or set it with --theme-file and --sequence (or --preset).")
+        return
+    _print_series(_compact(series), _series_cards(key), as_json)
+
+
+def _nullcontext():
+    import contextlib
+
+    return contextlib.nullcontext()
+
+
+def _current_theme(base):
+    from odevio import api
+
+    try:
+        return _compact(api.get(base) or {}).get("theme") or {}
+    except api.NotFoundException:
+        return {}
+
+
+def _compact(series):
+    """ The series with its fonts named, not embedded: what a person reads and a theme file holds. """
+    theme = dict(series.get("theme") or {})
+    if isinstance(theme.get("font"), dict):
+        theme["font"] = theme["font"]["family"]
+    if theme.get("fonts"):
+        theme["fonts"] = [f["family"] if isinstance(f, dict) else f for f in theme["fonts"]]
+    return {**series, "theme": theme}
+
+
+def _parse_sequence(text):
+    steps = []
+    for part in [p.strip() for p in text.split(",") if p.strip()]:
+        template, _, palette = part.partition(":")
+        palette = palette or "main"
+        if palette in ("alt", "alternate"):
+            palette = "alternate"
+        steps.append({"template": template.strip(), "palette": palette})
+    return steps
+
+
+def _series_cards(key):
+    """ Each card of the listing with its step, its effective layout and its exceptions. """
+    from odevio import api
+
+    cards = []
+    for entry in api.get(f"/store-listings/{key}/screenshot-list/") or []:
+        if not entry.get("visual_id"):
+            continue
+        visual = api.get(f"/marketing-visuals/{entry['visual_id']}/") or {}
+        state = visual.get("series") or {}
+        cards.append({"screenshot_id": entry["id"], "step": state.get("step"), "template": state.get("template"),
+                      "palette": state.get("palette"), "exceptions": state.get("exceptions") or [],
+                      "approved": bool(visual.get("approved")), "needs_approval": bool(visual.get("needs_approval"))})
+    return cards
+
+
+def _print_series(series, cards, as_json):
+    import json
+
+    from rich.table import Table
+
+    from odevio.settings import console
+
+    if as_json:
+        click.echo(json.dumps({"series": series, "cards": cards}, indent=2, ensure_ascii=False))
+        return
+    theme = series.get("theme") or {}
+    console.print(f"Font: {theme.get('font') or 'Inter'} · Eyebrow: {theme.get('eyebrow') or '—'}")
+    console.print(f"Main palette: {json.dumps(theme.get('palette') or {})}")
+    if theme.get("alternate_palette"):
+        console.print(f"Alternate palette: {json.dumps(theme['alternate_palette'])}")
+    console.print("Sequence: " + " · ".join(
+        f"{i + 1} {s['template']}{' (alt)' if s.get('palette') == 'alternate' else ''}"
+        for i, s in enumerate(series.get("sequence") or [])))
+    if not cards:
+        return
+    table = Table("id", "step", "layout", "palette", "exceptions", "state")
+    for card in cards:
+        state = "needs approval" if card["needs_approval"] else "approved" if card["approved"] else "draft"
+        table.add_row(f"#{card['screenshot_id']}", str(card["step"] or "—"), card["template"] or "—",
+                      card["palette"] or "—", ", ".join(card["exceptions"]) or "—", state)
+    console.print(table)
+
+
 @listing.command("visuals")
 @login_required_warning_decorator
 @click.argument('key', required=False)
@@ -834,32 +1047,62 @@ def listing_upload(key, files, size):
 @login_required_warning_decorator
 @click.argument('key')
 @click.argument('screenshot_id', type=int)
-@click.option('--template', help="A shipped layout by name (see 'odevio screenshot templates'). Or give your own with --jsx-file.")
+@click.option('--template', help="A shipped layout by name (see 'odevio screenshot templates'). Or give your own with "
+                                   "--jsx-file. On a listing with a series, leave both out: the card takes its step's layout.")
 @click.option('--jsx-file', type=click.Path(exists=True, dir_okay=False),
               help="Your own React component (default export) for the visual.")
 @click.option('--props-file', type=click.Path(exists=True, dir_okay=False),
               help="JSON props for the component.")
 @click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
 @click.option('--force', is_flag=True, help="Overwrite a visual the user retouched in the editor.")
-def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force):
+@click.option('--follow-series', is_flag=True,
+              help="Give the card its series' layout again, after it kept a template of its own.")
+def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force, follow_series):
     """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the listing \"KEY\". """
     _visual(f"/store-listings/{key}", screenshot_id, template, jsx_file, props_file, font_spec,
-            f"odevio screenshot listing screenshots {key}", force)
+            f"odevio screenshot listing screenshots {key}", force, follow_series)
 
 
 @listing.command("approve-visual")
 @login_required_warning_decorator
 @click.argument('key')
-@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+@click.argument('screenshot_ids', type=int, nargs=-1)
+@click.option('--all', 'approve_changed', is_flag=True,
+              help="Approve again every card a change of the series un-approved. Drafts never approved are left alone.")
 @click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
-def listing_approve_visual(key, screenshot_ids, out_dir):
+def listing_approve_visual(key, screenshot_ids, approve_changed, out_dir):
     """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the listing \"KEY\". """
     from odevio import api
+    from odevio.settings import console
 
+    if bool(screenshot_ids) == approve_changed:
+        raise click.UsageError("Give screenshot ids, or --all.")
     listing = api.get(f"/store-listings/{key}/")
-    if listing:
+    if not listing:
+        return
+    if screenshot_ids:
         _render_visuals(f"/store-listings/{key}", screenshot_ids, True, out_dir, "odevio screenshot listing visual",
                         bool(listing.get("application")))
+        return
+    started = api.post(f"/store-listings/{key}/approve-all/", json_data={})
+    if not started:
+        return
+    tasks = started.get("tasks") or []
+    if not tasks:
+        console.print("No card needs approval again.")
+        return
+    console.print(f"Rendering {len(tasks)} card{'s' if len(tasks) > 1 else ''}…")
+    for task in tasks:
+        status = _wait_for_render(task["visual"], task["task_id"])
+        if status is None:
+            console.print(f"[warning]Visual {task['visual']}: render timed out.[/warning] Try again.")
+        elif status["state"] == "FAILURE":
+            console.print(f"[warning]Visual {task['visual']}: render failed:[/warning] {status.get('error', 'unknown error')}")
+        elif out_dir:
+            path = _save_png(task["visual"], out_dir, f"approved-visual-{task['visual']}.png")
+            if path:
+                console.print(f"Saved to {path}")
+    console.print("[success]Done.[/success] Run 'odevio screenshot listing visuals " + key + "' to check.")
 
 
 @listing.command("preview")

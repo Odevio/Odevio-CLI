@@ -238,10 +238,35 @@ system**: the same background family, the same font, the same kind of layout. A 
 by a red one reads as two different apps — so reuse the first card's palette and font unless the user
 asks for contrast, and if you do change a colour, say so and confirm rather than just switching.
 
-You read the cards already there with `odevio screenshot visuals <app-key> --json` (or
-`odevio screenshot listing visuals <listing-key> --json`): each comes with its template, font and full
-props. Start the next card's props file from the first card's, and change only the words. If the
-existing cards already disagree with each other, say so and ask which one sets the system.
+**Hold the system in a series, not by copying props.** A listing can carry a *series*: one theme
+(font, eyebrow, a main and an optional alternate palette) and a sequence of layouts, one step per
+position, repeating past the end. A card on a series brings only its words; its colours, font, eyebrow
+and layout come from the series by its position. So set the series once, then write words per card:
+
+```bash
+odevio screenshot series <app-key>                       # what is set, and each card's step
+odevio screenshot templates --presets                    # editorial, calm, bold: layouts + one line each
+odevio screenshot series <app-key> --theme-file theme.json --preset editorial
+odevio screenshot visual <app-key> 150 --props-file words.json    # no --template: the step decides
+```
+
+`theme.json` holds `palette` (`background`, `headlineColor`, `accent`), optionally `alternate_palette`,
+`eyebrow`, and `font` — a font the listing already has, by name, or set one with `--font 'Family:600,800'`.
+Use `--sequence statement,tilt:alt,lens` for steps of your own. (For a store listing, the same commands
+live under `odevio screenshot listing … <listing-key>`.)
+
+When cards already exist, read them first (`odevio screenshot visuals <app-key> --json`: template,
+font, full props and their `series` step), then turn the series on **from the card that sets the
+look**: `odevio screenshot series <app-key> --from-card 150 --dry-run` shows what it would derive and
+how many values stay the cards' own; without `--dry-run` it creates it, and nothing re-renders. If the
+existing cards disagree with each other, say so and ask which one sets the system.
+
+A value a card sets for itself is an **exception** — a colour, the eyebrow, or a `--template` of its
+own (`--follow-series` gives the card its step's layout back). Keep exceptions rare and deliberate.
+
+**Changing the series un-approves exactly the cards whose image changes**; until they are approved
+again, Apple gets the plain screenshots for them. After a change, re-approve them in one go with
+`odevio screenshot approve-visual <app-key> --all`, after looking at a `preview`.
 
 Each card is a different **beat**, never the same idea reworded: the first says who the app is, the
 next shows a feature, the next the payoff. Two cards with the same words rearranged are not a story.
@@ -332,12 +357,14 @@ questions in a row. Ask separately only what you cannot derive at all.
 **The language** is their store page's when there is one; otherwise the language of the app's own
 screens in the captures; otherwise the language they write to you in. Say which in the proposal.
 
-**3. Author it.** Pick the template by name, write a props JSON for this card in the user's working
+**3. Author it.** On a set of cards, set the series first (above), then write each card's words. For a
+single card, pick the template by name. Write the props JSON for this card in the user's working
 folder — with your file-writing tool, not a shell heredoc, so it costs them no permission prompt — and
 create the visual for that id:
 
 ```bash
-odevio screenshot visual <app-key> 150 --template classic --props-file <file>
+odevio screenshot visual <app-key> 150 --props-file <file>                     # on a series
+odevio screenshot visual <app-key> 150 --template classic --props-file <file>  # a card on its own
 ```
 
 For most cards you write only the props file; a genuinely new layout is a new template (keeping the
