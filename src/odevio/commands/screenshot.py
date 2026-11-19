@@ -564,7 +564,7 @@ def templates(name, as_json, presets):
     if as_json:
         click.echo(json.dumps(rows, indent=2, ensure_ascii=False))
         return
-    table = Table("name", "positions", "description", "props")
+    table = Table("name", "span", "description", "props")
     for row in rows:
         table.add_row(row["name"], str(row.get("span") or 1), row["description"], ", ".join(row["props"]))
     console.print(table)
@@ -736,7 +736,7 @@ def _save_png(visual_id, out_dir, name):
                       for position in range(1, span + 1)]
     paths = []
     for file_name, file_url in downloads:
-        content = _download(file_url)
+        content = _download(file_url, file_name)
         if content is None:
             continue
         os.makedirs(out_dir, exist_ok=True)
@@ -747,7 +747,7 @@ def _save_png(visual_id, out_dir, name):
     return paths
 
 
-def _download(url):
+def _download(url, file_name):
     """ The bytes at URL, fetched with the user's authorization; None after printing why not. """
     import requests
 
@@ -756,12 +756,18 @@ def _download(url):
 
     try:
         response = requests.get(url, headers={"Authorization": api.get_authorization_header()}, timeout=60)
-        response.raise_for_status()
     except requests.RequestException as error:
-        console.print(f"[warning]Could not download the PNG:[/warning] {error}")
+        console.print(f"[warning]Could not download {file_name}:[/warning] {error}")
+        return None
+    if not response.ok:
+        try:
+            detail = response.json().get("detail")
+        except ValueError:
+            detail = None
+        console.print(f"[warning]Could not download {file_name}:[/warning] {detail or f'HTTP {response.status_code}'}")
         return None
     if not response.content:
-        console.print("[warning]Could not download the PNG:[/warning] the server sent an empty file. "
+        console.print(f"[warning]Could not download {file_name}:[/warning] the server sent an empty file. "
                       "Look at the card in the editor instead.")
         return None
     return response.content
