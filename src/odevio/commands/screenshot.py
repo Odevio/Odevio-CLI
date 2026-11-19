@@ -555,6 +555,7 @@ def templates(name, as_json, presets):
         for row in rows:
             table.add_row(row["name"], " · ".join(row["templates"]), row.get("description", ""))
         console.print(table)
+        console.print("Steps alternate the main and the alternate palette when the theme has both.")
         return
     rows = api.get("/marketing-templates/")
     if rows is None:
@@ -579,7 +580,9 @@ def templates(name, as_json, presets):
               help="JSON props for the component.")
 @click.option('--font', 'font_spec', help="Google Font to embed, e.g. 'Inter:600,800'.")
 @click.option('--force', is_flag=True, help="Overwrite a visual the user retouched in the editor.")
-def visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force):
+@click.option('--follow-series', is_flag=True,
+              help="Give the card its series' layout again, after it kept a template of its own.")
+def visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force, follow_series):
     """ Creates or updates the marketing visual for screenshot SCREENSHOT_ID of the app \"KEY\".
 
     \f
@@ -591,7 +594,8 @@ def visual(key, screenshot_id, template, jsx_file, props_file, font_spec, force)
     """
     base = _app_base(key)
     if base:
-        _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls", force)
+        _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, "odevio screenshot ls", force,
+                follow_series)
 
 
 def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_command, force=False,
@@ -729,6 +733,10 @@ def _save_png(visual_id, out_dir, name):
     except requests.RequestException as error:
         console.print(f"[warning]Could not download the PNG:[/warning] {error}")
         return None
+    if not response.content:
+        console.print("[warning]Could not download the PNG:[/warning] the server sent an empty file. "
+                      "Look at the card in the editor instead.")
+        return None
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, name)
     with open(path, "wb") as handle:
@@ -784,6 +792,7 @@ def _listing_of_app(app_key):
 
 
 @screenshot.command("series")
+@login_required_warning_decorator
 @click.argument('key')
 @click.option('--json', 'as_json', is_flag=True, help="Print the series and each card's step as JSON.")
 @click.option('--from-card', 'from_card', type=int,

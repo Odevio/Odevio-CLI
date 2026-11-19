@@ -270,7 +270,9 @@ asks for contrast, and if you do change a colour, say so and confirm rather than
 **Hold the system in a series, not by copying props.** A listing can carry a *series*: one theme
 (font, eyebrow, a main and an optional alternate palette) and a sequence of layouts, one step per
 position, repeating past the end. A card on a series brings only its words; its colours, font, eyebrow
-and layout come from the series by its position. So set the series once, then write words per card:
+and layout come from the series by its position — its place among the shots of its size, the order they
+were uploaded in, which the user can change by dragging in the editor. So upload in story order, set the
+series once, then write words per card:
 
 ```bash
 odevio screenshot series <app-key>                       # what is set, and each card's step
@@ -280,8 +282,12 @@ odevio screenshot visual <app-key> 150 --props-file words.json    # no --templat
 ```
 
 `theme.json` holds `palette` (`background`, `headlineColor`, `accent`), optionally `alternate_palette`,
-`eyebrow`, and `font` — a font the listing already has, by name, or set one with `--font 'Family:600,800'`.
-Use `--sequence statement,tilt:alt,lens` for steps of your own. (For a store listing, the same commands
+`eyebrow`, and `font` — a font the listing already has, by name. On a new listing, give the font with
+`--font 'Family:600,800'` next to `--theme-file`: it wins over the file's, and no card needs a
+`fontFamily` prop. Use `--sequence statement,tilt:alternate,lens` for steps of your own. A preset
+alternates the main and the alternate palette from one step to the next when the theme has both — leave
+`alternate_palette` out for one colour throughout. A card's own settings — `focus`, `inset`, `layout` —
+are not exceptions; they stay the card's. (For a store listing, the same commands
 live under `odevio screenshot listing … <listing-key>`.)
 
 When cards already exist, read them first (`odevio screenshot visuals <app-key> --json`: template,
@@ -410,7 +416,7 @@ odevio screenshot preview <app-key> 150 151 --out-dir <folder>
 ```
 
 It writes `preview-<id>.png` — the exact image approval would produce — and approves nothing. A preview
-takes about twenty seconds a card and an approval about fifteen; for a set, say so once before you
+takes about thirty seconds a card and an approval about twenty-five; for a set, say so once before you
 start rather than going quiet. Check the
 words are whole and inside the margins, the contrast, the crop of the screenshot, and the typography;
 fix what you see, then show them. The editor is their judging surface — the same compiled HTML the
