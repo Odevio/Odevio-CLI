@@ -491,6 +491,7 @@ def _visuals(base, as_json):
             continue
         rows.append({
             "screenshot_id": entry["id"],
+            "positions": entry.get("positions"),
             "approved": bool(visual.get("approved")),
             "template": visual.get("template") or "custom",
             "series": visual.get("series"),
@@ -505,13 +506,13 @@ def _visuals(base, as_json):
     if not rows:
         console.print("No marketing visuals yet.")
         return
-    table = Table("id", "state", "template", "headline", "background", "font", "last edited by")
+    table = Table("id", "position", "state", "template", "headline", "background", "font", "last edited by")
     for row in rows:
         props = row["props"]
         step = row["series"]
         layout = f"{step['template']} · step {step['step']}" if step else row["template"]
         state = "needs approval" if row["needs_approval"] else "approved" if row["approved"] else "draft"
-        table.add_row(f"#{row['screenshot_id']}", state, layout,
+        table.add_row(f"#{row['screenshot_id']}", _positions(row["positions"]), state, layout,
                       str(props.get("headline", "")), str(props.get("background", "series" if step else "")),
                       row["font"] or ("series" if step else "—"),
                       row["last_edited_by"])
@@ -563,9 +564,9 @@ def templates(name, as_json, presets):
     if as_json:
         click.echo(json.dumps(rows, indent=2, ensure_ascii=False))
         return
-    table = Table("name", "description", "props")
+    table = Table("name", "positions", "description", "props")
     for row in rows:
-        table.add_row(row["name"], row["description"], ", ".join(row["props"]))
+        table.add_row(row["name"], str(row.get("span") or 1), row["description"], ", ".join(row["props"]))
     console.print(table)
 
 
@@ -712,23 +713,49 @@ def _wait_for_render(visual_id, task_id):
 
 
 def _save_png(visual_id, out_dir, name):
-    """ Download a visual's last render into OUT_DIR, returning the file written. """
+    """ Download a visual's last render into OUT_DIR, returning the files written: the render, then, for a
+    card spanning several App Store positions, one image per position (NAME-1.png, NAME-2.png). """
     import os
     from urllib.parse import urlparse
 
+    from odevio import api
+    from odevio.settings import API_BASE_URL
+
+    visual = api.get(f"/marketing-visuals/{visual_id}/") or {}
+    url = visual.get("rendered_png")
+    if not url:
+        return []
+    # The server may name itself by an internal host; the file is always reached through the API's own.
+    parts = urlparse(url)
+    downloads = [(name, API_BASE_URL + parts.path + (f"?{parts.query}" if parts.query else ""))]
+    stem = os.path.splitext(name)[0]
+    span = visual.get("span") or 1
+    if span > 1:
+        downloads += [(f"{stem}-{position}.png",
+                       f"{API_BASE_URL}/api/v1/marketing-visuals/{visual_id}/slot-image/{position}/")
+                      for position in range(1, span + 1)]
+    paths = []
+    for file_name, file_url in downloads:
+        content = _download(file_url)
+        if content is None:
+            continue
+        os.makedirs(out_dir, exist_ok=True)
+        path = os.path.join(out_dir, file_name)
+        with open(path, "wb") as handle:
+            handle.write(content)
+        paths.append(path)
+    return paths
+
+
+def _download(url):
+    """ The bytes at URL, fetched with the user's authorization; None after printing why not. """
     import requests
 
     from odevio import api
-    from odevio.settings import API_BASE_URL, console
+    from odevio.settings import console
 
-    url = (api.get(f"/marketing-visuals/{visual_id}/") or {}).get("rendered_png")
-    if not url:
-        return None
-    # The server may name itself by an internal host; the file is always reached through the API's own.
-    parts = urlparse(url)
     try:
-        response = requests.get(API_BASE_URL + parts.path + (f"?{parts.query}" if parts.query else ""),
-                                headers={"Authorization": api.get_authorization_header()}, timeout=60)
+        response = requests.get(url, headers={"Authorization": api.get_authorization_header()}, timeout=60)
         response.raise_for_status()
     except requests.RequestException as error:
         console.print(f"[warning]Could not download the PNG:[/warning] {error}")
@@ -737,11 +764,7 @@ def _save_png(visual_id, out_dir, name):
         console.print("[warning]Could not download the PNG:[/warning] the server sent an empty file. "
                       "Look at the card in the editor instead.")
         return None
-    os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, name)
-    with open(path, "wb") as handle:
-        handle.write(response.content)
-    return path
+    return response.content
 
 
 def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command, linked=True):
@@ -775,9 +798,15 @@ def _render_visuals(base, screenshot_ids, approve, out_dir, visual_command, link
         else:
             console.print(f"[success]Rendered a draft of #{screenshot_id}.[/success] Not approved: nothing ships yet.")
         if out_dir:
-            path = _save_png(visual_id, out_dir, f"{'approved' if approve else 'preview'}-{screenshot_id}.png")
-            if path:
+            for path in _save_png(visual_id, out_dir, f"{'approved' if approve else 'preview'}-{screenshot_id}.png"):
                 console.print(f"Saved to {path}")
+
+
+def _positions(positions):
+    """ App Store positions as the store numbers them: '2', or '2-3' for a card spanning two. """
+    if not positions:
+        return "—"
+    return str(positions[0]) if len(positions) == 1 else f"{positions[0]}-{positions[-1]}"
 
 
 def _listing_of_app(app_key):
@@ -993,7 +1022,8 @@ def _series_cards(key):
             continue
         visual = api.get(f"/marketing-visuals/{entry['visual_id']}/") or {}
         state = visual.get("series") or {}
-        cards.append({"screenshot_id": entry["id"], "step": state.get("step"), "template": state.get("template"),
+        cards.append({"screenshot_id": entry["id"], "positions": entry.get("positions"),
+                      "step": state.get("step"), "template": state.get("template"),
                       "palette": state.get("palette"), "exceptions": state.get("exceptions") or [],
                       "approved": bool(visual.get("approved")), "needs_approval": bool(visual.get("needs_approval"))})
     return cards
@@ -1019,10 +1049,11 @@ def _print_series(series, cards, as_json):
         for i, s in enumerate(series.get("sequence") or [])))
     if not cards:
         return
-    table = Table("id", "step", "layout", "palette", "exceptions", "state")
+    table = Table("id", "position", "step", "layout", "palette", "exceptions", "state")
     for card in cards:
         state = "needs approval" if card["needs_approval"] else "approved" if card["approved"] else "draft"
-        table.add_row(f"#{card['screenshot_id']}", str(card["step"] or "—"), card["template"] or "—",
+        table.add_row(f"#{card['screenshot_id']}", _positions(card["positions"]), str(card["step"] or "—"),
+                      card["template"] or "—",
                       card["palette"] or "—", ", ".join(card["exceptions"]) or "—", state)
     console.print(table)
 
@@ -1108,8 +1139,7 @@ def listing_approve_visual(key, screenshot_ids, approve_changed, out_dir):
         elif status["state"] == "FAILURE":
             console.print(f"[warning]Visual {task['visual']}: render failed:[/warning] {status.get('error', 'unknown error')}")
         elif out_dir:
-            path = _save_png(task["visual"], out_dir, f"approved-visual-{task['visual']}.png")
-            if path:
+            for path in _save_png(task["visual"], out_dir, f"approved-visual-{task['visual']}.png"):
                 console.print(f"Saved to {path}")
     console.print("[success]Done.[/success] Run 'odevio screenshot listing visuals " + key + "' to check.")
 
