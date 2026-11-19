@@ -6,9 +6,9 @@
    this exists — close this file, say nothing about local builds, and do not suggest finding a Mac. Not
    having one is the reason Odevio exists, and hinting at a better road they cannot take is the one way to
    make a working product feel like a compromise.
-2. **They raised it, not you.** An `.ipa` they already have, a CI, Xcode or fastlane mentioned, or a direct
-   question. Never offer this unprompted — a Mac owner may be here exactly to avoid Xcode, certificates and
-   provisioning profiles, and talking them out of that serves nobody.
+2. **They chose it.** On a Mac, `SKILL.md` offers both roads once; they picked their own build, or they already
+   have an `.ipa`, a CI, or mentioned Xcode or fastlane. A Mac owner who prefers Odevio to build is not
+   talked out of it — avoiding Xcode, certificates and provisioning profiles is a fine reason.
 
 Once both hold: what they want from Odevio is the App Store side — the page, the pictures, the
 questionnaire, the submission.

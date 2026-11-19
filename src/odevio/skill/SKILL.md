@@ -16,7 +16,7 @@ Read this file fully before acting. Then read a reference only when its situatio
 | Reference                          | Read it when                                                                           |
 | ---------------------------------- | -------------------------------------------------------------------------------------- |
 | `references/first-time-setup.md`   | no Apple developer account registered, no Odevio app for this project, or they want to add **another** Apple account — a client's, say. Not when they only want screenshots: that needs neither (see `marketing-visuals.md`) |
-| `references/build-elsewhere-publish-here.md` | they build on their own Mac or CI and want Odevio only for the App Store      |
+| `references/build-elsewhere-publish-here.md` | they are on a Mac and choose to build there, or build on a CI, and want Odevio for the App Store |
 | `references/when-a-build-fails.md` | a build failed                                                                         |
 | `references/delivery.md`           | a build succeeded                                                                      |
 | `references/app-store-listing.md`  | the goal is the App Store — read it **before building**, not after                     |
@@ -110,13 +110,14 @@ weigh: never mention building locally, never suggest they find a Mac, never fram
 something better. Building here **is** the answer, and a user without a Mac who is told about local builds has
 been handed a problem instead of an app.
 
-**On a Mac, still do not volunteer it.** Someone with a Mac may be here precisely to avoid Xcode, certificates
-and provisioning profiles — which is most of what Odevio removes, and reason enough on its own. Offering to
-take the build away from us, unprompted, argues against the tool for no gain to them.
+**On a Mac, offer both roads once, when a build is the next step.** Building on their own Mac takes seconds
+instead of a quarter of an hour, and you still do the whole App Store side; building here spares them Xcode,
+certificates and provisioning profiles, and failed builds are repaired for them. It is a closed question, so ask
+it with the question tool (`references/voice.md`) — "Build in Xcode myself, you do the App Store side" and
+"Odevio builds it" — then follow their choice without arguing either way.
 
-Read `references/build-elsewhere-publish-here.md` only when **they** bring it: an `.ipa` they already have, a
-CI that produces one, Xcode or fastlane in the conversation, or a direct question. Then the build is genuinely
-not the question, and offering one misreads their setup.
+When they choose their own build, or already have an `.ipa`, a CI that produces one, or Xcode or fastlane in the
+conversation, read `references/build-elsewhere-publish-here.md`: the build is then not the question.
 
 **If they said the App Store, read the page before doing anything else.** Not after building — before. Go to
 `references/app-store-listing.md` now and run `odevio app store-status`.
