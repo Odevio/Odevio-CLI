@@ -4,6 +4,9 @@ Unreleased:
     - On a Mac, the skill offers to build there and still do the whole App Store side, or to let Odevio build
     - Marketing templates live on the server: `screenshot templates` lists them or prints one, `--template` sends only its name
     - Server errors print as plain sentences, without list brackets
+    - Panorama cards: `--template panorama` spans two App Store positions; `approve-visual` and `preview --out-dir` also save its two halves, and `visuals` / `series` show each card's positions
+    - The skill offers at most one panorama per set, never across positions 3-4, with a second headline for the right half
+    - A failed download names the file and gives the server's reason
 
 v1.4.0:
     - The skill adds a client's Apple account straight into a team when asked, with the API key in hand
