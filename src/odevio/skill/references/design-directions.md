@@ -103,7 +103,8 @@ in the editor, and refine.
 Reach the range first through the **shipped templates and the `layout` prop**: classic (centred, headline
 top or bottom), editorial (oversized headline, phone off the bottom), hero (phone off the top),
 statement (enormous type, small phone low on the right), tilt (phone tilted and off-centre), lens (an
-enlarged zone of the screen over the phone — UI as object). Most directions are one of these plus the
+enlarged zone of the screen over the phone — UI as object), panorama (one picture across two store
+slots — a strong opening on positions 1-2 or a payoff from 4 on, at most once per set). Most directions are one of these plus the
 right words, colour and font — try that before anything else.
 
 For a direction none of them covers, you *can* build a new template — deliberately: keep the

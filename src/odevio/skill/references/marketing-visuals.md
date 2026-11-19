@@ -29,12 +29,13 @@ scratch. `design-directions.md` covers *which* concept to choose.
 | statement | the words are the subject — enormous headline, small phone low on the right; put the line breaks yourself |
 | tilt | asymmetric — phone tilted and pushed right, cropped by the edges; for a screen whose point is top-left |
 | lens | UI as object — an inset enlarges one zone of the same screenshot over the phone (`focus` prop) |
+| panorama | **two App Store positions wide** — one picture across two slots, a tilted phone crossing the seam; a second headline (`headline2`) on the right card (see "A panorama" below) |
 
 In every template the headline size steps down with its number of lines, and the phone follows the text,
 so a short title leaves no hole. Put the line breaks yourself with `\n`.
 
-All six take the same server-injected assets and the same authored props below; `layout`, `focus` and
-`inset` are the only ones a single template adds (read its header).
+All of them take the same server-injected assets and the same authored props below; `layout`, `focus`,
+`inset` and `headline2` are the only ones a single template adds (read its header).
 
 **If the user names a template, use that one.** They browse them in the editor's *Templates* panel
 and ask for one by name — e.g. "use the editorial template for #149". A `#<n>` there is a **screenshot
@@ -269,8 +270,8 @@ asks for contrast, and if you do change a colour, say so and confirm rather than
 
 **Hold the system in a series, not by copying props.** A listing can carry a *series*: one theme
 (font, eyebrow, a main and an optional alternate palette) and a sequence of layouts, one step per
-position, repeating past the end. A card on a series brings only its words; its colours, font, eyebrow
-and layout come from the series by its position — its place among the shots of its size, the order they
+card, repeating past the end. A card on a series brings only its words; its colours, font, eyebrow
+and layout come from the series by its rank — its place among the shots of its size, the order they
 were uploaded in, which the user can change by dragging in the editor. So upload in story order, set the
 series once, then write words per card:
 
@@ -302,6 +303,25 @@ own (`--follow-series` gives the card its step's layout back). Keep exceptions r
 **Changing the series un-approves exactly the cards whose image changes**; until they are approved
 again, Apple gets the plain screenshots for them. After a change, re-approve them in one go with
 `odevio screenshot approve-visual <app-key> --all`, after looking at a `preview`.
+
+**A panorama** is one card that takes two App Store positions: the server renders it once at double
+width and cuts it at the seam into two images, approved together. It reads as one picture across the
+store page, so propose it **inside the series proposal, at most once per set**, as a step of the
+sequence (`--sequence hero,panorama,classic`) or with `--template panorama` on one card. Rules:
+
+- **Never across positions 3-4.** Search results show the first three images, and half a panorama there
+  looks cut off. Put it on positions 1-2, or from 4 on. `odevio screenshot series <app-key>` and
+  `visuals` show each card's positions (`2-3`); a panorama step shifts the cards after it by one
+  position, and their layouts do not change (the sequence follows the cards, not the positions).
+- **Always write a `headline2`** — the right card's line — so each half reads on its own.
+- **One screenshot**, the card's own, in one phone: it needs no second capture.
+- **Check after setting the series.** A sequence repeats past its end, so a panorama step can come
+  round twice. Run `odevio screenshot series <app-key>`: exactly one card may show a two-position range,
+  and not `3-4`. Give any other card on a panorama step its own `--template`.
+- `preview` saves the full image and its two halves (`…-1.png`, `…-2.png`): look at both halves before
+  asking the user to approve. Until it is approved, Apple gets the card's plain screenshot once.
+- Apple takes 10 images per display slot (all its pixel sizes together); an approved panorama counts
+  for two, and a push over 10 is refused.
 
 Each card is a different **beat**, never the same idea reworded: the first says who the app is, the
 next shows a feature, the next the payoff. Two cards with the same words rearranged are not a story.
