@@ -300,6 +300,29 @@ existing cards disagree with each other, say so and ask which one sets the syste
 A value a card sets for itself is an **exception** — a colour, the eyebrow, or a `--template` of its
 own (`--follow-series` gives the card its step's layout back). Keep exceptions rare and deliberate.
 
+**A motif ties the set into one picture.** The series can draw a backdrop across all its cards — one
+artwork over the App Store positions, each card showing its slice in its own accent:
+`odevio screenshot series <app-key> --motif <name>` (`listing series <listing-key>` for a store listing;
+`"motif": {"shape": "<name>"}` in a theme file works too; `--motif none` removes it). Propose it **inside
+the series proposal**, with one line on why, from the app's category, the shape of its icon and its palette:
+
+| Motif | Fits |
+|---|---|
+| waves | fluid, calm: lifestyle, wellness, food, travel |
+| discs | round, friendly: consumer apps, family, home |
+| diagonal | speed: finance, sport, transport, productivity |
+| glow | dark and premium: music, media, sleep, AI |
+| grid | precise: finance, productivity, developer and B2B tools |
+| chevrons | energy: games, fitness, kids, delivery |
+| ribbon | a story in steps: travel, onboarding, plans |
+| sparkles | playful: photo, beauty, rewards, social |
+| none | sober brands, editorial apps, or when the screens are already busy |
+
+A card can turn its slice off (`"motif": "off"` in its props file; remove the key to turn it back on) —
+for a calm card in the middle of the set; it is an exception like a colour. A theme file replaces the whole
+theme: keep its `motif` in it, or the motif goes. Any change of the motif, and any reorder, re-renders the cards
+whose slice moves: preview, then `approve-visual --all`. Turning the series off removes the motif.
+
 **Changing the series un-approves exactly the cards whose image changes**; until they are approved
 again, Apple gets the plain screenshots for them. After a change, re-approve them in one go with
 `odevio screenshot approve-visual <app-key> --all`, after looking at a `preview`.
