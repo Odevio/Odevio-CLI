@@ -82,7 +82,14 @@ height; then write `{"top": centre − 0.085, "height": 0.17}`. Check the band's
 (`centre ± 0.085`) fall between rows, never through a line of text, and move the centre if they do. A
 band holds about two ordinary list rows: it cannot isolate a single one, so feature a pair, or shift the
 centre off the row so the band ends on whole rows. Rows just past the inset's edge are half hidden by it
-on the phone: check them in the preview. The
+on the phone: check them in the preview.
+
+**The zone must sit under its own inset**, or it shows twice: once enlarged, once on the phone beside it.
+With a short headline, the `top` inset covers about 11–34% of the screen's height and the `bottom` one
+about 58–79% (longer copy pushes the phone down, which moves the bottom inset's band up the screen). A
+zone centred between about 35% and 57% is covered by neither, whatever `inset` says — a lone row in the
+middle of a screen is the usual case. Pick another screen or another template for that card: a single
+row with empty space around it is not a detail worth a lens. The
 inset shows the screenshot as framed in the editor, so after a zoom or a move the fractions shift: always
 `preview`, look at the inset, and adjust.
 
