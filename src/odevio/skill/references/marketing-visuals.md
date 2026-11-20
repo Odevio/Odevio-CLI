@@ -130,8 +130,10 @@ are dark-ground with white type. Change one and change the other.
 ## The screenshots are the user's own
 
 You compose cards over raw screenshots of the user's own app: captured on their phone, or — **on a Mac —
-on their own simulator, by you** (below). Never propose capturing screens on an Odevio machine. If a size
-has too few shots, ask for more captures and carry on.
+on their own simulator, by you** (below). Never propose capturing screens on an Odevio machine:
+`odevio screenshot start` and `capture` drive a simulator on the remote machine of a running Odevio build
+(they take a build key), never the simulator on the user's Mac. If a size has too few shots, ask for more
+captures and carry on.
 
 Raw captures come in the same way as finished pictures — `upload` — or through the editor's *Add
 screenshots*. Each upload becomes a row with an id you compose on:
