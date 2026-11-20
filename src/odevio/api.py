@@ -141,12 +141,12 @@ def put(route, authorization=True, json_data=None, params=None, files=None, json
     return _request("put", route, params=params, data=json_data, files=files, authorization=authorization, json_body=json_body)
 
 
-def patch(route, authorization=True, json_body=None):
+def patch(route, authorization=True, json_body=None, json_data=None, files=None):
     """ PATCH method wrapper for Odevio API: changes only the fields given.
 
     :return dict of the JSON returned by the API or False if an error occurred
     """
-    return _request("patch", route, authorization=authorization, json_body=json_body)
+    return _request("patch", route, data=json_data, files=files, authorization=authorization, json_body=json_body)
 
 
 def delete(route, authorization=True, params=None, auth_data=None, json_decode=True):

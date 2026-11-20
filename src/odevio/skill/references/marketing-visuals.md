@@ -200,6 +200,13 @@ When something is wrong, ask for a clean capture of that screen — it takes the
 If they cannot yet and want to see a first set anyway, compose on them as a **draft**: name the defects
 once, keep any detail zoom (a `lens` inset) off test data — a placeholder price enlarged is the first
 thing read — and do not approve those cards until the clean captures replace them.
+
+A clean capture goes in **in place of** the old one, so the card stays: `odevio screenshot upload
+<app-key> --replace <id> --file <path>` (or `listing upload <listing-key> --replace <id> …`) keeps the id,
+the position, the crop and the marketing visual, and puts the visual back to draft — check the crop
+still suits the new capture, preview, then approve.
+`odevio screenshot rm <app-key> <id> …` (or `listing rm`) deletes a capture with the card composed on it;
+ask the user before deleting one.
 The only fix you make yourself is **cropping or reframing**; never repaint pixels or splice parts of the
 screen together: the card would show an app that does not exist.
 

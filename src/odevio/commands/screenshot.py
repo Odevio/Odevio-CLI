@@ -274,7 +274,9 @@ def _listing_base(key):
               help="An image to add: a raw capture or a finished picture. Repeat for several.")
 @click.option('--size', type=click.Choice(list(STORE_SIZES)),
               help="Which slot it belongs to. Read from the image itself when it matches one exactly.")
-def upload(key, files, size):
+@click.option('--replace', 'replace_id', type=int,
+              help="Put the image in place of screenshot REPLACE (one --file): same slot, order and marketing visual.")
+def upload(key, files, size, replace_id):
     """ Adds images to the App Store screenshots of the app with key \"KEY\".
 
     \f
@@ -289,12 +291,18 @@ def upload(key, files, size):
     """
     base = _app_base(key)
     if base:
-        _upload(base, files, size)
+        _upload(base, files, size, replace_id, "odevio screenshot ls")
 
 
-def _upload(base, files, size):
+def _upload(base, files, size, replace_id=None, ls_command=None):
     from odevio import api
     from odevio.settings import console
+
+    if replace_id is not None:
+        if len(files) != 1 or size:
+            raise click.UsageError("--replace takes one --file, and no --size: the image keeps the slot it replaces.")
+        _replace(base, replace_id, files[0], ls_command)
+        return
 
     by_pixels = {dimensions: name for name, dimensions in STORE_SIZES.items()}
 
@@ -323,6 +331,72 @@ def _upload(base, files, size):
         if created:
             kept = "kept as it is" if pixels == (width, height) else f"scaled from {pixels[0]} × {pixels[1]}"
             console.print(f"[success]Added {path}[/success] as #{created['pk']} to the {slot} slot — {kept}.")
+
+
+def _replace(base, screenshot_id, path, ls_command):
+    from odevio import api
+    from odevio.settings import console
+
+    entry = _screenshot_entry(base, screenshot_id)
+    if entry is None:
+        console.print(f"[warning]No screenshot #{screenshot_id} here.[/warning] Run '{ls_command}' to see the ids.")
+        return
+    try:
+        from PIL import Image
+        with Image.open(path) as image:
+            pixels = image.size
+    except Exception as error:
+        console.print(f"[warning]{path} could not be read:[/warning] {error}")
+        return
+    with open(path, "rb") as handle:
+        replaced = api.patch(f"/screenshots/{screenshot_id}/", files={"screenshot": handle})
+    if not replaced:
+        return
+    slot = (entry["width"], entry["height"])
+    kept = "kept as it is" if pixels == slot else f"scaled from {pixels[0]} × {pixels[1]}"
+    console.print(f"[success]Replaced the image of #{screenshot_id}[/success] — {kept}.")
+    top, bottom = replaced.get("crop_top") or 0, replaced.get("crop_bottom") or 0
+    if top or bottom:
+        console.print(f"Its crop still applies ({top:.0%} off the top, {bottom:.0%} off the bottom); "
+                      "crop it again with --top 0 --bottom 0 to show the whole capture.")
+    if entry.get("visual_id"):
+        after = _screenshot_entry(base, screenshot_id) or {}
+        if after.get("visual_approved"):
+            # A server older than this command keeps the approval, with a render of the old image.
+            console.print("[warning]Its marketing visual still shows the old image.[/warning] "
+                          "Preview it, then approve it again.")
+        else:
+            console.print("Its marketing visual now shows the new image: preview it, then approve it again.")
+
+
+def _remove(base, screenshot_ids, ls_command):
+    from odevio import api
+    from odevio.settings import console
+
+    entries = {row.get("id"): row for row in api.get(f"{base}/screenshot-list/") or []}
+    for screenshot_id in screenshot_ids:
+        entry = entries.get(screenshot_id)
+        if entry is None:
+            console.print(f"[warning]No screenshot #{screenshot_id} here.[/warning] Run '{ls_command}' to see the ids.")
+            continue
+        if api.delete(f"/screenshots/{screenshot_id}/", json_decode=False) is not False:
+            console.print(f"[success]Deleted #{screenshot_id}[/success]"
+                          + (", with its marketing visual." if entry.get("visual_id") else "."))
+
+
+@screenshot.command("rm")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+def rm(key, screenshot_ids):
+    """ Deletes screenshots SCREENSHOT_IDS of the app "KEY", with the marketing visual composed on each.
+
+    \f
+    To change the image under a card and keep the card, use :code:`upload --replace` instead.
+
+    Usage:
+    """
+    _remove(_app_base(key), screenshot_ids, "odevio screenshot ls")
 
 
 def _font_cache_dir():
@@ -1097,11 +1171,22 @@ def listing_visuals(key, as_json):
               help="An image to add: a raw capture or a finished picture. Repeat for several.")
 @click.option('--size', type=click.Choice(list(STORE_SIZES)),
               help="Which slot it belongs to. Read from the image itself when it matches one exactly.")
-def listing_upload(key, files, size):
+@click.option('--replace', 'replace_id', type=int,
+              help="Put the image in place of screenshot REPLACE (one --file): same slot, order and marketing visual.")
+def listing_upload(key, files, size, replace_id):
     """ Adds images to the store listing \"KEY\" — raw captures or finished pictures — at Apple's exact slot size. """
     base = _listing_base(key)
     if base:
-        _upload(base, files, size)
+        _upload(base, files, size, replace_id, f"odevio screenshot listing screenshots {base.rsplit('/', 1)[-1]}")
+
+
+@listing.command("rm")
+@login_required_warning_decorator
+@click.argument('key')
+@click.argument('screenshot_ids', type=int, nargs=-1, required=True)
+def listing_rm(key, screenshot_ids):
+    """ Deletes screenshots SCREENSHOT_IDS of the listing \"KEY\", with the marketing visual composed on each. """
+    _remove(f"/store-listings/{key}", screenshot_ids, f"odevio screenshot listing screenshots {key}")
 
 
 @listing.command("visual")
