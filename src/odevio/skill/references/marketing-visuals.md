@@ -307,7 +307,8 @@ A value a card sets for itself is an **exception** — a colour, the eyebrow, or
 own (`--follow-series` gives the card its step's layout back). Keep exceptions rare and deliberate.
 
 **A motif ties the set into one picture.** The series can draw a backdrop across all its cards — one
-artwork over the App Store positions, each card showing its slice in its own accent:
+artwork over the App Store positions, each card showing its slice in its own accent (iPhone sizes only: an
+iPad card stays plain):
 `odevio screenshot series <app-key> --motif <name>` (`listing series <listing-key>` for a store listing;
 `"motif": {"shape": "<name>"}` in a theme file works too; `--motif none` removes it). Propose it **inside
 the series proposal**, with one line on why, from the app's category, the shape of its icon and its palette:

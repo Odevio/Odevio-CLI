@@ -945,7 +945,7 @@ def listing_series(key, as_json, from_card, dry_run, theme_file, font_spec, sequ
     if off:
         losing = 0
         if _current_theme(base).get("motif"):
-            losing = sum(1 for card in _series_cards(key) if card["approved"] and "motif" not in card["exceptions"])
+            losing = sum(1 for card in _series_cards(key) if card["approved"] and card["motif"])
         try:
             deleted = api.delete(base, json_decode=False)
         except api.NotFoundException:
@@ -1043,7 +1043,9 @@ def _series_cards(key):
         cards.append({"screenshot_id": entry["id"], "positions": entry.get("positions"),
                       "step": state.get("step"), "template": state.get("template"),
                       "palette": state.get("palette"), "exceptions": state.get("exceptions") or [],
-                      "approved": bool(visual.get("approved")), "needs_approval": bool(visual.get("needs_approval"))})
+                      "approved": bool(visual.get("approved")), "needs_approval": bool(visual.get("needs_approval")),
+                      # Servers before the field: every card not turning it off drew it.
+                      "motif": visual.get("motif", "motif" not in (state.get("exceptions") or []))})
     return cards
 
 
