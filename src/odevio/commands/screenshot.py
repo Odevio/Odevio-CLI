@@ -567,7 +567,7 @@ def _visuals(base, as_json):
             "screenshot_id": entry["id"],
             "positions": entry.get("positions"),
             "approved": bool(visual.get("approved")),
-            "template": visual.get("template") or "custom",
+            "template": visual.get("template") or (visual.get("series") or {}).get("template") or "custom",
             "series": visual.get("series"),
             "needs_approval": bool(visual.get("needs_approval")),
             "font": (visual.get("font") or {}).get("family"),
