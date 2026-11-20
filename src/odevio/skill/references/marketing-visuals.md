@@ -197,6 +197,9 @@ Apple wants the app as people use it. Before composing on a capture, check:
   called "Test", placeholder text).
 
 When something is wrong, ask for a clean capture of that screen — it takes them seconds on their phone.
+If they cannot yet and want to see a first set anyway, compose on them as a **draft**: name the defects
+once, keep any detail zoom (a `lens` inset) off test data — a placeholder price enlarged is the first
+thing read — and do not approve those cards until the clean captures replace them.
 The only fix you make yourself is **cropping or reframing**; never repaint pixels or splice parts of the
 screen together: the card would show an app that does not exist.
 
@@ -323,7 +326,9 @@ the series proposal**, with one line on why, from the app's category, the shape 
 
 An app the table does not name takes the row of its closest character: a professional service or
 marketplace (jobs, health, legal) reads precise — grid or diagonal; a community or consumer service reads
-friendly — discs or waves. Say in the proposal which row you took and why.
+friendly — discs or waves. Say in the proposal which row you took and why. On a dark ground the thin
+motifs (waves, grid, diagonal) read faint; discs and glow carry better. There is no intensity setting:
+when the user finds the motif too faint or too busy, the answer is another motif or none.
 
 A card can turn its slice off (`"motif": "off"` in its props file; remove the key to turn it back on) —
 for a calm card in the middle of the set; it is an exception like a colour. A theme file replaces the whole
@@ -448,8 +453,10 @@ direction, the template and headline of each card, the colours, the font and the
 once. They see a first set within minutes and react to images, which is faster than answering five
 questions in a row. Ask separately only what you cannot derive at all.
 
-**The language** is their store page's when there is one; otherwise the language of the app's own
-screens in the captures; otherwise the language they write to you in. Say which in the proposal.
+**The language** is their store page's when there is one; otherwise the language of the market they
+name; otherwise the language of the app's own screens in the captures; otherwise the language they write
+to you in. Say which in the proposal. Headlines in one language over screens in another read fine at a
+glance but not up close: fine for a draft, worth new captures in that language before approval.
 
 **3. Author it.** On a set of cards, set the series first (above), then write each card's words. For a
 single card, pick the template by name. Write the props JSON for this card in the user's working
@@ -488,6 +495,15 @@ Give them the editor link the first time (`odevio app screenshots <app-key>`, or
 `odevio screenshot listing open <listing-key>`, which prints it), and say it opens on the web: they sign
 in there with the same Odevio account. Tell them once that they can retouch a card themselves — they
 will not find it otherwise.
+
+**On a set, show the first render as a draft, not a verdict.** With the images, say in two or three lines
+what changes in one step, from the editor or by asking you: the motif (name one or two alternatives that
+would also suit the app — "waves would feel calmer than the grid"), the layout of any card or making
+one a panorama, the order (drag in the editor), the motif off on one card, the colours and the font for
+the whole set. Then offer one concrete variant ("the same set with waves instead?") rather than asking
+whether they like it. In the editor the Series tab holds the motif and the layouts, Retouch a single
+card, and "Approve all" re-approves the set in one click. Their own logo is not available yet, neither as
+a backdrop nor in place of the eyebrow (text only): say so if they ask, and propose the closest motif.
 
 **5. Iterate on props.** Every change is a **props** change — headline, subhead, colours, font,
 `layout`. Re-run the `visual` command with the new props file, look at a fresh `preview`, then they
