@@ -728,9 +728,11 @@ def _visual(base, screenshot_id, template, jsx_file, props_file, font_spec, ls_c
 @click.argument('screenshot_ids', type=int, nargs=-1)
 @click.option('--all', 'approve_changed', is_flag=True,
               help="Approve again every card a change of the series un-approved (KEY required).")
+@click.option('--except', 'except_ids', multiple=True,
+              help="With --all: leave these screenshot ids out, e.g. --except 12,14.")
 @click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
 @click.pass_context
-def approve_visual(ctx, key, screenshot_ids, approve_changed, out_dir):
+def approve_visual(ctx, key, screenshot_ids, approve_changed, except_ids, out_dir):
     """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the app \"KEY\" (KEY required).
 
     \f
@@ -743,8 +745,10 @@ def approve_visual(ctx, key, screenshot_ids, approve_changed, out_dir):
         if not key or screenshot_ids:
             raise click.UsageError("Give the app key and --all, without screenshot ids.")
         ctx.invoke(listing_approve_visual, key=_listing_of_app(key), screenshot_ids=(), approve_changed=True,
-                   out_dir=out_dir)
+                   except_ids=except_ids, out_dir=out_dir)
         return
+    if except_ids:
+        raise click.UsageError("--except only goes with --all.")
     if not screenshot_ids:
         raise click.UsageError("Give screenshot ids, or --all.")
     base = _app_base(key)
@@ -1215,19 +1219,29 @@ def listing_visual(key, screenshot_id, template, jsx_file, props_file, font_spec
 @click.argument('screenshot_ids', type=int, nargs=-1)
 @click.option('--all', 'approve_changed', is_flag=True,
               help="Approve again every card a change of the series un-approved. Drafts never approved are left alone.")
+@click.option('--except', 'except_ids', multiple=True,
+              help="With --all: leave these screenshot ids out, e.g. --except 12,14.")
 @click.option('--out-dir', type=click.Path(file_okay=False), help="Also save each approved PNG in this folder.")
-def listing_approve_visual(key, screenshot_ids, approve_changed, out_dir):
+def listing_approve_visual(key, screenshot_ids, approve_changed, except_ids, out_dir):
     """ Renders and approves the marketing visuals of screenshots SCREENSHOT_IDS of the listing \"KEY\". """
     from odevio import api
     from odevio.settings import console
 
+    if except_ids and not approve_changed:
+        raise click.UsageError("--except only goes with --all.")
     if bool(screenshot_ids) == approve_changed:
         raise click.UsageError("Give screenshot ids, or --all.")
     listing = api.get(f"/store-listings/{key}/")
     if not listing:
         return
+    base = f"/store-listings/{key}"
+    if except_ids:
+        screenshot_ids = _needing_approval(base, _id_list(except_ids))
+        if not screenshot_ids:
+            console.print("No other card needs approval again.")
+            return
     if screenshot_ids:
-        _render_visuals(f"/store-listings/{key}", screenshot_ids, True, out_dir, "odevio screenshot listing visual",
+        _render_visuals(base, screenshot_ids, True, out_dir, "odevio screenshot listing visual",
                         bool(listing.get("application")))
         return
     started = api.post(f"/store-listings/{key}/approve-all/", json_data={})
@@ -1248,6 +1262,28 @@ def listing_approve_visual(key, screenshot_ids, approve_changed, out_dir):
             for path in _save_png(task["visual"], out_dir, f"approved-visual-{task['visual']}.png"):
                 console.print(f"Saved to {path}")
     console.print("[success]Done.[/success] Run 'odevio screenshot listing visuals " + key + "' to check.")
+
+
+def _id_list(values):
+    """ Screenshot ids given as repeated options, comma-separated, or both. """
+    try:
+        return {int(part) for value in values for part in value.split(",") if part.strip()}
+    except ValueError:
+        raise click.UsageError("--except takes screenshot ids, e.g. --except 12,14.")
+
+
+def _needing_approval(base, excluded):
+    """ The screenshots whose card lost its approval, as the server's approve-all picks them, but EXCLUDED. """
+    from odevio import api
+
+    ids = []
+    for entry in api.get(f"{base}/screenshot-list/") or []:
+        if not entry.get("visual_id") or entry["id"] in excluded:
+            continue
+        visual = api.get(f"/marketing-visuals/{entry['visual_id']}/") or {}
+        if visual.get("needs_approval"):
+            ids.append(entry["id"])
+    return ids
 
 
 @listing.command("preview")

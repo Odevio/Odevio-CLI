@@ -370,7 +370,7 @@ sequence (`--sequence hero,panorama,classic`) or with `--template panorama` on o
   `…-2.png`): look at both halves before asking the user to approve; `approve-visual --out-dir <folder>`
   saves the approved images the same way. Until it is approved, Apple gets the card's plain screenshot once.
 - A first approval names the cards (`approve-visual <key> 150 151 …`); `--all` only re-approves cards a
-  series change un-approved.
+  series change un-approved. `--all --except 152,153` leaves out the ones still waiting on the user.
 - Apple takes 10 images per display slot (all its pixel sizes together); an approved panorama counts
   for two, and a push over 10 is refused.
 

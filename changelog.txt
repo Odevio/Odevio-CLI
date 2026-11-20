@@ -1,5 +1,6 @@
 Unreleased:
     - `screenshot rm` deletes screenshots; `upload --replace ID` swaps the image under a card and keeps the card
+    - `approve-visual --all --except IDS` re-approves the changed cards but the ones named
     - On a Mac, the skill offers to capture the App Store screenshots itself in the iPhone simulator
     - `screenshot series` (and `listing series`) sets one theme and one sequence of layouts for a listing's cards; `visual` then needs only the words, and `approve-visual --all` re-approves the cards a series change touched
     - On a Mac, the skill offers to build there and still do the whole App Store side, or to let Odevio build
