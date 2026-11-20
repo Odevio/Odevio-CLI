@@ -169,7 +169,10 @@ available` answers. Then offer it once, in the question above; on a yes:
    Drive the simulator yourself when you have a tool for it (tapping, typing, screenshots of the
    simulator); otherwise ask the user to open each screen in the Simulator window and tell you, one at a
    time. Prefer demo content: an empty list or a login form sells nothing — ask whether the app has a
-   demo account or sample data before capturing.
+   demo account or sample data before capturing. When every screen worth showing sits behind a sign-in,
+   stop and ask the user to sign in themselves in the Simulator window (never type a password for them),
+   then capture. A test build's markers (an environment ribbon, a "DEV" badge) cannot be cropped away:
+   capture from a build without them, or say so before the set is approved.
 5. **Capture**: `xcrun simctl io <udid> screenshot <folder>/<screen>.png` into the user's working folder
    (not a temporary one: the files are theirs). Look at each image, check it as below, then
    `upload` the ones that pass.
@@ -318,6 +321,10 @@ the series proposal**, with one line on why, from the app's category, the shape 
 | sparkles | playful: photo, beauty, rewards, social |
 | none | sober brands, editorial apps, or when the screens are already busy |
 
+An app the table does not name takes the row of its closest character: a professional service or
+marketplace (jobs, health, legal) reads precise — grid or diagonal; a community or consumer service reads
+friendly — discs or waves. Say in the proposal which row you took and why.
+
 A card can turn its slice off (`"motif": "off"` in its props file; remove the key to turn it back on) —
 for a calm card in the middle of the set; it is an exception like a colour. A theme file replaces the whole
 theme: keep its `motif` in it, or the motif goes. Any change of the motif, and any reorder, re-renders the cards
@@ -346,8 +353,9 @@ sequence (`--sequence hero,panorama,classic`) or with `--template panorama` on o
   check after writing them. A sequence repeats past its end, so a panorama step can come round twice:
   `series` must show exactly one two-position range, and not `3-4`. Give any other card on a panorama
   step its own `--template`.
-- `preview` saves the full image and its two halves (`…-1.png`, `…-2.png`): look at both halves before
-  asking the user to approve. Until it is approved, Apple gets the card's plain screenshot once.
+- `preview` saves the full image (`preview-<id>.png`, two slots wide) and its two halves (`…-1.png`,
+  `…-2.png`): look at both halves before asking the user to approve; `approve-visual --out-dir <folder>`
+  saves the approved images the same way. Until it is approved, Apple gets the card's plain screenshot once.
 - A first approval names the cards (`approve-visual <key> 150 151 …`); `--all` only re-approves cards a
   series change un-approved.
 - Apple takes 10 images per display slot (all its pixel sizes together); an approved panorama counts
@@ -381,6 +389,7 @@ same screenshot ids and the same templates:
 | `odevio screenshot visual <app-key> <id> …` | `odevio screenshot listing visual <listing-key> <id> …` |
 | `odevio screenshot preview <app-key> <id> …` | `odevio screenshot listing preview <listing-key> <id> …` |
 | `odevio screenshot approve-visual <app-key> <id> …` | `odevio screenshot listing approve-visual <listing-key> <id> …` |
+| `odevio screenshot series <app-key> …` | `odevio screenshot listing series <listing-key> …` |
 | `odevio app screenshots <app-key>` (editor link) | `odevio screenshot listing open <listing-key>` |
 
 App keys and listing keys are separate and can be the same string, so a listing key only ever goes to a
