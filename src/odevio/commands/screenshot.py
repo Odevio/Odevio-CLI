@@ -834,11 +834,13 @@ def _listing_of_app(app_key):
               help="Turn the series on from the card of screenshot ID: its look becomes the theme, nothing re-renders.")
 @click.option('--dry-run', is_flag=True, help="With --from-card: show the series it would create, change nothing.")
 @click.option('--theme-file', type=click.Path(exists=True, dir_okay=False),
-              help="JSON theme: palette, alternate_palette, eyebrow and font (a font of the listing by name).")
+              help="JSON theme: palette, alternate_palette, eyebrow, font (a font of the listing by name) and motif.")
 @click.option('--font', 'font_spec', help="Google Font for every card, e.g. 'Fraunces:600,800'.")
 @click.option('--sequence', help="Steps as template[:main|alternate], comma-separated, e.g. 'statement,tilt:alternate,lens'.")
 @click.option('--preset', help="A shipped sequence by name (see 'odevio screenshot templates --presets').")
-@click.option('--off', is_flag=True, help="Turn the series off; each card keeps what it shows.")
+@click.option('--motif', help="A backdrop drawn across all the cards: waves, discs, diagonal, glow, grid, chevrons, "
+                              "ribbon, sparkles, or none.")
+@click.option('--off', is_flag=True, help="Turn the series off; each card keeps what it shows, but its motif.")
 @click.pass_context
 def series(ctx, key, **options):
     """ Shows or sets the series of the app with key \"KEY\": one theme and one sequence of layouts for its cards. """
@@ -917,12 +919,14 @@ def listing_screenshots(key):
               help="Turn the series on from the card of screenshot ID: its look becomes the theme, nothing re-renders.")
 @click.option('--dry-run', is_flag=True, help="With --from-card: show the series it would create, change nothing.")
 @click.option('--theme-file', type=click.Path(exists=True, dir_okay=False),
-              help="JSON theme: palette, alternate_palette, eyebrow and font (a font of the listing by name).")
+              help="JSON theme: palette, alternate_palette, eyebrow, font (a font of the listing by name) and motif.")
 @click.option('--font', 'font_spec', help="Google Font for every card, e.g. 'Fraunces:600,800'.")
 @click.option('--sequence', help="Steps as template[:main|alternate], comma-separated, e.g. 'statement,tilt:alternate,lens'.")
 @click.option('--preset', help="A shipped sequence by name (see 'odevio screenshot templates --presets').")
-@click.option('--off', is_flag=True, help="Turn the series off; each card keeps what it shows.")
-def listing_series(key, as_json, from_card, dry_run, theme_file, font_spec, sequence, preset, off):
+@click.option('--motif', help="A backdrop drawn across all the cards: waves, discs, diagonal, glow, grid, chevrons, "
+                              "ribbon, sparkles, or none.")
+@click.option('--off', is_flag=True, help="Turn the series off; each card keeps what it shows, but its motif.")
+def listing_series(key, as_json, from_card, dry_run, theme_file, font_spec, sequence, preset, motif, off):
     """ Shows or sets the series of the store listing \"KEY\": one theme and one sequence of layouts for its cards.
 
     \f
@@ -939,12 +943,18 @@ def listing_series(key, as_json, from_card, dry_run, theme_file, font_spec, sequ
 
     base = f"/store-listings/{key}/series/"
     if off:
+        losing = 0
+        if _current_theme(base).get("motif"):
+            losing = sum(1 for card in _series_cards(key) if card["approved"] and "motif" not in card["exceptions"])
         try:
             deleted = api.delete(base, json_decode=False)
         except api.NotFoundException:
             raise click.ClickException("This listing has no series.")
         if deleted is not False:
-            console.print("[success]The series is off.[/success] Each card keeps what it showed.")
+            console.print("[success]The series is off.[/success] Each card keeps what it showed"
+                          + (f", but {losing} card{'s' if losing > 1 else ''} lost the motif and "
+                             f"need{'' if losing > 1 else 's'} approval: "
+                             f"'odevio screenshot listing approve-visual {key} --all'." if losing else "."))
         return
     if from_card is not None:
         route = f"{base}from-card/{from_card}/"
@@ -959,13 +969,15 @@ def listing_series(key, as_json, from_card, dry_run, theme_file, font_spec, sequ
             _print_series(_compact(derived), [], as_json)
             return
         console.print("[success]Series created.[/success] Nothing re-renders: every card keeps its look.")
-    elif theme_file or font_spec or sequence or preset:
+    elif theme_file or font_spec or sequence or preset or motif:
         body = {}
-        if theme_file or font_spec:
+        if theme_file or font_spec or motif:
             with open(theme_file) if theme_file else _nullcontext() as fh:
                 theme = json.load(fh) if fh else _current_theme(base)
             if font_spec:
                 theme["font"] = _resolve_font(font_spec)
+            if motif:
+                theme["motif"] = "none" if motif == "none" else {"shape": motif}
             body["theme"] = theme
         if sequence:
             body["sequence"] = _parse_sequence(sequence)
@@ -1050,6 +1062,7 @@ def _print_series(series, cards, as_json):
     console.print(f"Main palette: {json.dumps(theme.get('palette') or {})}")
     if theme.get("alternate_palette"):
         console.print(f"Alternate palette: {json.dumps(theme['alternate_palette'])}")
+    console.print(f"Motif: {(theme.get('motif') or {}).get('shape') or 'none'}")
     console.print("Sequence: " + " · ".join(
         f"{i + 1} {s['template']}{' (alt)' if s.get('palette') == 'alternate' else ''}"
         for i, s in enumerate(series.get("sequence") or [])))
